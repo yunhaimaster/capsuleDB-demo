@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ProductionOrder {
+  id                 String       @id @default(cuid())
+  customerName       String       // 客戶名稱
+  productCode        String       // 產品代號
+  productionQuantity Int          // 生產數量
+  unitWeightMg       Float        // 單粒總重量（計算）
+  batchTotalWeightMg Float        // 批次總重量（計算）
+  completionDate     DateTime?    // 完工日期
+  processIssues      String?      // 製程問題記錄
+  qualityNotes       String?      // 品管備註
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  createdBy          String?      // 建檔人員
+  ingredients        Ingredient[]
+
+  @@map("production_orders")
+}
+
+model Ingredient {
+  id            String          @id @default(cuid())
+  orderId       String
+  materialName  String          // 原料品名
+  unitContentMg Float           // 單粒含量
+  order         ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("ingredients")
+}

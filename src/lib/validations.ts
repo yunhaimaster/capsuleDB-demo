@@ -1,0 +1,77 @@
+import { z } from 'zod'
+
+export const ingredientSchema = z.object({
+  materialName: z
+    .string()
+    .min(1, '原料品名不能為空')
+    .max(100, '原料品名不能超過100字')
+    .regex(/^[a-zA-Z0-9\u4e00-\u9fff\s\(\)\-]+$/, '原料品名只能包含中英數、括號、連字符'),
+  unitContentMg: z
+    .number()
+    .positive('單粒含量必須為正數')
+    .min(0.00001, '單粒含量不能小於0.00001mg')
+    .max(10000, '單粒含量不能超過10,000mg')
+    .refine((val) => Number(val.toFixed(5)) === val, '單粒含量精度不能超過小數點後5位')
+})
+
+export const productionOrderSchema = z.object({
+  customerName: z
+    .string()
+    .min(1, '客戶名稱不能為空')
+    .max(100, '客戶名稱不能超過100字'),
+  productCode: z
+    .string()
+    .min(1, '產品代號不能為空')
+    .max(100, '產品代號不能超過100字'),
+  productionQuantity: z
+    .number()
+    .int('生產數量必須為整數')
+    .positive('生產數量必須為正數')
+    .min(1, '生產數量不能小於1')
+    .max(5000000, '生產數量不能超過5,000,000粒'),
+  completionDate: z.date().optional().nullable(),
+  processIssues: z
+    .string()
+    .max(1000, '製程問題記錄不能超過1000字')
+    .optional()
+    .nullable(),
+  qualityNotes: z
+    .string()
+    .max(500, '品管備註不能超過500字')
+    .optional()
+    .nullable(),
+  createdBy: z.string().optional().nullable(),
+  ingredients: z
+    .array(ingredientSchema)
+    .min(1, '至少需要一項原料')
+    .refine(
+      (ingredients) => {
+        const names = ingredients.map(i => i.materialName)
+        return new Set(names).size === names.length
+      },
+      '同一配方內原料品名不能重複'
+    )
+    .refine(
+      (ingredients) => {
+        const totalWeight = ingredients.reduce((sum, i) => sum + i.unitContentMg, 0)
+        return totalWeight > 0
+      },
+      '單粒總重量必須為正值'
+    )
+})
+
+export const searchFiltersSchema = z.object({
+  customerName: z.string().optional(),
+  productCode: z.string().optional(),
+  dateFrom: z.date().optional(),
+  dateTo: z.date().optional(),
+  isCompleted: z.boolean().optional(),
+  page: z.number().int().positive().default(1),
+  limit: z.number().int().positive().max(100).default(10),
+  sortBy: z.enum(['createdAt', 'productionQuantity', 'customerName', 'completionDate']).default('createdAt'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc')
+})
+
+export type ProductionOrderFormData = z.infer<typeof productionOrderSchema>
+export type IngredientFormData = z.infer<typeof ingredientSchema>
+export type SearchFiltersFormData = z.infer<typeof searchFiltersSchema>

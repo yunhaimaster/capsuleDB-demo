@@ -1,0 +1,38 @@
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'EasyPack 膠囊配方管理系統',
+  description: 'EasyPack 內部生產管理系統',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="zh-TW">
+      <body className={inter.className}>
+        <div className="min-h-screen bg-background">
+          <header className="border-b">
+            <div className="container mx-auto px-4 py-4">
+              <h1 className="text-2xl font-bold text-primary">
+                EasyPack 膠囊配方管理系統
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                EasyPack 內部生產管理
+              </p>
+            </div>
+          </header>
+          <main className="container mx-auto px-4 py-6">
+            {children}
+          </main>
+        </div>
+      </body>
+    </html>
+  )
+}
