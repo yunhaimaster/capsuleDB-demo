@@ -9,66 +9,6 @@ import Link from 'next/link'
 export default function HomePage() {
   return (
     <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="text-center space-y-4 py-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl mb-4">
-          <span className="text-2xl">💊</span>
-        </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          EasyPack 膠囊配方管理系統
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          專業的保健品內部生產管理解決方案，讓您的生產流程更加高效與精準
-        </p>
-      </div>
-
-      {/* Quick Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-blue-500 rounded-xl">
-                <Plus className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-blue-600">新增配方</p>
-                <p className="text-2xl font-bold text-blue-700">0</p>
-                <p className="text-xs text-blue-500">本月新增</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-green-100">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-green-500 rounded-xl">
-                <FileText className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-green-600">總記錄數</p>
-                <p className="text-2xl font-bold text-green-700">0</p>
-                <p className="text-xs text-green-500">所有配方</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-purple-100">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-purple-500 rounded-xl">
-                <BarChart3 className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-purple-600">完成率</p>
-                <p className="text-2xl font-bold text-purple-700">0%</p>
-                <p className="text-xs text-purple-500">本月完成</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

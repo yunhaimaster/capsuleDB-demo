@@ -20,64 +20,6 @@ export default function OrdersPage() {
         </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-500 rounded-lg">
-                <span className="text-white text-sm">📊</span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-blue-600">總記錄數</p>
-                <p className="text-lg font-bold text-blue-700">0</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-green-100">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-green-500 rounded-lg">
-                <span className="text-white text-sm">✅</span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-green-600">已完成</p>
-                <p className="text-lg font-bold text-green-700">0</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-50 to-orange-100">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-orange-500 rounded-lg">
-                <span className="text-white text-sm">⏳</span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-orange-600">進行中</p>
-                <p className="text-lg font-bold text-orange-700">0</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-purple-100">
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-purple-500 rounded-lg">
-                <span className="text-white text-sm">📈</span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-purple-600">完成率</p>
-                <p className="text-lg font-bold text-purple-700">0%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       <OrdersList />
     </div>

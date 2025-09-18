@@ -213,14 +213,6 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 <Download className="mr-2 h-4 w-4" />
                 匯出 CSV
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleExport('pdf')}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                匯出 PDF
-              </Button>
             </div>
             <div className="text-sm text-muted-foreground">
               共 {pagination?.total || 0} 筆記錄
@@ -248,11 +240,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   <TableHead>建檔日期</TableHead>
                   <TableHead>客戶名稱</TableHead>
                   <TableHead>產品代號</TableHead>
+                  <TableHead>主要原料</TableHead>
                   <TableHead>生產數量</TableHead>
                   <TableHead>單粒總重量</TableHead>
-                  <TableHead>批次總重量</TableHead>
-                  <TableHead>完工日期</TableHead>
-                  <TableHead>建檔人員</TableHead>
+                  <TableHead>完工狀態</TableHead>
+                  <TableHead>製程問題</TableHead>
                   <TableHead className="w-[200px]">操作</TableHead>
                 </TableRow>
               </TableHeader>
@@ -262,9 +254,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     <TableCell>{formatDate(order.createdAt)}</TableCell>
                     <TableCell>{order.customerName}</TableCell>
                     <TableCell>{order.productCode}</TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px]">
+                        {order.ingredients && order.ingredients.length > 0 ? (
+                          <div className="space-y-1">
+                            {order.ingredients.slice(0, 2).map((ingredient, index) => (
+                              <div key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                                {ingredient.materialName}
+                              </div>
+                            ))}
+                            {order.ingredients.length > 2 && (
+                              <div className="text-xs text-gray-500">
+                                +{order.ingredients.length - 2} 更多
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">無原料資料</span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>{formatNumber(order.productionQuantity)} 粒</TableCell>
                     <TableCell>{order.unitWeightMg.toFixed(3)} mg</TableCell>
-                    <TableCell>{convertWeight(order.batchTotalWeightMg).display}</TableCell>
                     <TableCell>
                       {order.completionDate ? (
                         <span className="status-badge status-completed">
@@ -276,7 +287,20 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                         </span>
                       )}
                     </TableCell>
-                    <TableCell>{order.createdBy || '系統'}</TableCell>
+                    <TableCell>
+                      <div className="max-w-[150px]">
+                        {order.processIssues ? (
+                          <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200">
+                            {order.processIssues.length > 50 
+                              ? `${order.processIssues.substring(0, 50)}...` 
+                              : order.processIssues
+                            }
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-xs">無問題</span>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Dialog>
