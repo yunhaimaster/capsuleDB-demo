@@ -115,35 +115,47 @@ export default function HomePage() {
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-800 flex items-center">
               <TrendingUp className="h-5 w-5 mr-2 text-blue-600" />
-              系統特色
+              核心功能
             </CardTitle>
             <CardDescription className="text-gray-600">
-              專業的膠囊配方管理功能
+              專為保健品生產管理設計
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-3">
               <h4 className="font-semibold text-gray-700 flex items-center">
-                <Plus className="h-4 w-4 mr-2 text-indigo-600" />
-                配方建檔
+                <span className="mr-2">📋</span>
+                配方管理
               </h4>
               <ul className="text-sm text-gray-600 space-y-2 ml-6">
-                <li>• 動態原料條目管理</li>
-                <li>• 即時驗證與自動計算</li>
-                <li>• 一鍵複製配方清單</li>
-                <li>• 智能重量轉換</li>
+                <li>• 動態原料配置</li>
+                <li>• 自動重量計算</li>
+                <li>• 配方複製功能</li>
+                <li>• 即時數據驗證</li>
               </ul>
             </div>
             <div className="space-y-3">
               <h4 className="font-semibold text-gray-700 flex items-center">
-                <FileText className="h-4 w-4 mr-2 text-emerald-600" />
-                生產記錄
+                <span className="mr-2">🔍</span>
+                智能搜尋
               </h4>
               <ul className="text-sm text-gray-600 space-y-2 ml-6">
-                <li>• 多維度搜尋篩選</li>
-                <li>• CSV/PDF 匯出功能</li>
-                <li>• 列印友好樣式</li>
-                <li>• 狀態追蹤管理</li>
+                <li>• 客戶名稱搜尋</li>
+                <li>• 原料名稱搜尋</li>
+                <li>• 日期範圍篩選</li>
+                <li>• 狀態快速篩選</li>
+              </ul>
+            </div>
+            <div className="space-y-3">
+              <h4 className="font-semibold text-gray-700 flex items-center">
+                <span className="mr-2">📊</span>
+                數據分析
+              </h4>
+              <ul className="text-sm text-gray-600 space-y-2 ml-6">
+                <li>• 原料使用統計</li>
+                <li>• 問題追蹤分析</li>
+                <li>• CSV 數據匯出</li>
+                <li>• 生產狀態監控</li>
               </ul>
             </div>
           </CardContent>
@@ -152,7 +164,7 @@ export default function HomePage() {
         <Card className="border-0 shadow-lg bg-gradient-to-br from-cyan-50 to-blue-100">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-blue-800 flex items-center">
-              <Clock className="h-5 w-5 mr-2 text-blue-600" />
+              <span className="mr-2">⚡</span>
               快速操作
             </CardTitle>
             <CardDescription className="text-blue-600">
@@ -175,14 +187,19 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-              <div className="flex items-center justify-between text-sm">
-                <div>
-                  <p className="font-medium text-blue-700">最近更新</p>
-                  <p className="text-blue-600">{new Date().toLocaleDateString('zh-TW')}</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <div>
+                    <p className="font-medium text-blue-700">系統狀態</p>
+                    <p className="text-green-600">✓ 正常運行</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-blue-700">版本</p>
+                    <p className="text-blue-600">v1.0.0</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-blue-700">系統版本</p>
-                  <p className="text-blue-600">v1.0.0</p>
+                <div className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                  最後更新：{new Date().toLocaleDateString('zh-TW')}
                 </div>
               </div>
             </div>
