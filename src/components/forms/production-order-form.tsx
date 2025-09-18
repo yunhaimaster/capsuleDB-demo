@@ -71,6 +71,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       const url = orderId ? `/api/orders/${orderId}` : '/api/orders'
       const method = orderId ? 'PUT' : 'POST'
 
+      console.log('Submitting data:', data) // 調試用
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -79,15 +81,23 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         body: JSON.stringify(data),
       })
 
+      console.log('Response status:', response.status) // 調試用
+
       if (!response.ok) {
-        throw new Error('儲存失敗')
+        const errorData = await response.json().catch(() => ({}))
+        console.error('API Error:', errorData)
+        throw new Error(`儲存失敗: ${errorData.error || '未知錯誤'}`)
       }
+
+      const result = await response.json()
+      console.log('Success:', result) // 調試用
 
       router.push('/orders')
       router.refresh()
     } catch (error) {
       console.error('Error saving order:', error)
-      alert('儲存失敗，請重試')
+      const errorMessage = error instanceof Error ? error.message : '儲存失敗，請重試'
+      alert(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
