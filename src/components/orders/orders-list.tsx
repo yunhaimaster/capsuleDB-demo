@@ -664,10 +664,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             ))}
           </TableBody>
         </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      </div>
     </div>
   )
 }
