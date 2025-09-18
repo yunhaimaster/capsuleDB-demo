@@ -207,25 +207,6 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* Recent Activity Card */}
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-gray-50 to-gray-100">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-700 flex items-center">
-            <Users className="h-5 w-5 mr-2 text-gray-600" />
-            最近活動
-          </CardTitle>
-          <CardDescription>查看最新的生產活動記錄</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-200 rounded-full mb-4">
-              <FileText className="h-6 w-6 text-gray-400" />
-            </div>
-            <p className="text-gray-500 font-medium">暫無最近活動</p>
-            <p className="text-sm text-gray-400">開始建立您的第一個配方記錄</p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
