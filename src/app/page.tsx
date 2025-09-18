@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, FileText, Search, BarChart3, TrendingUp, Clock, Users } from 'lucide-react'
+import { Plus, FileText, BarChart3, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 
 export default function HomePage() {
@@ -11,7 +11,7 @@ export default function HomePage() {
     <div className="space-y-8">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
@@ -60,29 +60,6 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-violet-50 to-violet-100 hover:from-violet-100 hover:to-violet-200">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div className="p-3 bg-violet-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Search className="h-6 w-6 text-white" />
-              </div>
-              <div className="text-right">
-                <CardTitle className="text-lg font-semibold text-violet-700">搜尋篩選</CardTitle>
-                <CardDescription className="text-violet-600">快速查找</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-sm text-gray-600 mb-4">
-              快速搜尋與篩選記錄，支援多維度條件查詢
-            </p>
-            <Link href="/orders">
-              <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                開始搜尋
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
 
         <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200">
           <CardHeader className="pb-4">
