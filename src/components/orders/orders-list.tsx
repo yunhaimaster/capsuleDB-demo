@@ -122,24 +122,25 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       {/* 搜尋和篩選 */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <CardTitle>生產記錄管理</CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
+              <CardTitle className="text-lg md:text-xl">生產記錄管理</CardTitle>
+              <p className="text-xs md:text-sm text-muted-foreground mt-1">
                 支援搜尋客戶名稱或原料名稱
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
+                className="text-xs md:text-sm"
               >
-                <Filter className="mr-2 h-4 w-4" />
+                <Filter className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
                 篩選
               </Button>
               <Link href="/orders/new">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
+                <Button className="text-xs md:text-sm">
+                  <Plus className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
                   新增配方
                 </Button>
               </Link>
@@ -147,22 +148,23 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-4">
             <div className="flex-1">
               <Input
                 placeholder="搜尋客戶名稱或原料名稱..."
                 value={filters.customerName || ''}
                 onChange={(e) => handleSearch({ customerName: e.target.value })}
+                className="text-sm md:text-base"
               />
             </div>
-            <Button variant="outline">
-              <Search className="mr-2 h-4 w-4" />
+            <Button variant="outline" className="text-xs md:text-sm">
+              <Search className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
               搜尋
             </Button>
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-muted rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 bg-muted rounded-lg">
               <div>
                 <label className="text-sm font-medium">產品代號</label>
                 <Input
@@ -230,27 +232,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-2 text-muted-foreground">載入中...</p>
+            <div className="p-6 md:p-8 text-center">
+              <div className="animate-spin rounded-full h-6 w-6 md:h-8 md:w-8 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-2 text-sm md:text-base text-muted-foreground">載入中...</p>
             </div>
           ) : orders.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-muted-foreground">沒有找到任何記錄</p>
+            <div className="p-6 md:p-8 text-center">
+              <p className="text-sm md:text-base text-muted-foreground">沒有找到任何記錄</p>
             </div>
           ) : (
-            <Table>
+            <div className="overflow-x-auto">
+              <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>建檔日期</TableHead>
-                  <TableHead>客戶名稱</TableHead>
-                  <TableHead>產品代號</TableHead>
-                  <TableHead>主要原料</TableHead>
-                  <TableHead>生產數量</TableHead>
-                  <TableHead>單粒總重量</TableHead>
-                  <TableHead>完工狀態</TableHead>
-                  <TableHead>製程問題</TableHead>
-                  <TableHead className="w-[200px]">操作</TableHead>
+                  <TableHead className="text-xs md:text-sm">建檔日期</TableHead>
+                  <TableHead className="text-xs md:text-sm">客戶名稱</TableHead>
+                  <TableHead className="text-xs md:text-sm">產品代號</TableHead>
+                  <TableHead className="text-xs md:text-sm">主要原料</TableHead>
+                  <TableHead className="text-xs md:text-sm">生產數量</TableHead>
+                  <TableHead className="text-xs md:text-sm">單粒總重量</TableHead>
+                  <TableHead className="text-xs md:text-sm">完工狀態</TableHead>
+                  <TableHead className="text-xs md:text-sm">製程問題</TableHead>
+                  <TableHead className="w-[120px] md:w-[200px] text-xs md:text-sm">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -470,7 +473,10 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             ))}
           </TableBody>
         </Table>
-      </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

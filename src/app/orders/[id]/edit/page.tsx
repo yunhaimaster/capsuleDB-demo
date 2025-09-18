@@ -54,20 +54,20 @@ export default function EditOrderPage() {
       ]} />
       
       {/* Header Section */}
-      <div className="text-center space-y-4 py-6">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-4">
-          <span className="text-xl">✏️</span>
+      <div className="text-center space-y-3 md:space-y-4 py-4 md:py-6">
+        <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-3 md:mb-4">
+          <span className="text-lg md:text-xl">✏️</span>
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+        <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
           編輯膠囊配方
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
           修改現有的膠囊配方生產記錄，更新原料配置與生產參數
         </p>
       </div>
 
       {/* Form Card */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4 md:px-0">
         <ProductionOrderForm 
           initialData={order}
           orderId={order.id}

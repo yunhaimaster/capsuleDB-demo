@@ -8,20 +8,20 @@ export default function ReportsPage() {
       <Breadcrumb items={[{ label: '統計報表' }]} />
       
       {/* Header Section */}
-      <div className="text-center space-y-4 py-6">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-4">
-          <span className="text-xl">📊</span>
+      <div className="text-center space-y-3 md:space-y-4 py-4 md:py-6">
+        <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-3 md:mb-4">
+          <span className="text-lg md:text-xl">📊</span>
         </div>
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+        <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
           統計報表
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
           生產數據分析與統計，提供深入的業務洞察
         </p>
       </div>
 
       {/* Coming Soon Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-orange-50 to-amber-100">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 p-4 bg-orange-500 rounded-2xl w-fit">
@@ -84,7 +84,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Feature Preview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100">
           <CardHeader className="pb-4">
             <div className="flex items-center space-x-3">
