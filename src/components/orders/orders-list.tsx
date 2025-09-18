@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import { Search, Filter, Download, Eye, Edit, Trash2, Plus } from 'lucide-react'
+import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDate, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, SearchFilters } from '@/types'
 import Link from 'next/link'
@@ -64,6 +64,18 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   const handleSearch = (newFilters: Partial<SearchFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
+  }
+
+  const handleSort = (field: string) => {
+    const newSortOrder = filters.sortBy === field && filters.sortOrder === 'asc' ? 'desc' : 'asc'
+    setFilters(prev => ({ ...prev, sortBy: field as any, sortOrder: newSortOrder, page: 1 }))
+  }
+
+  const getSortIcon = (field: string) => {
+    if (filters.sortBy !== field) {
+      return <ArrowUpDown className="h-4 w-4" />
+    }
+    return filters.sortOrder === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
   }
 
   const handleDelete = async (orderId: string) => {
@@ -434,13 +446,61 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-xs md:text-sm">建檔日期</TableHead>
-                    <TableHead className="text-xs md:text-sm">客戶名稱</TableHead>
-                    <TableHead className="text-xs md:text-sm">產品代號</TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('createdAt')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>建檔日期</span>
+                        {getSortIcon('createdAt')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('customerName')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>客戶名稱</span>
+                        {getSortIcon('customerName')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('productCode')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>產品代號</span>
+                        {getSortIcon('productCode')}
+                      </div>
+                    </TableHead>
                     <TableHead className="text-xs md:text-sm">主要原料</TableHead>
-                    <TableHead className="text-xs md:text-sm">生產數量</TableHead>
-                    <TableHead className="text-xs md:text-sm">單粒總重量</TableHead>
-                    <TableHead className="text-xs md:text-sm">完工狀態</TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('productionQuantity')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>生產數量</span>
+                        {getSortIcon('productionQuantity')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('unitWeightMg')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>單粒總重量</span>
+                        {getSortIcon('unitWeightMg')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('completionDate')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>完工狀態</span>
+                        {getSortIcon('completionDate')}
+                      </div>
+                    </TableHead>
                     <TableHead className="text-xs md:text-sm">製程問題</TableHead>
                     <TableHead className="w-[120px] md:w-[200px] text-xs md:text-sm">操作</TableHead>
                   </TableRow>

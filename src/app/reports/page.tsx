@@ -5,7 +5,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import { AlertTriangle, TrendingUp, Package, BarChart3 } from 'lucide-react'
+import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 interface IngredientStat {
   materialName: string
@@ -30,10 +30,15 @@ interface IngredientStatsResponse {
   summary: StatsSummary
 }
 
+type SortField = 'materialName' | 'usageCount' | 'totalUsageMg'
+type SortOrder = 'asc' | 'desc'
+
 export default function ReportsPage() {
   const [stats, setStats] = useState<IngredientStatsResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [sortField, setSortField] = useState<SortField>('totalUsageMg')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
 
   useEffect(() => {
     fetchStats()
@@ -72,6 +77,56 @@ export default function ReportsPage() {
     }
     return `${mg.toFixed(2)} mg`
   }
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortOrder('asc')
+    }
+  }
+
+  const getSortIcon = (field: SortField) => {
+    if (sortField !== field) {
+      return <ArrowUpDown className="h-4 w-4" />
+    }
+    return sortOrder === 'asc' ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+  }
+
+  const sortedIngredients = stats?.ingredients ? [...stats.ingredients].sort((a, b) => {
+    let aValue: string | number
+    let bValue: string | number
+
+    switch (sortField) {
+      case 'materialName':
+        aValue = a.materialName
+        bValue = b.materialName
+        break
+      case 'usageCount':
+        aValue = a.usageCount
+        bValue = b.usageCount
+        break
+      case 'totalUsageMg':
+        aValue = a.totalUsageMg
+        bValue = b.totalUsageMg
+        break
+      default:
+        return 0
+    }
+
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortOrder === 'asc' 
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue)
+    }
+
+    if (typeof aValue === 'number' && typeof bValue === 'number') {
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue
+    }
+
+    return 0
+  }) : []
 
   if (loading) {
     return (
@@ -208,16 +263,37 @@ export default function ReportsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-sm font-semibold">原料名稱</TableHead>
-                    <TableHead className="text-sm font-semibold">使用次數</TableHead>
-                    <TableHead className="text-sm font-semibold">總使用量</TableHead>
-                    <TableHead className="text-sm font-semibold">重量佔比</TableHead>
-                    <TableHead className="text-sm font-semibold">風險等級</TableHead>
-                    <TableHead className="text-sm font-semibold">風險描述</TableHead>
+                    <TableHead 
+                      className="text-sm font-semibold cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('materialName')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>原料名稱</span>
+                        {getSortIcon('materialName')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-sm font-semibold cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('usageCount')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>使用次數</span>
+                        {getSortIcon('usageCount')}
+                      </div>
+                    </TableHead>
+                    <TableHead 
+                      className="text-sm font-semibold cursor-pointer hover:bg-gray-100 select-none"
+                      onClick={() => handleSort('totalUsageMg')}
+                    >
+                      <div className="flex items-center space-x-1">
+                        <span>總使用量</span>
+                        {getSortIcon('totalUsageMg')}
+                      </div>
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stats.ingredients.map((ingredient, index) => (
+                  {sortedIngredients.map((ingredient, index) => (
                     <TableRow key={index} className="hover:bg-gray-50">
                       <TableCell className="font-medium text-gray-800">
                         {ingredient.materialName}
@@ -227,25 +303,6 @@ export default function ReportsPage() {
                       </TableCell>
                       <TableCell className="text-sm text-gray-600">
                         {formatWeight(ingredient.totalUsageMg)}
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-600">
-                        <div className="flex items-center space-x-2">
-                          <span>{ingredient.weightPercentage}%</span>
-                          <div className="w-16 bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-amber-500 h-2 rounded-full" 
-                              style={{ width: `${Math.min(ingredient.weightPercentage, 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={`text-xs ${getRiskBadgeColor(ingredient.riskScore)}`}>
-                          {getRiskLevelText(ingredient.riskScore)} ({ingredient.riskScore}/10)
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-600 max-w-xs">
-                        {ingredient.riskDescription}
                       </TableCell>
                     </TableRow>
                   ))}
