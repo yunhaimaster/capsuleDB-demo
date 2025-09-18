@@ -122,6 +122,8 @@ export async function POST(request: NextRequest) {
     
     const validatedData = productionOrderSchema.parse(body)
     console.log('Validated data:', validatedData)
+    console.log('Completion date type:', typeof validatedData.completionDate)
+    console.log('Completion date value:', validatedData.completionDate)
     
     // Calculate weights
     const unitWeightMg = validatedData.ingredients.reduce(
@@ -139,7 +141,7 @@ export async function POST(request: NextRequest) {
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate,
+        completionDate: validatedData.completionDate || null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         createdBy: validatedData.createdBy || '系統',

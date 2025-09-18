@@ -62,7 +62,7 @@ export async function PUT(
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate,
+        completionDate: validatedData.completionDate || null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         ingredients: {
