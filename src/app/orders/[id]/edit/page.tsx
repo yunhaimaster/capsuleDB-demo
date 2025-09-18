@@ -47,21 +47,32 @@ export default function EditOrderPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <Breadcrumb items={[
         { label: '生產記錄管理', href: '/orders' },
         { label: '編輯配方' }
       ]} />
-      <div>
-        <h1 className="text-3xl font-bold">編輯膠囊配方</h1>
-        <p className="text-muted-foreground">
-          修改膠囊配方生產記錄
+      
+      {/* Header Section */}
+      <div className="text-center space-y-4 py-6">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-4">
+          <span className="text-xl">✏️</span>
+        </div>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+          編輯膠囊配方
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          修改現有的膠囊配方生產記錄，更新原料配置與生產參數
         </p>
       </div>
-      <ProductionOrderForm 
-        initialData={order}
-        orderId={order.id}
-      />
+
+      {/* Form Card */}
+      <div className="max-w-4xl mx-auto">
+        <ProductionOrderForm 
+          initialData={order}
+          orderId={order.id}
+        />
+      </div>
     </div>
   )
 }
