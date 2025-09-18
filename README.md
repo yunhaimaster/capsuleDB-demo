@@ -1,6 +1,6 @@
-# 膠囊配方管理系統
+# EasyPack 膠囊配方管理系統
 
-一個專為醫藥製造業設計的內部生產管理系統，用於膠囊配方的建檔與生產記錄管理。
+一個專為保健品公司設計的內部生產管理系統，用於膠囊配方的建檔與生產記錄管理。
 
 ## 功能特色
 
@@ -14,7 +14,7 @@
 - ✅ 記錄清單檢視與搜尋篩選
 - ✅ 多維度排序與分頁
 - ✅ 詳細記錄查看
-- ✅ CSV/PDF 匯出功能
+- ✅ CSV 匯出功能
 - ✅ 列印友好樣式
 
 ### 自動計算功能
@@ -30,7 +30,7 @@
 - **資料庫**: SQLite (開發) / PostgreSQL (生產)
 - **表單驗證**: React Hook Form + Zod
 - **UI 組件**: Radix UI + Lucide React
-- **匯出功能**: CSV + PDF (jsPDF)
+- **匯出功能**: CSV 匯出
 
 ## 快速開始
 
@@ -49,7 +49,7 @@ cp env.example .env.local
 編輯 `.env.local` 檔案，設定資料庫連線：
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:./prisma/dev.db"
 ```
 
 ### 3. 初始化資料庫
@@ -110,15 +110,17 @@ capsuleDB/
 3. 執行 `npm run build` 建置專案
 4. 執行 `npm start` 啟動生產伺服器
 
-### Docker 部署
+### Vercel 部署 (推薦)
 ```bash
-# 使用 Docker Compose
-docker-compose up -d
+# 1. 推送代碼到 GitHub
+git push origin main
 
-# 或使用 Docker
-docker build -t capsule-db .
-docker run -p 3000:3000 capsule-db
+# 2. 在 Vercel 中導入專案
+# 3. 設定環境變數
+# 4. 自動部署完成
 ```
+
+詳細部署指南請參考 [DEPLOYMENT.md](./DEPLOYMENT.md)
 
 ## API 端點
 
@@ -151,7 +153,7 @@ npm run test:e2e
 - 多維度搜尋篩選（客戶名稱、產品代號、日期範圍、生產狀態）
 - 分頁顯示與排序功能
 - 詳細記錄檢視與編輯
-- 一鍵匯出 CSV/PDF 格式
+- 一鍵匯出 CSV 格式
 
 ### 資料驗證
 - 客戶名稱：1-100 字
