@@ -63,11 +63,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   // 計算批次總重量
   const batchTotalWeight = unitTotalWeight * (watchedQuantity || 1)
 
-  // 更新計算值
-  useEffect(() => {
-    setValue('unitWeightMg', unitTotalWeight)
-    setValue('batchTotalWeightMg', batchTotalWeight)
-  }, [unitTotalWeight, batchTotalWeight, setValue])
+  // 計算值不需要設置到表單中，它們會在提交時計算
 
   const onSubmit = async (data: ProductionOrderFormData) => {
     setIsSubmitting(true)

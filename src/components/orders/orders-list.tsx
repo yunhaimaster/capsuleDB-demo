@@ -326,7 +326,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           <Button
             variant="outline"
             disabled={filters.page === 1}
-            onClick={() => handleSearch({ page: filters.page - 1 })}
+            onClick={() => handleSearch({ page: (filters.page || 1) - 1 })}
           >
             上一頁
           </Button>
@@ -336,7 +336,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           <Button
             variant="outline"
             disabled={filters.page === pagination.totalPages}
-            onClick={() => handleSearch({ page: filters.page + 1 })}
+            onClick={() => handleSearch({ page: (filters.page || 1) + 1 })}
           >
             下一頁
           </Button>
