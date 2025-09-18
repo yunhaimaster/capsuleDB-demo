@@ -123,7 +123,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>生產記錄管理</CardTitle>
+            <div>
+              <CardTitle>生產記錄管理</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                支援搜尋客戶名稱或原料名稱
+              </p>
+            </div>
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -145,7 +150,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
               <Input
-                placeholder="搜尋客戶名稱或產品代號..."
+                placeholder="搜尋客戶名稱或原料名稱..."
                 value={filters.customerName || ''}
                 onChange={(e) => handleSearch({ customerName: e.target.value })}
               />
@@ -252,17 +257,37 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 {orders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell>{formatDate(order.createdAt)}</TableCell>
-                    <TableCell>{order.customerName}</TableCell>
+                    <TableCell>
+                      {filters.customerName && 
+                       order.customerName.toLowerCase().includes(filters.customerName.toLowerCase()) ? (
+                        <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">
+                          {order.customerName}
+                        </span>
+                      ) : (
+                        order.customerName
+                      )}
+                    </TableCell>
                     <TableCell>{order.productCode}</TableCell>
                     <TableCell>
                       <div className="max-w-[200px]">
                         {order.ingredients && order.ingredients.length > 0 ? (
                           <div className="space-y-1">
-                            {order.ingredients.slice(0, 2).map((ingredient, index) => (
-                              <div key={index} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                                {ingredient.materialName}
-                              </div>
-                            ))}
+                            {order.ingredients.slice(0, 2).map((ingredient, index) => {
+                              const isHighlighted = filters.customerName && 
+                                ingredient.materialName.toLowerCase().includes(filters.customerName.toLowerCase())
+                              return (
+                                <div 
+                                  key={index} 
+                                  className={`text-xs px-2 py-1 rounded ${
+                                    isHighlighted 
+                                      ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
+                                      : 'bg-gray-100'
+                                  }`}
+                                >
+                                  {ingredient.materialName}
+                                </div>
+                              )
+                            })}
                             {order.ingredients.length > 2 && (
                               <div className="text-xs text-gray-500">
                                 +{order.ingredients.length - 2} 更多

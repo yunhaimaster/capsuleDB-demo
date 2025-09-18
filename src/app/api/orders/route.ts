@@ -24,10 +24,25 @@ export async function GET(request: NextRequest) {
     const where: any = {}
     
     if (validatedFilters.customerName) {
-      where.customerName = {
-        contains: validatedFilters.customerName,
-        mode: 'insensitive'
-      }
+      // 支援客戶名稱或原料名稱搜尋
+      where.OR = [
+        {
+          customerName: {
+            contains: validatedFilters.customerName,
+            mode: 'insensitive'
+          }
+        },
+        {
+          ingredients: {
+            some: {
+              materialName: {
+                contains: validatedFilters.customerName,
+                mode: 'insensitive'
+              }
+            }
+          }
+        }
+      ]
     }
     
     if (validatedFilters.productCode) {
