@@ -100,8 +100,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('POST /api/orders - Starting request')
+    
     const body = await request.json()
+    console.log('Request body:', body)
+    
     const validatedData = productionOrderSchema.parse(body)
+    console.log('Validated data:', validatedData)
     
     // Calculate weights
     const unitWeightMg = validatedData.ingredients.reduce(
@@ -109,6 +114,8 @@ export async function POST(request: NextRequest) {
       0
     )
     const batchTotalWeightMg = unitWeightMg * validatedData.productionQuantity
+    
+    console.log('Calculated weights:', { unitWeightMg, batchTotalWeightMg })
     
     const order = await prisma.productionOrder.create({
       data: {
@@ -133,6 +140,8 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    console.log('Order created successfully:', order)
+
     // 確保日期正確序列化
     const serializedOrder = {
       ...order,
@@ -144,14 +153,24 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(serializedOrder, { status: 201 })
   } catch (error) {
     console.error('Error creating order:', error)
+    console.error('Error details:', {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace'
+    })
+    
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
         { error: 'Validation failed', details: error.message },
         { status: 400 }
       )
     }
+    
     return NextResponse.json(
-      { error: 'Failed to create order' },
+      { 
+        error: 'Failed to create order',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }
