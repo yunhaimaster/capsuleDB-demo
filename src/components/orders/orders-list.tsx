@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus } from 'lucide-react'
 import { formatDate, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, SearchFilters } from '@/types'
@@ -241,22 +242,210 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <p className="text-sm md:text-base text-muted-foreground">沒有找到任何記錄</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="text-xs md:text-sm">建檔日期</TableHead>
-                  <TableHead className="text-xs md:text-sm">客戶名稱</TableHead>
-                  <TableHead className="text-xs md:text-sm">產品代號</TableHead>
-                  <TableHead className="text-xs md:text-sm">主要原料</TableHead>
-                  <TableHead className="text-xs md:text-sm">生產數量</TableHead>
-                  <TableHead className="text-xs md:text-sm">單粒總重量</TableHead>
-                  <TableHead className="text-xs md:text-sm">完工狀態</TableHead>
-                  <TableHead className="text-xs md:text-sm">製程問題</TableHead>
-                  <TableHead className="w-[120px] md:w-[200px] text-xs md:text-sm">操作</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <>
+              {/* 手機卡片式佈局 */}
+              <div className="block md:hidden space-y-4">
+                {orders.map((order) => (
+                  <Card key={order.id} className="border-0 shadow-lg">
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* 標題行 */}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-semibold text-gray-800">{order.customerName}</h3>
+                            <p className="text-sm text-gray-600">{order.productCode}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm text-gray-500">{formatDate(order.createdAt)}</div>
+                            {order.completionDate ? (
+                              <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+                                ✓ 已完工
+                              </span>
+                            ) : (
+                              <span className="inline-block mt-1 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">
+                                ⏳ 未完工
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 原料信息 */}
+                        <div>
+                          <p className="text-xs font-medium text-gray-600 mb-1">主要原料</p>
+                          <div className="flex flex-wrap gap-1">
+                            {order.ingredients && order.ingredients.length > 0 ? (
+                              order.ingredients.slice(0, 3).map((ingredient, index) => {
+                                const isHighlighted = filters.customerName && 
+                                  ingredient.materialName.toLowerCase().includes(filters.customerName.toLowerCase())
+                                return (
+                                  <span 
+                                    key={index} 
+                                    className={`text-xs px-2 py-1 rounded ${
+                                      isHighlighted 
+                                        ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
+                                        : 'bg-gray-100 text-gray-700'
+                                    }`}
+                                  >
+                                    {ingredient.materialName}
+                                  </span>
+                                )
+                              })
+                            ) : (
+                              <span className="text-xs text-gray-400">無原料資料</span>
+                            )}
+                            {order.ingredients && order.ingredients.length > 3 && (
+                              <span className="text-xs text-gray-500">
+                                +{order.ingredients.length - 3} 更多
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 生產信息 */}
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <p className="text-xs text-gray-500">生產數量</p>
+                            <p className="font-medium">{formatNumber(order.productionQuantity)} 粒</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500">單粒重量</p>
+                            <p className="font-medium">{order.unitWeightMg.toFixed(3)} mg</p>
+                          </div>
+                        </div>
+
+                        {/* 製程問題 */}
+                        {order.processIssues && (
+                          <div>
+                            <p className="text-xs font-medium text-gray-600 mb-1">製程問題</p>
+                            <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200">
+                              {order.processIssues.length > 100 
+                                ? `${order.processIssues.substring(0, 100)}...` 
+                                : order.processIssues
+                              }
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 操作按鈕 */}
+                        <div className="flex gap-2 pt-2 border-t">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" size="sm" className="flex-1 text-xs">
+                                <Eye className="mr-1 h-3 w-3" />
+                                查看
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle>生產記錄詳情</DialogTitle>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <Label className="text-sm font-medium">客戶名稱</Label>
+                                    <p className="text-sm">{order.customerName}</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-sm font-medium">產品代號</Label>
+                                    <p className="text-sm">{order.productCode}</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-sm font-medium">生產數量</Label>
+                                    <p className="text-sm">{formatNumber(order.productionQuantity)} 粒</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-sm font-medium">單粒總重量</Label>
+                                    <p className="text-sm">{order.unitWeightMg.toFixed(3)} mg</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-sm font-medium">批次總重量</Label>
+                                    <p className="text-sm">{convertWeight(order.batchTotalWeightMg).display}</p>
+                                  </div>
+                                  <div>
+                                    <Label className="text-sm font-medium">完工日期</Label>
+                                    <p className="text-sm">{order.completionDate ? formatDate(order.completionDate) : '未完工'}</p>
+                                  </div>
+                                </div>
+                                
+                                {order.processIssues && (
+                                  <div>
+                                    <Label className="text-sm font-medium">製程問題記錄</Label>
+                                    <p className="text-sm bg-red-50 p-3 rounded border border-red-200">{order.processIssues}</p>
+                                  </div>
+                                )}
+                                
+                                {order.qualityNotes && (
+                                  <div>
+                                    <Label className="text-sm font-medium">品管備註</Label>
+                                    <p className="text-sm bg-blue-50 p-3 rounded border border-blue-200">{order.qualityNotes}</p>
+                                  </div>
+                                )}
+
+                                <div>
+                                  <Label className="text-sm font-medium">原料明細</Label>
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>原料名稱</TableHead>
+                                        <TableHead>單粒含量(mg)</TableHead>
+                                        <TableHead>批次用量</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {order.ingredients?.map((ingredient, index) => (
+                                        <TableRow key={index}>
+                                          <TableCell>{ingredient.materialName}</TableCell>
+                                          <TableCell>{ingredient.unitContentMg.toFixed(5)}</TableCell>
+                                          <TableCell>{convertWeight(ingredient.unitContentMg * order.productionQuantity).display}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <Link href={`/orders/${order.id}/edit`}>
+                            <Button variant="outline" size="sm" className="flex-1 text-xs">
+                              <Edit className="mr-1 h-3 w-3" />
+                              編輯
+                            </Button>
+                          </Link>
+                          
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleDelete(order.id)}
+                            className="flex-1 text-xs text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="mr-1 h-3 w-3" />
+                            刪除
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* 桌面表格佈局 */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-xs md:text-sm">建檔日期</TableHead>
+                    <TableHead className="text-xs md:text-sm">客戶名稱</TableHead>
+                    <TableHead className="text-xs md:text-sm">產品代號</TableHead>
+                    <TableHead className="text-xs md:text-sm">主要原料</TableHead>
+                    <TableHead className="text-xs md:text-sm">生產數量</TableHead>
+                    <TableHead className="text-xs md:text-sm">單粒總重量</TableHead>
+                    <TableHead className="text-xs md:text-sm">完工狀態</TableHead>
+                    <TableHead className="text-xs md:text-sm">製程問題</TableHead>
+                    <TableHead className="w-[120px] md:w-[200px] text-xs md:text-sm">操作</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                 {orders.map((order) => (
                   <TableRow key={order.id}>
                     <TableCell>{formatDate(order.createdAt)}</TableCell>
@@ -368,6 +557,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 ))}
               </TableBody>
             </Table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>
