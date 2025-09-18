@@ -29,7 +29,7 @@ export const productionOrderSchema = z.object({
     .positive('生產數量必須為正數')
     .min(1, '生產數量不能小於1')
     .max(5000000, '生產數量不能超過5,000,000粒'),
-  completionDate: z.date().optional().nullable(),
+  completionDate: z.union([z.date(), z.string().transform(str => new Date(str)), z.null()]).optional().nullable(),
   processIssues: z
     .string()
     .max(1000, '製程問題記錄不能超過1000字')

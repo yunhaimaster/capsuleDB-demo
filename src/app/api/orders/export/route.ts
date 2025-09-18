@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
         return row
       })
 
-      const csvContent = generateCSV(csvData, headers)
+      // 添加 BOM 以支持中文
+      const csvContent = '\uFEFF' + generateCSV(csvData, headers)
       
       return new NextResponse(csvContent, {
         headers: {
@@ -77,22 +78,19 @@ export async function POST(request: NextRequest) {
     if (format === 'pdf') {
       const doc = new jsPDF()
       
-      // 設定中文字體
-      doc.setFont('helvetica')
-      
       // 標題
       doc.setFontSize(16)
-      doc.text('膠囊配方生產記錄', 20, 20)
+      doc.text('Capsule Production Records', 20, 20)
       
       // 表格標題
-      const tableHeaders = ['建檔日期', '客戶名稱', '產品代號', '生產數量', '單粒重量(mg)', '完工狀態']
+      const tableHeaders = ['Date', 'Customer', 'Product Code', 'Quantity', 'Unit Weight(mg)', 'Status']
       const tableData = orders.map(order => [
         order.createdAt.toISOString().split('T')[0],
         order.customerName,
         order.productCode,
         order.productionQuantity.toString(),
         order.unitWeightMg.toFixed(3),
-        order.completionDate ? '已完工' : '未完工'
+        order.completionDate ? 'Completed' : 'Pending'
       ])
 
       // 簡單的表格實現

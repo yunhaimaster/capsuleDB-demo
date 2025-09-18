@@ -86,8 +86,8 @@ export function generateCSV(data: any[], headers: string[]): string {
   const csvContent = [
     headers.join(','),
     ...data.map(row => 
-      headers.map(header => {
-        const value = row[header] || ''
+      headers.map((_, index) => {
+        const value = row[index] || ''
         // Escape commas and quotes
         if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
           return `"${value.replace(/"/g, '""')}"`
