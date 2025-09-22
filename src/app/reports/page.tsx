@@ -10,7 +10,6 @@ export default function ReportsPage() {
       {/* 麵包屑導航 */}
       <Breadcrumb
         items={[
-          { label: '首頁', href: '/' },
           { label: '統計報表', href: '/reports' }
         ]}
       />
@@ -67,7 +66,7 @@ export default function ReportsPage() {
             </div>
             <div className="pt-4 border-t border-gray-200">
               <p className="text-xs text-gray-500">
-                如有緊急統計需求，請聯繫系統管理員
+                如有緊急統計需求，請聯繫 Victor
               </p>
             </div>
           </CardContent>

@@ -51,7 +51,6 @@ export default function OrderDetailPage() {
       <div className="space-y-6">
         <Breadcrumb
           items={[
-            { label: '首頁', href: '/' },
             { label: '生產記錄', href: '/orders' },
             { label: '載入中...', href: '#' }
           ]}
@@ -70,7 +69,6 @@ export default function OrderDetailPage() {
       <div className="space-y-6">
         <Breadcrumb
           items={[
-            { label: '首頁', href: '/' },
             { label: '生產記錄', href: '/orders' },
             { label: '錯誤', href: '#' }
           ]}
@@ -100,7 +98,6 @@ export default function OrderDetailPage() {
       {/* 麵包屑導航 */}
       <Breadcrumb
         items={[
-          { label: '首頁', href: '/' },
           { label: '生產記錄', href: '/orders' },
           { label: `${order.customerName} - ${order.productName}`, href: '#' }
         ]}
