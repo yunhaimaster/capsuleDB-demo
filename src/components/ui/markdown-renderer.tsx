@@ -30,7 +30,7 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
           ),
           // 自定義段落樣式
           p: ({ children }) => (
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">
+            <p className="text-sm text-gray-800 dark:text-gray-200 mb-2 leading-relaxed font-medium">
               {children}
             </p>
           ),
@@ -46,18 +46,18 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
             </ol>
           ),
           li: ({ children }) => (
-            <li className="text-sm text-gray-700 dark:text-gray-300">
+            <li className="text-sm text-gray-800 dark:text-gray-200 font-medium">
               {children}
             </li>
           ),
           // 自定義強調樣式
           strong: ({ children }) => (
-            <strong className="font-semibold text-gray-900 dark:text-gray-100">
+            <strong className="font-bold text-gray-900 dark:text-gray-100">
               {children}
             </strong>
           ),
           em: ({ children }) => (
-            <em className="italic text-gray-800 dark:text-gray-200">
+            <em className="italic text-gray-900 dark:text-gray-100 font-medium">
               {children}
             </em>
           ),

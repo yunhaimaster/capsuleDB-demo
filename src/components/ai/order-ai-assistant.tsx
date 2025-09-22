@@ -241,7 +241,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     <div
                       className={`max-w-[80%] rounded-lg p-3 ${
                         message.role === 'user'
-                          ? 'bg-purple-600 text-white'
+                          ? 'bg-purple-600 text-white shadow-lg'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                       }`}
                     >

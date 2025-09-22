@@ -289,7 +289,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                       <div
                         className={`max-w-[80%] rounded-lg p-3 ${
                           message.role === 'user'
-                            ? 'bg-emerald-600 text-white'
+                            ? 'bg-emerald-600 text-white shadow-lg'
                             : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                         }`}
                       >
