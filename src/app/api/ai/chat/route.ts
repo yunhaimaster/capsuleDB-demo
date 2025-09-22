@@ -4,9 +4,17 @@ export async function POST(request: NextRequest) {
   try {
     const { message, orders } = await request.json()
 
-    // OpenRouter API 配置
-    const OPENROUTER_API_KEY = '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'
-    const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
+    // 從環境變數獲取 API 配置
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
+    const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
+
+    if (!OPENROUTER_API_KEY) {
+      console.error('OpenRouter API key not configured')
+      return NextResponse.json(
+        { error: 'AI 服務暫時無法使用，請聯繫 Victor' },
+        { status: 500 }
+      )
+    }
 
     // 構建系統提示詞
     const systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
@@ -30,7 +38,7 @@ ${JSON.stringify(orders, null, 2)}
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://easypack-capsule-management.vercel.app',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
