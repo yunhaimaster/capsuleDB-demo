@@ -203,8 +203,6 @@ ${JSON.stringify(userFriendlyOrders, null, 2)}
       .replace(/end_of_sentence/gi, '')
       // 清理任何以 < 開頭的特殊標記
       .replace(/<[^>]*>/g, '')
-      // 清理任何包含 | 的特殊標記
-      .replace(/[^a-zA-Z0-9\u4e00-\u9fff\s.,!?;:(){}[\]"'`~@#$%^&*+=<>/\\-]/g, '')
       .trim()
 
     // 基於 AI 回答動態生成建議問題
