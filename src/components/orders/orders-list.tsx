@@ -497,9 +497,64 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               <span className="text-xs text-gray-400">無原料資料</span>
                             )}
                             {order.ingredients && order.ingredients.length > 3 && (
-                              <span className="text-xs text-gray-500">
-                                +{order.ingredients.length - 3} 更多
-                              </span>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer">
+                                    +{order.ingredients.length - 3} 更多
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                                  <DialogHeader>
+                                    <DialogTitle>原料配方明細 - {order.customerName}</DialogTitle>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      <div>
+                                        <h4 className="font-medium mb-2">基本資訊</h4>
+                                        <div className="space-y-1 text-sm">
+                                          <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
+                                          <p><span className="font-medium">產品名字：</span>{order.productName}</p>
+                                          <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium mb-2">生產狀態</h4>
+                                        <div className="space-y-1 text-sm">
+                                          <p><span className="font-medium">完工日期：</span>
+                                            {order.completionDate ? formatDate(order.completionDate) : '未完工'}
+                                          </p>
+                                          <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+                                          <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div>
+                                      <h4 className="font-medium mb-2">原料配方明細</h4>
+                                      <Table>
+                                        <TableHeader>
+                                          <TableRow>
+                                            <TableHead>原料品名</TableHead>
+                                            <TableHead>單粒含量 (mg)</TableHead>
+                                            <TableHead>批次用量</TableHead>
+                                          </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                          {order.ingredients.map((ingredient, index) => (
+                                            <TableRow key={index}>
+                                              <TableCell>{ingredient.materialName}</TableCell>
+                                              <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                                              <TableCell>
+                                                {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                                              </TableCell>
+                                            </TableRow>
+                                          ))}
+                                        </TableBody>
+                                      </Table>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
                             )}
                           </div>
                         </div>
@@ -735,9 +790,64 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               )
                             })}
                             {order.ingredients.length > 2 && (
-                              <div className="text-xs text-gray-500 dark:text-gray-400">
-                                +{order.ingredients.length - 2} 更多
-                              </div>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer">
+                                    +{order.ingredients.length - 2} 更多
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                                  <DialogHeader>
+                                    <DialogTitle>原料配方明細 - {order.customerName}</DialogTitle>
+                                  </DialogHeader>
+                                  <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                      <div>
+                                        <h4 className="font-medium mb-2">基本資訊</h4>
+                                        <div className="space-y-1 text-sm">
+                                          <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
+                                          <p><span className="font-medium">產品名字：</span>{order.productName}</p>
+                                          <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium mb-2">生產狀態</h4>
+                                        <div className="space-y-1 text-sm">
+                                          <p><span className="font-medium">完工日期：</span>
+                                            {order.completionDate ? formatDate(order.completionDate) : '未完工'}
+                                          </p>
+                                          <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+                                          <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div>
+                                      <h4 className="font-medium mb-2">原料配方明細</h4>
+                                      <Table>
+                                        <TableHeader>
+                                          <TableRow>
+                                            <TableHead>原料品名</TableHead>
+                                            <TableHead>單粒含量 (mg)</TableHead>
+                                            <TableHead>批次用量</TableHead>
+                                          </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                          {order.ingredients.map((ingredient, index) => (
+                                            <TableRow key={index}>
+                                              <TableCell>{ingredient.materialName}</TableCell>
+                                              <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                                              <TableCell>
+                                                {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                                              </TableCell>
+                                            </TableRow>
+                                          ))}
+                                        </TableBody>
+                                      </Table>
+                                    </div>
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
                             )}
                           </div>
                         ) : (
