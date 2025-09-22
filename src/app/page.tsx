@@ -123,38 +123,38 @@ export default function HomePage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900/50 dark:to-gray-900/50 dark:border-slate-700/30">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
+            <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
               <FileText className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
               最近生產紀錄
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-gray-600">
+            <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-300">
               最新的生產訂單狀態
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {loading ? (
               <div className="text-center py-4">
-                <div className="text-sm text-gray-500">載入中...</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">載入中...</div>
               </div>
             ) : recentOrders.length > 0 ? (
               <div className="space-y-2">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                  <div key={order.id} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2">
-                        <h4 className="text-sm font-medium text-gray-900 truncate">
+                        <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                           {order.customerName}
                         </h4>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           {order.productName}
                         </span>
                       </div>
                       <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           {formatNumber(order.productionQuantity)} 粒
                         </span>
                         {order.capsuleSize && order.capsuleColor && order.capsuleType && (
-                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                          <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded">
                             {[order.capsuleSize, order.capsuleColor, order.capsuleType].filter(Boolean).join('')}
                           </span>
                         )}
@@ -162,11 +162,11 @@ export default function HomePage() {
                     </div>
                     <div className="flex items-center space-x-2">
                       {order.completionDate ? (
-                        <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
+                        <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded">
                           ✓ 完工 {formatDateOnly(order.completionDate)}
                         </span>
                       ) : (
-                        <span className="text-xs px-2 py-1 bg-orange-100 text-orange-800 rounded">
+                        <span className="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded">
                           ⏳ 未完工
                         </span>
                       )}
@@ -203,7 +203,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="text-center py-4">
-                <div className="text-sm text-gray-500 mb-2">尚無生產記錄</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">尚無生產記錄</div>
                 <Link href="/orders/new">
                   <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                     建立第一筆記錄
@@ -220,7 +220,7 @@ export default function HomePage() {
               <span className="mr-2">📋</span>
               功能介紹
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-amber-600 dark:text-amber-300">
+            <CardDescription className="text-sm md:text-base text-amber-600 dark:text-amber-200">
               系統功能說明與使用指南
             </CardDescription>
           </CardHeader>
@@ -228,7 +228,7 @@ export default function HomePage() {
             <div className="space-y-3 md:space-y-4">
               <div className="bg-amber-50 dark:bg-amber-900/40 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-700/50">
                 <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
-                <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-300">
+                <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-100">
                   <li>• 膠囊配方管理與記錄</li>
                   <li>• 生產訂單追蹤與狀態管理</li>
                   <li>• 製程問題記錄與品質管理</li>
@@ -238,7 +238,7 @@ export default function HomePage() {
               
               <div className="bg-orange-50 dark:bg-orange-900/40 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-700/50">
                 <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">使用流程</h4>
-                <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-300">
+                <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-100">
                   <li>1. 新增配方：建立新的膠囊生產訂單</li>
                   <li>2. 檢視記錄：查看和管理現有膠囊訂單</li>
                   <li>3. 品質追蹤：記錄膠囊製程問題和備註</li>
@@ -248,10 +248,10 @@ export default function HomePage() {
               
               <div className="bg-yellow-50 dark:bg-yellow-900/40 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-700/50">
                 <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">技術支援</h4>
-                <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-300">
+                <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-100">
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
                   <p className="font-medium">Victor</p>
-                  <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">系統管理員</p>
+                  <p className="text-xs text-yellow-600 dark:text-yellow-200 mt-1">系統管理員</p>
                 </div>
               </div>
             </div>
