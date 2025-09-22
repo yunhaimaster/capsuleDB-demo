@@ -54,7 +54,16 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
         },
         body: JSON.stringify({
           message: input.trim(),
-          orders: [order] // 只傳送當前訂單
+          orders: [order], // 只傳送當前訂單
+          context: {
+            currentPage: '/orders/[id]',
+            pageDescription: '訂單詳情頁面 - 查看特定膠囊訂單的詳細信息',
+            timestamp: new Date().toISOString(),
+            ordersCount: 1,
+            hasCurrentOrder: true,
+            currentOrder: order,
+            recentOrders: []
+          }
         }),
       })
 
