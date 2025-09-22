@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, Eye, FileText, BarChart3, Plus } from 'lucide-react'
+import { Bot, Send, Loader2, X, Eye, FileText, Plus } from 'lucide-react'
 
 interface Message {
   id: string
@@ -66,15 +66,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           '膠囊原料配比有什麼建議？',
           '膠囊生產數量如何計算？',
           '膠囊大小和顏色搭配指南'
-        ]
-        break
-      case '/reports':
-        pageDescription = '統計報表頁面 - 查看膠囊生產統計和分析'
-        suggestions = [
-          '顯示膠囊原料使用統計',
-          '膠囊客戶訂單分析',
-          '膠囊生產效率報告',
-          '膠囊品質問題統計'
         ]
         break
       default:
@@ -177,8 +168,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         return <Eye className="h-4 w-4" />
       case '/orders/new':
         return <Plus className="h-4 w-4" />
-      case '/reports':
-        return <BarChart3 className="h-4 w-4" />
       default:
         return <Bot className="h-4 w-4" />
     }
@@ -192,8 +181,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         return '生產記錄 AI 助手'
       case '/orders/new':
         return '新增配方 AI 助手'
-      case '/reports':
-        return '統計報表 AI 助手'
       default:
         if (pathname.startsWith('/orders/') && pathname !== '/orders/new') {
           return '訂單詳情 AI 助手'
@@ -223,26 +210,15 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               <Bot className="h-5 w-5 mr-2 text-blue-600" />
               {getPageTitle()}
             </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearChat}
-                className="h-8 w-8 p-0"
-                title="清除對話"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClose}
-                className="h-8 w-8 p-0"
-                title="關閉"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearChat}
+              className="h-8 w-8 p-0"
+              title="清除對話"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </DialogTitle>
         </DialogHeader>
         
