@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Plus, FileText, BarChart3, TrendingUp, Eye } from 'lucide-react'
-import { formatDateOnly, formatNumber } from '@/lib/utils'
+import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
 
 export default function HomePage() {
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
 
   useEffect(() => {
     fetchRecentOrders()
@@ -160,11 +163,26 @@ export default function HomePage() {
                           ⏳ 未完工
                         </span>
                       )}
-                      <Link href={`/orders/${order.id}`}>
-                        <Button size="sm" variant="outline" className="h-6 w-6 p-0">
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                      </Link>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="h-6 w-6 p-0"
+                            onClick={() => setSelectedOrder(order)}
+                          >
+                            <Eye className="h-3 w-3" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>訂單詳情</DialogTitle>
+                          </DialogHeader>
+                          {selectedOrder && (
+                            <OrderDetailView order={selectedOrder} />
+                          )}
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   </div>
                 ))}
@@ -235,6 +253,89 @@ export default function HomePage() {
         </Card>
       </div>
 
+    </div>
+  )
+}
+
+// 訂單詳情檢視組件
+function OrderDetailView({ order }: { order: ProductionOrder }) {
+  return (
+    <div className="space-y-6">
+      {/* 基本資訊 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h4 className="font-medium mb-2">基本資訊</h4>
+          <div className="space-y-2 text-sm">
+            <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
+            <p><span className="font-medium">產品名字：</span>{order.productName}</p>
+            <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+            <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
+            {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
+              <div className="mt-3 pt-3 border-t">
+                <h5 className="font-medium mb-2">膠囊規格</h5>
+                {order.capsuleColor && <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>}
+                {order.capsuleSize && <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>}
+                {order.capsuleType && <p><span className="font-medium">成份：</span>{order.capsuleType}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+        <div>
+          <h4 className="font-medium mb-2">生產狀態</h4>
+          <div className="space-y-2 text-sm">
+            <p><span className="font-medium">完工日期：</span>
+              {order.completionDate ? formatDate(order.completionDate) : '未完工'}
+            </p>
+            <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+            <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 製程問題記錄 */}
+      {order.processIssues && (
+        <div>
+          <h4 className="font-medium mb-2">製程問題記錄</h4>
+          <div className="p-3 bg-muted rounded-md text-sm">
+            {order.processIssues}
+          </div>
+        </div>
+      )}
+
+      {/* 品管備註 */}
+      {order.qualityNotes && (
+        <div>
+          <h4 className="font-medium mb-2">品管備註</h4>
+          <div className="p-3 bg-muted rounded-md text-sm">
+            {order.qualityNotes}
+          </div>
+        </div>
+      )}
+
+      {/* 原料配方明細 */}
+      <div>
+        <h4 className="font-medium mb-2">原料配方明細</h4>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>原料品名</TableHead>
+              <TableHead>單粒含量 (mg)</TableHead>
+              <TableHead>批次用量</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {order.ingredients.map((ingredient, index) => (
+              <TableRow key={index}>
+                <TableCell>{ingredient.materialName}</TableCell>
+                <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                <TableCell>
+                  {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }
