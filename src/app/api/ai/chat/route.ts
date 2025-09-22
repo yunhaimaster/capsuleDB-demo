@@ -143,8 +143,9 @@ AI回答：${aiResponse}
 3. 涉及膠囊規格、原料配比、生產工藝、質量控制等
 4. 有助於用戶進一步了解膠囊灌裝相關問題
 5. 問題簡潔明確，可以直接點擊使用
+6. 問題必須是完整的問句，不能是"問題用中文"這樣的無意義文字
 
-請只返回4個問題，每行一個，不要編號，不要其他文字。`
+請只返回4個問題，每行一個，不要編號，不要其他文字。每個問題都應該是關於膠囊灌裝的具體問題。`
             }
           ],
           max_tokens: 300,
@@ -155,7 +156,17 @@ AI回答：${aiResponse}
       if (suggestionsResponse.ok) {
         const suggestionsData = await suggestionsResponse.json()
         const suggestionsText = suggestionsData.choices[0].message.content
-        suggestions = suggestionsText.split('\n').filter((s: string) => s.trim()).slice(0, 4)
+        suggestions = suggestionsText.split('\n')
+          .filter((s: string) => s.trim())
+          .filter((s: string) => {
+            const cleanS = s.trim()
+            return cleanS.length > 5 && 
+                   !cleanS.includes('問題用中文') && 
+                   !cleanS.includes('用中文') &&
+                   !cleanS.includes('問題') &&
+                   (cleanS.includes('？') || cleanS.includes('?'))
+          })
+          .slice(0, 4)
         console.log('Dynamic suggestions generated:', suggestions)
       } else {
         console.error('Suggestions API failed:', suggestionsResponse.status)
