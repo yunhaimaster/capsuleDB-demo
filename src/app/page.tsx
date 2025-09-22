@@ -260,7 +260,18 @@ export default function HomePage() {
       </div>
 
              {/* 智能 AI 助手 */}
-             <SmartAIAssistant orders={allOrders} />
+             <SmartAIAssistant 
+              orders={allOrders} 
+              pageData={{
+                currentPage: '/',
+                pageDescription: '首頁 - 系統概覽和最近生產記錄',
+                timestamp: new Date().toISOString(),
+                ordersCount: allOrders.length,
+                hasCurrentOrder: false,
+                currentOrder: null,
+                recentOrders: recentOrders.slice(0, 5)
+              }}
+            />
     </div>
   )
 }

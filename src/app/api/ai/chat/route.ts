@@ -189,7 +189,7 @@ AI回答：${aiResponse}
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
                    !s.includes('end_of_sentence') &&
-                   (s.includes('？') || s.includes('?'))
+                   (s.includes('？') || s.includes('?') || s.includes('如何') || s.includes('什麼') || s.includes('哪個') || s.includes('怎樣'))
           })
           .slice(0, 4)
         console.log('Dynamic suggestions generated:', suggestions)

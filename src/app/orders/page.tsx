@@ -48,7 +48,18 @@ export default function OrdersPage() {
       <OrdersList />
       
              {/* 智能 AI 助手 */}
-             <SmartAIAssistant orders={orders} />
+             <SmartAIAssistant 
+              orders={orders} 
+              pageData={{
+                currentPage: '/orders',
+                pageDescription: '生產記錄管理頁面 - 查看和管理所有膠囊生產訂單',
+                timestamp: new Date().toISOString(),
+                ordersCount: orders.length,
+                hasCurrentOrder: false,
+                currentOrder: null,
+                recentOrders: orders.slice(0, 5)
+              }}
+            />
     </div>
   )
 }

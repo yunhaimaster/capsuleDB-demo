@@ -33,7 +33,18 @@ export default function NewOrderPage() {
       </div>
       
       {/* 智能 AI 助手 */}
-      <SmartAIAssistant />
+      <SmartAIAssistant 
+        orders={[]} 
+        pageData={{
+          currentPage: '/orders/new',
+          pageDescription: '新增膠囊配方頁面 - 建立新的膠囊生產訂單',
+          timestamp: new Date().toISOString(),
+          ordersCount: 0,
+          hasCurrentOrder: false,
+          currentOrder: null,
+          recentOrders: []
+        }}
+      />
     </div>
   )
 }
