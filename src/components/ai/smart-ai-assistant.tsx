@@ -543,7 +543,12 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setInput('繼續對話...')}
+                  onClick={() => {
+                    toggleMinimize() // 先展開
+                    setTimeout(() => {
+                      setInput('繼續對話...')
+                    }, 100) // 延遲設置輸入
+                  }}
                   className="text-xs"
                 >
                   繼續對話
