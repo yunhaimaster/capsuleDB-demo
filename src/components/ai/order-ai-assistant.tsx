@@ -199,31 +199,31 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
                       onClick={() => setInput('這個訂單的原料配比如何？')}
-                      className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                      className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-purple-200 dark:border-purple-700"
                     >
-                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1 text-sm">訂單分析</p>
-                      <p className="text-purple-700 dark:text-purple-300 text-xs sm:text-sm">"這個訂單的原料配比如何？"</p>
+                      <p className="font-bold text-purple-900 dark:text-purple-100 mb-1 text-sm">訂單分析</p>
+                      <p className="text-purple-800 dark:text-purple-200 text-xs sm:text-sm font-medium">"這個訂單的原料配比如何？"</p>
                     </button>
                     <button
                       onClick={() => setInput('單粒重量是否合理？')}
-                      className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                      className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-blue-200 dark:border-blue-700"
                     >
-                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1 text-sm">重量計算</p>
-                      <p className="text-blue-700 dark:text-blue-300 text-xs sm:text-sm">"單粒重量是否合理？"</p>
+                      <p className="font-bold text-blue-900 dark:text-blue-100 mb-1 text-sm">重量計算</p>
+                      <p className="text-blue-800 dark:text-blue-200 text-xs sm:text-sm font-medium">"單粒重量是否合理？"</p>
                     </button>
                     <button
                       onClick={() => setInput('有什麼生產注意事項？')}
-                      className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                      className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-green-200 dark:border-green-700"
                     >
-                      <p className="font-medium text-green-800 dark:text-green-200 mb-1 text-sm">生產建議</p>
-                      <p className="text-green-700 dark:text-green-300 text-xs sm:text-sm">"有什麼生產注意事項？"</p>
+                      <p className="font-bold text-green-900 dark:text-green-100 mb-1 text-sm">生產建議</p>
+                      <p className="text-green-800 dark:text-green-200 text-xs sm:text-sm font-medium">"有什麼生產注意事項？"</p>
                     </button>
                     <button
                       onClick={() => setInput('這個配方的品質如何？')}
-                      className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                      className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-orange-200 dark:border-orange-700"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1 text-sm">品質評估</p>
-                      <p className="text-orange-700 dark:text-orange-300 text-xs sm:text-sm">"這個配方的品質如何？"</p>
+                      <p className="font-bold text-orange-900 dark:text-orange-100 mb-1 text-sm">品質評估</p>
+                      <p className="text-orange-800 dark:text-orange-200 text-xs sm:text-sm font-medium">"這個配方的品質如何？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
