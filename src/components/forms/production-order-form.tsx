@@ -23,6 +23,21 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showCalculations, setShowCalculations] = useState(false)
+  const [hasStartedTyping, setHasStartedTyping] = useState(false)
+
+  // 處理產品名字的智能預填
+  const handleProductNameFocus = () => {
+    if (!hasStartedTyping && watch('productName') === '未命名產品') {
+      setValue('productName', '')
+      setHasStartedTyping(true)
+    }
+  }
+
+  const handleProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!hasStartedTyping) {
+      setHasStartedTyping(true)
+    }
+  }
 
   const {
     register,
@@ -151,6 +166,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 id="productName"
                 {...register('productName')}
                 placeholder="請輸入產品名字"
+                onFocus={handleProductNameFocus}
+                onChange={(e) => {
+                  handleProductNameChange(e)
+                  register('productName').onChange(e)
+                }}
               />
               {errors.productName && (
                 <p className="text-sm text-destructive">{errors.productName.message}</p>
