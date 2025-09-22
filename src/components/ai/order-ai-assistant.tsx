@@ -241,7 +241,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     <div
                       className={`max-w-[80%] rounded-lg p-3 ${
                         message.role === 'user'
-                          ? 'bg-purple-600 text-white shadow-lg'
+                          ? 'bg-indigo-600 text-white shadow-lg'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                       }`}
                     >
@@ -286,7 +286,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 <div className="flex justify-start">
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                     <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-purple-600" />
+                      <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">AI 正在分析訂單...</span>
                     </div>
                   </div>
@@ -308,7 +308,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isLoading}
                 size="sm"
-                className="bg-purple-600 hover:bg-purple-700"
+                className="bg-indigo-600 hover:bg-indigo-700"
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -318,7 +318,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           /* 最小化狀態顯示 */
           <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800">
             <div className="flex items-center space-x-3">
-              <Bot className="h-5 w-5 text-purple-600" />
+              <Bot className="h-5 w-5 text-indigo-600" />
               <div>
                 <p className="text-sm font-medium">AI 訂單助手已最小化</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
