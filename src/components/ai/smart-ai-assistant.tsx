@@ -164,6 +164,10 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
     setMessages([])
   }
 
+  const handleClose = () => {
+    setIsOpen(false)
+  }
+
   const getPageIcon = () => {
     switch (pathname) {
       case '/':
@@ -218,15 +222,26 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               <Bot className="h-5 w-5 mr-2 text-blue-600" />
               {getPageTitle()}
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearChat}
-              className="h-8 w-8 p-0"
-              title="清除對話"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearChat}
+                className="h-8 w-8 p-0"
+                title="清除對話"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClose}
+                className="h-8 w-8 p-0"
+                title="關閉"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </DialogTitle>
         </DialogHeader>
         
@@ -248,9 +263,13 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                 {context.suggestions.map((suggestion, index) => (
-                  <div key={index} className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                  <button
+                    key={index}
+                    onClick={() => setInput(suggestion)}
+                    className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                  >
                     <p className="text-gray-700 dark:text-gray-300">"{suggestion}"</p>
-                  </div>
+                  </button>
                 ))}
               </div>
 

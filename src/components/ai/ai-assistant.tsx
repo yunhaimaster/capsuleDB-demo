@@ -87,6 +87,10 @@ export function AIAssistant({ orders }: AIAssistantProps) {
     setMessages([])
   }
 
+  const handleClose = () => {
+    setIsOpen(false)
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -106,15 +110,26 @@ export function AIAssistant({ orders }: AIAssistantProps) {
               <Bot className="h-5 w-5 mr-2 text-blue-600" />
               AI 訂單助手
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearChat}
-              className="h-8 w-8 p-0"
-              title="清除對話"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearChat}
+                className="h-8 w-8 p-0"
+                title="清除對話"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClose}
+                className="h-8 w-8 p-0"
+                title="關閉"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           </DialogTitle>
         </DialogHeader>
         
@@ -125,22 +140,34 @@ export function AIAssistant({ orders }: AIAssistantProps) {
               <p className="text-lg font-medium mb-2">歡迎使用 AI 訂單助手！</p>
               <p className="text-sm mb-4">您可以詢問關於訂單的任何問題，例如：</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                <button
+                  onClick={() => setInput('顯示所有未完工的訂單')}
+                  className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                >
                   <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">查詢訂單</p>
                   <p className="text-blue-600 dark:text-blue-300">"顯示所有未完工的訂單"</p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                </button>
+                <button
+                  onClick={() => setInput('哪個客戶的訂單最多？')}
+                  className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                >
                   <p className="font-medium text-green-800 dark:text-green-200 mb-1">統計分析</p>
                   <p className="text-green-600 dark:text-green-300">"哪個客戶的訂單最多？"</p>
-                </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
+                </button>
+                <button
+                  onClick={() => setInput('維生素C相關的訂單有哪些？')}
+                  className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                >
                   <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">原料查詢</p>
                   <p className="text-purple-600 dark:text-purple-300">"維生素C相關的訂單有哪些？"</p>
-                </div>
-                <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg">
+                </button>
+                <button
+                  onClick={() => setInput('最近一週的生產情況如何？')}
+                  className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                >
                   <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">時間分析</p>
                   <p className="text-orange-600 dark:text-orange-300">"最近一週的生產情況如何？"</p>
-                </div>
+                </button>
               </div>
             </div>
           ) : (
