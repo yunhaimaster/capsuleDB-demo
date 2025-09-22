@@ -195,6 +195,8 @@ AI回答：${aiResponse}
         console.log('Dynamic suggestions generated:', suggestions)
       } else {
         console.error('Suggestions API failed:', suggestionsResponse.status)
+        const errorText = await suggestionsResponse.text()
+        console.error('Suggestions API error response:', errorText)
         // 如果 API 失敗，提供基於回答內容的默認建議
         suggestions = [
           '可以查看更多詳細分析嗎？',
@@ -206,6 +208,17 @@ AI回答：${aiResponse}
     } catch (error) {
       console.error('Error generating dynamic suggestions:', error)
       // 如果生成失敗，提供默認建議
+      suggestions = [
+        '可以查看更多詳細分析嗎？',
+        '如何深入分析這個問題？',
+        '有哪些相關的統計數據？',
+        '如何優化相關流程？'
+      ]
+    }
+    
+    // 確保總是有建議問題
+    if (suggestions.length === 0) {
+      console.log('No suggestions generated, using fallback')
       suggestions = [
         '可以查看更多詳細分析嗎？',
         '如何深入分析這個問題？',

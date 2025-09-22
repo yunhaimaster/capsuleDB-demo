@@ -187,6 +187,37 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     <Bot className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                     <p>我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
                     <p className="text-sm mt-2">請輸入您的問題開始對話。</p>
+                    
+                    {/* 初始建議問題 */}
+                    <div className="mt-6">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">您可以問我：</p>
+                      <div className="grid grid-cols-1 gap-2 max-w-md mx-auto">
+                        <button
+                          onClick={() => setInput('顯示所有未完工的生產訂單')}
+                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
+                        >
+                          "顯示所有未完工的生產訂單"
+                        </button>
+                        <button
+                          onClick={() => setInput('哪個客戶的膠囊訂單最多？')}
+                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
+                        >
+                          "哪個客戶的膠囊訂單最多？"
+                        </button>
+                        <button
+                          onClick={() => setInput('最近一週的膠囊生產情況如何？')}
+                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
+                        >
+                          "最近一週的膠囊生產情況如何？"
+                        </button>
+                        <button
+                          onClick={() => setInput('分析膠囊灌裝的生產效率')}
+                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
+                        >
+                          "分析膠囊灌裝的生產效率"
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   messages.map((message) => (
