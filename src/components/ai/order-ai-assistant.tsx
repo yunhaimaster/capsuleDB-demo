@@ -192,38 +192,38 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             
             <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4">
               {messages.length === 0 ? (
-                <div className="text-center py-6 sm:py-8 text-gray-600 dark:text-gray-300">
-                  <Bot className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4 text-purple-500 dark:text-purple-400" />
-                  <p className="text-base sm:text-lg font-medium mb-2 text-gray-700 dark:text-gray-200">AI 訂單分析助手</p>
-                  <p className="text-xs sm:text-sm mb-4 text-gray-600 dark:text-gray-300">針對當前訂單進行分析，您可以詢問：</p>
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-purple-600" />
+                  <p className="text-lg font-medium mb-2">AI 訂單分析助手</p>
+                  <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
                       onClick={() => setInput('這個訂單的原料配比如何？')}
-                      className="bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-indigo-200 dark:border-indigo-700"
+                      className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-bold text-indigo-900 dark:text-white mb-1 text-sm">訂單分析</p>
-                      <p className="text-indigo-800 dark:text-white text-xs sm:text-sm font-medium">"這個訂單的原料配比如何？"</p>
+                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">訂單分析</p>
+                      <p className="text-purple-600 dark:text-purple-300">"這個訂單的原料配比如何？"</p>
                     </button>
                     <button
                       onClick={() => setInput('單粒重量是否合理？')}
-                      className="bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-700/50 p-3 rounded-lg text-left transition-colors cursor-pointer border border-slate-200 dark:border-slate-600"
+                      className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-bold text-slate-900 dark:text-white mb-1 text-sm">重量計算</p>
-                      <p className="text-slate-800 dark:text-white text-xs sm:text-sm font-medium">"單粒重量是否合理？"</p>
+                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">重量計算</p>
+                      <p className="text-blue-600 dark:text-blue-300">"單粒重量是否合理？"</p>
                     </button>
                     <button
                       onClick={() => setInput('有什麼生產注意事項？')}
-                      className="bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-emerald-200 dark:border-emerald-700"
+                      className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-bold text-emerald-900 dark:text-white mb-1 text-sm">生產建議</p>
-                      <p className="text-emerald-800 dark:text-white text-xs sm:text-sm font-medium">"有什麼生產注意事項？"</p>
+                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">生產建議</p>
+                      <p className="text-green-600 dark:text-green-300">"有什麼生產注意事項？"</p>
                     </button>
                     <button
                       onClick={() => setInput('這個配方的品質如何？')}
-                      className="bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-amber-200 dark:border-amber-700"
+                      className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-bold text-amber-900 dark:text-white mb-1 text-sm">品質評估</p>
-                      <p className="text-amber-800 dark:text-white text-xs sm:text-sm font-medium">"這個配方的品質如何？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">品質評估</p>
+                      <p className="text-orange-600 dark:text-orange-300">"這個配方的品質如何？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -241,22 +241,23 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     <div
                       className={`max-w-[80%] rounded-lg p-3 ${
                         message.role === 'user'
-                          ? 'bg-indigo-600 text-white shadow-lg'
+                          ? 'bg-purple-600 text-white'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                       }`}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <MarkdownRenderer 
-                            content={message.content} 
-                            forceWhiteText={message.role === 'user'}
-                          />
+                          {message.role === 'assistant' ? (
+                            <MarkdownRenderer content={message.content} />
+                          ) : (
+                            <p className="whitespace-pre-wrap text-white">{message.content}</p>
+                          )}
                         </div>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => copyMessage(message.content)}
-                          className="ml-2 h-6 w-6 p-0 opacity-70 hover:opacity-100"
+                          className="ml-2 h-6 w-6 p-0 opacity-70 hover:opacity-100 text-white hover:text-white"
                           title="複製此消息"
                         >
                           <Copy className="h-3 w-3" />
@@ -289,7 +290,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 <div className="flex justify-start">
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                     <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
+                      <Loader2 className="h-4 w-4 animate-spin text-purple-600" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">AI 正在分析訂單...</span>
                     </div>
                   </div>
@@ -311,7 +312,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isLoading}
                 size="sm"
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-purple-600 hover:bg-purple-700"
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -321,7 +322,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           /* 最小化狀態顯示 */
           <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800">
             <div className="flex items-center space-x-3">
-              <Bot className="h-5 w-5 text-indigo-600" />
+              <Bot className="h-5 w-5 text-purple-600" />
               <div>
                 <p className="text-sm font-medium">AI 訂單助手已最小化</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">

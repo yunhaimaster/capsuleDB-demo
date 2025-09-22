@@ -184,38 +184,38 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4"
               >
                 {messages.length === 0 ? (
-                  <div className="text-center text-gray-600 dark:text-gray-300 py-6 sm:py-8">
-                    <Bot className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-400 dark:text-gray-500" />
-                    <p className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200">我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
-                    <p className="text-xs sm:text-sm mt-2 text-gray-600 dark:text-gray-300">請輸入您的問題開始對話。</p>
+                  <div className="text-center text-gray-500 dark:text-gray-400 py-6 sm:py-8">
+                    <Bot className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
+                    <p className="text-sm sm:text-base">我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
+                    <p className="text-xs sm:text-sm mt-2">請輸入您的問題開始對話。</p>
                     
                     {/* 初始建議問題 */}
                     <div className="mt-4 sm:mt-6">
-                      <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">相關問題：</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
                       <div className="grid grid-cols-1 gap-1">
                         {pageData?.currentPage === '/' && (
                           <>
                             <button
                               onClick={() => setInput('顯示所有未完工的生產訂單')}
-                              className="text-xs text-left p-2 sm:p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-200 font-medium"
+                              className="text-xs text-left p-2 sm:p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                             >
                               "顯示所有未完工的生產訂單"
                             </button>
                             <button
                               onClick={() => setInput('哪個客戶的膠囊訂單最多？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-200 font-medium"
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                             >
                               "哪個客戶的膠囊訂單最多？"
                             </button>
                             <button
                               onClick={() => setInput('最近一週的膠囊生產情況如何？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-200 font-medium"
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                             >
                               "最近一週的膠囊生產情況如何？"
                             </button>
                             <button
                               onClick={() => setInput('分析膠囊灌裝的生產效率')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-200 font-medium"
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                             >
                               "分析膠囊灌裝的生產效率"
                             </button>
@@ -289,7 +289,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                       <div
                         className={`max-w-[80%] rounded-lg p-3 ${
                           message.role === 'user'
-                            ? 'bg-emerald-600 text-white shadow-lg'
+                            ? 'bg-emerald-600 text-white'
                             : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                         }`}
                       >
@@ -298,10 +298,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                             {message.role === 'assistant' ? (
                               <MarkdownRenderer content={message.content} />
                             ) : (
-                              <MarkdownRenderer 
-                                content={message.content} 
-                                forceWhiteText={true}
-                              />
+                              <p className="whitespace-pre-wrap text-white">{message.content}</p>
                             )}
                           </div>
                           <div className="flex items-center space-x-1 ml-2">
@@ -309,7 +306,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                               variant="ghost"
                               size="sm"
                               onClick={() => copyMessage(message.content)}
-                              className="text-xs opacity-70 hover:opacity-100"
+                              className="text-xs opacity-70 hover:opacity-100 text-white hover:text-white"
                             >
                               <Copy className="w-3 h-3" />
                             </Button>
@@ -319,13 +316,13 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                         {/* 顯示建議問題 */}
                         {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                            <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">相關問題：</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
                             <div className="grid grid-cols-1 gap-1">
                               {message.suggestions.map((suggestion, index) => (
                                 <button
                                   key={index}
                                   onClick={() => setInput(suggestion)}
-                                  className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors text-gray-700 dark:text-gray-200 font-medium"
+                                  className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                                 >
                                   "{suggestion}"
                                 </button>
@@ -341,10 +338,10 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 {/* 正在回答的提示 */}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+                    <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                       <div className="flex items-center space-x-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-gray-600 dark:text-gray-400" />
-                        <span className="text-sm font-medium">AI 正在思考中...</span>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm">AI 正在思考中...</span>
                       </div>
                     </div>
                   </div>
@@ -354,7 +351,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               </div>
 
               {/* 輸入區域 */}
-              <div className="border-t border-gray-200 dark:border-gray-700 p-3 sm:p-4">
+              <div className="border-t border-gray-200 dark:border-gray-700 p-4">
                 <div className="flex space-x-2">
                   <Input
                     value={input}
@@ -362,7 +359,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     onKeyPress={handleKeyPress}
                     placeholder="輸入您的問題..."
                     disabled={isLoading}
-                    className="flex-1 text-sm sm:text-base"
+                    className="flex-1"
                   />
                   <Button
                     onClick={handleSendMessage}
