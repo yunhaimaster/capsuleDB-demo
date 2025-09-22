@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw } from 'lucide-react'
+import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download } from 'lucide-react'
 
 interface Message {
   id: string
@@ -28,6 +28,8 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const pathname = usePathname()
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   // 根據當前頁面生成上下文信息
   const getPageContext = () => {
@@ -137,6 +139,11 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
       console.log('Assistant message with suggestions:', assistantMessage) // 調試用
 
       setMessages(prev => [...prev, assistantMessage])
+      
+      // 滾動到最新消息
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -163,6 +170,36 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
 
   const handleClose = () => {
     setIsOpen(false)
+  }
+
+  const scrollToTop = () => {
+    messagesContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const copyMessage = async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(content)
+      // 可以添加一個 toast 提示
+    } catch (error) {
+      console.error('Failed to copy:', error)
+    }
+  }
+
+  const exportConversation = () => {
+    const conversation = messages.map(msg => {
+      const role = msg.role === 'user' ? '用戶' : 'AI 助手'
+      return `${role}: ${msg.content}`
+    }).join('\n\n')
+    
+    const blob = new Blob([conversation], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `AI對話記錄_${new Date().toISOString().split('T')[0]}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
   }
 
   const getPageIcon = () => {
@@ -216,6 +253,28 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               {getPageTitle()}
             </div>
             <div className="flex items-center space-x-2">
+              {messages.length > 0 && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={scrollToTop}
+                    className="h-8 w-8 p-0"
+                    title="回到頂部"
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={exportConversation}
+                    className="h-8 w-8 p-0"
+                    title="導出對話"
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -238,7 +297,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           </DialogTitle>
         </DialogHeader>
         
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4">
           {messages.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-blue-600" />
@@ -287,7 +346,20 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                   }`}
                 >
-                  <MarkdownRenderer content={message.content} />
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <MarkdownRenderer content={message.content} />
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyMessage(message.content)}
+                      className="ml-2 h-6 w-6 p-0 opacity-70 hover:opacity-100"
+                      title="複製此消息"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
                   
                   {/* 顯示建議問題 */}
                   {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
@@ -321,6 +393,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="flex space-x-2">
