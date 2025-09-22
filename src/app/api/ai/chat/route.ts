@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, orders } = await request.json()
+    const { message, orders, context } = await request.json()
 
     // 從環境變數獲取 API 配置
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
@@ -16,10 +16,41 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 構建系統提示詞
+    // 構建智能系統提示詞
     const isSingleOrder = orders && orders.length === 1
-    const systemPrompt = isSingleOrder 
-      ? `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
+    const hasContext = context && context.currentPage
+    
+    let systemPrompt = ''
+    
+    if (hasContext) {
+      // 智能上下文模式
+      systemPrompt = `你是一個專業的膠囊配方管理系統智能 AI 助手。用戶當前正在 "${context.pageDescription}"，你需要根據用戶的當前頁面和上下文提供相關的幫助。
+
+當前頁面信息：
+- 頁面：${context.currentPage}
+- 描述：${context.pageDescription}
+- 時間：${context.timestamp}
+- 訂單總數：${context.ordersCount}
+- 是否有當前訂單：${context.hasCurrentOrder ? '是' : '否'}
+
+${context.currentOrder ? `當前查看的訂單：
+${JSON.stringify(context.currentOrder, null, 2)}` : ''}
+
+${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
+${JSON.stringify(context.recentOrders, null, 2)}` : ''}
+
+請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
+1. 分析當前頁面顯示的數據
+2. 提供頁面相關的操作建議
+3. 回答關於當前頁面內容的問題
+4. 提供頁面功能的指導
+5. 分析相關的訂單數據
+6. 提供專業的建議和見解
+
+請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。`
+    } else if (isSingleOrder) {
+      // 單個訂單分析模式
+      systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
 
 當前訂單數據：
 ${JSON.stringify(orders[0], null, 2)}
@@ -34,7 +65,9 @@ ${JSON.stringify(orders[0], null, 2)}
 7. 評估製程問題和品管備註
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。`
-      : `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
+    } else {
+      // 一般查詢模式
+      systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
 系統數據：
 ${JSON.stringify(orders, null, 2)}
@@ -48,6 +81,7 @@ ${JSON.stringify(orders, null, 2)}
 6. 計算統計數據
 
 請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。`
+    }
 
     // 調用 OpenRouter API
     const response = await fetch(OPENROUTER_API_URL, {

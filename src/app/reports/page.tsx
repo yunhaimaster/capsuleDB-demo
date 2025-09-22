@@ -2,6 +2,7 @@
 
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Construction, BarChart3, Clock } from 'lucide-react'
 
 export default function ReportsPage() {
@@ -72,6 +73,9 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* 智能 AI 助手 */}
+      <SmartAIAssistant />
     </div>
   )
 }

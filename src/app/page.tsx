@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { AIAssistant } from '@/components/ai/ai-assistant'
+import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Plus, FileText, BarChart3, TrendingUp, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
@@ -266,8 +266,8 @@ export default function HomePage() {
         </Card>
       </div>
 
-      {/* AI 助手 */}
-      <AIAssistant orders={allOrders} />
+             {/* 智能 AI 助手 */}
+             <SmartAIAssistant orders={allOrders} />
     </div>
   )
 }

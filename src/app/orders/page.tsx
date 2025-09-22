@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { OrdersList } from '@/components/orders/orders-list'
-import { AIAssistant } from '@/components/ai/ai-assistant'
+import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -45,8 +45,8 @@ export default function OrdersPage() {
 
       <OrdersList />
       
-      {/* AI 助手 */}
-      <AIAssistant orders={orders} />
+             {/* 智能 AI 助手 */}
+             <SmartAIAssistant orders={orders} />
     </div>
   )
 }

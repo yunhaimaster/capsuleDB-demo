@@ -2,6 +2,7 @@
 
 import { ProductionOrderForm } from '@/components/forms/production-order-form'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 
 export default function NewOrderPage() {
   return (
@@ -28,6 +29,9 @@ export default function NewOrderPage() {
       <div className="max-w-4xl mx-auto px-4 md:px-0">
         <ProductionOrderForm />
       </div>
+      
+      {/* 智能 AI 助手 */}
+      <SmartAIAssistant />
     </div>
   )
 }
