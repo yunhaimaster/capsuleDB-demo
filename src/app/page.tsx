@@ -224,7 +224,6 @@ export default function HomePage() {
                 <ul className="space-y-1 text-xs md:text-sm text-green-700">
                   <li>• 膠囊配方管理與記錄</li>
                   <li>• 生產訂單追蹤與狀態管理</li>
-                  <li>• 原料用量統計與分析</li>
                   <li>• 製程問題記錄與品質管理</li>
                 </ul>
               </div>
@@ -234,8 +233,7 @@ export default function HomePage() {
                 <ol className="space-y-1 text-xs md:text-sm text-blue-700">
                   <li>1. 新增配方：建立新的生產訂單</li>
                   <li>2. 檢視記錄：查看和管理現有訂單</li>
-                  <li>3. 統計報表：分析原料使用情況</li>
-                  <li>4. 品質追蹤：記錄製程問題和備註</li>
+                  <li>3. 品質追蹤：記錄製程問題和備註</li>
                 </ol>
               </div>
               
