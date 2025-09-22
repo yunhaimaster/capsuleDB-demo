@@ -72,6 +72,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
       }
 
       const data = await response.json()
+      console.log('Order AI API Response:', data) // 調試信息
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -80,6 +81,8 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
         timestamp: new Date(),
         suggestions: data.suggestions || []
       }
+      
+      console.log('Order AI Message with suggestions:', assistantMessage) // 調試信息
 
       setMessages(prev => [...prev, assistantMessage])
       
