@@ -70,7 +70,7 @@ ${JSON.stringify({
 }, null, 2)}` : ''}
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
-${JSON.stringify(context.recentOrders.map(order => ({
+${JSON.stringify(context.recentOrders.map((order: any) => ({
   訂單編號: order.id,
   客戶名稱: order.customerName,
   產品名稱: order.productName,
@@ -97,7 +97,7 @@ ${JSON.stringify(context.recentOrders.map(order => ({
 重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
     } else {
       // 一般查詢模式 - 創建用戶友好的數據格式
-      const userFriendlyOrders = orders.map(order => ({
+      const userFriendlyOrders = orders.map((order: any) => ({
         訂單編號: order.id,
         客戶名稱: order.customerName,
         產品名稱: order.productName,
