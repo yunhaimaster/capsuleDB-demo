@@ -57,15 +57,15 @@ ${JSON.stringify(orders[0], null, 2)}
 ${context.currentOrder ? `當前查看的訂單：
 ${JSON.stringify({
   客戶名稱: context.currentOrder.customerName || '未知客戶',
-  產品名稱: context.currentOrder.productName || '未知產品',
+  產品名稱: context.currentOrder.productName || context.currentOrder.productCode || '未知產品',
   生產數量: `${context.currentOrder.productionQuantity || 0} 粒`,
   單粒重量: `${context.currentOrder.unitWeightMg || 0} 毫克`,
-  膠囊規格: `${context.currentOrder.capsuleColor} ${context.currentOrder.capsuleSize} ${context.currentOrder.capsuleType}`,
+  膠囊規格: `${context.currentOrder.capsuleColor || '未知'} ${context.currentOrder.capsuleSize || '未知'} ${context.currentOrder.capsuleType || '未知'}`,
   主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
   生產狀態: context.currentOrder.completionDate ? '已完成' : '進行中',
   完成日期: context.currentOrder.completionDate ? new Date(context.currentOrder.completionDate).toLocaleDateString('zh-TW') : '未完成',
   創建時間: context.currentOrder.createdAt ? new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW') : '未知',
-  備註: context.currentOrder.notes || '無'
+  備註: context.currentOrder.notes || context.currentOrder.processIssues || context.currentOrder.qualityNotes || '無'
 }, null, 2)}` : ''}
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
@@ -97,15 +97,15 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
       // 一般查詢模式 - 創建用戶友好的數據格式
       const userFriendlyOrders = orders.map((order: any) => ({
         客戶名稱: order.customerName || '未知客戶',
-        產品名稱: order.productName || '未知產品',
+        產品名稱: order.productName || order.productCode || '未知產品',
         生產數量: `${order.productionQuantity || 0} 粒`,
         單粒重量: `${order.unitWeightMg || 0} 毫克`,
-        膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
+        膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
         主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
         生產狀態: order.completionDate ? '已完成' : '進行中',
         完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
         創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
-        備註: order.notes || '無'
+        備註: order.notes || order.processIssues || order.qualityNotes || '無'
       }));
 
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
