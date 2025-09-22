@@ -124,6 +124,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
       }
 
       const data = await response.json()
+      console.log('API Response:', data) // 調試用
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -132,6 +133,8 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         timestamp: new Date(),
         suggestions: data.suggestions || []
       }
+      
+      console.log('Assistant message with suggestions:', assistantMessage) // 調試用
 
       setMessages(prev => [...prev, assistantMessage])
     } catch (error) {
