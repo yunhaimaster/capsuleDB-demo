@@ -58,7 +58,7 @@ ${context.currentOrder ? `當前查看的訂單：
 ${JSON.stringify({
   客戶名稱: context.currentOrder.customerName || '未知客戶',
   產品名稱: context.currentOrder.productName || '未知產品',
-  生產數量: `${context.currentOrder.quantity || 0} 粒`,
+  生產數量: `${context.currentOrder.productionQuantity || 0} 粒`,
   單粒重量: `${context.currentOrder.unitWeightMg || 0} 毫克`,
   膠囊規格: `${context.currentOrder.capsuleColor} ${context.currentOrder.capsuleSize} ${context.currentOrder.capsuleType}`,
   主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
@@ -98,7 +98,7 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
       const userFriendlyOrders = orders.map((order: any) => ({
         客戶名稱: order.customerName || '未知客戶',
         產品名稱: order.productName || '未知產品',
-        生產數量: `${order.quantity || 0} 粒`,
+        生產數量: `${order.productionQuantity || 0} 粒`,
         單粒重量: `${order.unitWeightMg || 0} 毫克`,
         膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
         主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
