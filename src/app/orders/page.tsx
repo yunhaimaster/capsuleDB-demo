@@ -31,7 +31,7 @@ export default function OrdersPage() {
       <Breadcrumb items={[{ label: '生產記錄管理' }]} />
       
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-emerald-50 to-green-100 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl p-6 md:p-8">
+      <div className="bg-gradient-to-r from-emerald-50 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 rounded-xl p-6 md:p-8 border dark:border-emerald-800/30">
         <div className="text-center space-y-3 md:space-y-4">
           <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl mb-3 md:mb-4">
             <span className="text-lg md:text-xl">📋</span>

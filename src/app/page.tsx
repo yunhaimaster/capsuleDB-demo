@@ -52,7 +52,7 @@ export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 md:p-8">
+      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-6 md:p-8 border dark:border-purple-800/30">
         <div className="text-center space-y-3 md:space-y-4">
           <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl mb-3 md:mb-4">
             <span className="text-lg md:text-xl">🏠</span>
@@ -68,7 +68,7 @@ export default function HomePage() {
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200">
+        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 dark:from-indigo-900/20 dark:to-indigo-800/20 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/30 dark:border-indigo-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
@@ -92,7 +92,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200">
+        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 dark:from-emerald-900/20 dark:to-emerald-800/20 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30 dark:border-emerald-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
@@ -121,7 +121,7 @@ export default function HomePage() {
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-800 dark:to-gray-900">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900/50 dark:to-gray-900/50 dark:border-slate-700/30">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
               <FileText className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
@@ -214,7 +214,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 dark:border-amber-800/30">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
               <span className="mr-2">📋</span>
@@ -226,7 +226,7 @@ export default function HomePage() {
           </CardHeader>
           <CardContent className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-800">
+              <div className="bg-amber-50 dark:bg-amber-900/40 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-700/50">
                 <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-300">
                   <li>• 膠囊配方管理與記錄</li>
@@ -236,7 +236,7 @@ export default function HomePage() {
                 </ul>
               </div>
               
-              <div className="bg-orange-50 dark:bg-orange-900/20 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-800">
+              <div className="bg-orange-50 dark:bg-orange-900/40 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-700/50">
                 <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">使用流程</h4>
                 <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-300">
                   <li>1. 新增配方：建立新的膠囊生產訂單</li>
@@ -246,7 +246,7 @@ export default function HomePage() {
                 </ol>
               </div>
               
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-800">
+              <div className="bg-yellow-50 dark:bg-yellow-900/40 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-700/50">
                 <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">技術支援</h4>
                 <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-300">
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
