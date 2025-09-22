@@ -52,12 +52,12 @@ export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 md:p-8">
+      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 md:p-8">
         <div className="text-center space-y-3 md:space-y-4">
-          <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl mb-3 md:mb-4">
+          <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl mb-3 md:mb-4">
             <span className="text-lg md:text-xl">🏠</span>
           </div>
-          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             EasyPack 膠囊配方管理系統
           </h1>
           <p className="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
@@ -214,21 +214,21 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-green-800 dark:text-green-200 flex items-center">
+            <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
               <span className="mr-2">📋</span>
               功能介紹
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-green-600 dark:text-green-300">
+            <CardDescription className="text-sm md:text-base text-amber-600 dark:text-amber-300">
               系統功能說明與使用指南
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
-              <div className="bg-green-50 dark:bg-green-900/20 p-3 md:p-4 rounded-xl border border-green-200 dark:border-green-800">
-                <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">主要功能</h4>
-                <ul className="space-y-1 text-xs md:text-sm text-green-700 dark:text-green-300">
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-800">
+                <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
+                <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-300">
                   <li>• 膠囊配方管理與記錄</li>
                   <li>• 生產訂單追蹤與狀態管理</li>
                   <li>• 製程問題記錄與品質管理</li>
@@ -236,9 +236,9 @@ export default function HomePage() {
                 </ul>
               </div>
               
-              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 md:p-4 rounded-xl border border-blue-200 dark:border-blue-800">
-                <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">使用流程</h4>
-                <ol className="space-y-1 text-xs md:text-sm text-blue-700 dark:text-blue-300">
+              <div className="bg-orange-50 dark:bg-orange-900/20 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-800">
+                <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">使用流程</h4>
+                <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-300">
                   <li>1. 新增配方：建立新的膠囊生產訂單</li>
                   <li>2. 檢視記錄：查看和管理現有膠囊訂單</li>
                   <li>3. 品質追蹤：記錄膠囊製程問題和備註</li>
@@ -246,12 +246,12 @@ export default function HomePage() {
                 </ol>
               </div>
               
-              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-800">
-                <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">技術支援</h4>
-                <div className="text-xs md:text-sm text-amber-700 dark:text-amber-300">
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">技術支援</h4>
+                <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-300">
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
                   <p className="font-medium">Victor</p>
-                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">系統管理員</p>
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">系統管理員</p>
                 </div>
               </div>
             </div>
