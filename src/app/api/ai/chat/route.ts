@@ -55,32 +55,10 @@ ${JSON.stringify(orders[0], null, 2)}
 - 是否有當前訂單：${context.hasCurrentOrder ? '是' : '否'}
 
 ${context.currentOrder ? `當前查看的訂單：
-${JSON.stringify({
-  客戶名稱: context.currentOrder.customerName || '未知客戶',
-  產品名稱: context.currentOrder.productName || context.currentOrder.productCode || '未知產品',
-  生產數量: `${context.currentOrder.productionQuantity || 0} 粒`,
-  單粒重量: `${context.currentOrder.unitWeightMg || 0} 毫克`,
-  膠囊規格: `${context.currentOrder.capsuleColor || '未知'} ${context.currentOrder.capsuleSize || '未知'} ${context.currentOrder.capsuleType || '未知'}`,
-  主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
-  生產狀態: context.currentOrder.completionDate ? '已完成' : '進行中',
-  完成日期: context.currentOrder.completionDate ? new Date(context.currentOrder.completionDate).toLocaleDateString('zh-TW') : '未完成',
-  創建時間: context.currentOrder.createdAt ? new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW') : '未知',
-  備註: context.currentOrder.notes || context.currentOrder.processIssues || context.currentOrder.qualityNotes || '無'
-}, null, 2)}` : ''}
+${JSON.stringify(context.currentOrder, null, 2)}` : ''}
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
-${JSON.stringify(context.recentOrders.map((order: any) => ({
-  客戶名稱: order.customerName || '未知客戶',
-  產品名稱: order.productName || '未知產品',
-  生產數量: `${order.quantity || 0} 粒`,
-  單粒重量: `${order.unitWeightMg || 0} 毫克`,
-  膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
-  主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
-  生產狀態: order.completionDate ? '已完成' : '進行中',
-  完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
-  創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
-  備註: order.notes || '無'
-})), null, 2)}` : ''}
+${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 
 請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
 1. 分析當前頁面顯示的數據
@@ -92,26 +70,13 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
     } else {
-      // 一般查詢模式 - 創建用戶友好的數據格式
-      const userFriendlyOrders = orders.map((order: any) => ({
-        客戶名稱: order.customerName || '未知客戶',
-        產品名稱: order.productName || order.productCode || '未知產品',
-        生產數量: `${order.productionQuantity || 0} 粒`,
-        單粒重量: `${order.unitWeightMg || 0} 毫克`,
-        膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
-        主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
-        生產狀態: order.completionDate ? '已完成' : '進行中',
-        完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
-        創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
-        備註: order.notes || order.processIssues || order.qualityNotes || '無'
-      }));
-
+      // 一般查詢模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
-生產訂單數據：
-${JSON.stringify(userFriendlyOrders, null, 2)}
+系統數據：
+${JSON.stringify(orders, null, 2)}
 
 請根據用戶的問題，分析訂單數據並提供有用的回答。你可以：
 1. 查詢特定客戶的訂單
@@ -121,9 +86,9 @@ ${JSON.stringify(userFriendlyOrders, null, 2)}
 5. 分析生產趨勢
 6. 計算統計數據
 
-請用中文回答，並提供具體的數據支持。使用用戶友好的語言，避免使用技術術語如 completionDate、null、CMFUTESP 等。
+請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
     }
 
     // 調用 OpenRouter API
@@ -157,58 +122,16 @@ ${JSON.stringify(userFriendlyOrders, null, 2)}
     
     // 清理 AI 回答中的異常文字
     aiResponse = aiResponse
-      // 處理帶空格的格式：< | begin_of_sentence | >
-      .replace(/<\s*\|\s*begin_of_sentence\s*\|\s*>/gi, '')
-      .replace(/<\s*\|\s*end_of_sentence\s*\|\s*>/gi, '')
-      .replace(/<\s*\|\s*begin_of_sentence\s*\|\s*/gi, '')
-      .replace(/<\s*\|\s*end_of_sentence\s*\|\s*/gi, '')
-      .replace(/<\s*\|\s*begin_of_sentence\s*>/gi, '')
-      .replace(/<\s*\|\s*end_of_sentence\s*>/gi, '')
-      .replace(/<\s*\|\s*begin_of_sentence/gi, '')
-      .replace(/<\s*\|\s*end_of_sentence/gi, '')
-      // 處理不帶空格的格式：<|begin_of_sentence|>
-      .replace(/<\|begin_of_sentence\s*\|>/gi, '')
-      .replace(/<\|end_of_sentence\s*\|>/gi, '')
-      .replace(/<\|begin_of_sentence\s*\|/gi, '')
-      .replace(/<\|end_of_sentence\s*\|/gi, '')
-      .replace(/<\|begin_of_sentence\|>/gi, '')
-      .replace(/<\|end_of_sentence\|>/gi, '')
-      .replace(/<\|begin_of_sentence\|/gi, '')
-      .replace(/<\|end_of_sentence\|/gi, '')
-      .replace(/<\|begin_of_sentence>/gi, '')
-      .replace(/<\|end_of_sentence>/gi, '')
-      .replace(/<\|begin_of_sentence/gi, '')
-      .replace(/<\|end_of_sentence/gi, '')
-      // 處理純文字
-      .replace(/begin_of_sentence/gi, '')
-      .replace(/end_of_sentence/gi, '')
-      // 通用清理
-      .replace(/<\s*\|\s*.*?\s*\|\s*>/g, '')
-      .replace(/<\s*\|\s*.*?\s*\|\s*/g, '')
-      .replace(/<\s*\|\s*.*?\s*>/g, '')
-      .replace(/<\s*\|\s*.*?/g, '')
+      .replace(/<\|begin_of_sentence\s*\|>/g, '')
+      .replace(/<\|end_of_sentence\s*\|>/g, '')
+      .replace(/<\|begin_of_sentence\s*\|/g, '')
+      .replace(/<\|end_of_sentence\s*\|/g, '')
       .replace(/<\|.*?\|>/g, '')
       .replace(/<\|.*?\|/g, '')
       .replace(/<\|.*?>/g, '')
       .replace(/<\|.*?/g, '')
       .replace(/<\|/g, '')
       .replace(/\|>/g, '')
-      .replace(/\|\s*>/g, '')
-      .replace(/<\|/g, '')
-      .replace(/\|/g, '')
-      // 額外的清理：處理任何剩餘的特殊標記
-      .replace(/<[^>]*begin_of_sentence[^>]*>/gi, '')
-      .replace(/<[^>]*end_of_sentence[^>]*>/gi, '')
-      .replace(/begin_of_sentence/gi, '')
-      .replace(/end_of_sentence/gi, '')
-      // 清理任何以 < 開頭的特殊標記，但保留 Markdown 符號
-      .replace(/<[^>]*>/g, '')
-      // 確保 Markdown 格式符號不被誤刪
-      .replace(/\n\n/g, '\n\n') // 保留段落分隔
-      .replace(/\*\*(.*?)\*\*/g, '**$1**') // 保留粗體
-      .replace(/\*(.*?)\*/g, '*$1*') // 保留斜體
-      .replace(/^\s*[-*+]\s/gm, '- ') // 保留列表符號
-      .replace(/^\s*\d+\.\s/gm, '1. ') // 保留數字列表
       .trim()
 
     // 基於 AI 回答動態生成建議問題
