@@ -161,6 +161,15 @@ ${JSON.stringify(orders, null, 2)}
       .replace(/\|\s*>/g, '')
       .replace(/<\|/g, '')
       .replace(/\|/g, '')
+      // 額外的清理：處理任何剩餘的特殊標記
+      .replace(/<[^>]*begin_of_sentence[^>]*>/gi, '')
+      .replace(/<[^>]*end_of_sentence[^>]*>/gi, '')
+      .replace(/begin_of_sentence/gi, '')
+      .replace(/end_of_sentence/gi, '')
+      // 清理任何以 < 開頭的特殊標記
+      .replace(/<[^>]*>/g, '')
+      // 清理任何包含 | 的特殊標記
+      .replace(/[^a-zA-Z0-9\u4e00-\u9fff\s.,!?;:(){}[\]"'`~@#$%^&*+=<>/\\-]/g, '')
       .trim()
 
     // 基於 AI 回答動態生成建議問題
