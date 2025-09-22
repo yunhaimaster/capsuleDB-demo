@@ -56,7 +56,6 @@ ${JSON.stringify(orders[0], null, 2)}
 
 ${context.currentOrder ? `當前查看的訂單：
 ${JSON.stringify({
-  訂單編號: context.currentOrder.id || '未知',
   客戶名稱: context.currentOrder.customerName || '未知客戶',
   產品名稱: context.currentOrder.productName || '未知產品',
   生產數量: `${context.currentOrder.quantity || 0} 粒`,
@@ -71,7 +70,6 @@ ${JSON.stringify({
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
 ${JSON.stringify(context.recentOrders.map((order: any) => ({
-  訂單編號: order.id || '未知',
   客戶名稱: order.customerName || '未知客戶',
   產品名稱: order.productName || '未知產品',
   生產數量: `${order.quantity || 0} 粒`,
@@ -98,7 +96,6 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
     } else {
       // 一般查詢模式 - 創建用戶友好的數據格式
       const userFriendlyOrders = orders.map((order: any) => ({
-        訂單編號: order.id || '未知',
         客戶名稱: order.customerName || '未知客戶',
         產品名稱: order.productName || '未知產品',
         生產數量: `${order.quantity || 0} 粒`,
