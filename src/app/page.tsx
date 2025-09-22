@@ -52,40 +52,40 @@ export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-6 md:p-8 border dark:border-purple-800/30">
-        <div className="text-center space-y-3 md:space-y-4">
-          <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl mb-3 md:mb-4">
-            <span className="text-lg md:text-xl">🏠</span>
+      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-purple-800/30">
+        <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
+          <div className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl mb-2 sm:mb-3 md:mb-4">
+            <span className="text-base sm:text-lg md:text-xl">🏠</span>
           </div>
-          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
             EasyPack 膠囊配方管理系統
           </h1>
-          <p className="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+          <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
             專業的膠囊配方生產管理平台，提供完整的生產記錄追蹤與智能分析功能
           </p>
         </div>
       </div>
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 dark:from-indigo-900/20 dark:to-indigo-800/20 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/30 dark:border-indigo-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Plus className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <CardTitle className="text-base md:text-lg font-semibold text-indigo-700">新增配方</CardTitle>
-                <CardDescription className="text-sm md:text-base text-indigo-600">建立新記錄</CardDescription>
+                <CardTitle className="text-sm sm:text-base md:text-lg font-semibold text-indigo-700">新增配方</CardTitle>
+                <CardDescription className="text-xs sm:text-sm md:text-base text-indigo-600">建立新記錄</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
+            <p className="text-xs sm:text-xs md:text-sm text-gray-600 mb-3 sm:mb-3 md:mb-4 leading-relaxed">
               建立新的膠囊配方記錄，包含原料配置與生產參數
             </p>
             <Link href="/orders/new">
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-sm md:text-base">
+              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
                 開始建立
               </Button>
             </Link>
@@ -95,21 +95,21 @@ export default function HomePage() {
         <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 dark:from-emerald-900/20 dark:to-emerald-800/20 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30 dark:border-emerald-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <div className="p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <FileText className="h-6 w-6 text-white" />
+              <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <CardTitle className="text-lg font-semibold text-emerald-700">生產記錄</CardTitle>
-                <CardDescription className="text-emerald-600">檢視管理</CardDescription>
+                <CardTitle className="text-sm sm:text-base md:text-lg font-semibold text-emerald-700">生產記錄</CardTitle>
+                <CardDescription className="text-xs sm:text-sm md:text-base text-emerald-600">檢視管理</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-xs sm:text-xs md:text-sm text-gray-600 mb-3 sm:mb-3 md:mb-4 leading-relaxed">
               檢視與管理所有生產記錄，支援搜尋、篩選與編輯
             </p>
             <Link href="/orders">
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
                 查看記錄
               </Button>
             </Link>
@@ -120,14 +120,14 @@ export default function HomePage() {
       </div>
 
       {/* Feature Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900/50 dark:to-gray-900/50 dark:border-slate-700/30">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-              <FileText className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
+            <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
+              <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
               最近生產紀錄
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-gray-600 dark:text-gray-300">
+            <CardDescription className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300">
               最新的生產訂單狀態
             </CardDescription>
           </CardHeader>
@@ -263,25 +263,25 @@ export default function HomePage() {
 
         {/* 版本更新記錄 */}
         <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 dark:border-blue-800/30">
-          <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
-              <span className="mr-2">📝</span>
+          <CardHeader className="pb-3 sm:pb-4">
+            <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
+              <span className="mr-2 text-sm sm:text-base">📝</span>
               版本更新記錄
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-blue-600 dark:text-blue-200">
+            <CardDescription className="text-xs sm:text-sm md:text-base text-blue-600 dark:text-blue-200">
               系統功能更新與改進記錄
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200">v1.0.0 - 2024年9月22日</h4>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">最新版本</span>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.0 - 2024年9月22日</h4>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
-                <div className="text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p>🎉 <strong>重大更新</strong></p>
-                  <ul className="ml-4 space-y-1">
+                <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
+                  <p className="text-xs sm:text-xs md:text-sm">🎉 <strong>重大更新</strong></p>
+                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
                     <li>• 智能 AI 助手全面升級，支援基於回答內容的動態建議問題</li>
                     <li>• 新增響應式設計，完美支援手機與桌面設備</li>
                     <li>• 深色模式與淺色模式切換功能</li>
@@ -294,13 +294,13 @@ export default function HomePage() {
               </div>
 
               <div className="bg-indigo-50 dark:bg-indigo-900/40 p-3 rounded-xl border border-indigo-200 dark:border-indigo-700/50">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200">v0.9.0 - 2024年9月21日</h4>
-                  <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full">穩定版本</span>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200 text-sm sm:text-base">v0.9.0 - 2024年9月21日</h4>
+                  <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
                 </div>
-                <div className="text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
-                  <p>🔧 <strong>功能完善</strong></p>
-                  <ul className="ml-4 space-y-1">
+                <div className="text-xs sm:text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
+                  <p className="text-xs sm:text-xs md:text-sm">🔧 <strong>功能完善</strong></p>
+                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
                     <li>• 膠囊配方管理系統基礎功能</li>
                     <li>• 生產訂單追蹤與狀態管理</li>
                     <li>• 製程問題記錄與品質管理</li>
