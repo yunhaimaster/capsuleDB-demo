@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
-import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Plus, FileText, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
@@ -282,7 +281,18 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
     <div className="space-y-6">
       {/* AI 助手按鈕 */}
       <div className="flex justify-end">
-        <OrderAIAssistant order={order} />
+        <SmartAIAssistant 
+          orders={[order]} 
+          pageData={{
+            currentPage: '/orders/[id]',
+            pageDescription: '訂單詳情頁面 - 查看特定膠囊訂單的詳細信息',
+            timestamp: new Date().toISOString(),
+            ordersCount: 1,
+            hasCurrentOrder: true,
+            currentOrder: order,
+            recentOrders: []
+          }}
+        />
       </div>
       {/* 基本資訊 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
