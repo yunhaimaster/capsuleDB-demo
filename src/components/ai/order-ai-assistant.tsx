@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 
 interface Message {
@@ -120,7 +120,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 className="h-8 w-8 p-0"
                 title="清除對話"
               >
-                <X className="h-4 w-4" />
+                <RotateCcw className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
