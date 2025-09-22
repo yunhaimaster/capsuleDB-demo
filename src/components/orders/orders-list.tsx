@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { ProductionOrder, SearchFilters } from '@/types'
 import Link from 'next/link'
 
@@ -966,6 +967,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
+      {/* AI 助手按鈕 */}
+      <div className="flex justify-end">
+        <OrderAIAssistant order={order} />
+      </div>
       {/* 基本資訊 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

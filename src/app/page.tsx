@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { AIAssistant } from '@/components/ai/ai-assistant'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Plus, FileText, BarChart3, TrendingUp, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
@@ -275,6 +276,10 @@ export default function HomePage() {
 function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
+      {/* AI 助手按鈕 */}
+      <div className="flex justify-end">
+        <OrderAIAssistant order={order} />
+      </div>
       {/* 基本資訊 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
