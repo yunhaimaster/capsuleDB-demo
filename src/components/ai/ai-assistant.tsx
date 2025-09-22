@@ -106,17 +106,15 @@ export function AIAssistant({ orders }: AIAssistantProps) {
               <Bot className="h-5 w-5 mr-2 text-blue-600" />
               AI 訂單助手
             </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearChat}
-                className="h-8 w-8 p-0"
-                title="清除對話"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearChat}
+              className="h-8 w-8 p-0"
+              title="清除對話"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </DialogTitle>
         </DialogHeader>
         
