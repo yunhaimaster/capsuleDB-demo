@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
-import { formatDate, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
+import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, SearchFilters } from '@/types'
 import Link from 'next/link'
 
@@ -270,7 +270,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                           <div className="text-right">
                             {order.completionDate ? (
                               <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
-                                ✓ 完工 {formatDate(order.completionDate)}
+                                ✓ 完工 {formatDateOnly(order.completionDate)}
                               </span>
                             ) : (
                               <span className="inline-block mt-1 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">
@@ -567,7 +567,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     <TableCell>
                       {order.completionDate ? (
                         <span className="status-badge status-completed">
-                          ✓ 完工 {formatDate(order.completionDate)}
+                          ✓ 完工 {formatDateOnly(order.completionDate)}
                         </span>
                       ) : (
                         <span className="status-badge status-pending">

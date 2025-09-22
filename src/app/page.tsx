@@ -1,12 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, FileText, BarChart3, TrendingUp } from 'lucide-react'
+import { Plus, FileText, BarChart3, TrendingUp, Eye } from 'lucide-react'
+import { formatDateOnly, formatNumber } from '@/lib/utils'
+import { ProductionOrder } from '@/types'
 import Link from 'next/link'
 
 export default function HomePage() {
+  const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchRecentOrders()
+  }, [])
+
+  const fetchRecentOrders = async () => {
+    try {
+      const response = await fetch('/api/orders?limit=5')
+      if (response.ok) {
+        const data = await response.json()
+        setRecentOrders(data.orders || [])
+      }
+    } catch (error) {
+      console.error('Error fetching recent orders:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-8">
 
@@ -91,50 +114,78 @@ export default function HomePage() {
         <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
-              <TrendingUp className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
-              核心功能
+              <FileText className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
+              最近生產紀錄
             </CardTitle>
             <CardDescription className="text-sm md:text-base text-gray-600">
-              專為保健品生產管理設計
+              最新的生產訂單狀態
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 md:space-y-6">
-            <div className="space-y-2 md:space-y-3">
-              <h4 className="text-sm md:text-base font-semibold text-gray-700 flex items-center">
-                <span className="mr-2">📋</span>
-                配方管理
-              </h4>
-              <ul className="text-xs md:text-sm text-gray-600 space-y-1 md:space-y-2 ml-4 md:ml-6">
-                <li>• 動態原料配置</li>
-                <li>• 自動重量計算</li>
-                <li>• 配方複製功能</li>
-                <li>• 即時數據驗證</li>
-              </ul>
-            </div>
-            <div className="space-y-2 md:space-y-3">
-              <h4 className="text-sm md:text-base font-semibold text-gray-700 flex items-center">
-                <span className="mr-2">🔍</span>
-                智能搜尋
-              </h4>
-              <ul className="text-xs md:text-sm text-gray-600 space-y-1 md:space-y-2 ml-4 md:ml-6">
-                <li>• 客戶名稱搜尋</li>
-                <li>• 原料名稱搜尋</li>
-                <li>• 日期範圍篩選</li>
-                <li>• 狀態快速篩選</li>
-              </ul>
-            </div>
-            <div className="space-y-2 md:space-y-3">
-              <h4 className="text-sm md:text-base font-semibold text-gray-700 flex items-center">
-                <span className="mr-2">📊</span>
-                數據分析
-              </h4>
-              <ul className="text-xs md:text-sm text-gray-600 space-y-1 md:space-y-2 ml-4 md:ml-6">
-                <li>• 原料使用統計</li>
-                <li>• 問題追蹤分析</li>
-                <li>• CSV 數據匯出</li>
-                <li>• 生產狀態監控</li>
-              </ul>
-            </div>
+          <CardContent className="space-y-3">
+            {loading ? (
+              <div className="text-center py-4">
+                <div className="text-sm text-gray-500">載入中...</div>
+              </div>
+            ) : recentOrders.length > 0 ? (
+              <div className="space-y-2">
+                {recentOrders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <h4 className="text-sm font-medium text-gray-900 truncate">
+                          {order.customerName}
+                        </h4>
+                        <span className="text-xs text-gray-500">
+                          {order.productName}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-xs text-gray-500">
+                          {formatNumber(order.productionQuantity)} 粒
+                        </span>
+                        {order.capsuleSize && order.capsuleColor && order.capsuleType && (
+                          <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                            {[order.capsuleSize, order.capsuleColor, order.capsuleType].filter(Boolean).join('')}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {order.completionDate ? (
+                        <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
+                          ✓ 完工 {formatDateOnly(order.completionDate)}
+                        </span>
+                      ) : (
+                        <span className="text-xs px-2 py-1 bg-orange-100 text-orange-800 rounded">
+                          ⏳ 未完工
+                        </span>
+                      )}
+                      <Link href={`/orders/${order.id}`}>
+                        <Button size="sm" variant="outline" className="h-6 w-6 p-0">
+                          <Eye className="h-3 w-3" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+                <div className="pt-2">
+                  <Link href="/orders">
+                    <Button variant="outline" className="w-full text-sm">
+                      查看所有記錄
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <div className="text-sm text-gray-500 mb-2">尚無生產記錄</div>
+                <Link href="/orders/new">
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    建立第一筆記錄
+                  </Button>
+                </Link>
+              </div>
+            )}
           </CardContent>
         </Card>
 
