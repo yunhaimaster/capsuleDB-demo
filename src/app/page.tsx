@@ -229,20 +229,23 @@ export default function HomePage() {
               <div className="bg-amber-50 dark:bg-amber-900/40 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-700/50">
                 <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-100">
-                  <li>• 膠囊配方管理與記錄</li>
-                  <li>• 生產訂單追蹤與狀態管理</li>
-                  <li>• 製程問題記錄與品質管理</li>
+                  <li>• 膠囊配方管理與記錄追蹤</li>
+                  <li>• 生產訂單狀態管理與品質控制</li>
                   <li>• 智能 AI 助手分析與建議</li>
+                  <li>• 響應式設計，支援手機與桌面</li>
+                  <li>• 深色模式與淺色模式切換</li>
+                  <li>• 數據導出與備份功能</li>
                 </ul>
               </div>
               
               <div className="bg-orange-50 dark:bg-orange-900/40 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-700/50">
                 <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">使用流程</h4>
                 <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-100">
-                  <li>1. 新增配方：建立新的膠囊生產訂單</li>
+                  <li>1. 新增配方：建立新的膠囊生產訂單與配方</li>
                   <li>2. 檢視記錄：查看和管理現有膠囊訂單</li>
                   <li>3. 品質追蹤：記錄膠囊製程問題和備註</li>
                   <li>4. AI 分析：使用智能助手分析生產數據</li>
+                  <li>5. 數據導出：匯出 CSV 格式的生產記錄</li>
                 </ol>
               </div>
               
@@ -252,6 +255,57 @@ export default function HomePage() {
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
                   <p className="font-medium">Victor</p>
                   <p className="text-xs text-yellow-600 dark:text-yellow-200 mt-1">系統管理員</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* 版本更新記錄 */}
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 dark:border-blue-800/30">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
+              <span className="mr-2">📝</span>
+              版本更新記錄
+            </CardTitle>
+            <CardDescription className="text-sm md:text-base text-blue-600 dark:text-blue-200">
+              系統功能更新與改進記錄
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200">v1.0.0 - 2024年9月22日</h4>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">最新版本</span>
+                </div>
+                <div className="text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
+                  <p>🎉 <strong>重大更新</strong></p>
+                  <ul className="ml-4 space-y-1">
+                    <li>• 智能 AI 助手全面升級，支援基於回答內容的動態建議問題</li>
+                    <li>• 新增響應式設計，完美支援手機與桌面設備</li>
+                    <li>• 深色模式與淺色模式切換功能</li>
+                    <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
+                    <li>• 數據導出功能：CSV 格式支援中文編碼</li>
+                    <li>• 用戶體驗優化：正在回答提示、統一設計風格</li>
+                    <li>• 頁面針對性建議：不同頁面顯示相關的 AI 建議問題</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-indigo-50 dark:bg-indigo-900/40 p-3 rounded-xl border border-indigo-200 dark:border-indigo-700/50">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200">v0.9.0 - 2024年9月21日</h4>
+                  <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full">穩定版本</span>
+                </div>
+                <div className="text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
+                  <p>🔧 <strong>功能完善</strong></p>
+                  <ul className="ml-4 space-y-1">
+                    <li>• 膠囊配方管理系統基礎功能</li>
+                    <li>• 生產訂單追蹤與狀態管理</li>
+                    <li>• 製程問題記錄與品質管理</li>
+                    <li>• 基礎 AI 助手功能</li>
+                  </ul>
                 </div>
               </div>
             </div>
