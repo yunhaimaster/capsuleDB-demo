@@ -58,10 +58,10 @@ ${context.currentOrder ? `當前查看的訂單：
 ${JSON.stringify({
   客戶名稱: context.currentOrder.customerName || '未知客戶',
   產品名稱: context.currentOrder.productName || '未知產品',
-  生產數量: `${context.currentOrder.quantity || 0} 粒`,
-  單粒重量: `${context.currentOrder.unitWeightMg || 0} 毫克`,
-  膠囊規格: `${context.currentOrder.capsuleColor || '未知'} ${context.currentOrder.capsuleSize || '未知'} ${context.currentOrder.capsuleType || '未知'}`,
-  主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
+  生產數量: `${context.currentOrder.quantity} 粒`,
+  單粒重量: `${context.currentOrder.unitWeightMg} 毫克`,
+  膠囊規格: `${context.currentOrder.capsuleColor} ${context.currentOrder.capsuleSize} ${context.currentOrder.capsuleType}`,
+  主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
   生產狀態: context.currentOrder.completionDate ? '已完成' : '進行中',
   完成日期: context.currentOrder.completionDate ? new Date(context.currentOrder.completionDate).toLocaleDateString('zh-TW') : '未完成',
   創建時間: context.currentOrder.createdAt ? new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW') : '未知',
@@ -72,10 +72,10 @@ ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數�
 ${JSON.stringify(context.recentOrders.map((order: any) => ({
   客戶名稱: order.customerName || '未知客戶',
   產品名稱: order.productName || '未知產品',
-  生產數量: `${order.quantity || 0} 粒`,
-  單粒重量: `${order.unitWeightMg || 0} 毫克`,
-  膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
-  主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
+  生產數量: `${order.quantity} 粒`,
+  單粒重量: `${order.unitWeightMg} 毫克`,
+  膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
+  主要原料: order.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
   生產狀態: order.completionDate ? '已完成' : '進行中',
   完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
   創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
@@ -98,10 +98,10 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
       const userFriendlyOrders = orders.map((order: any) => ({
         客戶名稱: order.customerName || '未知客戶',
         產品名稱: order.productName || '未知產品',
-        生產數量: `${order.quantity || 0} 粒`,
-        單粒重量: `${order.unitWeightMg || 0} 毫克`,
-        膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
-        主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
+        生產數量: `${order.quantity} 粒`,
+        單粒重量: `${order.unitWeightMg} 毫克`,
+        膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
+        主要原料: order.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
         生產狀態: order.completionDate ? '已完成' : '進行中',
         完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
         創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
@@ -201,8 +201,14 @@ ${JSON.stringify(userFriendlyOrders, null, 2)}
       .replace(/<[^>]*end_of_sentence[^>]*>/gi, '')
       .replace(/begin_of_sentence/gi, '')
       .replace(/end_of_sentence/gi, '')
-      // 清理任何以 < 開頭的特殊標記
+      // 清理任何以 < 開頭的特殊標記，但保留 Markdown 符號
       .replace(/<[^>]*>/g, '')
+      // 確保 Markdown 格式符號不被誤刪
+      .replace(/\n\n/g, '\n\n') // 保留段落分隔
+      .replace(/\*\*(.*?)\*\*/g, '**$1**') // 保留粗體
+      .replace(/\*(.*?)\*/g, '*$1*') // 保留斜體
+      .replace(/^\s*[-*+]\s/gm, '- ') // 保留列表符號
+      .replace(/^\s*\d+\.\s/gm, '1. ') // 保留數字列表
       .trim()
 
     // 基於 AI 回答動態生成建議問題
