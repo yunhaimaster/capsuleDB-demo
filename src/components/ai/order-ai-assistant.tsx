@@ -192,38 +192,38 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             
             <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4">
               {messages.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-purple-600" />
-                  <p className="text-lg font-medium mb-2">AI 訂單分析助手</p>
-                  <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
+                <div className="text-center py-6 sm:py-8 text-gray-600 dark:text-gray-300">
+                  <Bot className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4 text-purple-500 dark:text-purple-400" />
+                  <p className="text-base sm:text-lg font-medium mb-2 text-gray-700 dark:text-gray-200">AI 訂單分析助手</p>
+                  <p className="text-xs sm:text-sm mb-4 text-gray-600 dark:text-gray-300">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
                       onClick={() => setInput('這個訂單的原料配比如何？')}
                       className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">訂單分析</p>
-                      <p className="text-purple-600 dark:text-purple-300">"這個訂單的原料配比如何？"</p>
+                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1 text-sm">訂單分析</p>
+                      <p className="text-purple-700 dark:text-purple-300 text-xs sm:text-sm">"這個訂單的原料配比如何？"</p>
                     </button>
                     <button
                       onClick={() => setInput('單粒重量是否合理？')}
                       className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">重量計算</p>
-                      <p className="text-blue-600 dark:text-blue-300">"單粒重量是否合理？"</p>
+                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1 text-sm">重量計算</p>
+                      <p className="text-blue-700 dark:text-blue-300 text-xs sm:text-sm">"單粒重量是否合理？"</p>
                     </button>
                     <button
                       onClick={() => setInput('有什麼生產注意事項？')}
                       className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">生產建議</p>
-                      <p className="text-green-600 dark:text-green-300">"有什麼生產注意事項？"</p>
+                      <p className="font-medium text-green-800 dark:text-green-200 mb-1 text-sm">生產建議</p>
+                      <p className="text-green-700 dark:text-green-300 text-xs sm:text-sm">"有什麼生產注意事項？"</p>
                     </button>
                     <button
                       onClick={() => setInput('這個配方的品質如何？')}
                       className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">品質評估</p>
-                      <p className="text-orange-600 dark:text-orange-300">"這個配方的品質如何？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1 text-sm">品質評估</p>
+                      <p className="text-orange-700 dark:text-orange-300 text-xs sm:text-sm">"這個配方的品質如何？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
