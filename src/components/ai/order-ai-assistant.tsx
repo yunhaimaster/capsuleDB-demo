@@ -66,32 +66,32 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           詢問此訂單
         </Button>
       </DialogTrigger>
-      <DialogContent className={`max-w-4xl max-h-[90vh] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
-        <DialogHeader>
+      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
+        <DialogHeader className="pb-3 sm:pb-4">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
-              <Bot className="h-5 w-5 mr-2 text-purple-600" />
-              AI 訂單分析助手
+              <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-purple-600" />
+              <span className="text-base sm:text-lg">AI 訂單分析助手</span>
             </div>
             <div className="flex items-center space-x-1">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={startNewChat}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title="新對話（保存當前對話）"
               >
-                <MessageSquare className="h-4 w-4" />
+                <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
               {chatHistory.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowSettings(!showSettings)}
-                  className="h-8 w-8 p-0"
+                  className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                   title="對話歷史"
                 >
-                  <History className="h-4 w-4" />
+                  <History className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               )}
               {messages.length > 0 && (
@@ -100,19 +100,19 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     variant="outline"
                     size="sm"
                     onClick={scrollToTop}
-                    className="h-8 w-8 p-0"
+                    className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                     title="回到頂部"
                   >
-                    <ArrowUp className="h-4 w-4" />
+                    <ArrowUp className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={exportConversation}
-                    className="h-8 w-8 p-0"
+                    className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                     title="導出對話"
                   >
-                    <Download className="h-4 w-4" />
+                    <Download className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </>
               )}
@@ -120,28 +120,28 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 variant="outline"
                 size="sm"
                 onClick={toggleMinimize}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title={isMinimized ? "展開" : "最小化"}
               >
-                {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+                {isMinimized ? <Maximize2 className="h-3 w-3 sm:h-4 sm:w-4" /> : <Minimize2 className="h-3 w-3 sm:h-4 sm:w-4" />}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={clearChat}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title="清除對話（不保存）"
               >
-                <RotateCcw className="h-4 w-4" />
+                <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleClose}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title="關閉"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </div>
           </DialogTitle>

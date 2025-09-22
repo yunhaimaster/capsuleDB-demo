@@ -63,64 +63,64 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         </Button>
       </DialogTrigger>
       
-      <DialogContent className={`max-w-4xl max-h-[90vh] ${isMinimized ? 'max-w-sm' : ''}`}>
-        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <DialogTitle className="text-lg font-semibold flex items-center">
-            <Bot className="w-5 h-5 mr-2 text-emerald-600" />
+      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] ${isMinimized ? 'max-w-sm' : ''}`}>
+        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
+          <DialogTitle className="text-base sm:text-lg font-semibold flex items-center">
+            <Bot className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-emerald-600" />
             Smart AI 助手
           </DialogTitle>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={startNewChat}
               title="新對話（保存當前對話）"
-              className="text-xs"
+              className="h-8 w-8 p-0 text-xs"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowSettings(!showSettings)}
               title="對話歷史"
-              className="text-xs"
+              className="h-8 w-8 p-0 text-xs"
             >
-              <Settings className="w-4 h-4" />
+              <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleMinimize}
               title={isMinimized ? "展開" : "最小化"}
-              className="text-xs"
+              className="h-8 w-8 p-0 text-xs"
             >
-              {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+              {isMinimized ? <Maximize2 className="w-3 h-3 sm:w-4 sm:h-4" /> : <Minimize2 className="w-3 h-3 sm:w-4 sm:h-4" />}
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={clearChat}
               title="清除對話（不保存）"
-              className="text-xs"
+              className="h-8 w-8 p-0 text-xs"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClose}
               title="關閉"
-              className="text-xs"
+              className="h-8 w-8 p-0 text-xs"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           </div>
         </DialogHeader>
 
         {isMinimized ? (
-          <div className="p-4 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <div className="p-3 sm:p-4 text-center">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">
               AI 助手已最小化
             </p>
             <Button
@@ -131,28 +131,29 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 }, 100)
               }}
               size="sm"
-              className="w-full"
+              className="w-full text-xs sm:text-sm"
             >
               繼續對話
             </Button>
           </div>
         ) : (
-          <div className="flex h-[600px]">
+          <div className="flex h-[400px] sm:h-[500px] md:h-[600px]">
             {/* 聊天歷史側邊欄 */}
             {showSettings && (
-              <div className="w-64 border-r border-gray-200 dark:border-gray-700 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium">對話歷史</h3>
+              <div className="w-48 sm:w-56 md:w-64 border-r border-gray-200 dark:border-gray-700 p-3 sm:p-4">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <h3 className="text-xs sm:text-sm font-medium">對話歷史</h3>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setShowSettings(false)}
+                    className="h-6 w-6 p-0"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-3 h-3 sm:w-4 sm:h-4" />
                   </Button>
                 </div>
                 
-                <div className="space-y-2 max-h-96 overflow-y-auto">
+                <div className="space-y-1 sm:space-y-2 max-h-80 sm:max-h-96 overflow-y-auto">
                   {chatHistory.map((chat, index) => (
                     <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
                       <button
@@ -165,7 +166,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteChatHistory(index)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-red-500 hover:text-red-700 h-6 w-6 p-0"
                       >
                         <Trash2 className="w-3 h-3" />
                       </Button>
@@ -180,23 +181,23 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               {/* 消息顯示區域 */}
               <div 
                 ref={messagesContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4"
+                className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4"
               >
                 {messages.length === 0 ? (
-                  <div className="text-center text-gray-500 dark:text-gray-400 py-8">
-                    <Bot className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
-                    <p className="text-sm mt-2">請輸入您的問題開始對話。</p>
+                  <div className="text-center text-gray-500 dark:text-gray-400 py-6 sm:py-8">
+                    <Bot className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
+                    <p className="text-sm sm:text-base">我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
+                    <p className="text-xs sm:text-sm mt-2">請輸入您的問題開始對話。</p>
                     
                     {/* 初始建議問題 */}
-                    <div className="mt-6">
+                    <div className="mt-4 sm:mt-6">
                       <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
                       <div className="grid grid-cols-1 gap-1">
                         {pageData?.currentPage === '/' && (
                           <>
                             <button
                               onClick={() => setInput('顯示所有未完工的生產訂單')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="text-xs text-left p-2 sm:p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                             >
                               "顯示所有未完工的生產訂單"
                             </button>
