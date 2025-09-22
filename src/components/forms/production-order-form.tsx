@@ -172,111 +172,113 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               )}
             </div>
           </div>
+        </CardContent>
+      </Card>
 
-          {/* 膠囊規格 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">膠囊規格</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="capsuleColor">膠囊顏色</Label>
-                  <Input
-                    id="capsuleColor"
-                    {...register('capsuleColor')}
-                    placeholder="例如：白色、透明、藍色"
-                  />
-                  {errors.capsuleColor && (
-                    <p className="text-sm text-destructive">{errors.capsuleColor.message}</p>
-                  )}
-                </div>
+      {/* 膠囊規格 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">膠囊規格</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="capsuleColor">膠囊顏色</Label>
+              <Input
+                id="capsuleColor"
+                {...register('capsuleColor')}
+                placeholder="例如：白色、透明、藍色"
+              />
+              {errors.capsuleColor && (
+                <p className="text-sm text-destructive">{errors.capsuleColor.message}</p>
+              )}
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="capsuleSize">膠囊大小</Label>
-                  <Select onValueChange={(value) => setValue('capsuleSize', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="選擇膠囊大小" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="#1">#1</SelectItem>
-                      <SelectItem value="#0">#0</SelectItem>
-                      <SelectItem value="#00">#00</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.capsuleSize && (
-                    <p className="text-sm text-destructive">{errors.capsuleSize.message}</p>
-                  )}
-                </div>
+            <div className="space-y-2">
+              <Label htmlFor="capsuleSize">膠囊大小</Label>
+              <Select onValueChange={(value) => setValue('capsuleSize', value as "#1" | "#0" | "#00")}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇膠囊大小" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="#1">#1</SelectItem>
+                  <SelectItem value="#0">#0</SelectItem>
+                  <SelectItem value="#00">#00</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.capsuleSize && (
+                <p className="text-sm text-destructive">{errors.capsuleSize.message}</p>
+              )}
+            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="capsuleType">膠囊成份</Label>
-                  <Select onValueChange={(value) => setValue('capsuleType', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="選擇膠囊成份" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="明膠胃溶">明膠胃溶</SelectItem>
-                      <SelectItem value="植物胃溶">植物胃溶</SelectItem>
-                      <SelectItem value="明膠腸溶">明膠腸溶</SelectItem>
-                      <SelectItem value="植物腸溶">植物腸溶</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.capsuleType && (
-                    <p className="text-sm text-destructive">{errors.capsuleType.message}</p>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            <div className="space-y-2">
+              <Label htmlFor="capsuleType">膠囊成份</Label>
+              <Select onValueChange={(value) => setValue('capsuleType', value as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶")}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇膠囊成份" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="明膠胃溶">明膠胃溶</SelectItem>
+                  <SelectItem value="植物胃溶">植物胃溶</SelectItem>
+                  <SelectItem value="明膠腸溶">明膠腸溶</SelectItem>
+                  <SelectItem value="植物腸溶">植物腸溶</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.capsuleType && (
+                <p className="text-sm text-destructive">{errors.capsuleType.message}</p>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-          {/* 其他信息 */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">其他信息</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="completionDate">完工日期</Label>
-                <Input
-                  id="completionDate"
-                  type="date"
-                  {...register('completionDate', { 
-                    setValueAs: (value) => {
-                      if (!value || value === '') return null
-                      const date = new Date(value)
-                      return isNaN(date.getTime()) ? null : date
-                    }
-                  })}
-                />
-              </div>
+      {/* 其他信息 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">其他信息</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="completionDate">完工日期</Label>
+            <Input
+              id="completionDate"
+              type="date"
+              {...register('completionDate', { 
+                setValueAs: (value) => {
+                  if (!value || value === '') return null
+                  const date = new Date(value)
+                  return isNaN(date.getTime()) ? null : date
+                }
+              })}
+            />
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="processIssues">製程問題記錄</Label>
-                <textarea
-                  id="processIssues"
-                  {...register('processIssues')}
-                  placeholder="記錄生產異常與解決方案"
-                  className="w-full min-h-[100px] px-3 py-2 border border-input bg-background rounded-md text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
-                {errors.processIssues && (
-                  <p className="text-sm text-destructive">{errors.processIssues.message}</p>
-                )}
-              </div>
+          <div className="space-y-2">
+            <Label htmlFor="processIssues">製程問題記錄</Label>
+            <textarea
+              id="processIssues"
+              {...register('processIssues')}
+              placeholder="記錄生產異常與解決方案"
+              className="w-full min-h-[100px] px-3 py-2 border border-input bg-background rounded-md text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+            {errors.processIssues && (
+              <p className="text-sm text-destructive">{errors.processIssues.message}</p>
+            )}
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="qualityNotes">品管備註</Label>
-                <textarea
-                  id="qualityNotes"
-                  {...register('qualityNotes')}
-                  placeholder="品管相關備註"
-                  className="w-full min-h-[80px] px-3 py-2 border border-input bg-background rounded-md text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
-                {errors.qualityNotes && (
-                  <p className="text-sm text-destructive">{errors.qualityNotes.message}</p>
-                )}
-              </div>
-            </CardContent>
+          <div className="space-y-2">
+            <Label htmlFor="qualityNotes">品管備註</Label>
+            <textarea
+              id="qualityNotes"
+              {...register('qualityNotes')}
+              placeholder="品管相關備註"
+              className="w-full min-h-[80px] px-3 py-2 border border-input bg-background rounded-md text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
+            {errors.qualityNotes && (
+              <p className="text-sm text-destructive">{errors.qualityNotes.message}</p>
+            )}
+          </div>
+        </CardContent>
       </Card>
 
       {/* 原料配方 */}
@@ -327,10 +329,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   <TableCell>
                     <Input
                       {...register(`ingredients.${index}.materialName`)}
-                      placeholder="請輸入原料品名"
+                      placeholder="原料品名"
                     />
                     {errors.ingredients?.[index]?.materialName && (
-                      <p className="text-xs text-destructive mt-1">
+                      <p className="text-sm text-destructive mt-1">
                         {errors.ingredients[index]?.materialName?.message}
                       </p>
                     )}
@@ -339,13 +341,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     <Input
                       type="number"
                       step="0.00001"
-                      {...register(`ingredients.${index}.unitContentMg`, { 
-                        valueAsNumber: true 
-                      })}
+                      {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
                       placeholder="0.00000"
                     />
                     {errors.ingredients?.[index]?.unitContentMg && (
-                      <p className="text-xs text-destructive mt-1">
+                      <p className="text-sm text-destructive mt-1">
                         {errors.ingredients[index]?.unitContentMg?.message}
                       </p>
                     )}
@@ -353,26 +353,17 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   {showCalculations && (
                     <>
                       <TableCell>
-                        {watchedIngredients[index]?.unitContentMg && watchedQuantity
-                          ? calculateBatchWeight(
-                              watchedIngredients[index].unitContentMg,
-                              watchedQuantity
-                            ).display
-                          : '-'
-                        }
+                        {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
                       </TableCell>
                       <TableCell>
-                        {watchedIngredients[index]?.unitContentMg
-                          ? convertWeight(watchedIngredients[index].unitContentMg).display
-                          : '-'
-                        }
+                        {convertWeight(field.unitContentMg).display}
                       </TableCell>
                     </>
                   )}
                   <TableCell>
                     <Button
                       type="button"
-                      variant="destructive"
+                      variant="outline"
                       size="sm"
                       onClick={() => remove(index)}
                       disabled={fields.length === 1}
@@ -384,7 +375,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               ))}
             </TableBody>
           </Table>
-
+          
           <div className="mt-4">
             <Button
               type="button"

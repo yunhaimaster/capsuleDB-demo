@@ -9,11 +9,14 @@ async function main() {
   const orders = [
     {
       customerName: '康健藥業股份有限公司',
-      productCode: 'KJ-001',
+      productName: '維生素C+D3鈣片',
       productionQuantity: 100000,
       completionDate: new Date('2024-01-15'),
       processIssues: '膠囊填充過程中發現部分膠囊重量偏差，已調整填充參數',
       qualityNotes: '品質檢驗合格，符合標準',
+      capsuleColor: '白色',
+      capsuleSize: '#0',
+      capsuleType: '明膠胃溶',
       createdBy: '張藥師',
       ingredients: [
         { materialName: '維生素C', unitContentMg: 500.0 },
@@ -24,11 +27,14 @@ async function main() {
     },
     {
       customerName: '永信藥品工業股份有限公司',
-      productCode: 'YS-2024-001',
+      productName: '益生菌膠囊',
       productionQuantity: 50000,
       completionDate: null,
       processIssues: null,
       qualityNotes: '待生產',
+      capsuleColor: '透明',
+      capsuleSize: '#1',
+      capsuleType: '植物胃溶',
       createdBy: '李藥師',
       ingredients: [
         { materialName: '魚油', unitContentMg: 1000.0 },
@@ -38,11 +44,14 @@ async function main() {
     },
     {
       customerName: '中化製藥股份有限公司',
-      productCode: 'CH-2024-003',
+      productName: '葉酸鐵質複合膠囊',
       productionQuantity: 200000,
       completionDate: new Date('2024-01-20'),
       processIssues: '原料供應延遲，影響生產進度',
       qualityNotes: '已補貨完成，品質無虞',
+      capsuleColor: '棕色',
+      capsuleSize: '#0',
+      capsuleType: '明膠腸溶',
       createdBy: '王藥師',
       ingredients: [
         { materialName: '葉酸', unitContentMg: 400.0 },
@@ -53,11 +62,14 @@ async function main() {
     },
     {
       customerName: '台灣東洋藥品工業股份有限公司',
-      productCode: 'TY-2024-005',
+      productName: '維生素B群膠囊',
       productionQuantity: 75000,
       completionDate: new Date('2024-01-18'),
       processIssues: null,
       qualityNotes: '生產順利，無異常',
+      capsuleColor: '黃色',
+      capsuleSize: '#00',
+      capsuleType: '植物腸溶',
       createdBy: '陳藥師',
       ingredients: [
         { materialName: '益生菌', unitContentMg: 50.0 },
@@ -67,11 +79,14 @@ async function main() {
     },
     {
       customerName: '信東生技股份有限公司',
-      productCode: 'ST-2024-007',
+      productName: '綜合維生素膠囊',
       productionQuantity: 150000,
       completionDate: null,
       processIssues: '設備維護中，預計下週恢復生產',
       qualityNotes: '待設備維護完成',
+      capsuleColor: '藍色',
+      capsuleSize: '#1',
+      capsuleType: '明膠胃溶',
       createdBy: '林藥師',
       ingredients: [
         { materialName: '葡萄糖胺', unitContentMg: 750.0 },
@@ -93,13 +108,16 @@ async function main() {
     const order = await prisma.productionOrder.create({
       data: {
         customerName: orderData.customerName,
-        productCode: orderData.productCode,
+        productName: orderData.productName,
         productionQuantity: orderData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
         completionDate: orderData.completionDate,
         processIssues: orderData.processIssues,
         qualityNotes: orderData.qualityNotes,
+        capsuleColor: orderData.capsuleColor,
+        capsuleSize: orderData.capsuleSize,
+        capsuleType: orderData.capsuleType,
         createdBy: orderData.createdBy,
         ingredients: {
           create: orderData.ingredients.map(ingredient => ({
@@ -110,7 +128,7 @@ async function main() {
       }
     })
 
-    console.log(`已創建訂單: ${order.productCode} - ${order.customerName}`)
+    console.log(`已創建訂單: ${order.productName} - ${order.customerName}`)
   }
 
   console.log('種子資料完成！')

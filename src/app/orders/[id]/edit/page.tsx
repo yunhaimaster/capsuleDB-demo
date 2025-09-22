@@ -69,7 +69,19 @@ export default function EditOrderPage() {
       {/* Form Card */}
       <div className="max-w-4xl mx-auto px-4 md:px-0">
         <ProductionOrderForm 
-          initialData={order}
+          initialData={{
+            customerName: order.customerName,
+            productName: order.productName,
+            productionQuantity: order.productionQuantity,
+            completionDate: order.completionDate,
+            processIssues: order.processIssues,
+            qualityNotes: order.qualityNotes,
+            capsuleColor: order.capsuleColor,
+            capsuleSize: order.capsuleSize as "#1" | "#0" | "#00" | null,
+            capsuleType: order.capsuleType as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶" | null,
+            createdBy: order.createdBy,
+            ingredients: order.ingredients
+          }}
           orderId={order.id}
         />
       </div>

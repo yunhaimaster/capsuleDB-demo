@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         const row = [
           order.createdAt.toISOString().split('T')[0],
           order.customerName,
-          order.productCode,
+          order.productName,
           order.productionQuantity.toString(),
           order.unitWeightMg.toString(),
           order.batchTotalWeightMg.toString(),
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       const tableData = orders.map(order => [
         order.createdAt.toISOString().split('T')[0],
         order.customerName,
-        order.productCode,
+        order.productName,
         order.productionQuantity.toString(),
         order.unitWeightMg.toFixed(3),
         order.completionDate ? 'Completed' : 'Pending'
