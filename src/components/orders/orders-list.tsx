@@ -724,7 +724,6 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
               <TableHead>原料品名</TableHead>
               <TableHead>單粒含量 (mg)</TableHead>
               <TableHead>批次用量</TableHead>
-              <TableHead>小計</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -734,9 +733,6 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
                 <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
                 <TableCell>
                   {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
-                </TableCell>
-                <TableCell>
-                  {convertWeight(ingredient.unitContentMg).display}
                 </TableCell>
               </TableRow>
             ))}
