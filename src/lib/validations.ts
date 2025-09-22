@@ -86,6 +86,8 @@ export const productionOrderSchema = z.object({
 export const searchFiltersSchema = z.object({
   customerName: z.string().optional(),
   productName: z.string().optional(),
+  ingredientName: z.string().optional(),
+  capsuleType: z.string().optional(),
   dateFrom: z.date().optional(),
   dateTo: z.date().optional(),
   isCompleted: z.boolean().optional(),

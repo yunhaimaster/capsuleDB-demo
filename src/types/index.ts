@@ -50,6 +50,8 @@ export interface UpdateProductionOrderData extends Partial<CreateProductionOrder
 export interface SearchFilters {
   customerName?: string
   productName?: string
+  ingredientName?: string
+  capsuleType?: string
   dateFrom?: Date
   dateTo?: Date
   isCompleted?: boolean

@@ -24,6 +24,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [filters, setFilters] = useState<SearchFilters>({
     customerName: '',
     productName: '',
+    ingredientName: '',
+    capsuleType: '',
     dateFrom: undefined,
     dateTo: undefined,
     isCompleted: undefined,
@@ -34,6 +36,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   })
   const [showFilters, setShowFilters] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
+  
+  // 下拉選單選項狀態
+  const [customerOptions, setCustomerOptions] = useState<string[]>([])
+  const [productOptions, setProductOptions] = useState<string[]>([])
+  const [ingredientOptions, setIngredientOptions] = useState<string[]>([])
+  const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<string[]>([])
+
+  // 獲取下拉選單選項
+  const fetchDropdownOptions = async () => {
+    try {
+      const response = await fetch('/api/orders/options')
+      if (response.ok) {
+        const data = await response.json()
+        setCustomerOptions(data.customers || [])
+        setProductOptions(data.products || [])
+        setIngredientOptions(data.ingredients || [])
+        setCapsuleTypeOptions(data.capsuleTypes || [])
+      }
+    } catch (error) {
+      console.error('Error fetching dropdown options:', error)
+    }
+  }
 
   const fetchOrders = async (newFilters: SearchFilters) => {
     setLoading(true)
@@ -60,7 +84,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   useEffect(() => {
     fetchOrders(filters)
-  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productName, filters.dateFrom, filters.dateTo, filters.isCompleted])
+  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType, filters.dateFrom, filters.dateTo, filters.isCompleted])
+
+  useEffect(() => {
+    fetchDropdownOptions()
+  }, [])
 
   const handleSearch = (newFilters: Partial<SearchFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
@@ -139,7 +167,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             <div>
               <CardTitle className="text-lg md:text-xl">生產記錄管理</CardTitle>
               <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                支援搜尋客戶名稱或原料名稱
+                支援搜尋客戶名稱、產品名字、原料名稱、膠囊類型
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
@@ -161,31 +189,75 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           </div>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-4">
-            <div className="flex-1">
-              <Input
-                placeholder="搜尋客戶名稱或原料名稱..."
+          {/* 主要搜尋條件 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
+            <div>
+              <label className="text-sm font-medium mb-1 block">客戶名稱</label>
+              <select
+                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
                 value={filters.customerName || ''}
                 onChange={(e) => handleSearch({ customerName: e.target.value })}
-                className="text-sm md:text-base"
-              />
+              >
+                <option value="">全部客戶</option>
+                {customerOptions.map((customer) => (
+                  <option key={customer} value={customer}>
+                    {customer}
+                  </option>
+                ))}
+              </select>
             </div>
-            <Button variant="outline" className="text-xs md:text-sm">
-              <Search className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-              搜尋
-            </Button>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">產品名稱</label>
+              <select
+                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                value={filters.productName || ''}
+                onChange={(e) => handleSearch({ productName: e.target.value })}
+              >
+                <option value="">全部產品</option>
+                {productOptions.map((product) => (
+                  <option key={product} value={product}>
+                    {product}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">原料名稱</label>
+              <select
+                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                value={filters.ingredientName || ''}
+                onChange={(e) => handleSearch({ ingredientName: e.target.value })}
+              >
+                <option value="">全部原料</option>
+                {ingredientOptions.map((ingredient) => (
+                  <option key={ingredient} value={ingredient}>
+                    {ingredient}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">膠囊類型</label>
+              <select
+                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                value={filters.capsuleType || ''}
+                onChange={(e) => handleSearch({ capsuleType: e.target.value })}
+              >
+                <option value="">全部類型</option>
+                {capsuleTypeOptions.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {showFilters && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 bg-muted rounded-lg">
-              <div>
-                <label className="text-sm font-medium">產品名字</label>
-                <Input
-                  placeholder="產品名字"
-                  value={filters.productName || ''}
-                  onChange={(e) => handleSearch({ productName: e.target.value })}
-                />
-              </div>
               <div>
                 <label className="text-sm font-medium">開始日期</label>
                 <Input

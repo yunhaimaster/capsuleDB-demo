@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
     const filters: SearchFilters = {
       customerName: searchParams.get('customerName') || undefined,
       productName: searchParams.get('productName') || undefined,
+      ingredientName: searchParams.get('ingredientName') || undefined,
+      capsuleType: searchParams.get('capsuleType') || undefined,
       dateFrom: searchParams.get('dateFrom') ? new Date(searchParams.get('dateFrom')!) : undefined,
       dateTo: searchParams.get('dateTo') ? new Date(searchParams.get('dateTo')!) : undefined,
       isCompleted: searchParams.get('isCompleted') ? searchParams.get('isCompleted') === 'true' : undefined,
@@ -23,33 +25,52 @@ export async function GET(request: NextRequest) {
     
     const where: any = {}
     
+    // 構建搜尋條件
+    const searchConditions: any[] = []
+    
     if (validatedFilters.customerName) {
-      // 支援客戶名稱或原料名稱搜尋
-      where.OR = [
-        {
-          customerName: {
-            contains: validatedFilters.customerName,
-            mode: 'insensitive'
-          }
-        },
-        {
-          ingredients: {
-            some: {
-              materialName: {
-                contains: validatedFilters.customerName,
-                mode: 'insensitive'
-              }
-            }
-          }
+      searchConditions.push({
+        customerName: {
+          contains: validatedFilters.customerName,
+          mode: 'insensitive'
         }
-      ]
+      })
     }
     
     if (validatedFilters.productName) {
-      where.productName = {
-        contains: validatedFilters.productName,
-        mode: 'insensitive'
-      }
+      searchConditions.push({
+        productName: {
+          contains: validatedFilters.productName,
+          mode: 'insensitive'
+        }
+      })
+    }
+    
+    if (validatedFilters.ingredientName) {
+      searchConditions.push({
+        ingredients: {
+          some: {
+            materialName: {
+              contains: validatedFilters.ingredientName,
+              mode: 'insensitive'
+            }
+          }
+        }
+      })
+    }
+    
+    if (validatedFilters.capsuleType) {
+      searchConditions.push({
+        capsuleType: {
+          contains: validatedFilters.capsuleType,
+          mode: 'insensitive'
+        }
+      })
+    }
+    
+    // 如果有搜尋條件，使用 AND 邏輯
+    if (searchConditions.length > 0) {
+      where.AND = searchConditions
     }
     
     if (validatedFilters.dateFrom || validatedFilters.dateTo) {
