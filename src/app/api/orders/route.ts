@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
       productName: searchParams.get('productName') || undefined,
       ingredientName: searchParams.get('ingredientName') || undefined,
       capsuleType: searchParams.get('capsuleType') || undefined,
-      dateFrom: searchParams.get('dateFrom') ? new Date(searchParams.get('dateFrom')!) : undefined,
       dateTo: searchParams.get('dateTo') ? new Date(searchParams.get('dateTo')!) : undefined,
+      minQuantity: searchParams.get('minQuantity') ? parseInt(searchParams.get('minQuantity')!) : undefined,
+      maxQuantity: searchParams.get('maxQuantity') ? parseInt(searchParams.get('maxQuantity')!) : undefined,
       isCompleted: searchParams.get('isCompleted') ? searchParams.get('isCompleted') === 'true' : undefined,
       page: parseInt(searchParams.get('page') || '1'),
       limit: parseInt(searchParams.get('limit') || '10'),
@@ -73,13 +74,20 @@ export async function GET(request: NextRequest) {
       where.AND = searchConditions
     }
     
-    if (validatedFilters.dateFrom || validatedFilters.dateTo) {
-      where.createdAt = {}
-      if (validatedFilters.dateFrom) {
-        where.createdAt.gte = validatedFilters.dateFrom
+    if (validatedFilters.dateTo) {
+      where.completionDate = {
+        gte: new Date(validatedFilters.dateTo.getFullYear(), validatedFilters.dateTo.getMonth(), validatedFilters.dateTo.getDate()),
+        lt: new Date(validatedFilters.dateTo.getFullYear(), validatedFilters.dateTo.getMonth(), validatedFilters.dateTo.getDate() + 1)
       }
-      if (validatedFilters.dateTo) {
-        where.createdAt.lte = validatedFilters.dateTo
+    }
+    
+    if (validatedFilters.minQuantity !== undefined || validatedFilters.maxQuantity !== undefined) {
+      where.productionQuantity = {}
+      if (validatedFilters.minQuantity !== undefined) {
+        where.productionQuantity.gte = validatedFilters.minQuantity
+      }
+      if (validatedFilters.maxQuantity !== undefined) {
+        where.productionQuantity.lte = validatedFilters.maxQuantity
       }
     }
     

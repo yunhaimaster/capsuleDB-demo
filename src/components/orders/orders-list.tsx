@@ -26,8 +26,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     productName: '',
     ingredientName: '',
     capsuleType: '',
-    dateFrom: undefined,
     dateTo: undefined,
+    minQuantity: undefined,
+    maxQuantity: undefined,
     isCompleted: undefined,
     page: 1,
     limit: 10,
@@ -127,7 +128,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   useEffect(() => {
     fetchOrders(filters)
-  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType, filters.dateFrom, filters.dateTo, filters.isCompleted])
+  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType, filters.dateTo, filters.minQuantity, filters.maxQuantity, filters.isCompleted])
 
   useEffect(() => {
     fetchDropdownOptions()
@@ -181,8 +182,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         body: JSON.stringify({
           format,
           includeIngredients: true,
-          dateRange: filters.dateFrom && filters.dateTo ? {
-            from: filters.dateFrom,
+          dateRange: filters.dateTo ? {
+            from: filters.dateTo,
             to: filters.dateTo
           } : undefined
         })
@@ -314,24 +315,38 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           {showFilters && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 bg-muted rounded-lg">
               <div>
-                <label className="text-sm font-medium">開始日期</label>
-                <Input
-                  type="date"
-                  value={filters.dateFrom?.toISOString().split('T')[0] || ''}
-                  onChange={(e) => handleSearch({ 
-                    dateFrom: e.target.value ? new Date(e.target.value) : undefined 
-                  })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">結束日期</label>
+                <label className="text-sm font-medium">完工日期</label>
                 <Input
                   type="date"
                   value={filters.dateTo?.toISOString().split('T')[0] || ''}
                   onChange={(e) => handleSearch({ 
                     dateTo: e.target.value ? new Date(e.target.value) : undefined 
                   })}
+                  placeholder="選擇完工日期"
                 />
+              </div>
+              <div>
+                <label className="text-sm font-medium">生產數量範圍</label>
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="最小數量"
+                    value={filters.minQuantity || ''}
+                    onChange={(e) => handleSearch({ 
+                      minQuantity: e.target.value ? parseInt(e.target.value) : undefined 
+                    })}
+                    className="text-sm"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="最大數量"
+                    value={filters.maxQuantity || ''}
+                    onChange={(e) => handleSearch({ 
+                      maxQuantity: e.target.value ? parseInt(e.target.value) : undefined 
+                    })}
+                    className="text-sm"
+                  />
+                </div>
               </div>
               <div>
                 <label className="text-sm font-medium">生產狀態</label>
@@ -342,9 +357,24 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     isCompleted: e.target.value === '' ? undefined : e.target.value === 'true'
                   })}
                 >
-                  <option value="">全部</option>
+                  <option value="">全部狀態</option>
                   <option value="false">未完工</option>
                   <option value="true">已完工</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-sm font-medium">每頁顯示</label>
+                <select
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                  value={filters.limit || 10}
+                  onChange={(e) => handleSearch({ 
+                    limit: parseInt(e.target.value)
+                  })}
+                >
+                  <option value="5">5 筆</option>
+                  <option value="10">10 筆</option>
+                  <option value="20">20 筆</option>
+                  <option value="50">50 筆</option>
                 </select>
               </div>
             </div>

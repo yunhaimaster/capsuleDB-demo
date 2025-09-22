@@ -52,8 +52,9 @@ export interface SearchFilters {
   productName?: string
   ingredientName?: string
   capsuleType?: string
-  dateFrom?: Date
   dateTo?: Date
+  minQuantity?: number
+  maxQuantity?: number
   isCompleted?: boolean
   page?: number
   limit?: number
