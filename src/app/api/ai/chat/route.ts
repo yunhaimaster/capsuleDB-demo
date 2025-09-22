@@ -49,7 +49,9 @@ ${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 5. 分析相關的訂單數據
 6. 提供專業的建議和見解
 
-請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。`
+請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
+
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。`
     } else if (isSingleOrder) {
       // 單個訂單分析模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
@@ -68,7 +70,7 @@ ${JSON.stringify(orders[0], null, 2)}
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
-重要：你的回答應該專注於膠囊灌裝相關的內容，包括膠囊規格、原料配比、生產工藝、質量控制等。`
+重要：你的回答應該專注於膠囊灌裝相關的內容，包括膠囊規格、原料配比、生產工藝、質量控制等。請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。`
     } else {
       // 一般查詢模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
@@ -84,7 +86,9 @@ ${JSON.stringify(orders, null, 2)}
 5. 分析生產趨勢
 6. 計算統計數據
 
-請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。`
+請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。
+
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。`
     }
 
     // 調用 OpenRouter API
@@ -114,7 +118,14 @@ ${JSON.stringify(orders, null, 2)}
     }
 
     const data = await response.json()
-    const aiResponse = data.choices[0].message.content
+    let aiResponse = data.choices[0].message.content
+    
+    // 清理 AI 回答中的異常文字
+    aiResponse = aiResponse
+      .replace(/<\|begin_of_sentence\s*\|>/g, '')
+      .replace(/<\|end_of_sentence\s*\|>/g, '')
+      .replace(/<\|.*?\|>/g, '')
+      .trim()
 
     // 基於 AI 回答動態生成建議問題
     let suggestions = []
@@ -158,13 +169,16 @@ AI回答：${aiResponse}
         const suggestionsText = suggestionsData.choices[0].message.content
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
+          .map((s: string) => s.trim())
           .filter((s: string) => {
-            const cleanS = s.trim()
-            return cleanS.length > 5 && 
-                   !cleanS.includes('問題用中文') && 
-                   !cleanS.includes('用中文') &&
-                   !cleanS.includes('問題') &&
-                   (cleanS.includes('？') || cleanS.includes('?'))
+            return s.length > 5 && 
+                   !s.includes('問題用中文') && 
+                   !s.includes('用中文') &&
+                   !s.includes('問題') &&
+                   !s.includes('<|') &&
+                   !s.includes('begin_of_sentence') &&
+                   !s.includes('end_of_sentence') &&
+                   (s.includes('？') || s.includes('?'))
           })
           .slice(0, 4)
         console.log('Dynamic suggestions generated:', suggestions)
