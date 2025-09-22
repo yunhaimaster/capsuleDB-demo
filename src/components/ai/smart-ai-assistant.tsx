@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download } from 'lucide-react'
+import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download, Settings, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 
 interface Message {
   id: string
@@ -27,6 +27,10 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [chatHistory, setChatHistory] = useState<Message[][]>([])
+  const [currentChatIndex, setCurrentChatIndex] = useState(-1)
   const pathname = usePathname()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
@@ -165,7 +169,45 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   }
 
   const clearChat = () => {
+    // 保存當前對話到歷史記錄
+    if (messages.length > 0) {
+      const newHistory = [...chatHistory, messages]
+      setChatHistory(newHistory)
+      setCurrentChatIndex(newHistory.length - 1)
+    }
     setMessages([])
+  }
+
+  const startNewChat = () => {
+    // 保存當前對話
+    if (messages.length > 0) {
+      const newHistory = [...chatHistory, messages]
+      setChatHistory(newHistory)
+      setCurrentChatIndex(newHistory.length - 1)
+    }
+    setMessages([])
+  }
+
+  const loadChatHistory = (index: number) => {
+    if (index >= 0 && index < chatHistory.length) {
+      setMessages(chatHistory[index])
+      setCurrentChatIndex(index)
+    }
+  }
+
+  const deleteChatHistory = (index: number) => {
+    const newHistory = chatHistory.filter((_, i) => i !== index)
+    setChatHistory(newHistory)
+    if (currentChatIndex === index) {
+      setMessages([])
+      setCurrentChatIndex(-1)
+    } else if (currentChatIndex > index) {
+      setCurrentChatIndex(currentChatIndex - 1)
+    }
+  }
+
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized)
   }
 
   const handleClose = () => {
@@ -245,14 +287,34 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           <span className="ml-2 hidden sm:inline">智能助手</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+      <DialogContent className={`max-w-4xl max-h-[90vh] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
               <Bot className="h-5 w-5 mr-2 text-blue-600" />
               {getPageTitle()}
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={startNewChat}
+                className="h-8 w-8 p-0"
+                title="新對話"
+              >
+                <MessageSquare className="h-4 w-4" />
+              </Button>
+              {chatHistory.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowSettings(!showSettings)}
+                  className="h-8 w-8 p-0"
+                  title="對話歷史"
+                >
+                  <History className="h-4 w-4" />
+                </Button>
+              )}
               {messages.length > 0 && (
                 <>
                   <Button
@@ -278,6 +340,15 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               <Button
                 variant="outline"
                 size="sm"
+                onClick={toggleMinimize}
+                className="h-8 w-8 p-0"
+                title={isMinimized ? "展開" : "最小化"}
+              >
+                {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={clearChat}
                 className="h-8 w-8 p-0"
                 title="清除對話"
@@ -297,7 +368,50 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           </DialogTitle>
         </DialogHeader>
         
-        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4">
+        {!isMinimized && (
+          <>
+            {/* 對話歷史側邊欄 */}
+            {showSettings && (
+              <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+                <h3 className="text-sm font-medium mb-3">對話歷史</h3>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {chatHistory.map((chat, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 bg-white dark:bg-gray-700 rounded border">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-gray-600 dark:text-gray-300 truncate">
+                          對話 {index + 1} - {chat.length} 條消息
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          {chat[0]?.content?.substring(0, 30)}...
+                        </p>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => loadChatHistory(index)}
+                          className="h-6 w-6 p-0"
+                          title="載入對話"
+                        >
+                          <MessageSquare className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteChatHistory(index)}
+                          className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                          title="刪除對話"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto space-y-4 mb-4">
           {messages.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-blue-600" />
@@ -393,27 +507,29 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
-        </div>
+              <div ref={messagesEndRef} />
+            </div>
 
-        <div className="flex space-x-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder={`詢問關於${context.pageDescription}的任何問題...`}
-            disabled={isLoading}
-            className="flex-1"
-          />
-          <Button
-            onClick={handleSendMessage}
-            disabled={!input.trim() || isLoading}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
+            <div className="flex space-x-2">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder={`詢問關於${context.pageDescription}的任何問題...`}
+                disabled={isLoading}
+                className="flex-1"
+              />
+              <Button
+                onClick={handleSendMessage}
+                disabled={!input.trim() || isLoading}
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )
