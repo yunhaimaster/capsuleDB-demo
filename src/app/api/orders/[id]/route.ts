@@ -58,13 +58,16 @@ export async function PUT(
       where: { id: params.id },
       data: {
         customerName: validatedData.customerName,
-        productCode: validatedData.productCode,
+        productName: validatedData.productName,
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
         completionDate: validatedData.completionDate || null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
+        capsuleColor: validatedData.capsuleColor,
+        capsuleSize: validatedData.capsuleSize,
+        capsuleType: validatedData.capsuleType,
         ingredients: {
           deleteMany: {},
           create: validatedData.ingredients.map(ingredient => ({

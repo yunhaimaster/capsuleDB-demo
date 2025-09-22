@@ -1,13 +1,16 @@
 export interface ProductionOrder {
   id: string
   customerName: string
-  productCode: string
+  productName: string
   productionQuantity: number
   unitWeightMg: number
   batchTotalWeightMg: number
   completionDate?: Date | null
   processIssues?: string | null
   qualityNotes?: string | null
+  capsuleColor?: string | null
+  capsuleSize?: string | null
+  capsuleType?: string | null
   createdAt: Date
   updatedAt: Date
   createdBy?: string | null
@@ -23,11 +26,14 @@ export interface Ingredient {
 
 export interface CreateProductionOrderData {
   customerName: string
-  productCode: string
+  productName: string
   productionQuantity: number
   completionDate?: Date | null
   processIssues?: string | null
   qualityNotes?: string | null
+  capsuleColor?: string | null
+  capsuleSize?: string | null
+  capsuleType?: string | null
   createdBy?: string | null
   ingredients: CreateIngredientData[]
 }
@@ -43,13 +49,13 @@ export interface UpdateProductionOrderData extends Partial<CreateProductionOrder
 
 export interface SearchFilters {
   customerName?: string
-  productCode?: string
+  productName?: string
   dateFrom?: Date
   dateTo?: Date
   isCompleted?: boolean
   page?: number
   limit?: number
-  sortBy?: 'createdAt' | 'productionQuantity' | 'customerName' | 'completionDate'
+  sortBy?: 'createdAt' | 'productionQuantity' | 'customerName' | 'productName' | 'completionDate'
   sortOrder?: 'asc' | 'desc'
 }
 

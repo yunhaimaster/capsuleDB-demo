@@ -19,10 +19,10 @@ export const productionOrderSchema = z.object({
     .string()
     .min(1, '客戶名稱不能為空')
     .max(100, '客戶名稱不能超過100字'),
-  productCode: z
+  productName: z
     .string()
-    .min(1, '產品代號不能為空')
-    .max(100, '產品代號不能超過100字'),
+    .min(1, '產品名字不能為空')
+    .max(100, '產品名字不能超過100字'),
   productionQuantity: z
     .number()
     .int('生產數量必須為整數')
@@ -43,6 +43,23 @@ export const productionOrderSchema = z.object({
   qualityNotes: z
     .string()
     .max(500, '品管備註不能超過500字')
+    .optional()
+    .nullable(),
+  capsuleColor: z
+    .string()
+    .max(50, '膠囊顏色不能超過50字')
+    .optional()
+    .nullable(),
+  capsuleSize: z
+    .enum(['#1', '#0', '#00'], {
+      errorMap: () => ({ message: '請選擇膠囊大小' })
+    })
+    .optional()
+    .nullable(),
+  capsuleType: z
+    .enum(['明膠胃溶', '植物胃溶', '明膠腸溶', '植物腸溶'], {
+      errorMap: () => ({ message: '請選擇膠囊成份' })
+    })
     .optional()
     .nullable(),
   createdBy: z.string().optional().nullable(),
@@ -67,13 +84,13 @@ export const productionOrderSchema = z.object({
 
 export const searchFiltersSchema = z.object({
   customerName: z.string().optional(),
-  productCode: z.string().optional(),
+  productName: z.string().optional(),
   dateFrom: z.date().optional(),
   dateTo: z.date().optional(),
   isCompleted: z.boolean().optional(),
   page: z.number().int().positive().default(1),
   limit: z.number().int().positive().max(100).default(10),
-  sortBy: z.enum(['createdAt', 'productionQuantity', 'customerName', 'completionDate']).default('createdAt'),
+  sortBy: z.enum(['createdAt', 'productionQuantity', 'customerName', 'productName', 'completionDate']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 })
 

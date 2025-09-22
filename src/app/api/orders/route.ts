@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     
     const filters: SearchFilters = {
       customerName: searchParams.get('customerName') || undefined,
-      productCode: searchParams.get('productCode') || undefined,
+      productName: searchParams.get('productName') || undefined,
       dateFrom: searchParams.get('dateFrom') ? new Date(searchParams.get('dateFrom')!) : undefined,
       dateTo: searchParams.get('dateTo') ? new Date(searchParams.get('dateTo')!) : undefined,
       isCompleted: searchParams.get('isCompleted') ? searchParams.get('isCompleted') === 'true' : undefined,
@@ -45,9 +45,9 @@ export async function GET(request: NextRequest) {
       ]
     }
     
-    if (validatedFilters.productCode) {
-      where.productCode = {
-        contains: validatedFilters.productCode,
+    if (validatedFilters.productName) {
+      where.productName = {
+        contains: validatedFilters.productName,
         mode: 'insensitive'
       }
     }
@@ -137,13 +137,16 @@ export async function POST(request: NextRequest) {
     const order = await prisma.productionOrder.create({
       data: {
         customerName: validatedData.customerName,
-        productCode: validatedData.productCode,
+        productName: validatedData.productName,
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
         completionDate: validatedData.completionDate || null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
+        capsuleColor: validatedData.capsuleColor,
+        capsuleSize: validatedData.capsuleSize,
+        capsuleType: validatedData.capsuleType,
         createdBy: validatedData.createdBy || '系統',
         ingredients: {
           create: validatedData.ingredients.map(ingredient => ({

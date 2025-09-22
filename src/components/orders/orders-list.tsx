@@ -23,7 +23,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState<SearchFilters>({
     customerName: '',
-    productCode: '',
+    productName: '',
     dateFrom: undefined,
     dateTo: undefined,
     isCompleted: undefined,
@@ -60,7 +60,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   useEffect(() => {
     fetchOrders(filters)
-  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productCode, filters.dateFrom, filters.dateTo, filters.isCompleted])
+  }, [filters.page, filters.limit, filters.sortBy, filters.sortOrder, filters.customerName, filters.productName, filters.dateFrom, filters.dateTo, filters.isCompleted])
 
   const handleSearch = (newFilters: Partial<SearchFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
@@ -179,11 +179,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           {showFilters && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 bg-muted rounded-lg">
               <div>
-                <label className="text-sm font-medium">產品代號</label>
+                <label className="text-sm font-medium">產品名字</label>
                 <Input
-                  placeholder="產品代號"
-                  value={filters.productCode || ''}
-                  onChange={(e) => handleSearch({ productCode: e.target.value })}
+                  placeholder="產品名字"
+                  value={filters.productName || ''}
+                  onChange={(e) => handleSearch({ productName: e.target.value })}
                 />
               </div>
               <div>
@@ -358,8 +358,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                     <p className="text-sm">{order.customerName}</p>
                                   </div>
                                   <div>
-                                    <Label className="text-sm font-medium">產品代號</Label>
-                                    <p className="text-sm">{order.productCode}</p>
+                                    <Label className="text-sm font-medium">產品名字</Label>
+                                    <p className="text-sm">{order.productName}</p>
                                   </div>
                                   <div>
                                     <Label className="text-sm font-medium">生產數量</Label>
@@ -466,11 +466,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     </TableHead>
                     <TableHead 
                       className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
-                      onClick={() => handleSort('productCode')}
+                      onClick={() => handleSort('productName')}
                     >
                       <div className="flex items-center space-x-1">
-                        <span>產品代號</span>
-                        {getSortIcon('productCode')}
+                        <span>產品名字</span>
+                        {getSortIcon('productName')}
                       </div>
                     </TableHead>
                     <TableHead className="text-xs md:text-sm">主要原料</TableHead>
@@ -519,7 +519,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                         order.customerName
                       )}
                     </TableCell>
-                    <TableCell>{order.productCode}</TableCell>
+                    <TableCell>{order.productName}</TableCell>
                     <TableCell>
                       <div className="max-w-[200px]">
                         {order.ingredients && order.ingredients.length > 0 ? (
@@ -659,10 +659,18 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
           <h4 className="font-medium mb-2">基本資訊</h4>
           <div className="space-y-2 text-sm">
             <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
-            <p><span className="font-medium">產品代號：</span>{order.productCode}</p>
+            <p><span className="font-medium">產品名字：</span>{order.productName}</p>
             <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
             <p><span className="font-medium">建檔日期：</span>{formatDate(order.createdAt)}</p>
             <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
+            {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
+              <div className="mt-3 pt-3 border-t">
+                <h5 className="font-medium mb-2">膠囊規格</h5>
+                {order.capsuleColor && <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>}
+                {order.capsuleSize && <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>}
+                {order.capsuleType && <p><span className="font-medium">成份：</span>{order.capsuleType}</p>}
+              </div>
+            )}
           </div>
         </div>
         <div>

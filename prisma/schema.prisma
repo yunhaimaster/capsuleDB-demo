@@ -13,13 +13,16 @@ datasource db {
 model ProductionOrder {
   id                 String       @id @default(cuid())
   customerName       String       // 客戶名稱
-  productCode        String       // 產品代號
+  productName        String       // 產品名字
   productionQuantity Int          // 生產數量
   unitWeightMg       Float        // 單粒總重量（計算）
   batchTotalWeightMg Float        // 批次總重量（計算）
   completionDate     DateTime?    // 完工日期
   processIssues      String?      // 製程問題記錄
   qualityNotes       String?      // 品管備註
+  capsuleColor       String?      // 膠囊顏色
+  capsuleSize        String?      // 膠囊大小 (#1, #0, #00)
+  capsuleType        String?      // 膠囊成份 (明膠胃溶, 植物胃溶, 明膠腸溶, 植物腸溶)
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
   createdBy          String?      // 建檔人員
