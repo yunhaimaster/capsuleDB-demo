@@ -190,32 +190,92 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     
                     {/* 初始建議問題 */}
                     <div className="mt-6">
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">您可以問我：</p>
-                      <div className="grid grid-cols-1 gap-2 max-w-md mx-auto">
-                        <button
-                          onClick={() => setInput('顯示所有未完工的生產訂單')}
-                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
-                        >
-                          "顯示所有未完工的生產訂單"
-                        </button>
-                        <button
-                          onClick={() => setInput('哪個客戶的膠囊訂單最多？')}
-                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
-                        >
-                          "哪個客戶的膠囊訂單最多？"
-                        </button>
-                        <button
-                          onClick={() => setInput('最近一週的膠囊生產情況如何？')}
-                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
-                        >
-                          "最近一週的膠囊生產情況如何？"
-                        </button>
-                        <button
-                          onClick={() => setInput('分析膠囊灌裝的生產效率')}
-                          className="text-sm text-left p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border"
-                        >
-                          "分析膠囊灌裝的生產效率"
-                        </button>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
+                      <div className="grid grid-cols-1 gap-1">
+                        {pageData?.currentPage === '/' && (
+                          <>
+                            <button
+                              onClick={() => setInput('顯示所有未完工的生產訂單')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "顯示所有未完工的生產訂單"
+                            </button>
+                            <button
+                              onClick={() => setInput('哪個客戶的膠囊訂單最多？')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "哪個客戶的膠囊訂單最多？"
+                            </button>
+                            <button
+                              onClick={() => setInput('最近一週的膠囊生產情況如何？')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "最近一週的膠囊生產情況如何？"
+                            </button>
+                            <button
+                              onClick={() => setInput('分析膠囊灌裝的生產效率')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "分析膠囊灌裝的生產效率"
+                            </button>
+                          </>
+                        )}
+                        {pageData?.currentPage === '/orders' && (
+                          <>
+                            <button
+                              onClick={() => setInput('篩選未完工的膠囊訂單')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "篩選未完工的膠囊訂單"
+                            </button>
+                            <button
+                              onClick={() => setInput('按客戶分組顯示膠囊訂單')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "按客戶分組顯示膠囊訂單"
+                            </button>
+                            <button
+                              onClick={() => setInput('找出生產數量最多的膠囊訂單')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "找出生產數量最多的膠囊訂單"
+                            </button>
+                            <button
+                              onClick={() => setInput('顯示有製程問題的膠囊訂單')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "顯示有製程問題的膠囊訂單"
+                            </button>
+                          </>
+                        )}
+                        {pageData?.currentPage === '/orders/new' && (
+                          <>
+                            <button
+                              onClick={() => setInput('膠囊規格如何選擇？')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "膠囊規格如何選擇？"
+                            </button>
+                            <button
+                              onClick={() => setInput('膠囊原料配比有什麼建議？')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "膠囊原料配比有什麼建議？"
+                            </button>
+                            <button
+                              onClick={() => setInput('膠囊生產數量如何計算？')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "膠囊生產數量如何計算？"
+                            </button>
+                            <button
+                              onClick={() => setInput('膠囊大小和顏色搭配指南')}
+                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                            >
+                              "膠囊大小和顏色搭配指南"
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -273,6 +333,19 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     </div>
                   ))
                 )}
+                
+                {/* 正在回答的提示 */}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+                      <div className="flex items-center space-x-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm">AI 正在思考中...</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div ref={messagesEndRef} />
               </div>
 
