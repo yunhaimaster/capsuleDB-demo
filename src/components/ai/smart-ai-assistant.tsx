@@ -44,47 +44,47 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
       case '/':
         pageDescription = '首頁 - 系統概覽和最近生產記錄'
         suggestions = [
-          '顯示所有未完工的訂單',
-          '哪個客戶的訂單最多？',
-          '最近一週的生產情況如何？',
-          '維生素C相關的訂單有哪些？'
+          '顯示所有未完工的生產訂單',
+          '哪個客戶的膠囊訂單最多？',
+          '最近一週的膠囊生產情況如何？',
+          '分析膠囊灌裝的生產效率'
         ]
         break
       case '/orders':
-        pageDescription = '生產記錄管理頁面 - 查看和管理所有生產訂單'
+        pageDescription = '生產記錄管理頁面 - 查看和管理所有膠囊生產訂單'
         suggestions = [
-          '篩選未完工的訂單',
-          '按客戶分組顯示訂單',
-          '找出生產數量最多的訂單',
-          '顯示有製程問題的訂單'
+          '篩選未完工的膠囊訂單',
+          '按客戶分組顯示膠囊訂單',
+          '找出生產數量最多的膠囊訂單',
+          '顯示有製程問題的膠囊訂單'
         ]
         break
       case '/orders/new':
-        pageDescription = '新增膠囊配方頁面 - 建立新的生產訂單'
+        pageDescription = '新增膠囊配方頁面 - 建立新的膠囊生產訂單'
         suggestions = [
-          '如何填寫膠囊規格？',
-          '原料配比有什麼建議？',
-          '生產數量如何計算？',
-          '膠囊大小選擇指南'
+          '膠囊規格如何選擇？',
+          '膠囊原料配比有什麼建議？',
+          '膠囊生產數量如何計算？',
+          '膠囊大小和顏色搭配指南'
         ]
         break
       case '/reports':
-        pageDescription = '統計報表頁面 - 查看生產統計和分析'
+        pageDescription = '統計報表頁面 - 查看膠囊生產統計和分析'
         suggestions = [
-          '顯示原料使用統計',
-          '客戶訂單分析',
-          '生產效率報告',
-          '品質問題統計'
+          '顯示膠囊原料使用統計',
+          '膠囊客戶訂單分析',
+          '膠囊生產效率報告',
+          '膠囊品質問題統計'
         ]
         break
       default:
         if (pathname.startsWith('/orders/') && pathname !== '/orders/new') {
-          pageDescription = '訂單詳情頁面 - 查看特定訂單的詳細信息'
+          pageDescription = '訂單詳情頁面 - 查看特定膠囊訂單的詳細信息'
           suggestions = [
-            '分析這個訂單的原料配比',
-            '評估單粒重量是否合理',
+            '分析這個膠囊訂單的原料配比',
+            '評估膠囊單粒重量是否合理',
             '檢查膠囊規格是否合適',
-            '提供生產建議'
+            '提供膠囊生產建議'
           ]
         }
     }

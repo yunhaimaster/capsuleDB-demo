@@ -130,7 +130,7 @@ export default function HomePage() {
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-800 dark:to-gray-900">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-gray-800 flex items-center">
               <FileText className="h-4 w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
@@ -223,42 +223,44 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-green-800 flex items-center">
+            <CardTitle className="text-lg md:text-xl font-semibold text-green-800 dark:text-green-200 flex items-center">
               <span className="mr-2">📋</span>
               功能介紹
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-green-600">
+            <CardDescription className="text-sm md:text-base text-green-600 dark:text-green-300">
               系統功能說明與使用指南
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
-              <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200">
-                <h4 className="font-medium text-green-800 mb-2">主要功能</h4>
-                <ul className="space-y-1 text-xs md:text-sm text-green-700">
+              <div className="bg-green-50 dark:bg-green-900/20 p-3 md:p-4 rounded-xl border border-green-200 dark:border-green-800">
+                <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">主要功能</h4>
+                <ul className="space-y-1 text-xs md:text-sm text-green-700 dark:text-green-300">
                   <li>• 膠囊配方管理與記錄</li>
                   <li>• 生產訂單追蹤與狀態管理</li>
                   <li>• 製程問題記錄與品質管理</li>
+                  <li>• 智能 AI 助手分析與建議</li>
                 </ul>
               </div>
               
-              <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200">
-                <h4 className="font-medium text-blue-800 mb-2">使用流程</h4>
-                <ol className="space-y-1 text-xs md:text-sm text-blue-700">
-                  <li>1. 新增配方：建立新的生產訂單</li>
-                  <li>2. 檢視記錄：查看和管理現有訂單</li>
-                  <li>3. 品質追蹤：記錄製程問題和備註</li>
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 md:p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">使用流程</h4>
+                <ol className="space-y-1 text-xs md:text-sm text-blue-700 dark:text-blue-300">
+                  <li>1. 新增配方：建立新的膠囊生產訂單</li>
+                  <li>2. 檢視記錄：查看和管理現有膠囊訂單</li>
+                  <li>3. 品質追蹤：記錄膠囊製程問題和備註</li>
+                  <li>4. AI 分析：使用智能助手分析生產數據</li>
                 </ol>
               </div>
               
-              <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
-                <h4 className="font-medium text-amber-800 mb-2">技術支援</h4>
-                <div className="text-xs md:text-sm text-amber-700">
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-800">
+                <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">技術支援</h4>
+                <div className="text-xs md:text-sm text-amber-700 dark:text-amber-300">
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
                   <p className="font-medium">Victor</p>
-                  <p className="text-xs text-amber-600 mt-1">系統管理員</p>
+                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">系統管理員</p>
                 </div>
               </div>
             </div>

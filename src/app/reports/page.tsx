@@ -30,15 +30,15 @@ export default function ReportsPage() {
 
       {/* 正在設計中卡片 */}
       <div className="flex items-center justify-center min-h-[400px]">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 max-w-md w-full">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-800 dark:to-gray-900 max-w-md w-full">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 p-4 bg-blue-100 rounded-full w-fit">
               <Construction className="h-12 w-12 text-blue-600" />
             </div>
-            <CardTitle className="text-xl md:text-2xl font-semibold text-gray-800">
+            <CardTitle className="text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               功能開發中
             </CardTitle>
-            <CardDescription className="text-gray-600 text-sm md:text-base">
+            <CardDescription className="text-gray-600 dark:text-gray-400 text-sm md:text-base">
               統計報表功能正在設計中，敬請期待
             </CardDescription>
           </CardHeader>
