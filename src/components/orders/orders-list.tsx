@@ -43,6 +43,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [ingredientOptions, setIngredientOptions] = useState<string[]>([])
   const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<string[]>([])
 
+  // 聯動篩選的選項狀態
+  const [filteredProductOptions, setFilteredProductOptions] = useState<string[]>([])
+  const [filteredIngredientOptions, setFilteredIngredientOptions] = useState<string[]>([])
+  const [filteredCapsuleTypeOptions, setFilteredCapsuleTypeOptions] = useState<string[]>([])
+
   // 獲取下拉選單選項
   const fetchDropdownOptions = async () => {
     try {
@@ -53,9 +58,47 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         setProductOptions(data.products || [])
         setIngredientOptions(data.ingredients || [])
         setCapsuleTypeOptions(data.capsuleTypes || [])
+        
+        // 初始化聯動選項
+        setFilteredProductOptions(data.products || [])
+        setFilteredIngredientOptions(data.ingredients || [])
+        setFilteredCapsuleTypeOptions(data.capsuleTypes || [])
       }
     } catch (error) {
       console.error('Error fetching dropdown options:', error)
+    }
+  }
+
+  // 獲取聯動篩選選項
+  const fetchFilteredOptions = async (filters: SearchFilters) => {
+    try {
+      const params = new URLSearchParams()
+      if (filters.customerName) params.append('customerName', filters.customerName)
+      if (filters.productName) params.append('productName', filters.productName)
+      if (filters.ingredientName) params.append('ingredientName', filters.ingredientName)
+      
+      const response = await fetch(`/api/orders/options?${params}`)
+      if (response.ok) {
+        const data = await response.json()
+        
+        // 更新聯動選項
+        if (filters.customerName) {
+          setFilteredProductOptions(data.products || [])
+          setFilteredIngredientOptions(data.ingredients || [])
+          setFilteredCapsuleTypeOptions(data.capsuleTypes || [])
+        }
+        
+        if (filters.productName) {
+          setFilteredIngredientOptions(data.ingredients || [])
+          setFilteredCapsuleTypeOptions(data.capsuleTypes || [])
+        }
+        
+        if (filters.ingredientName) {
+          setFilteredCapsuleTypeOptions(data.capsuleTypes || [])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching filtered options:', error)
     }
   }
 
@@ -91,7 +134,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }, [])
 
   const handleSearch = (newFilters: Partial<SearchFilters>) => {
-    setFilters(prev => ({ ...prev, ...newFilters, page: 1 }))
+    const updatedFilters = { ...filters, ...newFilters, page: 1 }
+    setFilters(updatedFilters)
+    
+    // 觸發聯動篩選
+    fetchFilteredOptions(updatedFilters)
   }
 
   const handleSort = (field: string) => {
@@ -193,66 +240,74 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
             <div>
               <label className="text-sm font-medium mb-1 block">客戶名稱</label>
-              <select
-                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
-                value={filters.customerName || ''}
-                onChange={(e) => handleSearch({ customerName: e.target.value })}
-              >
-                <option value="">全部客戶</option>
-                {customerOptions.map((customer) => (
-                  <option key={customer} value={customer}>
-                    {customer}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <Input
+                  placeholder="輸入或選擇客戶名稱..."
+                  value={filters.customerName || ''}
+                  onChange={(e) => handleSearch({ customerName: e.target.value })}
+                  className="text-sm"
+                  list="customer-list"
+                />
+                <datalist id="customer-list">
+                  {customerOptions.map((customer) => (
+                    <option key={customer} value={customer} />
+                  ))}
+                </datalist>
+              </div>
             </div>
             
             <div>
               <label className="text-sm font-medium mb-1 block">產品名稱</label>
-              <select
-                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
-                value={filters.productName || ''}
-                onChange={(e) => handleSearch({ productName: e.target.value })}
-              >
-                <option value="">全部產品</option>
-                {productOptions.map((product) => (
-                  <option key={product} value={product}>
-                    {product}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <Input
+                  placeholder="輸入或選擇產品名稱..."
+                  value={filters.productName || ''}
+                  onChange={(e) => handleSearch({ productName: e.target.value })}
+                  className="text-sm"
+                  list="product-list"
+                />
+                <datalist id="product-list">
+                  {filteredProductOptions.map((product) => (
+                    <option key={product} value={product} />
+                  ))}
+                </datalist>
+              </div>
             </div>
             
             <div>
               <label className="text-sm font-medium mb-1 block">原料名稱</label>
-              <select
-                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
-                value={filters.ingredientName || ''}
-                onChange={(e) => handleSearch({ ingredientName: e.target.value })}
-              >
-                <option value="">全部原料</option>
-                {ingredientOptions.map((ingredient) => (
-                  <option key={ingredient} value={ingredient}>
-                    {ingredient}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <Input
+                  placeholder="輸入或選擇原料名稱..."
+                  value={filters.ingredientName || ''}
+                  onChange={(e) => handleSearch({ ingredientName: e.target.value })}
+                  className="text-sm"
+                  list="ingredient-list"
+                />
+                <datalist id="ingredient-list">
+                  {filteredIngredientOptions.map((ingredient) => (
+                    <option key={ingredient} value={ingredient} />
+                  ))}
+                </datalist>
+              </div>
             </div>
             
             <div>
               <label className="text-sm font-medium mb-1 block">膠囊類型</label>
-              <select
-                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
-                value={filters.capsuleType || ''}
-                onChange={(e) => handleSearch({ capsuleType: e.target.value })}
-              >
-                <option value="">全部類型</option>
-                {capsuleTypeOptions.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <Input
+                  placeholder="輸入或選擇膠囊類型..."
+                  value={filters.capsuleType || ''}
+                  onChange={(e) => handleSearch({ capsuleType: e.target.value })}
+                  className="text-sm"
+                  list="capsule-type-list"
+                />
+                <datalist id="capsule-type-list">
+                  {filteredCapsuleTypeOptions.map((type) => (
+                    <option key={type} value={type} />
+                  ))}
+                </datalist>
+              </div>
             </div>
           </div>
 

@@ -3,8 +3,30 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    // 獲取所有訂單數據
+    const { searchParams } = new URL(request.url)
+    
+    // 構建篩選條件
+    const where: any = {}
+    
+    if (searchParams.get('customerName')) {
+      where.customerName = searchParams.get('customerName')
+    }
+    
+    if (searchParams.get('productName')) {
+      where.productName = searchParams.get('productName')
+    }
+    
+    if (searchParams.get('ingredientName')) {
+      where.ingredients = {
+        some: {
+          materialName: searchParams.get('ingredientName')
+        }
+      }
+    }
+
+    // 獲取篩選後的訂單數據
     const orders = await prisma.productionOrder.findMany({
+      where,
       include: {
         ingredients: true
       }
