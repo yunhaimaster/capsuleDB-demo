@@ -288,9 +288,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                   }`}
                 >
                   <MarkdownRenderer content={message.content} />
-                  <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString()}
-                  </p>
                   
                   {/* 顯示建議問題 */}
                   {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (

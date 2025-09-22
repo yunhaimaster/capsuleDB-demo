@@ -185,9 +185,6 @@ export function AIAssistant({ orders }: AIAssistantProps) {
                   }`}
                 >
                   <MarkdownRenderer content={message.content} />
-                  <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString()}
-                  </p>
                 </div>
               </div>
             ))
