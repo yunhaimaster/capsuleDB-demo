@@ -474,7 +474,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
                         {/* 原料信息 */}
                         <div>
-                          <p className="text-xs font-medium text-gray-600 mb-1">主要原料</p>
+                          <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">主要原料</p>
                           <div className="flex flex-wrap gap-1">
                             {order.ingredients && order.ingredients.length > 0 ? (
                               order.ingredients.slice(0, 3).map((ingredient, index) => {
@@ -485,8 +485,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                     key={index} 
                                     className={`text-xs px-2 py-1 rounded ${
                                       isHighlighted 
-                                        ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
-                                        : 'bg-gray-100 text-gray-700'
+                                        ? 'bg-yellow-100 text-yellow-800 border border-yellow-300 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-700' 
+                                        : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                                     }`}
                                   >
                                     {ingredient.materialName}
@@ -531,8 +531,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                         {/* 製程問題 */}
                         {order.processIssues && (
                           <div>
-                            <p className="text-xs font-medium text-gray-600 mb-1">製程問題</p>
-                            <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200">
+                            <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">製程問題</p>
+                            <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200 dark:bg-red-900 dark:text-red-200 dark:border-red-700">
                               {order.processIssues.length > 100 
                                 ? `${order.processIssues.substring(0, 100)}...` 
                                 : order.processIssues
@@ -726,8 +726,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                   key={index} 
                                   className={`text-xs px-2 py-1 rounded ${
                                     isHighlighted 
-                                      ? 'bg-yellow-100 text-yellow-800 border border-yellow-300' 
-                                      : 'bg-gray-100'
+                                      ? 'bg-yellow-100 text-yellow-800 border border-yellow-300 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-700' 
+                                      : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                                   }`}
                                 >
                                   {ingredient.materialName}
@@ -735,13 +735,13 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               )
                             })}
                             {order.ingredients.length > 2 && (
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                 +{order.ingredients.length - 2} 更多
                               </div>
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-400">無原料資料</span>
+                          <span className="text-gray-400 dark:text-gray-500">無原料資料</span>
                         )}
                       </div>
                     </TableCell>
@@ -770,14 +770,14 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     <TableCell>
                       <div className="max-w-[150px]">
                         {order.processIssues ? (
-                          <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200">
+                          <div className="text-xs bg-red-50 text-red-700 px-2 py-1 rounded border border-red-200 dark:bg-red-900 dark:text-red-200 dark:border-red-700">
                             {order.processIssues.length > 50 
                               ? `${order.processIssues.substring(0, 50)}...` 
                               : order.processIssues
                             }
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-xs">無問題</span>
+                          <span className="text-gray-400 dark:text-gray-500 text-xs">無問題</span>
                         )}
                       </div>
                     </TableCell>
