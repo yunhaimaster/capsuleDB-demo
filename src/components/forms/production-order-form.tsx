@@ -35,7 +35,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     resolver: zodResolver(productionOrderSchema),
     defaultValues: {
       customerName: initialData?.customerName || '',
-      productName: initialData?.productName || '',
+      productName: initialData?.productName || '未命名產品',
       productionQuantity: initialData?.productionQuantity || 1,
       completionDate: initialData?.completionDate || null,
       processIssues: initialData?.processIssues || '',

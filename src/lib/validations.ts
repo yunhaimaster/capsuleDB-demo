@@ -22,7 +22,8 @@ export const productionOrderSchema = z.object({
   productName: z
     .string()
     .min(1, '產品名字不能為空')
-    .max(100, '產品名字不能超過100字'),
+    .max(100, '產品名字不能超過100字')
+    .default('未命名產品'),
   productionQuantity: z
     .number()
     .int('生產數量必須為整數')
