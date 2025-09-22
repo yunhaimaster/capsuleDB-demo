@@ -136,6 +136,8 @@ ${JSON.stringify(orders, null, 2)}
 
     // 基於 AI 回答動態生成建議問題
     let suggestions = []
+    console.log('Starting suggestions generation for message:', message)
+    console.log('AI Response:', aiResponse)
     try {
       const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
@@ -173,7 +175,9 @@ AI回答：${aiResponse}
 
       if (suggestionsResponse.ok) {
         const suggestionsData = await suggestionsResponse.json()
+        console.log('Suggestions API response:', suggestionsData)
         const suggestionsText = suggestionsData.choices[0].message.content
+        console.log('Raw suggestions text:', suggestionsText)
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
