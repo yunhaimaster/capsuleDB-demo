@@ -169,6 +169,12 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   }
 
   const clearChat = () => {
+    // 直接清空當前對話，不保存到歷史記錄
+    setMessages([])
+    setShowSettings(false) // 關閉歷史記錄面板
+  }
+
+  const startNewChat = () => {
     // 保存當前對話到歷史記錄
     if (messages.length > 0) {
       const newHistory = [...chatHistory, messages]
@@ -176,16 +182,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
       setCurrentChatIndex(newHistory.length - 1)
     }
     setMessages([])
-  }
-
-  const startNewChat = () => {
-    // 保存當前對話
-    if (messages.length > 0) {
-      const newHistory = [...chatHistory, messages]
-      setChatHistory(newHistory)
-      setCurrentChatIndex(newHistory.length - 1)
-    }
-    setMessages([])
+    setShowSettings(false) // 關閉歷史記錄面板
   }
 
   const loadChatHistory = (index: number) => {
@@ -300,7 +297,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 size="sm"
                 onClick={startNewChat}
                 className="h-8 w-8 p-0"
-                title="新對話"
+                title="新對話（保存當前對話）"
               >
                 <MessageSquare className="h-4 w-4" />
               </Button>
@@ -351,7 +348,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                 size="sm"
                 onClick={clearChat}
                 className="h-8 w-8 p-0"
-                title="清除對話"
+                title="清除對話（不保存）"
               >
                 <RotateCcw className="h-4 w-4" />
               </Button>
@@ -368,7 +365,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           </DialogTitle>
         </DialogHeader>
         
-        {!isMinimized && (
+        {!isMinimized ? (
           <>
             {/* 對話歷史側邊欄 */}
             {showSettings && (
@@ -529,6 +526,40 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
               </Button>
             </div>
           </>
+        ) : (
+          /* 最小化狀態顯示 */
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="flex items-center space-x-3">
+              <Bot className="h-5 w-5 text-blue-600" />
+              <div>
+                <p className="text-sm font-medium">AI 助手已最小化</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {messages.length > 0 ? `當前對話：${messages.length} 條消息` : '點擊展開開始對話'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              {messages.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setInput('繼續對話...')}
+                  className="text-xs"
+                >
+                  繼續對話
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleMinimize}
+                className="h-8 w-8 p-0"
+                title="展開"
+              >
+                <Maximize2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         )}
       </DialogContent>
     </Dialog>

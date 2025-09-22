@@ -114,32 +114,59 @@ ${JSON.stringify(orders, null, 2)}
     const data = await response.json()
     const aiResponse = data.choices[0].message.content
 
-    // 生成相關建議問題 - 簡化版本
+    // 基於 AI 回答動態生成建議問題
     let suggestions = []
-    
-    // 基於用戶問題和回答內容生成建議
-    if (message.includes('客戶') || message.includes('訂單')) {
-      suggestions = [
-        '可以查看更詳細的客戶訂單統計嗎？',
-        '如何分析客戶的生產趨勢？',
-        '有哪些客戶的訂單量較多？',
-        '如何優化客戶服務流程？'
-      ]
-    } else if (message.includes('原料') || message.includes('配方')) {
-      suggestions = [
-        '可以查看原料使用統計嗎？',
-        '如何優化原料配比？',
-        '有哪些原料使用量較多？',
-        '如何分析原料成本？'
-      ]
-    } else if (message.includes('生產') || message.includes('效率')) {
-      suggestions = [
-        '可以查看生產效率分析嗎？',
-        '如何提高生產效率？',
-        '有哪些生產瓶頸？',
-        '如何優化生產流程？'
-      ]
-    } else {
+    try {
+      const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+          'X-Title': 'EasyPack AI Assistant'
+        },
+        body: JSON.stringify({
+          model: 'deepseek/deepseek-chat-v3.1:free',
+          messages: [
+            { 
+              role: 'system', 
+              content: `你是一個專業的膠囊配方管理系統 AI 助手。請根據用戶的問題和你的回答，生成4個相關的建議問題。
+
+用戶問題：${message}
+AI回答：${aiResponse}
+
+請分析 AI 回答的內容，生成4個與回答內容相關的建議問題。問題應該：
+1. 基於剛才的回答內容深入分析
+2. 與膠囊配方、生產管理相關
+3. 有助於用戶進一步了解
+4. 問題簡潔明確，可以直接點擊使用
+
+請只返回4個問題，每行一個，不要編號，不要其他文字。`
+            }
+          ],
+          max_tokens: 300,
+          temperature: 0.7
+        })
+      })
+
+      if (suggestionsResponse.ok) {
+        const suggestionsData = await suggestionsResponse.json()
+        const suggestionsText = suggestionsData.choices[0].message.content
+        suggestions = suggestionsText.split('\n').filter((s: string) => s.trim()).slice(0, 4)
+        console.log('Dynamic suggestions generated:', suggestions)
+      } else {
+        console.error('Suggestions API failed:', suggestionsResponse.status)
+        // 如果 API 失敗，提供基於回答內容的默認建議
+        suggestions = [
+          '可以查看更多詳細分析嗎？',
+          '如何深入分析這個問題？',
+          '有哪些相關的統計數據？',
+          '如何優化相關流程？'
+        ]
+      }
+    } catch (error) {
+      console.error('Error generating dynamic suggestions:', error)
+      // 如果生成失敗，提供默認建議
       suggestions = [
         '可以查看更多詳細分析嗎？',
         '如何深入分析這個問題？',
@@ -147,8 +174,6 @@ ${JSON.stringify(orders, null, 2)}
         '如何優化相關流程？'
       ]
     }
-    
-    console.log('Generated suggestions:', suggestions)
 
     return NextResponse.json({ 
       response: aiResponse,
