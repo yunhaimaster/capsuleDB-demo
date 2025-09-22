@@ -122,6 +122,16 @@ ${JSON.stringify(orders, null, 2)}
     
     // 清理 AI 回答中的異常文字
     aiResponse = aiResponse
+      // 處理帶空格的格式：< | begin_of_sentence | >
+      .replace(/<\s*\|\s*begin_of_sentence\s*\|\s*>/gi, '')
+      .replace(/<\s*\|\s*end_of_sentence\s*\|\s*>/gi, '')
+      .replace(/<\s*\|\s*begin_of_sentence\s*\|\s*/gi, '')
+      .replace(/<\s*\|\s*end_of_sentence\s*\|\s*/gi, '')
+      .replace(/<\s*\|\s*begin_of_sentence\s*>/gi, '')
+      .replace(/<\s*\|\s*end_of_sentence\s*>/gi, '')
+      .replace(/<\s*\|\s*begin_of_sentence/gi, '')
+      .replace(/<\s*\|\s*end_of_sentence/gi, '')
+      // 處理不帶空格的格式：<|begin_of_sentence|>
       .replace(/<\|begin_of_sentence\s*\|>/gi, '')
       .replace(/<\|end_of_sentence\s*\|>/gi, '')
       .replace(/<\|begin_of_sentence\s*\|/gi, '')
@@ -134,8 +144,14 @@ ${JSON.stringify(orders, null, 2)}
       .replace(/<\|end_of_sentence>/gi, '')
       .replace(/<\|begin_of_sentence/gi, '')
       .replace(/<\|end_of_sentence/gi, '')
+      // 處理純文字
       .replace(/begin_of_sentence/gi, '')
       .replace(/end_of_sentence/gi, '')
+      // 通用清理
+      .replace(/<\s*\|\s*.*?\s*\|\s*>/g, '')
+      .replace(/<\s*\|\s*.*?\s*\|\s*/g, '')
+      .replace(/<\s*\|\s*.*?\s*>/g, '')
+      .replace(/<\s*\|\s*.*?/g, '')
       .replace(/<\|.*?\|>/g, '')
       .replace(/<\|.*?\|/g, '')
       .replace(/<\|.*?>/g, '')
