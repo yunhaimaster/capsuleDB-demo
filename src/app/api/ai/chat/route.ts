@@ -138,8 +138,15 @@ ${JSON.stringify(orders, null, 2)}
     let suggestions = []
     console.log('Starting suggestions generation for message:', message)
     console.log('AI Response:', aiResponse)
-    try {
-      const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
+    
+    // 嘗試生成建議問題，最多重試2次
+    let retryCount = 0
+    const maxRetries = 2
+    
+    while (retryCount < maxRetries && suggestions.length === 0) {
+      try {
+        console.log(`Attempting suggestions generation, attempt ${retryCount + 1}`)
+        const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -152,20 +159,20 @@ ${JSON.stringify(orders, null, 2)}
           messages: [
             { 
               role: 'system', 
-              content: `你是一個專業的膠囊灌裝生產管理系統 AI 助手。請根據用戶的問題和你的回答，生成4個與膠囊灌裝相關的建議問題。
+              content: `你是專業的膠囊灌裝生產管理系統 AI 助手。請根據用戶問題和 AI 回答，生成4個與膠囊灌裝相關的建議問題。
 
 用戶問題：${message}
 AI回答：${aiResponse}
 
-請分析 AI 回答的內容，生成4個與膠囊灌裝相關的建議問題。問題必須：
-1. 只與膠囊灌裝、膠囊配方、膠囊生產相關
-2. 基於剛才的回答內容深入分析
-3. 涉及膠囊規格、原料配比、生產工藝、質量控制等
-4. 有助於用戶進一步了解膠囊灌裝相關問題
-5. 問題簡潔明確，可以直接點擊使用
-6. 問題必須是完整的問句，不能是"問題用中文"這樣的無意義文字
+請基於 AI 回答的具體內容，生成4個與膠囊灌裝相關的建議問題。要求：
+1. 必須與膠囊灌裝、膠囊配方、膠囊生產直接相關
+2. 基於 AI 回答的具體內容深入提問
+3. 涉及膠囊規格、原料配比、生產工藝、質量控制、設備參數等
+4. 問題要具體、實用，能幫助用戶深入了解膠囊灌裝
+5. 問題必須是完整的問句，以問號結尾
+6. 避免通用性問題，要針對回答內容
 
-請只返回4個問題，每行一個，不要編號，不要其他文字。每個問題都應該是關於膠囊灌裝的具體問題。`
+請只返回4個問題，每行一個，不要編號，不要其他文字。`
             }
           ],
           max_tokens: 300,
@@ -182,48 +189,60 @@ AI回答：${aiResponse}
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
-            return s.length > 5 && 
+            return s.length > 10 && 
                    !s.includes('問題用中文') && 
                    !s.includes('用中文') &&
                    !s.includes('問題') &&
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
                    !s.includes('end_of_sentence') &&
-                   (s.includes('？') || s.includes('?') || s.includes('如何') || s.includes('什麼') || s.includes('哪個') || s.includes('怎樣'))
+                   !s.includes('可以查看更多詳細分析嗎') &&
+                   !s.includes('如何深入分析這個問題') &&
+                   !s.includes('有哪些相關的統計數據') &&
+                   !s.includes('如何優化相關流程') &&
+                   (s.includes('？') || s.includes('?') || s.includes('如何') || s.includes('什麼') || s.includes('哪個') || s.includes('怎樣') || s.includes('什麼時候') || s.includes('為什麼'))
           })
           .slice(0, 4)
         console.log('Dynamic suggestions generated:', suggestions)
+        break // 成功生成建議，跳出重試循環
       } else {
         console.error('Suggestions API failed:', suggestionsResponse.status)
         const errorText = await suggestionsResponse.text()
         console.error('Suggestions API error response:', errorText)
-        // 如果 API 失敗，提供基於回答內容的默認建議
-        suggestions = [
-          '可以查看更多詳細分析嗎？',
-          '如何深入分析這個問題？',
-          '有哪些相關的統計數據？',
-          '如何優化相關流程？'
-        ]
+        retryCount++
+        if (retryCount >= maxRetries) {
+          // 如果重試次數用完，提供默認建議
+          suggestions = [
+            '這個配方的膠囊灌裝精度如何控制？',
+            '膠囊規格選擇有什麼建議？',
+            '原料配比如何影響灌裝效果？',
+            '生產工藝參數如何優化？'
+          ]
+        }
       }
-    } catch (error) {
-      console.error('Error generating dynamic suggestions:', error)
-      // 如果生成失敗，提供默認建議
-      suggestions = [
-        '可以查看更多詳細分析嗎？',
-        '如何深入分析這個問題？',
-        '有哪些相關的統計數據？',
-        '如何優化相關流程？'
-      ]
+      } catch (error) {
+        console.error('Error generating dynamic suggestions:', error)
+        retryCount++
+        if (retryCount >= maxRetries) {
+          // 如果重試次數用完，提供默認建議
+          suggestions = [
+            '這個配方的膠囊灌裝精度如何控制？',
+            '膠囊規格選擇有什麼建議？',
+            '原料配比如何影響灌裝效果？',
+            '生產工藝參數如何優化？'
+          ]
+        }
+      }
     }
     
     // 確保總是有建議問題
     if (suggestions.length === 0) {
       console.log('No suggestions generated, using fallback')
       suggestions = [
-        '可以查看更多詳細分析嗎？',
-        '如何深入分析這個問題？',
-        '有哪些相關的統計數據？',
-        '如何優化相關流程？'
+        '這個配方的膠囊灌裝精度如何控制？',
+        '膠囊規格選擇有什麼建議？',
+        '原料配比如何影響灌裝效果？',
+        '生產工藝參數如何優化？'
       ]
     }
 
