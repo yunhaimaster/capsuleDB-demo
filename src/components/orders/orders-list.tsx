@@ -250,6 +250,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   list="customer-list"
                 />
                 <datalist id="customer-list">
+                  <option value="" />
                   {customerOptions.map((customer) => (
                     <option key={customer} value={customer} />
                   ))}
@@ -268,6 +269,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   list="product-list"
                 />
                 <datalist id="product-list">
+                  <option value="" />
                   {filteredProductOptions.map((product) => (
                     <option key={product} value={product} />
                   ))}
@@ -286,6 +288,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   list="ingredient-list"
                 />
                 <datalist id="ingredient-list">
+                  <option value="" />
                   {filteredIngredientOptions.map((ingredient) => (
                     <option key={ingredient} value={ingredient} />
                   ))}
@@ -304,12 +307,44 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   list="capsule-type-list"
                 />
                 <datalist id="capsule-type-list">
+                  <option value="" />
                   {filteredCapsuleTypeOptions.map((type) => (
                     <option key={type} value={type} />
                   ))}
                 </datalist>
               </div>
             </div>
+          </div>
+
+          {/* 清除篩選按鈕 */}
+          <div className="flex justify-end mb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setFilters({
+                  customerName: '',
+                  productName: '',
+                  ingredientName: '',
+                  capsuleType: '',
+                  dateTo: undefined,
+                  minQuantity: undefined,
+                  maxQuantity: undefined,
+                  isCompleted: undefined,
+                  page: 1,
+                  limit: 10,
+                  sortBy: 'createdAt',
+                  sortOrder: 'desc'
+                })
+                // 重置聯動選項
+                setFilteredProductOptions(productOptions)
+                setFilteredIngredientOptions(ingredientOptions)
+                setFilteredCapsuleTypeOptions(capsuleTypeOptions)
+              }}
+              className="text-xs md:text-sm"
+            >
+              清除所有篩選
+            </Button>
           </div>
 
           {showFilters && (
