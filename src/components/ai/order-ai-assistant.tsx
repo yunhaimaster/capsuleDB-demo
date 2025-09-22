@@ -247,7 +247,10 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <MarkdownRenderer content={message.content} />
+                          <MarkdownRenderer 
+                            content={message.content} 
+                            forceWhiteText={message.role === 'user'}
+                          />
                         </div>
                         <Button
                           variant="ghost"

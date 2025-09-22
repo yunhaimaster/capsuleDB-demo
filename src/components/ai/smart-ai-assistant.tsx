@@ -298,7 +298,10 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                             {message.role === 'assistant' ? (
                               <MarkdownRenderer content={message.content} />
                             ) : (
-                              <p className="whitespace-pre-wrap">{message.content}</p>
+                              <MarkdownRenderer 
+                                content={message.content} 
+                                forceWhiteText={true}
+                              />
                             )}
                           </div>
                           <div className="flex items-center space-x-1 ml-2">

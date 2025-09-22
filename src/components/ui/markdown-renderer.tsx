@@ -4,9 +4,10 @@ import remarkGfm from 'remark-gfm'
 interface MarkdownRendererProps {
   content: string
   className?: string
+  forceWhiteText?: boolean
 }
 
-export function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, className = '', forceWhiteText = false }: MarkdownRendererProps) {
   return (
     <div className={`prose prose-sm max-w-none ${className}`}>
       <ReactMarkdown
@@ -30,7 +31,7 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
           ),
           // 自定義段落樣式
           p: ({ children }) => (
-            <p className="text-sm text-gray-800 dark:text-gray-200 mb-2 leading-relaxed font-medium">
+            <p className={`text-sm mb-2 leading-relaxed font-medium ${forceWhiteText ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
               {children}
             </p>
           ),
@@ -46,18 +47,18 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
             </ol>
           ),
           li: ({ children }) => (
-            <li className="text-sm text-gray-800 dark:text-gray-200 font-medium">
+            <li className={`text-sm font-medium ${forceWhiteText ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
               {children}
             </li>
           ),
           // 自定義強調樣式
           strong: ({ children }) => (
-            <strong className="font-bold text-gray-900 dark:text-gray-100">
+            <strong className={`font-bold ${forceWhiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </strong>
           ),
           em: ({ children }) => (
-            <em className="italic text-gray-900 dark:text-gray-100 font-medium">
+            <em className={`italic font-medium ${forceWhiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </em>
           ),
