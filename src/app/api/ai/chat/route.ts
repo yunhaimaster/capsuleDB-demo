@@ -17,7 +17,24 @@ export async function POST(request: NextRequest) {
     }
 
     // 構建系統提示詞
-    const systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
+    const isSingleOrder = orders && orders.length === 1
+    const systemPrompt = isSingleOrder 
+      ? `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
+
+當前訂單數據：
+${JSON.stringify(orders[0], null, 2)}
+
+請根據用戶的問題，針對這個特定訂單進行分析。你可以：
+1. 分析原料配比和重量分配
+2. 評估單粒重量是否合理
+3. 檢查膠囊規格是否合適
+4. 提供生產建議和注意事項
+5. 分析品質風險點
+6. 計算相關的統計數據
+7. 評估製程問題和品管備註
+
+請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。`
+      : `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
 系統數據：
 ${JSON.stringify(orders, null, 2)}

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -113,6 +114,7 @@ export default function OrderDetailPage() {
             </p>
           </div>
           <div className="flex gap-2">
+            <OrderAIAssistant order={order} />
             <Link href={`/orders/${order.id}/edit`}>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Edit className="mr-2 h-4 w-4" />
