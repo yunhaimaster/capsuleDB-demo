@@ -37,7 +37,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
     }
 
     let pageDescription = ''
-    let suggestions = []
+    let suggestions: string[] = []
 
     switch (pathname) {
       case '/':
