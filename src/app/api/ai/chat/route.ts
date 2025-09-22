@@ -70,7 +70,7 @@ ${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
     } else {
       // 一般查詢模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
@@ -88,7 +88,7 @@ ${JSON.stringify(orders, null, 2)}
 
 請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
     }
 
     // 調用 OpenRouter API
@@ -122,16 +122,29 @@ ${JSON.stringify(orders, null, 2)}
     
     // 清理 AI 回答中的異常文字
     aiResponse = aiResponse
-      .replace(/<\|begin_of_sentence\s*\|>/g, '')
-      .replace(/<\|end_of_sentence\s*\|>/g, '')
-      .replace(/<\|begin_of_sentence\s*\|/g, '')
-      .replace(/<\|end_of_sentence\s*\|/g, '')
+      .replace(/<\|begin_of_sentence\s*\|>/gi, '')
+      .replace(/<\|end_of_sentence\s*\|>/gi, '')
+      .replace(/<\|begin_of_sentence\s*\|/gi, '')
+      .replace(/<\|end_of_sentence\s*\|/gi, '')
+      .replace(/<\|begin_of_sentence\|>/gi, '')
+      .replace(/<\|end_of_sentence\|>/gi, '')
+      .replace(/<\|begin_of_sentence\|/gi, '')
+      .replace(/<\|end_of_sentence\|/gi, '')
+      .replace(/<\|begin_of_sentence>/gi, '')
+      .replace(/<\|end_of_sentence>/gi, '')
+      .replace(/<\|begin_of_sentence/gi, '')
+      .replace(/<\|end_of_sentence/gi, '')
+      .replace(/begin_of_sentence/gi, '')
+      .replace(/end_of_sentence/gi, '')
       .replace(/<\|.*?\|>/g, '')
       .replace(/<\|.*?\|/g, '')
       .replace(/<\|.*?>/g, '')
       .replace(/<\|.*?/g, '')
       .replace(/<\|/g, '')
       .replace(/\|>/g, '')
+      .replace(/\|\s*>/g, '')
+      .replace(/<\|/g, '')
+      .replace(/\|/g, '')
       .trim()
 
     // 基於 AI 回答動態生成建議問題
