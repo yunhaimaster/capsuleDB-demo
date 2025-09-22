@@ -3,9 +3,11 @@ import { prisma } from '@/lib/prisma'
 import { productionOrderSchema, searchFiltersSchema } from '@/lib/validations'
 import { SearchFilters } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = request.nextUrl
     
     const filters: SearchFilters = {
       customerName: searchParams.get('customerName') || undefined,
