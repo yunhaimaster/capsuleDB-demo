@@ -207,45 +207,44 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-cyan-50 to-blue-100">
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-emerald-100">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-blue-800 flex items-center">
-              <span className="mr-2">⚡</span>
-              快速操作
+            <CardTitle className="text-lg md:text-xl font-semibold text-green-800 flex items-center">
+              <span className="mr-2">📋</span>
+              功能介紹
             </CardTitle>
-            <CardDescription className="text-sm md:text-base text-blue-600">
-              常用功能快速入口
+            <CardDescription className="text-sm md:text-base text-green-600">
+              系統功能說明與使用指南
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 md:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-              <Link href="/orders/new">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 text-xs md:text-sm" size="sm">
-                  <Plus className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-                  新增配方
-                </Button>
-              </Link>
-              <Link href="/orders">
-                <Button className="w-full bg-cyan-600 hover:bg-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300 text-xs md:text-sm" size="sm">
-                  <FileText className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
-                  檢視記錄
-                </Button>
-              </Link>
-            </div>
-            <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200">
-              <div className="space-y-2 md:space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs md:text-sm gap-2">
-                  <div>
-                    <p className="font-medium text-blue-700">系統狀態</p>
-                    <p className="text-green-600">✓ 正常運行</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-blue-700">版本</p>
-                    <p className="text-blue-600">v1.0.0</p>
-                  </div>
-                </div>
-                <div className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                  最後更新：{new Date().toLocaleDateString('zh-TW')}
+            <div className="space-y-3 md:space-y-4">
+              <div className="bg-green-50 p-3 md:p-4 rounded-xl border border-green-200">
+                <h4 className="font-medium text-green-800 mb-2">主要功能</h4>
+                <ul className="space-y-1 text-xs md:text-sm text-green-700">
+                  <li>• 膠囊配方管理與記錄</li>
+                  <li>• 生產訂單追蹤與狀態管理</li>
+                  <li>• 原料用量統計與分析</li>
+                  <li>• 製程問題記錄與品質管理</li>
+                </ul>
+              </div>
+              
+              <div className="bg-blue-50 p-3 md:p-4 rounded-xl border border-blue-200">
+                <h4 className="font-medium text-blue-800 mb-2">使用流程</h4>
+                <ol className="space-y-1 text-xs md:text-sm text-blue-700">
+                  <li>1. 新增配方：建立新的生產訂單</li>
+                  <li>2. 檢視記錄：查看和管理現有訂單</li>
+                  <li>3. 統計報表：分析原料使用情況</li>
+                  <li>4. 品質追蹤：記錄製程問題和備註</li>
+                </ol>
+              </div>
+              
+              <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
+                <h4 className="font-medium text-amber-800 mb-2">技術支援</h4>
+                <div className="text-xs md:text-sm text-amber-700">
+                  <p className="mb-1">如有任何問題或建議，請聯繫：</p>
+                  <p className="font-medium">Victor</p>
+                  <p className="text-xs text-amber-600 mt-1">系統管理員</p>
                 </div>
               </div>
             </div>
