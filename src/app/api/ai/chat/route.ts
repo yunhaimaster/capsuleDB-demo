@@ -56,31 +56,31 @@ ${JSON.stringify(orders[0], null, 2)}
 
 ${context.currentOrder ? `當前查看的訂單：
 ${JSON.stringify({
-  訂單編號: context.currentOrder.id,
-  客戶名稱: context.currentOrder.customerName,
-  產品名稱: context.currentOrder.productName,
-  生產數量: `${context.currentOrder.quantity} 粒`,
-  單粒重量: `${context.currentOrder.unitWeightMg} 毫克`,
-  膠囊規格: `${context.currentOrder.capsuleColor} ${context.currentOrder.capsuleSize} ${context.currentOrder.capsuleType}`,
-  主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+  訂單編號: context.currentOrder.id || '未知',
+  客戶名稱: context.currentOrder.customerName || '未知客戶',
+  產品名稱: context.currentOrder.productName || '未知產品',
+  生產數量: `${context.currentOrder.quantity || 0} 粒`,
+  單粒重量: `${context.currentOrder.unitWeightMg || 0} 毫克`,
+  膠囊規格: `${context.currentOrder.capsuleColor || '未知'} ${context.currentOrder.capsuleSize || '未知'} ${context.currentOrder.capsuleType || '未知'}`,
+  主要原料: context.currentOrder.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
   生產狀態: context.currentOrder.completionDate ? '已完成' : '進行中',
   完成日期: context.currentOrder.completionDate ? new Date(context.currentOrder.completionDate).toLocaleDateString('zh-TW') : '未完成',
-  創建時間: new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW'),
+  創建時間: context.currentOrder.createdAt ? new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW') : '未知',
   備註: context.currentOrder.notes || '無'
 }, null, 2)}` : ''}
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
 ${JSON.stringify(context.recentOrders.map((order: any) => ({
-  訂單編號: order.id,
-  客戶名稱: order.customerName,
-  產品名稱: order.productName,
-  生產數量: `${order.quantity} 粒`,
-  單粒重量: `${order.unitWeightMg} 毫克`,
-  膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
-  主要原料: order.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+  訂單編號: order.id || '未知',
+  客戶名稱: order.customerName || '未知客戶',
+  產品名稱: order.productName || '未知產品',
+  生產數量: `${order.quantity || 0} 粒`,
+  單粒重量: `${order.unitWeightMg || 0} 毫克`,
+  膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
+  主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
   生產狀態: order.completionDate ? '已完成' : '進行中',
   完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
-  創建時間: new Date(order.createdAt).toLocaleDateString('zh-TW'),
+  創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
   備註: order.notes || '無'
 })), null, 2)}` : ''}
 
@@ -98,16 +98,16 @@ ${JSON.stringify(context.recentOrders.map((order: any) => ({
     } else {
       // 一般查詢模式 - 創建用戶友好的數據格式
       const userFriendlyOrders = orders.map((order: any) => ({
-        訂單編號: order.id,
-        客戶名稱: order.customerName,
-        產品名稱: order.productName,
-        生產數量: `${order.quantity} 粒`,
-        單粒重量: `${order.unitWeightMg} 毫克`,
-        膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
-        主要原料: order.ingredients?.map((ing: any) => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+        訂單編號: order.id || '未知',
+        客戶名稱: order.customerName || '未知客戶',
+        產品名稱: order.productName || '未知產品',
+        生產數量: `${order.quantity || 0} 粒`,
+        單粒重量: `${order.unitWeightMg || 0} 毫克`,
+        膠囊規格: `${order.capsuleColor || '未知'} ${order.capsuleSize || '未知'} ${order.capsuleType || '未知'}`,
+        主要原料: order.ingredients?.map((ing: any) => `${ing.name || '未知原料'} (${ing.amount || 0}毫克)`).join('、') || '無',
         生產狀態: order.completionDate ? '已完成' : '進行中',
         完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
-        創建時間: new Date(order.createdAt).toLocaleDateString('zh-TW'),
+        創建時間: order.createdAt ? new Date(order.createdAt).toLocaleDateString('zh-TW') : '未知',
         備註: order.notes || '無'
       }));
 
