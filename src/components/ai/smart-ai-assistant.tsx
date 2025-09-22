@@ -13,6 +13,7 @@ interface Message {
   role: 'user' | 'assistant'
   content: string
   timestamp: Date
+  suggestions?: string[]
 }
 
 interface SmartAIAssistantProps {
@@ -128,7 +129,8 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: data.response,
-        timestamp: new Date()
+        timestamp: new Date(),
+        suggestions: data.suggestions || []
       }
 
       setMessages(prev => [...prev, assistantMessage])
@@ -286,6 +288,24 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                   <p className="text-xs opacity-70 mt-1">
                     {message.timestamp.toLocaleTimeString()}
                   </p>
+                  
+                  {/* 顯示建議問題 */}
+                  {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
+                      <div className="grid grid-cols-1 gap-1">
+                        {message.suggestions.map((suggestion, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setInput(suggestion)}
+                            className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                          >
+                            "{suggestion}"
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ))
