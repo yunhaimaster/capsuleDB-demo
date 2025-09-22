@@ -201,29 +201,29 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                       onClick={() => setInput('這個訂單的原料配比如何？')}
                       className="bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-indigo-200 dark:border-indigo-700"
                     >
-                      <p className="font-bold text-indigo-900 dark:text-indigo-100 mb-1 text-sm">訂單分析</p>
-                      <p className="text-indigo-800 dark:text-indigo-200 text-xs sm:text-sm font-medium">"這個訂單的原料配比如何？"</p>
+                      <p className="font-bold text-indigo-900 dark:text-white mb-1 text-sm">訂單分析</p>
+                      <p className="text-indigo-800 dark:text-white text-xs sm:text-sm font-medium">"這個訂單的原料配比如何？"</p>
                     </button>
                     <button
                       onClick={() => setInput('單粒重量是否合理？')}
                       className="bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-700/50 p-3 rounded-lg text-left transition-colors cursor-pointer border border-slate-200 dark:border-slate-600"
                     >
-                      <p className="font-bold text-slate-900 dark:text-slate-100 mb-1 text-sm">重量計算</p>
-                      <p className="text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-medium">"單粒重量是否合理？"</p>
+                      <p className="font-bold text-slate-900 dark:text-white mb-1 text-sm">重量計算</p>
+                      <p className="text-slate-800 dark:text-white text-xs sm:text-sm font-medium">"單粒重量是否合理？"</p>
                     </button>
                     <button
                       onClick={() => setInput('有什麼生產注意事項？')}
                       className="bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-emerald-200 dark:border-emerald-700"
                     >
-                      <p className="font-bold text-emerald-900 dark:text-emerald-100 mb-1 text-sm">生產建議</p>
-                      <p className="text-emerald-800 dark:text-emerald-200 text-xs sm:text-sm font-medium">"有什麼生產注意事項？"</p>
+                      <p className="font-bold text-emerald-900 dark:text-white mb-1 text-sm">生產建議</p>
+                      <p className="text-emerald-800 dark:text-white text-xs sm:text-sm font-medium">"有什麼生產注意事項？"</p>
                     </button>
                     <button
                       onClick={() => setInput('這個配方的品質如何？')}
                       className="bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer border border-amber-200 dark:border-amber-700"
                     >
-                      <p className="font-bold text-amber-900 dark:text-amber-100 mb-1 text-sm">品質評估</p>
-                      <p className="text-amber-800 dark:text-amber-200 text-xs sm:text-sm font-medium">"這個配方的品質如何？"</p>
+                      <p className="font-bold text-amber-900 dark:text-white mb-1 text-sm">品質評估</p>
+                      <p className="text-amber-800 dark:text-white text-xs sm:text-sm font-medium">"這個配方的品質如何？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
