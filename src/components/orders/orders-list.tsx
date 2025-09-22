@@ -268,10 +268,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             <p className="text-sm text-gray-600">{order.productName}</p>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm text-gray-500">{formatDate(order.createdAt)}</div>
                             {order.completionDate ? (
                               <span className="inline-block mt-1 px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
-                                ✓ 已完工
+                                ✓ 完工 {formatDate(order.completionDate)}
                               </span>
                             ) : (
                               <span className="inline-block mt-1 px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded">
@@ -312,6 +311,18 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             )}
                           </div>
                         </div>
+
+                        {/* 膠囊類型 */}
+                        {(order.capsuleSize || order.capsuleColor || order.capsuleType) && (
+                          <div>
+                            <p className="text-xs font-medium text-gray-600 mb-1">膠囊類型</p>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                                {[order.capsuleSize, order.capsuleColor, order.capsuleType].filter(Boolean).join('')}
+                              </span>
+                            </div>
+                          </div>
+                        )}
 
                         {/* 生產信息 */}
                         <div className="grid grid-cols-2 gap-3 text-sm">
@@ -448,15 +459,6 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   <TableRow>
                     <TableHead 
                       className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
-                      onClick={() => handleSort('createdAt')}
-                    >
-                      <div className="flex items-center space-x-1">
-                        <span>建檔日期</span>
-                        {getSortIcon('createdAt')}
-                      </div>
-                    </TableHead>
-                    <TableHead 
-                      className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
                       onClick={() => handleSort('customerName')}
                     >
                       <div className="flex items-center space-x-1">
@@ -474,6 +476,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                       </div>
                     </TableHead>
                     <TableHead className="text-xs md:text-sm">主要原料</TableHead>
+                    <TableHead className="text-xs md:text-sm">膠囊類型</TableHead>
                     <TableHead 
                       className="text-xs md:text-sm cursor-pointer hover:bg-gray-100 select-none"
                       onClick={() => handleSort('productionQuantity')}
@@ -508,7 +511,6 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 <TableBody>
                 {orders.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell>{formatDate(order.createdAt)}</TableCell>
                     <TableCell>
                       {filters.customerName && 
                        order.customerName.toLowerCase().includes(filters.customerName.toLowerCase()) ? (
@@ -551,12 +553,21 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                         )}
                       </div>
                     </TableCell>
+                    <TableCell>
+                      {(order.capsuleSize || order.capsuleColor || order.capsuleType) ? (
+                        <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                          {[order.capsuleSize, order.capsuleColor, order.capsuleType].filter(Boolean).join('')}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-xs">未設定</span>
+                      )}
+                    </TableCell>
                     <TableCell>{formatNumber(order.productionQuantity)} 粒</TableCell>
                     <TableCell>{order.unitWeightMg.toFixed(3)} mg</TableCell>
                     <TableCell>
                       {order.completionDate ? (
                         <span className="status-badge status-completed">
-                          ✓ 已完工
+                          ✓ 完工 {formatDate(order.completionDate)}
                         </span>
                       ) : (
                         <span className="status-badge status-pending">
@@ -661,7 +672,6 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
             <p><span className="font-medium">產品名字：</span>{order.productName}</p>
             <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-            <p><span className="font-medium">建檔日期：</span>{formatDate(order.createdAt)}</p>
             <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
             {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
               <div className="mt-3 pt-3 border-t">
