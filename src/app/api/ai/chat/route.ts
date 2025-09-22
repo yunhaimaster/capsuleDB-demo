@@ -55,10 +55,34 @@ ${JSON.stringify(orders[0], null, 2)}
 - 是否有當前訂單：${context.hasCurrentOrder ? '是' : '否'}
 
 ${context.currentOrder ? `當前查看的訂單：
-${JSON.stringify(context.currentOrder, null, 2)}` : ''}
+${JSON.stringify({
+  訂單編號: context.currentOrder.id,
+  客戶名稱: context.currentOrder.customerName,
+  產品名稱: context.currentOrder.productName,
+  生產數量: `${context.currentOrder.quantity} 粒`,
+  單粒重量: `${context.currentOrder.unitWeightMg} 毫克`,
+  膠囊規格: `${context.currentOrder.capsuleColor} ${context.currentOrder.capsuleSize} ${context.currentOrder.capsuleType}`,
+  主要原料: context.currentOrder.ingredients?.map(ing => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+  生產狀態: context.currentOrder.completionDate ? '已完成' : '進行中',
+  完成日期: context.currentOrder.completionDate ? new Date(context.currentOrder.completionDate).toLocaleDateString('zh-TW') : '未完成',
+  創建時間: new Date(context.currentOrder.createdAt).toLocaleDateString('zh-TW'),
+  備註: context.currentOrder.notes || '無'
+}, null, 2)}` : ''}
 
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
-${JSON.stringify(context.recentOrders, null, 2)}` : ''}
+${JSON.stringify(context.recentOrders.map(order => ({
+  訂單編號: order.id,
+  客戶名稱: order.customerName,
+  產品名稱: order.productName,
+  生產數量: `${order.quantity} 粒`,
+  單粒重量: `${order.unitWeightMg} 毫克`,
+  膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
+  主要原料: order.ingredients?.map(ing => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+  生產狀態: order.completionDate ? '已完成' : '進行中',
+  完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
+  創建時間: new Date(order.createdAt).toLocaleDateString('zh-TW'),
+  備註: order.notes || '無'
+})), null, 2)}` : ''}
 
 請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
 1. 分析當前頁面顯示的數據
@@ -72,11 +96,25 @@ ${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 
 重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
     } else {
-      // 一般查詢模式
+      // 一般查詢模式 - 創建用戶友好的數據格式
+      const userFriendlyOrders = orders.map(order => ({
+        訂單編號: order.id,
+        客戶名稱: order.customerName,
+        產品名稱: order.productName,
+        生產數量: `${order.quantity} 粒`,
+        單粒重量: `${order.unitWeightMg} 毫克`,
+        膠囊規格: `${order.capsuleColor} ${order.capsuleSize} ${order.capsuleType}`,
+        主要原料: order.ingredients?.map(ing => `${ing.name} (${ing.amount}毫克)`).join('、') || '無',
+        生產狀態: order.completionDate ? '已完成' : '進行中',
+        完成日期: order.completionDate ? new Date(order.completionDate).toLocaleDateString('zh-TW') : '未完成',
+        創建時間: new Date(order.createdAt).toLocaleDateString('zh-TW'),
+        備註: order.notes || '無'
+      }));
+
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
-系統數據：
-${JSON.stringify(orders, null, 2)}
+生產訂單數據：
+${JSON.stringify(userFriendlyOrders, null, 2)}
 
 請根據用戶的問題，分析訂單數據並提供有用的回答。你可以：
 1. 查詢特定客戶的訂單
@@ -86,7 +124,7 @@ ${JSON.stringify(orders, null, 2)}
 5. 分析生產趨勢
 6. 計算統計數據
 
-請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。
+請用中文回答，並提供具體的數據支持。使用用戶友好的語言，避免使用技術術語如 completionDate、null、CMFUTESP 等。
 
 重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。絕對不要使用 <|begin_of_sentence|>、<|end_of_sentence|> 或任何類似的特殊標記。`
     }
