@@ -1,8 +1,31 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { OrdersList } from '@/components/orders/orders-list'
+import { AIAssistant } from '@/components/ai/ai-assistant'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Card, CardContent } from '@/components/ui/card'
 
 export default function OrdersPage() {
+  const [orders, setOrders] = useState([])
+
+  useEffect(() => {
+    // 獲取訂單數據供 AI 助手使用
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('/api/orders?limit=100')
+        if (response.ok) {
+          const data = await response.json()
+          setOrders(data.orders || [])
+        }
+      } catch (error) {
+        console.error('Error fetching orders for AI:', error)
+      }
+    }
+
+    fetchOrders()
+  }, [])
+
   return (
     <div className="space-y-8">
       <Breadcrumb items={[{ label: '生產記錄管理' }]} />
@@ -20,8 +43,10 @@ export default function OrdersPage() {
         </p>
       </div>
 
-
       <OrdersList />
+      
+      {/* AI 助手 */}
+      <AIAssistant orders={orders} />
     </div>
   )
 }

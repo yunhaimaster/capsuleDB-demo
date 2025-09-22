@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { AIAssistant } from '@/components/ai/ai-assistant'
 import { Plus, FileText, BarChart3, TrendingUp, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
@@ -12,11 +13,13 @@ import Link from 'next/link'
 
 export default function HomePage() {
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
+  const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
 
   useEffect(() => {
     fetchRecentOrders()
+    fetchAllOrders()
   }, [])
 
   const fetchRecentOrders = async () => {
@@ -30,6 +33,18 @@ export default function HomePage() {
       console.error('Error fetching recent orders:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchAllOrders = async () => {
+    try {
+      const response = await fetch('/api/orders?limit=100')
+      if (response.ok) {
+        const data = await response.json()
+        setAllOrders(data.orders || [])
+      }
+    } catch (error) {
+      console.error('Error fetching all orders:', error)
     }
   }
 
@@ -250,6 +265,8 @@ export default function HomePage() {
         </Card>
       </div>
 
+      {/* AI 助手 */}
+      <AIAssistant orders={allOrders} />
     </div>
   )
 }
