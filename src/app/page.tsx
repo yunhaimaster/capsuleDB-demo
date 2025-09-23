@@ -282,7 +282,7 @@ export default function HomePage() {
                 <div className="text-xs sm:text-xs md:text-sm text-green-700 dark:text-green-100 space-y-1">
                   <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 升級與介面優化</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• AI 模型升級至 OpenAI GPT-4o Mini，提供更準確的回答</li>
+                    <li>• AI 模型升級至 OpenAI GPT-5 Mini，提供更準確的回答</li>
                     <li>• 統一 Smart AI 和 Order AI 介面設計，提升用戶體驗</li>
                     <li>• 新增 AI 翻譯功能：簡體中文轉繁體中文</li>
                     <li>• 修復手機介面問題，優化響應式設計</li>
