@@ -387,7 +387,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <div>
                 <label className="text-sm font-medium">生產狀態</label>
                 <select
-                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer"
                   value={filters.isCompleted === undefined ? '' : filters.isCompleted.toString()}
                   onChange={(e) => handleSearch({ 
                     isCompleted: e.target.value === '' ? undefined : e.target.value === 'true'
@@ -401,7 +401,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <div>
                 <label className="text-sm font-medium">每頁顯示</label>
                 <select
-                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer"
                   value={filters.limit || 10}
                   onChange={(e) => handleSearch({ 
                     limit: parseInt(e.target.value)
@@ -606,7 +606,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                 查看
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                            <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle>生產記錄詳情</DialogTitle>
                               </DialogHeader>

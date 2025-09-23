@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
+import { FieldTranslator } from '@/components/ui/field-translator'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -150,11 +151,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="customerName">客戶名稱 *</Label>
-              <Input
-                id="customerName"
-                {...register('customerName')}
-                placeholder="請輸入客戶名稱"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="customerName"
+                  {...register('customerName')}
+                  placeholder="請輸入客戶名稱"
+                  className="flex-1"
+                />
+                <FieldTranslator
+                  value={watch('customerName') || ''}
+                  onTranslate={(translatedText) => setValue('customerName', translatedText)}
+                />
+              </div>
               {errors.customerName && (
                 <p className="text-sm text-destructive">{errors.customerName.message}</p>
               )}
@@ -162,16 +170,23 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
             <div className="space-y-2">
               <Label htmlFor="productName">產品名字 *</Label>
-              <Input
-                id="productName"
-                {...register('productName')}
-                placeholder="請輸入產品名字"
-                onFocus={handleProductNameFocus}
-                onChange={(e) => {
-                  handleProductNameChange(e)
-                  register('productName').onChange(e)
-                }}
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="productName"
+                  {...register('productName')}
+                  placeholder="請輸入產品名字"
+                  onFocus={handleProductNameFocus}
+                  onChange={(e) => {
+                    handleProductNameChange(e)
+                    register('productName').onChange(e)
+                  }}
+                  className="flex-1"
+                />
+                <FieldTranslator
+                  value={watch('productName') || ''}
+                  onTranslate={(translatedText) => setValue('productName', translatedText)}
+                />
+              </div>
               {errors.productName && (
                 <p className="text-sm text-destructive">{errors.productName.message}</p>
               )}
@@ -347,10 +362,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               {fields.map((field, index) => (
                 <TableRow key={field.id}>
                   <TableCell>
-                    <Input
-                      {...register(`ingredients.${index}.materialName`)}
-                      placeholder="原料品名"
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        {...register(`ingredients.${index}.materialName`)}
+                        placeholder="原料品名"
+                        className="flex-1"
+                      />
+                      <FieldTranslator
+                        value={watch(`ingredients.${index}.materialName`) || ''}
+                        onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
+                        className="shrink-0"
+                      />
+                    </div>
                     {errors.ingredients?.[index]?.materialName && (
                       <p className="text-sm text-destructive mt-1">
                         {errors.ingredients[index]?.materialName?.message}
