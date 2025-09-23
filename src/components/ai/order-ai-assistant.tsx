@@ -71,7 +71,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
               <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-purple-600" />
-              <span className="text-base sm:text-lg">AI 訂單分析助手（DeepSeek V3.1）</span>
+              <span className="text-base sm:text-lg">AI 訂單分析助手</span>
             </div>
             <div className="flex items-center space-x-1">
               <Button
@@ -194,7 +194,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
               {messages.length === 0 ? (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-purple-600" />
-                  <p className="text-lg font-medium mb-2">AI 訂單分析助手（DeepSeek V3.1）</p>
+                  <p className="text-lg font-medium mb-2">AI 訂單分析助手</p>
                   <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
@@ -324,7 +324,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             <div className="flex items-center space-x-3">
               <Bot className="h-5 w-5 text-purple-600" />
               <div>
-                <p className="text-sm font-medium">AI 訂單助手（DeepSeek V3.1）已最小化</p>
+                <p className="text-sm font-medium">AI 訂單助手已最小化</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {messages.length > 0 ? `當前對話：${messages.length} 條消息` : '點擊展開開始對話'}
                 </p>
