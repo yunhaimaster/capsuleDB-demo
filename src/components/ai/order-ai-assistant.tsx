@@ -205,11 +205,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                       <p className="text-purple-600 dark:text-purple-300">"這個訂單的原料配比如何？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('單粒重量是否合理？')}
+                      onClick={() => setInput('這個單粒重量用這個大小的膠囊是否合理？')}
                       className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
                       <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">重量計算</p>
-                      <p className="text-blue-600 dark:text-blue-300">"單粒重量是否合理？"</p>
+                      <p className="text-blue-600 dark:text-blue-300">"這個單粒重量用這個大小的膠囊是否合理？"</p>
                     </button>
                     <button
                       onClick={() => setInput('有什麼生產注意事項？')}
@@ -219,11 +219,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                       <p className="text-green-600 dark:text-green-300">"有什麼生產注意事項？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('這個配方的品質如何？')}
+                      onClick={() => setInput('這個配方在大陸、香港、歐洲和美國的合法性如何？')}
                       className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">品質評估</p>
-                      <p className="text-orange-600 dark:text-orange-300">"這個配方的品質如何？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">法規合規</p>
+                      <p className="text-orange-600 dark:text-orange-300">"這個配方在大陸、香港、歐洲和美國的合法性如何？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
