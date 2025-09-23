@@ -21,10 +21,7 @@ export async function GET(request: NextRequest) {
     if (searchParams.get('ingredientName')) {
       where.ingredients = {
         some: {
-          materialName: {
-            contains: searchParams.get('ingredientName'),
-            mode: 'insensitive'
-          }
+          materialName: searchParams.get('ingredientName')
         }
       }
     }
@@ -55,10 +52,10 @@ export async function GET(request: NextRequest) {
     )).sort()
 
     return NextResponse.json({
-      customerOptions: customers,
-      productOptions: products,
-      ingredientOptions: ingredients,
-      capsuleTypeOptions: capsuleTypes
+      customers,
+      products,
+      ingredients,
+      capsuleTypes
     })
 
   } catch (error) {
