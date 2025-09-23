@@ -101,7 +101,7 @@ ${JSON.stringify(orders, null, 2)}
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
-        model: 'x-ai/grok-code-fast-1',
+        model: 'openai/gpt-5-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -155,7 +155,7 @@ ${JSON.stringify(orders, null, 2)}
           'X-Title': 'EasyPack AI Assistant'
         },
         body: JSON.stringify({
-          model: 'x-ai/grok-code-fast-1',
+          model: 'openai/gpt-5-mini',
           messages: [
             { 
               role: 'system', 
