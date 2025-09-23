@@ -101,7 +101,7 @@ ${JSON.stringify(orders, null, 2)}
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3.1:free',
+        model: 'x-ai/grok-code-fast-1',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -155,7 +155,7 @@ ${JSON.stringify(orders, null, 2)}
           'X-Title': 'EasyPack AI Assistant'
         },
         body: JSON.stringify({
-          model: 'deepseek/deepseek-chat-v3.1:free',
+          model: 'x-ai/grok-code-fast-1',
           messages: [
             { 
               role: 'system', 
