@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         'X-Title': 'EasyPack Translation Service'
       },
       body: JSON.stringify({
-        model: 'x-ai/grok-code-fast-1',
+        model: 'deepseek/deepseek-chat-v3.1:free',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }
