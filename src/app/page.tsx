@@ -274,10 +274,29 @@ export default function HomePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
+              <div className="bg-green-50 dark:bg-green-900/40 p-3 rounded-xl border border-green-200 dark:border-green-700/50">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">v1.1.0 - 2024年9月23日</h4>
+                  <span className="text-xs bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                </div>
+                <div className="text-xs sm:text-xs md:text-sm text-green-700 dark:text-green-100 space-y-1">
+                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 升級與介面優化</strong></p>
+                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
+                    <li>• AI 模型升級至 OpenAI GPT-4o Mini，提供更準確的回答</li>
+                    <li>• 統一 Smart AI 和 Order AI 介面設計，提升用戶體驗</li>
+                    <li>• 新增 AI 翻譯功能：簡體中文轉繁體中文</li>
+                    <li>• 修復手機介面問題，優化響應式設計</li>
+                    <li>• 改進 Order AI 建議問題，更貼近實際需求</li>
+                    <li>• 增強錯誤處理和調試功能</li>
+                    <li>• 完善文檔和版本記錄</li>
+                  </ul>
+                </div>
+              </div>
+
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                   <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.0 - 2024年9月22日</h4>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
                   <p className="text-xs sm:text-xs md:text-sm">🎉 <strong>重大更新</strong></p>
