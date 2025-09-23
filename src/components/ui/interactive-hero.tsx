@@ -32,7 +32,12 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
     const deltaY = startY - e.clientY
     const progress = Math.min(Math.max(deltaY / 300, 0), 1)
     
-    setDragProgress(progress)
+    // 使用緩動函數讓拖拽更平滑
+    const easedProgress = progress < 0.5 
+      ? 2 * progress * progress 
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2
+    
+    setDragProgress(easedProgress)
     setCurrentY(e.clientY)
     
     if (progress >= 0.8 && !isRevealed) {
@@ -66,7 +71,12 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
     const deltaY = startY - touch.clientY
     const progress = Math.min(Math.max(deltaY / 300, 0), 1)
     
-    setDragProgress(progress)
+    // 使用緩動函數讓觸控更平滑
+    const easedProgress = progress < 0.5 
+      ? 2 * progress * progress 
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2
+    
+    setDragProgress(easedProgress)
     setCurrentY(touch.clientY)
     
     if (progress >= 0.8 && !isRevealed) {
@@ -105,8 +115,20 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
       <div 
         className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
         style={{
-          transform: `translateY(${dragProgress * 100}%)`,
-          transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+          transform: `translateY(${dragProgress * 100}%) scale(${1 + dragProgress * 0.05})`,
+          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: 1 - dragProgress * 0.3,
+          filter: `blur(${dragProgress * 2}px)`
+        }}
+      />
+      
+      {/* 背景裝飾層 */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20"
+        style={{
+          transform: `translateY(${dragProgress * 100}%) rotate(${dragProgress * 5}deg)`,
+          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: 1 - dragProgress * 0.5
         }}
       />
       
@@ -114,18 +136,33 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
       <div 
         className="absolute inset-0 flex items-center justify-center"
         style={{
-          transform: `translateY(${dragProgress * 100}%)`,
-          transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+          transform: `translateY(${dragProgress * 100}%) scale(${1 - dragProgress * 0.1})`,
+          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: 1 - dragProgress * 0.2
         }}
       >
         <div className="text-center text-white px-8 max-w-4xl">
           {/* 主標題 */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+          <h1 
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight"
+            style={{
+              transform: `translateY(${dragProgress * -20}px)`,
+              opacity: 1 - dragProgress * 0.3,
+              transition: isDragging ? 'none' : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
             無處不在，無遠弗屆
           </h1>
           
           {/* 副標題 */}
-          <p className="text-xl md:text-2xl lg:text-3xl mb-12 text-slate-300">
+          <p 
+            className="text-xl md:text-2xl lg:text-3xl mb-12 text-slate-300"
+            style={{
+              transform: `translateY(${dragProgress * -15}px)`,
+              opacity: 1 - dragProgress * 0.4,
+              transition: isDragging ? 'none' : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+            }}
+          >
             Made in Hong Kong
           </p>
           
@@ -139,8 +176,11 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
             {/* 進度指示器 */}
             <div className="w-64 h-1 bg-slate-700 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
-                style={{ width: `${dragProgress * 100}%` }}
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out"
+                style={{ 
+                  width: `${dragProgress * 100}%`,
+                  boxShadow: dragProgress > 0 ? '0 0 10px rgba(59, 130, 246, 0.5)' : 'none'
+                }}
               />
             </div>
           </div>
@@ -151,15 +191,23 @@ export function InteractiveHero({ onReveal }: InteractiveHeroProps) {
       <div 
         className="absolute inset-0 bg-white dark:bg-slate-900"
         style={{
-          transform: `translateY(${100 - dragProgress * 100}%)`,
-          transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+          transform: `translateY(${100 - dragProgress * 100}%) scale(${0.95 + dragProgress * 0.05})`,
+          transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: 0.3 + dragProgress * 0.7
         }}
       >
         <div className="h-full overflow-y-auto">
           {/* 系統內容 */}
           <div className="container mx-auto px-4 py-8">
             {/* 系統標題 */}
-            <div className="text-center mb-12">
+            <div 
+              className="text-center mb-12"
+              style={{
+                transform: `translateY(${(1 - dragProgress) * 50}px)`,
+                opacity: 0.3 + dragProgress * 0.7,
+                transition: isDragging ? 'none' : 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
                 EasyPack 膠囊配方管理系統
               </h2>
