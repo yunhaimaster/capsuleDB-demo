@@ -192,32 +192,36 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     {/* 初始建議問題 */}
                     <div className="mt-4 sm:mt-6">
                       <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
-                      <div className="grid grid-cols-1 gap-1">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                         {pageData?.currentPage === '/' && (
                           <>
                             <button
                               onClick={() => setInput('顯示所有未完工的生產訂單')}
-                              className="text-xs text-left p-2 sm:p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "顯示所有未完工的生產訂單"
+                              <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">訂單管理</p>
+                              <p className="text-purple-600 dark:text-purple-300">"顯示所有未完工的生產訂單"</p>
                             </button>
                             <button
                               onClick={() => setInput('哪個客戶的膠囊訂單最多？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "哪個客戶的膠囊訂單最多？"
+                              <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">客戶分析</p>
+                              <p className="text-blue-600 dark:text-blue-300">"哪個客戶的膠囊訂單最多？"</p>
                             </button>
                             <button
                               onClick={() => setInput('最近一週的膠囊生產情況如何？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "最近一週的膠囊生產情況如何？"
+                              <p className="font-medium text-green-800 dark:text-green-200 mb-1">生產統計</p>
+                              <p className="text-green-600 dark:text-green-300">"最近一週的膠囊生產情況如何？"</p>
                             </button>
                             <button
                               onClick={() => setInput('分析膠囊灌裝的生產效率')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "分析膠囊灌裝的生產效率"
+                              <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">效率分析</p>
+                              <p className="text-orange-600 dark:text-orange-300">"分析膠囊灌裝的生產效率"</p>
                             </button>
                           </>
                         )}
@@ -225,27 +229,31 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                           <>
                             <button
                               onClick={() => setInput('篩選未完工的膠囊訂單')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "篩選未完工的膠囊訂單"
+                              <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">訂單篩選</p>
+                              <p className="text-purple-600 dark:text-purple-300">"篩選未完工的膠囊訂單"</p>
                             </button>
                             <button
                               onClick={() => setInput('按客戶分組顯示膠囊訂單')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "按客戶分組顯示膠囊訂單"
+                              <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">客戶分組</p>
+                              <p className="text-blue-600 dark:text-blue-300">"按客戶分組顯示膠囊訂單"</p>
                             </button>
                             <button
                               onClick={() => setInput('找出生產數量最多的膠囊訂單')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "找出生產數量最多的膠囊訂單"
+                              <p className="font-medium text-green-800 dark:text-green-200 mb-1">數量分析</p>
+                              <p className="text-green-600 dark:text-green-300">"找出生產數量最多的膠囊訂單"</p>
                             </button>
                             <button
                               onClick={() => setInput('顯示有製程問題的膠囊訂單')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "顯示有製程問題的膠囊訂單"
+                              <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">問題分析</p>
+                              <p className="text-orange-600 dark:text-orange-300">"顯示有製程問題的膠囊訂單"</p>
                             </button>
                           </>
                         )}
@@ -253,27 +261,31 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                           <>
                             <button
                               onClick={() => setInput('膠囊規格如何選擇？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "膠囊規格如何選擇？"
+                              <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">規格選擇</p>
+                              <p className="text-purple-600 dark:text-purple-300">"膠囊規格如何選擇？"</p>
                             </button>
                             <button
                               onClick={() => setInput('膠囊原料配比有什麼建議？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "膠囊原料配比有什麼建議？"
+                              <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">配比建議</p>
+                              <p className="text-blue-600 dark:text-blue-300">"膠囊原料配比有什麼建議？"</p>
                             </button>
                             <button
                               onClick={() => setInput('膠囊生產數量如何計算？')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "膠囊生產數量如何計算？"
+                              <p className="font-medium text-green-800 dark:text-green-200 mb-1">數量計算</p>
+                              <p className="text-green-600 dark:text-green-300">"膠囊生產數量如何計算？"</p>
                             </button>
                             <button
                               onClick={() => setInput('膠囊大小和顏色搭配指南')}
-                              className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                              className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                             >
-                              "膠囊大小和顏色搭配指南"
+                              <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">搭配指南</p>
+                              <p className="text-orange-600 dark:text-orange-300">"膠囊大小和顏色搭配指南"</p>
                             </button>
                           </>
                         )}
