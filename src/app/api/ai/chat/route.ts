@@ -101,7 +101,7 @@ ${JSON.stringify(orders, null, 2)}
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5-mini',
+        model: 'openai/gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -118,7 +118,19 @@ ${JSON.stringify(orders, null, 2)}
     }
 
     const data = await response.json()
+    console.log('API Response:', JSON.stringify(data, null, 2))
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid API response structure:', data)
+      throw new Error('Invalid API response structure')
+    }
+    
     let aiResponse = data.choices[0].message.content
+    
+    if (!aiResponse || aiResponse.trim() === '') {
+      console.error('Empty AI response')
+      throw new Error('AI returned empty response')
+    }
     
     // 清理 AI 回答中的異常文字
     aiResponse = aiResponse
@@ -155,7 +167,7 @@ ${JSON.stringify(orders, null, 2)}
           'X-Title': 'EasyPack AI Assistant'
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5-mini',
+          model: 'openai/gpt-4o-mini',
           messages: [
             { 
               role: 'system', 
