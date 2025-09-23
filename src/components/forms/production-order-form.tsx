@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
+import { SmartMaterialInput } from '@/components/ui/smart-material-input'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -362,18 +363,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               {fields.map((field, index) => (
                 <TableRow key={field.id}>
                   <TableCell>
-                    <div className="flex gap-2">
-                      <Input
-                        {...register(`ingredients.${index}.materialName`)}
-                        placeholder="原料品名"
-                        className="flex-1"
-                      />
-                      <FieldTranslator
-                        value={watch(`ingredients.${index}.materialName`) || ''}
-                        onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
-                        className="shrink-0"
-                      />
-                    </div>
+                    <SmartMaterialInput
+                      value={watch(`ingredients.${index}.materialName`) || ''}
+                      onChange={(value) => setValue(`ingredients.${index}.materialName`, value)}
+                      placeholder="原料品名"
+                      onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
+                    />
                     {errors.ingredients?.[index]?.materialName && (
                       <p className="text-sm text-destructive mt-1">
                         {errors.ingredients[index]?.materialName?.message}
