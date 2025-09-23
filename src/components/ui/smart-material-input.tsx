@@ -30,20 +30,35 @@ export function SmartMaterialInput({
 
   // 獲取歷史原料選項
   const fetchMaterialSuggestions = async (query: string = '') => {
-    if (!query.trim()) {
-      setSuggestions([])
-      return
-    }
-
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/orders/options?ingredientName=${encodeURIComponent(query)}`)
+      // 如果有查詢詞，使用搜尋；否則獲取所有原料
+      const url = query.trim() 
+        ? `/api/orders/options?ingredientName=${encodeURIComponent(query)}`
+        : '/api/orders/options'
+      
+      const response = await fetch(url)
       if (response.ok) {
         const data = await response.json()
-        setSuggestions(data.ingredientOptions || [])
+        console.log('Material suggestions response:', data) // 調試信息
+        
+        let allIngredients = data.ingredientOptions || []
+        
+        // 如果有查詢詞，過濾結果
+        if (query.trim()) {
+          allIngredients = allIngredients.filter((ingredient: string) =>
+            ingredient.toLowerCase().includes(query.toLowerCase())
+          )
+        }
+        
+        setSuggestions(allIngredients)
+      } else {
+        console.error('Failed to fetch material suggestions:', response.status)
+        setSuggestions([])
       }
     } catch (error) {
       console.error('Error fetching material suggestions:', error)
+      setSuggestions([])
     } finally {
       setIsLoading(false)
     }
@@ -74,18 +89,14 @@ export function SmartMaterialInput({
 
   // 處理輸入框點擊
   const handleInputClick = () => {
-    if (inputValue.trim()) {
-      fetchMaterialSuggestions(inputValue)
-      setIsOpen(true)
-    }
+    fetchMaterialSuggestions(inputValue)
+    setIsOpen(true)
   }
 
   // 處理輸入框焦點
   const handleInputFocus = () => {
-    if (inputValue.trim()) {
-      fetchMaterialSuggestions(inputValue)
-      setIsOpen(true)
-    }
+    fetchMaterialSuggestions(inputValue)
+    setIsOpen(true)
   }
 
   // 處理輸入框失焦
