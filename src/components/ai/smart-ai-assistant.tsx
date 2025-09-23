@@ -187,7 +187,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                   <div className="text-center text-gray-500 dark:text-gray-400 py-6 sm:py-8">
                     <Bot className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
                     <p className="text-sm sm:text-base">我是您的智能 AI 助手，可以幫助您分析膠囊生產數據。</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Powered by OpenAI GPT-5 Mini</p>
                     <p className="text-xs sm:text-sm mt-2">請輸入您的問題開始對話。</p>
                     
                     {/* 初始建議問題 */}

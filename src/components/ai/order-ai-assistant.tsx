@@ -195,7 +195,6 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-purple-600" />
                   <p className="text-lg font-medium mb-2">AI 訂單分析助手</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">Powered by OpenAI GPT-5 Mini</p>
                   <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
