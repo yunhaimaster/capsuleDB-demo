@@ -106,7 +106,7 @@ ${JSON.stringify(orders, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 1500,
+        max_tokens: 2500,
         temperature: 0.7
       })
     })
@@ -184,10 +184,16 @@ AI回答：${aiResponse}
 5. 問題必須是完整的問句，以問號結尾
 6. 避免通用性問題，要針對回答內容
 
-請只返回4個問題，每行一個，不要編號，不要其他文字。`
+請嚴格返回4個問題，每行一個，格式如下：
+問題1？
+問題2？
+問題3？
+問題4？
+
+不要包含任何編號、標點符號或其他文字，只要問題內容。`
             }
           ],
-          max_tokens: 300,
+          max_tokens: 400,
           temperature: 0.7
         })
       })
@@ -201,10 +207,10 @@ AI回答：${aiResponse}
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
-            return s.length > 10 && 
+            // 基本過濾條件：長度和有害內容
+            return s.length > 8 && 
                    !s.includes('問題用中文') && 
                    !s.includes('用中文') &&
-                   !s.includes('問題') &&
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
                    !s.includes('end_of_sentence') &&
@@ -212,9 +218,25 @@ AI回答：${aiResponse}
                    !s.includes('如何深入分析這個問題') &&
                    !s.includes('有哪些相關的統計數據') &&
                    !s.includes('如何優化相關流程') &&
-                   (s.includes('？') || s.includes('?') || s.includes('如何') || s.includes('什麼') || s.includes('哪個') || s.includes('怎樣') || s.includes('什麼時候') || s.includes('為什麼'))
+                   // 確保是問句（以問號結尾或包含疑問詞）
+                   (s.includes('？') || s.includes('?') || 
+                    s.includes('如何') || s.includes('什麼') || s.includes('哪個') || 
+                    s.includes('怎樣') || s.includes('什麼時候') || s.includes('為什麼') ||
+                    s.includes('是否') || s.includes('會否') || s.includes('能否'))
           })
           .slice(0, 4)
+        
+        console.log('Filtered suggestions before fallback:', suggestions)
+        
+        // 如果過濾後少於4個問題，嘗試放寬條件
+        if (suggestions.length < 4) {
+          console.log('Not enough suggestions, trying relaxed filtering')
+          suggestions = suggestionsText.split('\n')
+            .filter((s: string) => s.trim())
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 5 && !s.includes('<|'))
+            .slice(0, 4)
+        }
         console.log('Dynamic suggestions generated:', suggestions)
         break // 成功生成建議，跳出重試循環
       } else {
@@ -224,6 +246,7 @@ AI回答：${aiResponse}
         retryCount++
         if (retryCount >= maxRetries) {
           // 如果重試次數用完，提供默認建議
+          console.log('Using fallback suggestions due to API failures')
           suggestions = [
             '這個配方的膠囊灌裝精度如何控制？',
             '膠囊規格選擇有什麼建議？',
@@ -237,6 +260,7 @@ AI回答：${aiResponse}
         retryCount++
         if (retryCount >= maxRetries) {
           // 如果重試次數用完，提供默認建議
+          console.log('Using fallback suggestions due to API failures')
           suggestions = [
             '這個配方的膠囊灌裝精度如何控制？',
             '膠囊規格選擇有什麼建議？',
