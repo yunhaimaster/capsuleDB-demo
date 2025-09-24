@@ -199,32 +199,32 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                   <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
-                      onClick={() => setInput('這個配方設計合理嗎？配方的品質和安全性如何？')}
+                      onClick={() => setInput('此配方在膠囊灌裝過程中是否存在受潮、黏壁或結塊等潛在困難？應採取哪些生產工藝或輔料處理才能避免？')}
                       className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">配方評估</p>
-                      <p className="text-purple-600 dark:text-purple-300">"這個配方設計合理嗎？配方的品質和安全性如何？"</p>
+                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">配方灌裝可行性與生產挑戰</p>
+                      <p className="text-purple-600 dark:text-purple-300 text-sm">"此配方在膠囊灌裝過程中是否存在受潮、黏壁或結塊等潛在困難？應採取哪些生產工藝或輔料處理才能避免？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('這個單粒重量用這個大小的膠囊是否合理？')}
+                      onClick={() => setInput('配方中是否含有會加劇流動性差或靜電聚集的危險原料？以其在配方中的比例，生產難度會提升多少？')}
                       className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">重量計算</p>
-                      <p className="text-blue-600 dark:text-blue-300">"這個單粒重量用這個大小的膠囊是否合理？"</p>
+                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">原料風險評估與配比影響</p>
+                      <p className="text-blue-600 dark:text-blue-300 text-sm">"配方中是否含有會加劇流動性差或靜電聚集的危險原料？以其在配方中的比例，生產難度會提升多少？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('有什麼生產注意事項？')}
+                      onClick={() => setInput('所選膠囊（大小、材質、填充量）是否適合此配方？是否需要調整膠囊類型或最大充填重量？')}
                       className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">生產建議</p>
-                      <p className="text-green-600 dark:text-green-300">"有什麼生產注意事項？"</p>
+                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">膠囊規格適配性檢視</p>
+                      <p className="text-green-600 dark:text-green-300 text-sm">"所選膠囊（大小、材質、填充量）是否適合此配方？是否需要調整膠囊類型或最大充填重量？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('這個配方在大陸、香港、歐洲和美國的合法性如何？')}
+                      onClick={() => setInput('此配方作為保健品在香港、大陸、美國及歐洲市場的法規合規性如何？是否有成分限量或申報風險？')}
                       className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">法規合規</p>
-                      <p className="text-orange-600 dark:text-orange-300">"這個配方在大陸、香港、歐洲和美國的合法性如何？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">法規合規及市場可行性</p>
+                      <p className="text-orange-600 dark:text-orange-300 text-sm">"此配方作為保健品在香港、大陸、美國及歐洲市場的法規合規性如何？是否有成分限量或申報風險？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
