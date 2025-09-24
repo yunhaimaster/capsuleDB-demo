@@ -344,28 +344,15 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted rounded-lg">
               <div className="space-y-1">
                 <label className="text-sm font-medium block">完工日期</label>
-                <div className="relative">
-                  <Input
-                    type="date"
-                    value={filters.dateTo?.toISOString().split('T')[0] || ''}
-                    onChange={(e) => handleSearch({ 
-                      dateTo: e.target.value ? new Date(e.target.value) : undefined 
-                    })}
-                    className="h-10 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-datetime-edit-text]:opacity-0 [&::-webkit-datetime-edit-month-field]:opacity-0 [&::-webkit-datetime-edit-day-field]:opacity-0 [&::-webkit-datetime-edit-year-field]:opacity-0"
-                    style={{ 
-                      colorScheme: 'light',
-                    }}
-                    data-placeholder="選擇完工日期"
-                  />
-                  {!filters.dateTo && (
-                    <div 
-                      className="absolute inset-0 flex items-center px-3 text-muted-foreground pointer-events-none text-sm bg-white dark:bg-background"
-                      style={{ zIndex: 1 }}
-                    >
-                      選擇完工日期
-                    </div>
-                  )}
-                </div>
+                <Input
+                  type="date"
+                  value={filters.dateTo?.toISOString().split('T')[0] || ''}
+                  onChange={(e) => handleSearch({ 
+                    dateTo: e.target.value ? new Date(e.target.value) : undefined 
+                  })}
+                  placeholder="選擇完工日期"
+                  className="h-10"
+                />
               </div>
               <div className="space-y-1">
                 <label className="text-sm font-medium block">生產數量範圍</label>

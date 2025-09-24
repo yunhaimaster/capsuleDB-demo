@@ -290,46 +290,17 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="completionDate">完工日期</Label>
-            <div className="relative">
-              <Input
-                id="completionDate"
-                type="date"
-                value={(() => {
-                  const dateValue = watch('completionDate')
-                  if (!dateValue) return ''
-                  if (dateValue instanceof Date) {
-                    return dateValue.toISOString().split('T')[0]
-                  }
-                  if (typeof dateValue === 'string') {
-                    const date = new Date(dateValue)
-                    return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0]
-                  }
-                  return ''
-                })()}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (!value || value === '') {
-                    setValue('completionDate', null)
-                  } else {
-                    const date = new Date(value)
-                    setValue('completionDate', isNaN(date.getTime()) ? null : date)
-                  }
-                }}
-                className="[&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-datetime-edit-text]:opacity-0 [&::-webkit-datetime-edit-month-field]:opacity-0 [&::-webkit-datetime-edit-day-field]:opacity-0 [&::-webkit-datetime-edit-year-field]:opacity-0"
-                style={{ 
-                  colorScheme: 'light',
-                }}
-                data-placeholder="請選擇完工日期"
-              />
-              {!watch('completionDate') && (
-                <div 
-                  className="absolute inset-0 flex items-center px-3 text-muted-foreground pointer-events-none text-sm bg-white dark:bg-background"
-                  style={{ zIndex: 1 }}
-                >
-                  請選擇完工日期
-                </div>
-              )}
-            </div>
+            <Input
+              id="completionDate"
+              type="date"
+              {...register('completionDate', { 
+                setValueAs: (value) => {
+                  if (!value || value === '') return null
+                  const date = new Date(value)
+                  return isNaN(date.getTime()) ? null : date
+                }
+              })}
+            />
           </div>
 
           <div className="space-y-2">
