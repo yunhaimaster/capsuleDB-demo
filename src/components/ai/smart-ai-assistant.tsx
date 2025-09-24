@@ -28,10 +28,12 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
     showSettings,
     setShowSettings,
     chatHistory,
+    retryMessage,
     messagesEndRef,
     messagesContainerRef,
     handleSendMessage,
     handleKeyPress,
+    handleRetry,
     clearChat,
     startNewChat,
     loadChatHistory,
@@ -325,8 +327,22 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                           </div>
                         </div>
                         
+                        {/* 顯示重試按鈕（錯誤消息） */}
+                        {message.role === 'assistant' && message.isError && retryMessage && (
+                          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                            <Button
+                              onClick={handleRetry}
+                              disabled={isLoading}
+                              size="sm"
+                              className="text-xs bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                              {isLoading ? '重試中...' : '🔄 重試'}
+                            </Button>
+                          </div>
+                        )}
+                        
                         {/* 顯示建議問題 */}
-                        {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
+                        {message.role === 'assistant' && !message.isError && message.suggestions && message.suggestions.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                             <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
                             <div className="grid grid-cols-1 gap-1">
@@ -374,7 +390,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     className="flex-1"
                   />
                   <Button
-                    onClick={handleSendMessage}
+                    onClick={() => handleSendMessage()}
                     disabled={isLoading || !input.trim()}
                     className="bg-emerald-600 hover:bg-emerald-700"
                   >

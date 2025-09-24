@@ -8,6 +8,7 @@ interface Message {
   content: string
   timestamp: Date
   suggestions?: string[]
+  isError?: boolean
 }
 
 interface UseAIAssistantProps {
@@ -24,42 +25,53 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
   const [showSettings, setShowSettings] = useState(false)
   const [chatHistory, setChatHistory] = useState<Message[][]>([])
   const [currentChatIndex, setCurrentChatIndex] = useState(-1)
+  const [retryMessage, setRetryMessage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  const handleSendMessage = async () => {
-    if (!input.trim() || isLoading) return
+  const sendMessageToAI = async (messageContent: string) => {
+    const response = await fetch('/api/ai/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: messageContent,
+        orders: orders,
+        context: context
+      }),
+    })
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: input.trim(),
-      timestamp: new Date()
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`AI 服務回應錯誤 (${response.status}): ${errorText}`)
     }
 
-    setMessages(prev => [...prev, userMessage])
-    setInput('')
+    return await response.json()
+  }
+
+  const handleSendMessage = async (messageToSend?: string) => {
+    const messageContent = messageToSend || input.trim()
+    if (!messageContent || isLoading) return
+
+    // 如果不是重試，添加用戶消息
+    if (!messageToSend) {
+      const userMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: messageContent,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, userMessage])
+      setInput('')
+    }
+    
     setIsLoading(true)
+    setRetryMessage(messageContent)
 
     try {
-      const response = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: input.trim(),
-          orders: orders,
-          context: context
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('AI 助手暫時無法回應')
-      }
-
-      const data = await response.json()
-      console.log('AI API Response:', data) // 統一調試信息
+      const data = await sendMessageToAI(messageContent)
+      console.log('AI API Response:', data)
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -69,24 +81,34 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
         suggestions: data.suggestions || []
       }
       
-      console.log('AI Message with suggestions:', assistantMessage) // 統一調試信息
-
+      console.log('AI Message with suggestions:', assistantMessage)
       setMessages(prev => [...prev, assistantMessage])
+      setRetryMessage(null) // 清除重試消息
       
       // 自動滾動到最新消息
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     } catch (error) {
+      console.error('AI Assistant Error:', error)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: '抱歉，AI 助手暫時無法回應。請稍後再試或聯繫 Victor。',
-        timestamp: new Date()
+        content: '抱歉，AI 助手暫時無法回應。這可能是由於網路問題或服務暫時繁忙。',
+        timestamp: new Date(),
+        isError: true
       }
       setMessages(prev => [...prev, errorMessage])
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleRetry = () => {
+    if (retryMessage && !isLoading) {
+      // 移除最後一條錯誤消息
+      setMessages(prev => prev.slice(0, -1))
+      handleSendMessage(retryMessage)
     }
   }
 
@@ -174,10 +196,12 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
     setShowSettings,
     chatHistory,
     currentChatIndex,
+    retryMessage,
     messagesEndRef,
     messagesContainerRef,
     handleSendMessage,
     handleKeyPress,
+    handleRetry,
     clearChat,
     startNewChat,
     loadChatHistory,
