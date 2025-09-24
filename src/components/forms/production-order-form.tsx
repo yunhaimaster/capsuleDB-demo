@@ -145,7 +145,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       {/* 基本資訊 */}
       <Card>
         <CardHeader>
-          <CardTitle>基本資訊</CardTitle>
+          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+            <span className="text-blue-600">📝</span>
+            基本資訊
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -213,7 +216,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       {/* 膠囊規格 */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">膠囊規格</CardTitle>
+          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+            <span className="text-purple-600">💊</span>
+            膠囊規格
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -270,7 +276,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       {/* 其他信息 */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">其他信息</CardTitle>
+          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+            <span className="text-green-600">📋</span>
+            其他信息
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
@@ -319,9 +328,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       {/* 原料配方 */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>原料配方（每粒規格）</CardTitle>
-            <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
+            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+              <span className="text-orange-600">🧪</span>
+              <span className="block sm:hidden">原料配方</span>
+              <span className="hidden sm:block">原料配方（每粒規格）</span>
+            </CardTitle>
+            <div className="flex gap-2 flex-wrap">
               <Button
                 type="button"
                 variant="outline"
@@ -528,25 +541,28 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       {/* 計算結果 */}
       <Card>
         <CardHeader>
-          <CardTitle>計算結果</CardTitle>
+          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+            <span className="text-emerald-600">📊</span>
+            計算結果
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground">單粒總重量</p>
-              <p className="text-2xl font-bold">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm text-blue-600 dark:text-blue-300 font-medium">單粒總重量</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-800 dark:text-blue-200">
                 {unitTotalWeight.toFixed(3)} mg
               </p>
             </div>
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground">批次總重量</p>
-              <p className="text-2xl font-bold">
+            <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+              <p className="text-sm text-emerald-600 dark:text-emerald-300 font-medium">批次總重量</p>
+              <p className="text-xl sm:text-2xl font-bold text-emerald-800 dark:text-emerald-200">
                 {convertWeight(batchTotalWeight).display}
               </p>
             </div>
-            <div className="text-center p-4 bg-muted rounded-lg">
-              <p className="text-sm text-muted-foreground">生產數量</p>
-              <p className="text-2xl font-bold">
+            <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-sm text-purple-600 dark:text-purple-300 font-medium">生產數量</p>
+              <p className="text-xl sm:text-2xl font-bold text-purple-800 dark:text-purple-200">
                 {formatNumber(watchedQuantity || 0)} 粒
               </p>
             </div>
@@ -555,15 +571,20 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 操作按鈕 */}
-      <div className="flex justify-end gap-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 pt-4">
         <Button
           type="button"
           variant="outline"
           onClick={() => router.back()}
+          className="w-full sm:w-auto order-2 sm:order-1"
         >
           取消
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
+        <Button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="w-full sm:w-auto order-1 sm:order-2"
+        >
           {isSubmitting ? '儲存中...' : '儲存配方'}
         </Button>
       </div>
