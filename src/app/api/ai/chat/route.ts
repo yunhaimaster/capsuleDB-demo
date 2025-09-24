@@ -60,13 +60,22 @@ ${JSON.stringify(context.currentOrder, null, 2)}` : ''}
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
 ${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 
+${orders && orders.length > 0 ? `完整的訂單數據庫（包含所有訂單）：
+${JSON.stringify(orders, null, 2)}` : ''}
+
 請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
 1. 分析當前頁面顯示的數據
 2. 提供頁面相關的操作建議
 3. 回答關於當前頁面內容的問題
 4. 提供頁面功能的指導
-5. 分析相關的訂單數據
+5. 分析相關的訂單數據（使用完整的訂單數據庫進行查詢和篩選）
 6. 提供專業的建議和見解
+7. 根據訂單狀態（completionDate 為 null 表示未完工）篩選和分析訂單
+
+重要提醒：
+- 當用戶詢問"未完工訂單"時，請查看完整的訂單數據庫，篩選 completionDate 為 null 的訂單
+- 當用戶詢問"已完工訂單"時，請查看完整的訂單數據庫，篩選 completionDate 不為 null 的訂單
+- 請使用完整的訂單數據進行統計和分析，而不僅僅是最近的訂單
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 

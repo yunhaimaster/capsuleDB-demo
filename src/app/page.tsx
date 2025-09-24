@@ -39,9 +39,12 @@ export default function HomePage() {
 
   const fetchAllOrders = async () => {
     try {
-      const response = await fetch('/api/orders?limit=100')
+      // 獲取所有訂單，包括未完工的訂單用於 AI 分析
+      const response = await fetch('/api/orders?limit=1000')
       if (response.ok) {
         const data = await response.json()
+        console.log('All orders fetched for AI:', data.orders?.length || 0)
+        console.log('Incomplete orders:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
         setAllOrders(data.orders || [])
       }
     } catch (error) {
