@@ -239,81 +239,73 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         </CardHeader>
         <CardContent>
           {/* 主要搜尋條件 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
-            <div>
-              <label className="text-sm font-medium mb-1 block">客戶名稱</label>
-              <div className="relative">
-                <Input
-                  placeholder="輸入或選擇客戶名稱..."
-                  value={filters.customerName || ''}
-                  onChange={(e) => handleSearch({ customerName: e.target.value })}
-                  className="text-sm"
-                  list="customer-list"
-                />
-                <datalist id="customer-list">
-                  <option value="" />
-                  {customerOptions.map((customer) => (
-                    <option key={customer} value={customer} />
-                  ))}
-                </datalist>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4">
+            <div className="space-y-1">
+              <label className="text-sm font-medium">客戶名稱</label>
+              <Input
+                placeholder="輸入或選擇客戶名稱..."
+                value={filters.customerName || ''}
+                onChange={(e) => handleSearch({ customerName: e.target.value })}
+                className="text-sm h-10"
+                list="customer-list"
+              />
+              <datalist id="customer-list">
+                <option value="" />
+                {customerOptions.map((customer) => (
+                  <option key={customer} value={customer} />
+                ))}
+              </datalist>
             </div>
             
-            <div>
-              <label className="text-sm font-medium mb-1 block">產品名稱</label>
-              <div className="relative">
-                <Input
-                  placeholder="輸入或選擇產品名稱..."
-                  value={filters.productName || ''}
-                  onChange={(e) => handleSearch({ productName: e.target.value })}
-                  className="text-sm"
-                  list="product-list"
-                />
-                <datalist id="product-list">
-                  <option value="" />
-                  {filteredProductOptions.map((product) => (
-                    <option key={product} value={product} />
-                  ))}
-                </datalist>
-              </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium">產品名稱</label>
+              <Input
+                placeholder="輸入或選擇產品名稱..."
+                value={filters.productName || ''}
+                onChange={(e) => handleSearch({ productName: e.target.value })}
+                className="text-sm h-10"
+                list="product-list"
+              />
+              <datalist id="product-list">
+                <option value="" />
+                {filteredProductOptions.map((product) => (
+                  <option key={product} value={product} />
+                ))}
+              </datalist>
             </div>
             
-            <div>
-              <label className="text-sm font-medium mb-1 block">原料名稱</label>
-              <div className="relative">
-                <Input
-                  placeholder="輸入或選擇原料名稱..."
-                  value={filters.ingredientName || ''}
-                  onChange={(e) => handleSearch({ ingredientName: e.target.value })}
-                  className="text-sm"
-                  list="ingredient-list"
-                />
-                <datalist id="ingredient-list">
-                  <option value="" />
-                  {filteredIngredientOptions.map((ingredient) => (
-                    <option key={ingredient} value={ingredient} />
-                  ))}
-                </datalist>
-              </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium">原料名稱</label>
+              <Input
+                placeholder="輸入或選擇原料名稱..."
+                value={filters.ingredientName || ''}
+                onChange={(e) => handleSearch({ ingredientName: e.target.value })}
+                className="text-sm h-10"
+                list="ingredient-list"
+              />
+              <datalist id="ingredient-list">
+                <option value="" />
+                {filteredIngredientOptions.map((ingredient) => (
+                  <option key={ingredient} value={ingredient} />
+                ))}
+              </datalist>
             </div>
             
-            <div>
-              <label className="text-sm font-medium mb-1 block">膠囊類型</label>
-              <div className="relative">
-                <Input
-                  placeholder="輸入或選擇膠囊類型..."
-                  value={filters.capsuleType || ''}
-                  onChange={(e) => handleSearch({ capsuleType: e.target.value })}
-                  className="text-sm"
-                  list="capsule-type-list"
-                />
-                <datalist id="capsule-type-list">
-                  <option value="" />
-                  {filteredCapsuleTypeOptions.map((type) => (
-                    <option key={type} value={type} />
-                  ))}
-                </datalist>
-              </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium">膠囊類型</label>
+              <Input
+                placeholder="輸入或選擇膠囊類型..."
+                value={filters.capsuleType || ''}
+                onChange={(e) => handleSearch({ capsuleType: e.target.value })}
+                className="text-sm h-10"
+                list="capsule-type-list"
+              />
+              <datalist id="capsule-type-list">
+                <option value="" />
+                {filteredCapsuleTypeOptions.map((type) => (
+                  <option key={type} value={type} />
+                ))}
+              </datalist>
             </div>
           </div>
 
@@ -349,9 +341,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           </div>
 
           {showFilters && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 p-3 md:p-4 bg-muted rounded-lg">
-              <div>
-                <label className="text-sm font-medium">完工日期</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted rounded-lg">
+              <div className="space-y-1">
+                <label className="text-sm font-medium block">完工日期</label>
                 <Input
                   type="date"
                   value={filters.dateTo?.toISOString().split('T')[0] || ''}
@@ -359,10 +351,11 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     dateTo: e.target.value ? new Date(e.target.value) : undefined 
                   })}
                   placeholder="選擇完工日期"
+                  className="h-10"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">生產數量範圍</label>
+              <div className="space-y-1">
+                <label className="text-sm font-medium block">生產數量範圍</label>
                 <div className="flex gap-2">
                   <Input
                     type="number"
@@ -371,7 +364,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     onChange={(e) => handleSearch({ 
                       minQuantity: e.target.value ? parseInt(e.target.value) : undefined 
                     })}
-                    className="text-sm"
+                    className="text-sm h-10"
                   />
                   <Input
                     type="number"
@@ -380,14 +373,14 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     onChange={(e) => handleSearch({ 
                       maxQuantity: e.target.value ? parseInt(e.target.value) : undefined 
                     })}
-                    className="text-sm"
+                    className="text-sm h-10"
                   />
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium">生產狀態</label>
+              <div className="space-y-1">
+                <label className="text-sm font-medium block">生產狀態</label>
                 <select
-                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer"
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   value={filters.isCompleted === undefined ? '' : filters.isCompleted.toString()}
                   onChange={(e) => handleSearch({ 
                     isCompleted: e.target.value === '' ? undefined : e.target.value === 'true'
@@ -398,10 +391,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   <option value="true">已完工</option>
                 </select>
               </div>
-              <div>
-                <label className="text-sm font-medium">每頁顯示</label>
+              <div className="space-y-1">
+                <label className="text-sm font-medium block">每頁顯示</label>
                 <select
-                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer"
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   value={filters.limit || 10}
                   onChange={(e) => handleSearch({ 
                     limit: parseInt(e.target.value)
