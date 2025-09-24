@@ -899,7 +899,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                           </DialogTrigger>
                           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle>訂單詳情</DialogTitle>
+                              <DialogTitle className="flex items-center justify-between">
+                                <span>訂單詳情</span>
+                                {selectedOrder && (
+                                  <OrderAIAssistant order={selectedOrder} />
+                                )}
+                              </DialogTitle>
                             </DialogHeader>
                             {selectedOrder && (
                               <OrderDetailView order={selectedOrder} />
@@ -960,10 +965,6 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
-      {/* AI 助手按鈕 */}
-      <div className="flex justify-end mb-4">
-        <OrderAIAssistant order={order} />
-      </div>
       {/* 基本資訊 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
