@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
+import { BulkIngredientsImport } from '@/components/forms/bulk-ingredients-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -66,10 +67,20 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     }
   })
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: 'ingredients'
   })
+
+  const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
+    // 如果當前只有一個空的原料項目，替換它
+    if (fields.length === 1 && !fields[0].materialName && fields[0].unitContentMg === 0) {
+      replace(ingredients)
+    } else {
+      // 否則添加到現有原料後面
+      ingredients.forEach(ingredient => append(ingredient))
+    }
+  }
 
   const watchedIngredients = watch('ingredients')
   const watchedQuantity = watch('productionQuantity')
@@ -525,7 +536,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             ))}
           </div>
           
-          <div className="mt-4">
+          <div className="mt-4 flex flex-wrap gap-2">
             <Button
               type="button"
               variant="outline"
@@ -534,6 +545,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <Plus className="mr-2 h-4 w-4" />
               新增原料
             </Button>
+            <BulkIngredientsImport onImport={handleBulkImport} />
           </div>
 
           {errors.ingredients && (
