@@ -968,7 +968,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
       {/* AI 助手按鈕 */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-4">
         <OrderAIAssistant order={order} />
       </div>
       {/* 基本資訊 */}

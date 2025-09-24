@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { ProductionOrder } from '@/types'
@@ -58,12 +58,13 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant="outline" 
+          variant="default"
           size="sm"
-          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600"
+          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200"
         >
           <Bot className="h-4 w-4 mr-2" />
-          詢問此訂單
+          <span className="hidden sm:inline">AI 助手</span>
+          <span className="sm:hidden">AI</span>
         </Button>
       </DialogTrigger>
       <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
