@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 
@@ -50,6 +50,9 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
     }
   })
 
+  const handleClose = () => {
+    setIsOpen(false)
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -131,6 +134,15 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 title="清除對話（不保存）"
               >
                 <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClose}
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
+                title="關閉"
+              >
+                <X className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </div>
           </DialogTitle>
