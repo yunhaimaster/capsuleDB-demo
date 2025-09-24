@@ -344,80 +344,167 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>原料品名 *</TableHead>
-                <TableHead>單粒含量 (mg) *</TableHead>
-                {showCalculations && (
-                  <>
-                    <TableHead>批次用量</TableHead>
-                    <TableHead>小計</TableHead>
-                  </>
-                )}
-                <TableHead className="w-[100px]">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {fields.map((field, index) => (
-                <TableRow key={field.id}>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Input
-                        {...register(`ingredients.${index}.materialName`)}
-                        placeholder="原料品名"
-                        className="flex-1"
-                      />
-                      <FieldTranslator
-                        value={watch(`ingredients.${index}.materialName`) || ''}
-                        onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
-                        className="shrink-0"
-                      />
-                    </div>
-                    {errors.ingredients?.[index]?.materialName && (
-                      <p className="text-sm text-destructive mt-1">
-                        {errors.ingredients[index]?.materialName?.message}
-                      </p>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      step="0.00001"
-                      {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
-                      placeholder="0.00000"
-                    />
-                    {errors.ingredients?.[index]?.unitContentMg && (
-                      <p className="text-sm text-destructive mt-1">
-                        {errors.ingredients[index]?.unitContentMg?.message}
-                      </p>
-                    )}
-                  </TableCell>
+          {/* 桌面版表格 */}
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>原料品名 *</TableHead>
+                  <TableHead>單粒含量 (mg) *</TableHead>
                   {showCalculations && (
                     <>
-                      <TableCell>
-                        {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
-                      </TableCell>
-                      <TableCell>
-                        {convertWeight(field.unitContentMg).display}
-                      </TableCell>
+                      <TableHead>批次用量</TableHead>
+                      <TableHead>小計</TableHead>
                     </>
                   )}
-                  <TableCell>
+                  <TableHead className="w-[100px]">操作</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {fields.map((field, index) => (
+                  <TableRow key={field.id}>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Input
+                          {...register(`ingredients.${index}.materialName`)}
+                          placeholder="原料品名"
+                          className="flex-1"
+                        />
+                        <FieldTranslator
+                          value={watch(`ingredients.${index}.materialName`) || ''}
+                          onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
+                          className="shrink-0"
+                        />
+                      </div>
+                      {errors.ingredients?.[index]?.materialName && (
+                        <p className="text-sm text-destructive mt-1">
+                          {errors.ingredients[index]?.materialName?.message}
+                        </p>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        step="0.00001"
+                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
+                        placeholder="0.00000"
+                      />
+                      {errors.ingredients?.[index]?.unitContentMg && (
+                        <p className="text-sm text-destructive mt-1">
+                          {errors.ingredients[index]?.unitContentMg?.message}
+                        </p>
+                      )}
+                    </TableCell>
+                    {showCalculations && (
+                      <>
+                        <TableCell>
+                          {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
+                        </TableCell>
+                        <TableCell>
+                          {convertWeight(field.unitContentMg).display}
+                        </TableCell>
+                      </>
+                    )}
+                    <TableCell>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => remove(index)}
+                        disabled={fields.length === 1}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* 手機版卡片佈局 */}
+          <div className="block md:hidden space-y-4">
+            {fields.map((field, index) => (
+              <Card key={field.id} className="border border-gray-200 dark:border-gray-700">
+                <CardContent className="p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300">
+                      原料 #{index + 1}
+                    </h4>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => remove(index)}
                       disabled={fields.length === 1}
+                      className="h-8 w-8 p-0"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {/* 原料品名 */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">原料品名 *</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          {...register(`ingredients.${index}.materialName`)}
+                          placeholder="請輸入原料品名"
+                          className="flex-1"
+                        />
+                        <FieldTranslator
+                          value={watch(`ingredients.${index}.materialName`) || ''}
+                          onTranslate={(translatedText) => setValue(`ingredients.${index}.materialName`, translatedText)}
+                          className="shrink-0"
+                        />
+                      </div>
+                      {errors.ingredients?.[index]?.materialName && (
+                        <p className="text-sm text-destructive">
+                          {errors.ingredients[index]?.materialName?.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 單粒含量 */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
+                      <Input
+                        type="number"
+                        step="0.00001"
+                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
+                        placeholder="0.00000"
+                        className="w-full"
+                      />
+                      {errors.ingredients?.[index]?.unitContentMg && (
+                        <p className="text-sm text-destructive">
+                          {errors.ingredients[index]?.unitContentMg?.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 計算結果（僅在顯示計算時） */}
+                    {showCalculations && (
+                      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">批次用量</Label>
+                          <p className="text-sm font-medium">
+                            {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 dark:text-gray-400">單位重量</Label>
+                          <p className="text-sm font-medium">
+                            {convertWeight(field.unitContentMg).display}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
           
           <div className="mt-4">
             <Button
