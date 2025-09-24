@@ -212,7 +212,7 @@ export function AIAssistant({ orders }: AIAssistantProps) {
             className="flex-1"
           />
           <Button
-            onClick={() => handleSendMessage()}
+            onClick={handleSendMessage}
             disabled={!input.trim() || isLoading}
             size="sm"
             className="bg-blue-600 hover:bg-blue-700"

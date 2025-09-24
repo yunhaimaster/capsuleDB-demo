@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         'X-Title': 'EasyPack Translation Service'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3.1:free',
+        model: 'openai/gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }
@@ -58,48 +58,8 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('Translation API error status:', response.status)
-      console.error('Translation API error response:', errorText)
-      
-      // 嘗試使用備用模型
-      console.log('Trying fallback model for translation: meta-llama/llama-3.2-3b-instruct:free')
-      const fallbackResponse = await fetch(OPENROUTER_API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-          'X-Title': 'EasyPack Translation Service'
-        },
-        body: JSON.stringify({
-          model: 'meta-llama/llama-3.2-3b-instruct:free',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: text }
-          ],
-          max_tokens: 1000,
-          temperature: 0.3
-        })
-      })
-      
-      if (!fallbackResponse.ok) {
-        const fallbackErrorText = await fallbackResponse.text()
-        console.error('Fallback translation model also failed:', fallbackErrorText)
-        throw new Error('翻譯服務暫時無法使用')
-      }
-      
-      const fallbackData = await fallbackResponse.json()
-      const translatedText = fallbackData.choices?.[0]?.message?.content?.trim()
-
-      if (!translatedText) {
-        throw new Error('備用翻譯模型結果為空')
-      }
-
-      return NextResponse.json({
-        success: true,
-        translatedText,
-        usedFallback: true
-      })
+      console.error('OpenRouter API error:', errorText)
+      throw new Error('翻譯服務暫時無法使用')
     }
 
     const data = await response.json()
