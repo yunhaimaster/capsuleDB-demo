@@ -315,7 +315,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     setValue('completionDate', isNaN(date.getTime()) ? null : date)
                   }
                 }}
-                className="[&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                className="[&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-datetime-edit-text]:opacity-0 [&::-webkit-datetime-edit-month-field]:opacity-0 [&::-webkit-datetime-edit-day-field]:opacity-0 [&::-webkit-datetime-edit-year-field]:opacity-0"
                 style={{ 
                   colorScheme: 'light',
                 }}
@@ -323,7 +323,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               />
               {!watch('completionDate') && (
                 <div 
-                  className="absolute inset-0 flex items-center px-3 text-muted-foreground pointer-events-none text-sm"
+                  className="absolute inset-0 flex items-center px-3 text-muted-foreground pointer-events-none text-sm bg-white dark:bg-background"
                   style={{ zIndex: 1 }}
                 >
                   請選擇完工日期
