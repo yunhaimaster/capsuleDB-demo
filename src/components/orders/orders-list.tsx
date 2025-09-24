@@ -899,12 +899,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                           </DialogTrigger>
                           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                             <DialogHeader>
-                              <DialogTitle className="flex items-center justify-between">
-                                <span>訂單詳情</span>
+                              <div className="flex items-center justify-between pr-8">
+                                <DialogTitle>訂單詳情</DialogTitle>
                                 {selectedOrder && (
                                   <OrderAIAssistant order={selectedOrder} />
                                 )}
-                              </DialogTitle>
+                              </div>
                             </DialogHeader>
                             {selectedOrder && (
                               <OrderDetailView order={selectedOrder} />
