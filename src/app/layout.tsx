@@ -6,6 +6,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { ProtectedLayout } from '@/components/auth/protected-layout'
 import { LogoutButton } from '@/components/auth/logout-button'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -56,6 +57,7 @@ export default function RootLayout({
             </ProtectedLayout>
           </AuthProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
