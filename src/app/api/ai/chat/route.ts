@@ -92,6 +92,7 @@ ${JSON.stringify(orders, null, 2)}
     }
 
     // 調用 OpenRouter API
+    console.log('Calling OpenRouter API with model:', 'deepseek/deepseek-chat-v3.1:free')
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
@@ -111,10 +112,75 @@ ${JSON.stringify(orders, null, 2)}
       })
     })
 
+    console.log('OpenRouter API response status:', response.status)
+    
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenRouter API error:', errorText)
-      throw new Error('OpenRouter API request failed')
+      console.error('OpenRouter API error status:', response.status)
+      console.error('OpenRouter API error response:', errorText)
+      
+      // 嘗試使用備用模型
+      console.log('Trying fallback model: meta-llama/llama-3.2-3b-instruct:free')
+      const fallbackResponse = await fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+          'X-Title': 'EasyPack AI Assistant'
+        },
+        body: JSON.stringify({
+          model: 'meta-llama/llama-3.2-3b-instruct:free',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: message }
+          ],
+          max_tokens: 1500,
+          temperature: 0.7
+        })
+      })
+      
+      if (!fallbackResponse.ok) {
+        const fallbackErrorText = await fallbackResponse.text()
+        console.error('Fallback model also failed:', fallbackErrorText)
+        throw new Error(`AI 服務暫時不可用。主要模型錯誤 (${response.status}): ${errorText}`)
+      }
+      
+      // 使用備用模型的響應
+      const fallbackData = await fallbackResponse.json()
+      console.log('Fallback model response received')
+      
+      if (!fallbackData.choices || !fallbackData.choices[0] || !fallbackData.choices[0].message) {
+        console.error('Invalid fallback API response structure:', fallbackData)
+        throw new Error('備用 AI 模型回應格式錯誤')
+      }
+      
+      let aiResponse = fallbackData.choices[0].message.content
+      if (!aiResponse || aiResponse.trim() === '') {
+        console.error('Empty fallback AI response')
+        throw new Error('備用 AI 模型返回空回應')
+      }
+      
+      // 使用備用模型的回應繼續處理
+      aiResponse = aiResponse
+        .replace(/<\|begin_of_sentence\|>/g, '')
+        .replace(/<\|end_of_sentence\|>/g, '')
+        .replace(/<\|begin_of_sentence \| >/g, '')
+        .replace(/<\|end_of_sentence \| >/g, '')
+        .replace(/< \| begin_of_sentence \| >/g, '')
+        .replace(/< \| end_of_sentence \| >/g, '')
+        .trim()
+      
+      return NextResponse.json({ 
+        response: aiResponse,
+        suggestions: [
+          '這個配方的膠囊灌裝精度如何控制？',
+          '膠囊規格選擇有什麼建議？',
+          '原料配比如何影響灌裝效果？',
+          '生產工藝參數如何優化？'
+        ],
+        usedFallback: true
+      })
     }
 
     const data = await response.json()
