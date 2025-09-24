@@ -60,7 +60,12 @@ ${JSON.stringify(context.currentOrder, null, 2)}` : ''}
 ${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
 ${JSON.stringify(context.recentOrders, null, 2)}` : ''}
 
-${orders && orders.length > 0 ? `完整的訂單數據庫（包含所有訂單）：
+${orders && orders.length > 0 ? `完整的訂單數據庫統計：
+- 總訂單數：${orders.length}
+- 未完工訂單數：${orders.filter((order: any) => !order.completionDate).length}
+- 已完工訂單數：${orders.filter((order: any) => order.completionDate).length}
+
+當用戶詢問具體訂單信息時，請從以下完整數據中篩選：
 ${JSON.stringify(orders, null, 2)}` : ''}
 
 請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
@@ -73,9 +78,10 @@ ${JSON.stringify(orders, null, 2)}` : ''}
 7. 根據訂單狀態（completionDate 為 null 表示未完工）篩選和分析訂單
 
 重要提醒：
-- 當用戶詢問"未完工訂單"時，請查看完整的訂單數據庫，篩選 completionDate 為 null 的訂單
+- 當用戶詢問"未完工訂單"時，請查看完整的訂單數據庫，篩選 completionDate 為 null 的訂單，並逐一列出所有未完工訂單的詳細信息
 - 當用戶詢問"已完工訂單"時，請查看完整的訂單數據庫，篩選 completionDate 不為 null 的訂單
 - 請使用完整的訂單數據進行統計和分析，而不僅僅是最近的訂單
+- 確保回答完整，不要截斷，如果訂單數據較多請分段展示但要包含所有相關訂單
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
@@ -115,7 +121,7 @@ ${JSON.stringify(orders, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 2500,
+        max_tokens: 4000,
         temperature: 0.7
       })
     })
