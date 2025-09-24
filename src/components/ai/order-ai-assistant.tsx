@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
+import { Bot, Send, Loader2, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 
@@ -50,9 +50,6 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
     }
   })
 
-  const handleClose = () => {
-    setIsOpen(false)
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -135,15 +132,6 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
               >
                 <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClose}
-                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
-                title="關閉"
-              >
-                <X className="h-3 w-3 sm:h-4 sm:w-4" />
-              </Button>
             </div>
           </DialogTitle>
         </DialogHeader>
@@ -199,11 +187,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                   <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
-                      onClick={() => setInput('這個訂單的原料配比如何？')}
+                      onClick={() => setInput('這個配方設計合理嗎？配方的品質和安全性如何？')}
                       className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">訂單分析</p>
-                      <p className="text-purple-600 dark:text-purple-300">"這個訂單的原料配比如何？"</p>
+                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">配方評估</p>
+                      <p className="text-purple-600 dark:text-purple-300">"這個配方設計合理嗎？配方的品質和安全性如何？"</p>
                     </button>
                     <button
                       onClick={() => setInput('這個單粒重量用這個大小的膠囊是否合理？')}
