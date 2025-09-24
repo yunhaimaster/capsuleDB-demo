@@ -276,35 +276,37 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.0 - 2024年9月22日</h4>
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.4 - 2024年9月23日</h4>
                   <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🎉 <strong>重大更新</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>系統完善</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 智能 AI 助手全面升級，支援基於回答內容的動態建議問題</li>
-                    <li>• 新增響應式設計，完美支援手機與桌面設備</li>
-                    <li>• 深色模式與淺色模式切換功能</li>
-                    <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
-                    <li>• 數據導出功能：CSV 格式支援中文編碼</li>
-                    <li>• 用戶體驗優化：正在回答提示、統一設計風格</li>
-                    <li>• 頁面針對性建議：不同頁面顯示相關的 AI 建議問題</li>
+                    <li>• Vercel 部署優化：正確連結到 easypack-capsule-management-v1 專案</li>
+                    <li>• AI 助手介面統一：Smart AI 和 Order AI 使用相同的卡片式設計</li>
+                    <li>• Order AI 初始問題優化：更新四個初始建議問題</li>
+                    <li>• 文字顯示修復：修復淺色模式下用戶消息文字不清楚的問題</li>
+                    <li>• 響應式設計完善：確保所有介面在電腦和手機上都美觀一致</li>
+                    <li>• 文檔完善：所有文檔反映最新版本狀態</li>
+                    <li>• 使用 OpenAI GPT-4o Mini 模型提供智能分析</li>
                   </ul>
                 </div>
               </div>
 
               <div className="bg-indigo-50 dark:bg-indigo-900/40 p-3 rounded-xl border border-indigo-200 dark:border-indigo-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200 text-sm sm:text-base">v0.9.0 - 2024年9月21日</h4>
+                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200 text-sm sm:text-base">v1.0.2 - 2024年9月22日</h4>
                   <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🔧 <strong>功能完善</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🤖 <strong>AI 升級</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 膠囊配方管理系統基礎功能</li>
-                    <li>• 生產訂單追蹤與狀態管理</li>
-                    <li>• 製程問題記錄與品質管理</li>
-                    <li>• 基礎 AI 助手功能</li>
+                    <li>• 智能 AI 助手全面升級，支援基於回答內容的動態建議問題</li>
+                    <li>• 新增響應式設計，完美支援手機與桌面設備</li>
+                    <li>• 深色模式與淺色模式切換功能</li>
+                    <li>• AI 翻譯功能：簡體中文轉繁體中文</li>
+                    <li>• 手機介面優化與觸控體驗改善</li>
+                    <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
                   </ul>
                 </div>
               </div>
