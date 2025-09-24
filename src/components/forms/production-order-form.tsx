@@ -237,7 +237,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
             <div className="space-y-2">
               <Label htmlFor="capsuleSize">膠囊大小</Label>
-              <Select onValueChange={(value) => setValue('capsuleSize', value as "#1" | "#0" | "#00")}>
+              <Select 
+                value={watch('capsuleSize') || ''} 
+                onValueChange={(value) => setValue('capsuleSize', value as "#1" | "#0" | "#00")}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="選擇膠囊大小" />
                 </SelectTrigger>
@@ -254,7 +257,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
             <div className="space-y-2">
               <Label htmlFor="capsuleType">膠囊成份</Label>
-              <Select onValueChange={(value) => setValue('capsuleType', value as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶")}>
+              <Select 
+                value={watch('capsuleType') || ''} 
+                onValueChange={(value) => setValue('capsuleType', value as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶")}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="選擇膠囊成份" />
                 </SelectTrigger>
