@@ -288,7 +288,7 @@ export default function HomePage() {
                     <li>• 文字顯示修復：修復淺色模式下用戶消息文字不清楚的問題</li>
                     <li>• 響應式設計完善：確保所有介面在電腦和手機上都美觀一致</li>
                     <li>• 文檔完善：所有文檔反映最新版本狀態</li>
-                    <li>• 使用 OpenAI GPT-4o Mini 模型提供智能分析</li>
+                    <li>• 使用 OpenAI GPT-5 Mini 模型提供智能分析</li>
                   </ul>
                 </div>
               </div>
