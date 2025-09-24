@@ -293,13 +293,30 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             <Input
               id="completionDate"
               type="date"
-              {...register('completionDate', { 
-                setValueAs: (value) => {
-                  if (!value || value === '') return null
-                  const date = new Date(value)
-                  return isNaN(date.getTime()) ? null : date
+              placeholder="選擇完工日期"
+              value={(() => {
+                const dateValue = watch('completionDate')
+                if (!dateValue) return ''
+                if (dateValue instanceof Date) {
+                  return dateValue.toISOString().split('T')[0]
                 }
-              })}
+                if (typeof dateValue === 'string') {
+                  const date = new Date(dateValue)
+                  return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0]
+                }
+                return ''
+              })()}
+              onChange={(e) => {
+                const value = e.target.value
+                if (!value || value === '') {
+                  setValue('completionDate', null)
+                } else {
+                  const date = new Date(value)
+                  setValue('completionDate', isNaN(date.getTime()) ? null : date)
+                }
+              }}
+              className="[&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+              lang="zh-TW"
             />
           </div>
 

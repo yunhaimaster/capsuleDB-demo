@@ -351,7 +351,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     dateTo: e.target.value ? new Date(e.target.value) : undefined 
                   })}
                   placeholder="選擇完工日期"
-                  className="h-10"
+                  className="h-10 [&::-webkit-calendar-picker-indicator]:opacity-100 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  lang="zh-TW"
                 />
               </div>
               <div className="space-y-1">
