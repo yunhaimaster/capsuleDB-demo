@@ -61,7 +61,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       capsuleSize: initialData?.capsuleSize || null,
       capsuleType: initialData?.capsuleType || null,
       createdBy: initialData?.createdBy || '系統',
-      ingredients: initialData?.ingredients?.length > 0 ? initialData.ingredients : [
+      ingredients: (initialData?.ingredients && initialData.ingredients.length > 0) ? initialData.ingredients : [
         { materialName: '', unitContentMg: 0 }
       ]
     }
