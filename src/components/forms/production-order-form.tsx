@@ -54,7 +54,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       customerName: initialData?.customerName || '',
       productName: initialData?.productName || '未命名產品',
       productionQuantity: initialData?.productionQuantity || 1,
-      completionDate: initialData?.completionDate || null,
+      completionDate: initialData?.completionDate 
+        ? (typeof initialData.completionDate === 'string' 
+            ? new Date(initialData.completionDate) 
+            : initialData.completionDate)
+        : null,
       processIssues: initialData?.processIssues || '',
       qualityNotes: initialData?.qualityNotes || '',
       capsuleColor: initialData?.capsuleColor || '',
@@ -337,16 +341,20 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="completionDate">完工日期</Label>
-            <Input
-              id="completionDate"
-              type="date"
-              {...register('completionDate', { 
-                setValueAs: (value) => {
-                  if (!value || value === '') return null
-                  const date = new Date(value)
-                  return isNaN(date.getTime()) ? null : date
-                }
-              })}
+            <Controller
+              name="completionDate"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="completionDate"
+                  type="date"
+                  value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    field.onChange(value ? new Date(value) : null)
+                  }}
+                />
+              )}
             />
           </div>
 
