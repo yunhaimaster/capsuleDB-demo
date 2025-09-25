@@ -388,6 +388,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           {...register(`ingredients.${index}.materialName`)}
                           placeholder="原料品名"
                           className="flex-1"
+                          disabled={isSubmitting}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -471,6 +472,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           {...register(`ingredients.${index}.materialName`)}
                           placeholder="請輸入原料品名"
                           className="flex-1"
+                          disabled={isSubmitting}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -488,13 +490,14 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     {/* 單粒含量 */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
-                      <Input
-                        type="number"
-                        step="0.00001"
-                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
-                        placeholder="0.00000"
-                        className="w-full"
-                      />
+                        <Input
+                          type="number"
+                          step="0.00001"
+                          {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
+                          placeholder="0.00000"
+                          className="w-full"
+                          disabled={isSubmitting}
+                        />
                       {errors.ingredients?.[index]?.unitContentMg && (
                         <p className="text-sm text-destructive">
                           {errors.ingredients[index]?.unitContentMg?.message}
