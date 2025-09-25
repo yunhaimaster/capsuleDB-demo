@@ -72,20 +72,21 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     name: 'ingredients'
   })
 
-  const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
-    // 獲取當前的原料數據
-    const currentIngredients = watch('ingredients')
-    
-    // 如果當前只有一個空的原料項目，替換它
-    if (fields.length === 1 && currentIngredients[0] && 
-        (!currentIngredients[0].materialName || currentIngredients[0].materialName.trim() === '') && 
-        currentIngredients[0].unitContentMg === 0) {
-      replace(ingredients)
-    } else {
-      // 否則添加到現有原料後面
-      ingredients.forEach(ingredient => append(ingredient))
-    }
-  }
+  // 暫時移除批量導入功能以調試表單編輯問題
+  // const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
+  //   // 獲取當前的原料數據
+  //   const currentIngredients = watch('ingredients')
+  //   
+  //   // 如果當前只有一個空的原料項目，替換它
+  //   if (fields.length === 1 && currentIngredients[0] && 
+  //       (!currentIngredients[0].materialName || currentIngredients[0].materialName.trim() === '') && 
+  //       currentIngredients[0].unitContentMg === 0) {
+  //     replace(ingredients)
+  //   } else {
+  //     // 否則添加到現有原料後面
+  //     ingredients.forEach(ingredient => append(ingredient))
+  //   }
+  // }
 
   const watchedIngredients = watch('ingredients')
   const watchedQuantity = watch('productionQuantity')
