@@ -604,6 +604,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                 <DialogTitle>生產記錄詳情</DialogTitle>
                               </DialogHeader>
                               <div className="space-y-4">
+                                {/* AI 助手按鈕 */}
+                                <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0">
+                                  <div className="w-full sm:w-auto flex justify-center">
+                                    <OrderAIAssistant order={order} />
+                                  </div>
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div>
                                     <Label className="text-sm font-medium">客戶名稱</Label>
