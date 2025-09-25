@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { productionOrderSchema, type ProductionOrderFormData } from '@/lib/validations'
 import { Button } from '@/components/ui/button'
@@ -385,11 +385,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   <TableRow key={field.id}>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Input
-                          {...register(`ingredients.${index}.materialName`)}
-                          placeholder="原料品名"
-                          className="flex-1"
-                          autoComplete="off"
+                        <Controller
+                          name={`ingredients.${index}.materialName`}
+                          control={control}
+                          defaultValue=""
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              placeholder="原料品名"
+                              className="flex-1"
+                              autoComplete="off"
+                            />
+                          )}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -469,11 +476,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">原料品名 *</Label>
                       <div className="flex gap-2">
-                        <Input
-                          {...register(`ingredients.${index}.materialName`)}
-                          placeholder="請輸入原料品名"
-                          className="flex-1"
-                          autoComplete="off"
+                        <Controller
+                          name={`ingredients.${index}.materialName`}
+                          control={control}
+                          defaultValue=""
+                          render={({ field }) => (
+                            <Input
+                              {...field}
+                              placeholder="請輸入原料品名"
+                              className="flex-1"
+                              autoComplete="off"
+                            />
+                          )}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -491,13 +505,21 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     {/* 單粒含量 */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
-                      <Input
-                        type="number"
-                        step="0.00001"
-                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
-                        placeholder="0.00000"
-                        className="w-full"
-                        autoComplete="off"
+                      <Controller
+                        name={`ingredients.${index}.unitContentMg`}
+                        control={control}
+                        defaultValue={0}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            type="number"
+                            step="0.00001"
+                            placeholder="0.00000"
+                            className="w-full"
+                            autoComplete="off"
+                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          />
+                        )}
                       />
                       {errors.ingredients?.[index]?.unitContentMg && (
                         <p className="text-sm text-destructive">
