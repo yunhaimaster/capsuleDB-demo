@@ -116,7 +116,7 @@ ${JSON.stringify(orders, null, 2)}
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4o-mini',
+        model: 'openai/gpt-4.1-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -182,7 +182,7 @@ ${JSON.stringify(orders, null, 2)}
           'X-Title': 'EasyPack AI Assistant'
         },
         body: JSON.stringify({
-          model: 'openai/gpt-4o-mini',
+          model: 'openai/gpt-4.1-mini',
           messages: [
             { 
               role: 'system', 
