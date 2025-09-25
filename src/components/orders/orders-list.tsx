@@ -33,7 +33,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     isCompleted: undefined,
     page: 1,
     limit: 10,
-    sortBy: 'createdAt',
+    sortBy: 'completionDate',
     sortOrder: 'desc'
   })
   const [showFilters, setShowFilters] = useState(false)
@@ -326,7 +326,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   isCompleted: undefined,
                   page: 1,
                   limit: 10,
-                  sortBy: 'createdAt',
+                  sortBy: 'completionDate',
                   sortOrder: 'desc'
                 })
                 // 重置聯動選項

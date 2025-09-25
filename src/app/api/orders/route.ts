@@ -103,20 +103,48 @@ export async function GET(request: NextRequest) {
 
     const skip = (validatedFilters.page - 1) * validatedFilters.limit
     
-    const [orders, total] = await Promise.all([
+    // 自定義排序邏輯：未完工的在前，已完工的按日期排序
+    const [allOrders, total] = await Promise.all([
       prisma.productionOrder.findMany({
         where,
         include: {
           ingredients: true
-        },
-        orderBy: {
-          [validatedFilters.sortBy]: validatedFilters.sortOrder
-        },
-        skip,
-        take: validatedFilters.limit
+        }
       }),
       prisma.productionOrder.count({ where })
     ])
+
+    // 應用自定義排序
+    const sortedOrders = allOrders.sort((a, b) => {
+      // 未完工的訂單排在前面
+      const aCompleted = a.completionDate !== null
+      const bCompleted = b.completionDate !== null
+      
+      if (aCompleted !== bCompleted) {
+        return aCompleted ? 1 : -1 // 未完工的在前
+      }
+      
+      // 如果都是未完工或都是已完工，按指定字段排序
+      if (validatedFilters.sortBy === 'createdAt') {
+        const aDate = new Date(a.createdAt)
+        const bDate = new Date(b.createdAt)
+        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
+      } else if (validatedFilters.sortBy === 'completionDate') {
+        const aDate = a.completionDate ? new Date(a.completionDate) : new Date(0)
+        const bDate = b.completionDate ? new Date(b.completionDate) : new Date(0)
+        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
+      } else {
+        // 其他字段的排序
+        const aValue = (a as any)[validatedFilters.sortBy]
+        const bValue = (b as any)[validatedFilters.sortBy]
+        if (aValue < bValue) return validatedFilters.sortOrder === 'asc' ? -1 : 1
+        if (aValue > bValue) return validatedFilters.sortOrder === 'asc' ? 1 : -1
+        return 0
+      }
+    })
+
+    // 應用分頁
+    const orders = sortedOrders.slice(skip, skip + validatedFilters.limit)
 
     // 確保日期正確序列化
     const serializedOrders = orders.map(order => ({
