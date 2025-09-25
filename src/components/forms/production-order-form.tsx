@@ -26,6 +26,9 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   const [showCalculations, setShowCalculations] = useState(false)
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
+  // 調試：檢查 isSubmitting 狀態
+  console.log('isSubmitting state:', isSubmitting)
+
   // 處理產品名字的智能預填
   const handleProductNameFocus = () => {
     if (!hasStartedTyping && watch('productName') === '未命名產品') {
@@ -389,7 +392,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           {...register(`ingredients.${index}.materialName`)}
                           placeholder="原料品名"
                           className="flex-1"
-                          disabled={isSubmitting}
                           autoComplete="off"
                         />
                         <FieldTranslator
@@ -474,7 +476,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           {...register(`ingredients.${index}.materialName`)}
                           placeholder="請輸入原料品名"
                           className="flex-1"
-                          disabled={isSubmitting}
                           autoComplete="off"
                         />
                         <FieldTranslator
@@ -499,7 +500,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                         {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
                         placeholder="0.00000"
                         className="w-full"
-                        disabled={isSubmitting}
                         autoComplete="off"
                       />
                       {errors.ingredients?.[index]?.unitContentMg && (
