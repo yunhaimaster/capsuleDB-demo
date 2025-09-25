@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
+import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -138,6 +139,29 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       alert('配方已複製到剪貼簿')
     } catch (error) {
       console.error('Failed to copy:', error)
+    }
+  }
+
+  const handleSmartImport = (importedIngredients: any[]) => {
+    // 清空現有原料
+    while (fields.length > 0) {
+      remove(0)
+    }
+    
+    // 添加導入的原料
+    importedIngredients.forEach((ingredient) => {
+      append({
+        materialName: ingredient.materialName,
+        unitContentMg: ingredient.unitContentMg
+      })
+    })
+    
+    // 如果沒有導入任何原料，至少保留一個空行
+    if (importedIngredients.length === 0) {
+      append({
+        materialName: '',
+        unitContentMg: 0
+      })
     }
   }
 
@@ -360,6 +384,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 <Copy className="mr-2 h-4 w-4" />
                 複製配方
               </Button>
+              <SmartRecipeImport 
+                onImport={handleSmartImport}
+                disabled={isSubmitting}
+              />
             </div>
           </div>
         </CardHeader>
