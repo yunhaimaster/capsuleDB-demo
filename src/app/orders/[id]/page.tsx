@@ -40,7 +40,7 @@ export default function OrderDetailPage() {
       const data = await response.json()
       setOrder(data)
     } catch (error) {
-      console.error('Error fetching order:', error)
+      console.error('載入訂單錯誤:', error)
       setError('載入訂單失敗')
     } finally {
       setLoading(false)

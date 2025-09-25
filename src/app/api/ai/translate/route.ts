@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
     if (!OPENROUTER_API_KEY) {
-      console.error('OpenRouter API key not configured')
+      console.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
         { error: '翻譯服務暫時無法使用，請聯繫 Victor' },
         { status: 500 }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenRouter API error:', errorText)
+      console.error('OpenRouter API 錯誤:', errorText)
       throw new Error('翻譯服務暫時無法使用')
     }
 
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Translation error:', error)
+    console.error('翻譯錯誤:', error)
     return NextResponse.json(
       { error: '翻譯失敗，請稍後再試' },
       { status: 500 }

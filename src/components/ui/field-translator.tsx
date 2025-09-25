@@ -45,7 +45,7 @@ export function FieldTranslator({ value, onTranslate, className, disabled }: Fie
         throw new Error(data.error || '翻譯失敗')
       }
     } catch (error) {
-      console.error('Translation error:', error)
+      console.error('翻譯錯誤:', error)
       alert('翻譯失敗，請稍後再試')
     } finally {
       setIsTranslating(false)

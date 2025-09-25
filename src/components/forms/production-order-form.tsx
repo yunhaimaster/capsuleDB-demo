@@ -82,7 +82,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   )
 
   // 計算批次總重量
-  const batchTotalWeight = unitTotalWeight * (watchedQuantity || 1)
+  const batchTotalWeight = unitTotalWeight * (watchedQuantity || 1) (watchedQuantity || 1)
 
   // 計算值不需要設置到表單中，它們會在提交時計算
 

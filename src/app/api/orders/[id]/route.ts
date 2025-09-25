@@ -31,9 +31,9 @@ export async function GET(
 
     return NextResponse.json(serializedOrder)
   } catch (error) {
-    console.error('Error fetching order:', error)
+    console.error('載入訂單錯誤:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch order' },
+      { error: '載入訂單失敗' },
       { status: 500 }
     )
   }
@@ -91,15 +91,15 @@ export async function PUT(
 
     return NextResponse.json(serializedOrder)
   } catch (error) {
-    console.error('Error updating order:', error)
+    console.error('更新訂單錯誤:', error)
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.message },
+        { error: '驗證失敗', details: error.message },
         { status: 400 }
       )
     }
     return NextResponse.json(
-      { error: 'Failed to update order' },
+      { error: '更新訂單失敗' },
       { status: 500 }
     )
   }
@@ -114,11 +114,11 @@ export async function DELETE(
       where: { id: params.id }
     })
 
-    return NextResponse.json({ message: 'Order deleted successfully' })
+    return NextResponse.json({ message: '訂單刪除成功' })
   } catch (error) {
-    console.error('Error deleting order:', error)
+    console.error('刪除訂單錯誤:', error)
     return NextResponse.json(
-      { error: 'Failed to delete order' },
+      { error: '刪除訂單失敗' },
       { status: 500 }
     )
   }

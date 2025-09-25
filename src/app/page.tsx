@@ -31,7 +31,7 @@ export default function HomePage() {
         setRecentOrders(data.orders || [])
       }
     } catch (error) {
-      console.error('Error fetching recent orders:', error)
+      console.error('載入最近訂單錯誤:', error)
     } finally {
       setLoading(false)
     }
@@ -43,12 +43,12 @@ export default function HomePage() {
       const response = await fetch('/api/orders?limit=1000')
       if (response.ok) {
         const data = await response.json()
-        console.log('All orders fetched for AI:', data.orders?.length || 0)
-        console.log('Incomplete orders:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
+        console.log('為 AI 載入的所有訂單:', data.orders?.length || 0)
+        console.log('未完工訂單:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
         setAllOrders(data.orders || [])
       }
     } catch (error) {
-      console.error('Error fetching all orders:', error)
+      console.error('載入所有訂單錯誤:', error)
     }
   }
 

@@ -136,9 +136,9 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error fetching orders:', error)
+    console.error('載入訂單錯誤:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch orders' },
+      { error: '載入訂單失敗' },
       { status: 500 }
     )
   }
@@ -203,24 +203,24 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(serializedOrder, { status: 201 })
   } catch (error) {
-    console.error('Error creating order:', error)
-    console.error('Error details:', {
-      name: error instanceof Error ? error.name : 'Unknown',
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : 'No stack trace'
+    console.error('創建訂單錯誤:', error)
+    console.error('錯誤詳情:', {
+      name: error instanceof Error ? error.name : '未知',
+      message: error instanceof Error ? error.message : '未知錯誤',
+      stack: error instanceof Error ? error.stack : '無堆疊追蹤'
     })
     
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.message },
+        { error: '驗證失敗', details: error.message },
         { status: 400 }
       )
     }
     
     return NextResponse.json(
       { 
-        error: 'Failed to create order',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        error: '創建訂單失敗',
+        details: error instanceof Error ? error.message : '未知錯誤'
       },
       { status: 500 }
     )

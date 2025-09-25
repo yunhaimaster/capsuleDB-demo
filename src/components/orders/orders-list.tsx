@@ -67,7 +67,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         setFilteredCapsuleTypeOptions(data.capsuleTypes || [])
       }
     } catch (error) {
-      console.error('Error fetching dropdown options:', error)
+      console.error('載入下拉選項錯誤:', error)
     }
   }
 
@@ -100,7 +100,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         }
       }
     } catch (error) {
-      console.error('Error fetching filtered options:', error)
+      console.error('載入篩選選項錯誤:', error)
     }
   }
 
@@ -115,13 +115,13 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       })
 
       const response = await fetch(`/api/orders?${params}`)
-      if (!response.ok) throw new Error('Failed to fetch orders')
+      if (!response.ok) throw new Error('載入訂單失敗')
       
       const data = await response.json()
       setOrders(data.orders)
       setPagination(data.pagination)
     } catch (error) {
-      console.error('Error fetching orders:', error)
+      console.error('載入訂單錯誤:', error)
     } finally {
       setLoading(false)
     }
@@ -163,12 +163,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         method: 'DELETE'
       })
       
-      if (!response.ok) throw new Error('Failed to delete order')
+      if (!response.ok) throw new Error('刪除訂單失敗')
       
       // 重新載入列表
       fetchOrders(filters)
     } catch (error) {
-      console.error('Error deleting order:', error)
+      console.error('刪除訂單錯誤:', error)
       alert('刪除失敗，請重試')
     }
   }

@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
     if (!OPENROUTER_API_KEY) {
-      console.error('OpenRouter API key not configured')
+      console.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
         { error: 'AI 服務暫時無法使用，請聯繫 Victor' },
         { status: 500 }
@@ -128,23 +128,23 @@ ${JSON.stringify(orders, null, 2)}
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenRouter API error:', errorText)
-      throw new Error('OpenRouter API request failed')
+      console.error('OpenRouter API 錯誤:', errorText)
+      throw new Error('OpenRouter API 請求失敗')
     }
 
     const data = await response.json()
-    console.log('API Response:', JSON.stringify(data, null, 2))
+    console.log('API 回應:', JSON.stringify(data, null, 2))
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('Invalid API response structure:', data)
-      throw new Error('Invalid API response structure')
+      console.error('API 回應結構無效:', data)
+      throw new Error('API 回應結構無效')
     }
     
     let aiResponse = data.choices[0].message.content
     
     if (!aiResponse || aiResponse.trim() === '') {
-      console.error('Empty AI response')
-      throw new Error('AI returned empty response')
+      console.error('AI 回應為空')
+      throw new Error('AI 回應為空')
     }
     
     // 清理 AI 回答中的異常文字
@@ -163,8 +163,8 @@ ${JSON.stringify(orders, null, 2)}
 
     // 基於 AI 回答動態生成建議問題
     let suggestions = []
-    console.log('Starting suggestions generation for message:', message)
-    console.log('AI Response:', aiResponse)
+    console.log('開始為訊息生成建議:', message)
+    console.log('AI 回應:', aiResponse)
     
     // 嘗試生成建議問題，最多重試2次
     let retryCount = 0
@@ -172,7 +172,7 @@ ${JSON.stringify(orders, null, 2)}
     
     while (retryCount < maxRetries && suggestions.length === 0) {
       try {
-        console.log(`Attempting suggestions generation, attempt ${retryCount + 1}`)
+        console.log(`嘗試生成建議，第 ${retryCount + 1} 次嘗試`)
         const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
@@ -215,9 +215,9 @@ AI回答：${aiResponse}
 
       if (suggestionsResponse.ok) {
         const suggestionsData = await suggestionsResponse.json()
-        console.log('Suggestions API response:', suggestionsData)
+        console.log('建議 API 回應:', suggestionsData)
         const suggestionsText = suggestionsData.choices[0].message.content
-        console.log('Raw suggestions text:', suggestionsText)
+        console.log('原始建議文字:', suggestionsText)
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
@@ -252,16 +252,16 @@ AI回答：${aiResponse}
             .filter((s: string) => s.length > 5 && !s.includes('<|'))
             .slice(0, 4)
         }
-        console.log('Dynamic suggestions generated:', suggestions)
+        console.log('動態建議已生成:', suggestions)
         break // 成功生成建議，跳出重試循環
       } else {
-        console.error('Suggestions API failed:', suggestionsResponse.status)
+        console.error('建議 API 失敗:', suggestionsResponse.status)
         const errorText = await suggestionsResponse.text()
-        console.error('Suggestions API error response:', errorText)
+        console.error('建議 API 錯誤回應:', errorText)
         retryCount++
         if (retryCount >= maxRetries) {
           // 如果重試次數用完，提供默認建議
-          console.log('Using fallback suggestions due to API failures')
+          console.log('由於 API 失敗，使用備用建議')
           suggestions = [
             '這個配方的膠囊灌裝精度如何控制？',
             '膠囊規格選擇有什麼建議？',
@@ -271,11 +271,11 @@ AI回答：${aiResponse}
         }
       }
       } catch (error) {
-        console.error('Error generating dynamic suggestions:', error)
+        console.error('生成動態建議時發生錯誤:', error)
         retryCount++
         if (retryCount >= maxRetries) {
           // 如果重試次數用完，提供默認建議
-          console.log('Using fallback suggestions due to API failures')
+          console.log('由於 API 失敗，使用備用建議')
           suggestions = [
             '這個配方的膠囊灌裝精度如何控制？',
             '膠囊規格選擇有什麼建議？',
@@ -303,7 +303,7 @@ AI回答：${aiResponse}
     })
 
   } catch (error) {
-    console.error('AI Chat error:', error)
+    console.error('AI 聊天錯誤:', error)
     return NextResponse.json(
       { error: 'AI 助手暫時無法回應，請稍後再試' },
       { status: 500 }
