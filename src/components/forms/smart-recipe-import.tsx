@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Upload, FileText, Image, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
+import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 
 interface ParsedIngredient {
   materialName: string
@@ -190,7 +191,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">解析結果</CardTitle>
+                  <div className="flex items-center gap-3">
+                    <CardTitle className="text-lg">解析結果</CardTitle>
+                    <AIPoweredBadge variant="minimal" />
+                  </div>
                   <div className="flex items-center gap-2">
                     <Badge className={getConfidenceColor(confidence)}>
                       信心度: {confidence}

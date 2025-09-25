@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download, Settings, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
+import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 
 interface SmartAIAssistantProps {
   orders?: any[]
@@ -384,6 +385,11 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                       <Send className="w-4 h-4" />
                     )}
                   </Button>
+                </div>
+                
+                {/* AI 標識 */}
+                <div className="flex justify-center mt-3">
+                  <AIPoweredBadge variant="compact" />
                 </div>
                 
                 {/* 功能按鈕 */}

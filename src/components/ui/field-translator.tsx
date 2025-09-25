@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Loader2, Languages } from 'lucide-react'
+import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 
 interface FieldTranslatorProps {
   value: string
@@ -53,23 +54,26 @@ export function FieldTranslator({ value, onTranslate, className, disabled }: Fie
   }
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      size="sm"
-      onClick={handleTranslate}
-      disabled={isTranslating || disabled || !value.trim()}
-      className={className}
-      title="使用 AI 將簡體中文轉換為繁體中文"
-    >
-      {isTranslating ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Languages className="h-4 w-4" />
-      )}
-      <span className="ml-2">
-        {isTranslating ? '翻譯中...' : '繁轉'}
-      </span>
-    </Button>
+    <div className="flex items-center gap-2">
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={handleTranslate}
+        disabled={isTranslating || disabled || !value.trim()}
+        className={className}
+        title="使用 AI 將簡體中文轉換為繁體中文"
+      >
+        {isTranslating ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Languages className="h-4 w-4" />
+        )}
+        <span className="ml-2">
+          {isTranslating ? '翻譯中...' : '繁轉'}
+        </span>
+      </Button>
+      <AIPoweredBadge variant="minimal" />
+    </div>
   )
 }

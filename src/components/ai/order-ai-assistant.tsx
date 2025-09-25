@@ -8,6 +8,7 @@ import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
+import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 
 interface OrderAIAssistantProps {
   order: ProductionOrder
@@ -317,6 +318,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
               >
                 <Send className="h-4 w-4" />
               </Button>
+            </div>
+            
+            {/* AI 標識 */}
+            <div className="flex justify-center mt-3">
+              <AIPoweredBadge variant="compact" />
             </div>
           </>
         ) : (
