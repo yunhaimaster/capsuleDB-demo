@@ -71,6 +71,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     name: 'ingredients'
   })
 
+  // 調試：檢查表單狀態
+  console.log('Form state - isSubmitting:', isSubmitting)
+  console.log('Form state - fields count:', fields.length)
+  console.log('Form state - fields:', fields)
+
   const watchedIngredients = watch('ingredients')
   const watchedQuantity = watch('productionQuantity')
 
@@ -389,6 +394,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           placeholder="原料品名"
                           className="flex-1"
                           disabled={isSubmitting}
+                          autoComplete="off"
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -473,6 +479,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           placeholder="請輸入原料品名"
                           className="flex-1"
                           disabled={isSubmitting}
+                          autoComplete="off"
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -497,6 +504,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           placeholder="0.00000"
                           className="w-full"
                           disabled={isSubmitting}
+                          autoComplete="off"
                         />
                       {errors.ingredients?.[index]?.unitContentMg && (
                         <p className="text-sm text-destructive">
