@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
-import { BulkIngredientsImport } from '@/components/forms/bulk-ingredients-import'
+// import { BulkIngredientsImport } from '@/components/forms/bulk-ingredients-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -550,7 +550,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <Plus className="mr-2 h-4 w-4" />
               新增原料
             </Button>
-            <BulkIngredientsImport onImport={handleBulkImport} />
+            {/* <BulkIngredientsImport onImport={handleBulkImport} /> */}
           </div>
 
           {errors.ingredients && (
