@@ -144,39 +144,46 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
   const handleSmartImport = (importedIngredients: any[]) => {
     try {
-      // 清空現有原料
-      while (fields.length > 0) {
-        remove(0)
+      console.log('開始導入原料:', importedIngredients)
+      
+      // 驗證導入的原料數據
+      if (!Array.isArray(importedIngredients)) {
+        throw new Error('導入數據格式不正確')
       }
       
-      // 添加導入的原料
-      if (importedIngredients.length > 0) {
-        importedIngredients.forEach((ingredient) => {
-          append({
-            materialName: ingredient.materialName || '',
-            unitContentMg: Number(ingredient.unitContentMg) || 0
-          })
-        })
-      } else {
-        // 如果沒有導入任何原料，至少保留一個空行
-        append({
-          materialName: '',
-          unitContentMg: 0
-        })
-      }
+      // 準備新的原料數據
+      const newIngredients = importedIngredients.length > 0 
+        ? importedIngredients
+            .map((ing, index) => {
+              const materialName = String(ing.materialName || '').trim()
+              const unitContentMg = Number(ing.unitContentMg) || 0
+              
+              if (!materialName) {
+                console.warn(`第 ${index + 1} 個原料名稱為空，跳過`)
+                return null
+              }
+              
+              return {
+                materialName,
+                unitContentMg: Math.max(0, unitContentMg)
+              }
+            })
+            .filter((item): item is { materialName: string; unitContentMg: number } => item !== null)
+        : [{ materialName: '', unitContentMg: 0 }]
       
-      // 觸發表單重新計算
-      setTimeout(() => {
-        // 使用 setValue 觸發表單更新
-        setValue('ingredients', importedIngredients.length > 0 ? importedIngredients.map(ing => ({
-          materialName: ing.materialName || '',
-          unitContentMg: Number(ing.unitContentMg) || 0
-        })) : [{ materialName: '', unitContentMg: 0 }])
-      }, 50)
+      console.log('處理後的原料:', newIngredients)
+      
+      // 使用 setValue 設置表單值，觸發重新渲染
+      setValue('ingredients', newIngredients, { 
+        shouldValidate: true,
+        shouldDirty: true 
+      })
+      
+      console.log('導入完成，表單已更新')
       
     } catch (error) {
       console.error('導入原料時發生錯誤:', error)
-      alert('導入失敗，請重試')
+      alert(`導入失敗：${error instanceof Error ? error.message : '未知錯誤'}`)
     }
   }
 

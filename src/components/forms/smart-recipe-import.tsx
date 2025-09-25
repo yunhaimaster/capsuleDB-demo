@@ -78,12 +78,22 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
   const handleConfirmImport = () => {
     if (parsedIngredients.length > 0) {
-      onImport(parsedIngredients)
-      setIsOpen(false)
-      setImportText('')
-      setParsedIngredients([])
-      setParseError('')
-      setParseSummary('')
+      try {
+        console.log('確認導入原料:', parsedIngredients)
+        onImport(parsedIngredients)
+        
+        // 延遲關閉對話框，確保導入完成
+        setTimeout(() => {
+          setIsOpen(false)
+          setImportText('')
+          setParsedIngredients([])
+          setParseError('')
+          setParseSummary('')
+        }, 100)
+      } catch (error) {
+        console.error('導入確認時發生錯誤:', error)
+        setParseError('導入失敗，請重試')
+      }
     }
   }
 
