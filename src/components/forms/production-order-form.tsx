@@ -26,12 +26,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   const [showCalculations, setShowCalculations] = useState(false)
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
-  // 調試：檢查表單狀態
-  console.log('isSubmitting state:', isSubmitting)
-  console.log('fields array:', fields)
-  console.log('fields length:', fields.length)
-  console.log('watchedIngredients:', watchedIngredients)
-
   // 處理產品名字的智能預填
   const handleProductNameFocus = () => {
     if (!hasStartedTyping && watch('productName') === '未命名產品') {
@@ -77,8 +71,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     name: 'ingredients'
   })
 
-
   const watchedIngredients = watch('ingredients')
+
+  // 調試：檢查表單狀態
+  console.log('isSubmitting state:', isSubmitting)
+  console.log('fields array:', fields)
+  console.log('fields length:', fields.length)
+  console.log('watchedIngredients:', watchedIngredients)
   const watchedQuantity = watch('productionQuantity')
 
   // 計算單粒總重量
