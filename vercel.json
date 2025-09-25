@@ -1,9 +1,0 @@
-{
-  "buildCommand": "prisma generate && prisma db push --accept-data-loss && next build",
-  "installCommand": "npm install",
-  "framework": "nextjs",
-  "env": {
-    "DATABASE_URL": "@database_url",
-    "DIRECT_URL": "@direct_url"
-  }
-}
