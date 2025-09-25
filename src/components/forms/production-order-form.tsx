@@ -26,8 +26,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   const [showCalculations, setShowCalculations] = useState(false)
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
-  // 調試：檢查 isSubmitting 狀態
+  // 調試：檢查表單狀態
   console.log('isSubmitting state:', isSubmitting)
+  console.log('fields array:', fields)
+  console.log('fields length:', fields.length)
+  console.log('watchedIngredients:', watchedIngredients)
 
   // 處理產品名字的智能預填
   const handleProductNameFocus = () => {
@@ -388,11 +391,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   <TableRow key={field.id}>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Input
-                          {...register(`ingredients.${index}.materialName`)}
+                        <input
+                          type="text"
                           placeholder="原料品名"
-                          className="flex-1"
-                          autoComplete="off"
+                          className="flex-1 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                          onChange={(e) => setValue(`ingredients.${index}.materialName`, e.target.value)}
+                          value={watch(`ingredients.${index}.materialName`) || ''}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -472,11 +476,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">原料品名 *</Label>
                       <div className="flex gap-2">
-                        <Input
-                          {...register(`ingredients.${index}.materialName`)}
+                        <input
+                          type="text"
                           placeholder="請輸入原料品名"
-                          className="flex-1"
-                          autoComplete="off"
+                          className="flex-1 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                          onChange={(e) => setValue(`ingredients.${index}.materialName`, e.target.value)}
+                          value={watch(`ingredients.${index}.materialName`) || ''}
                         />
                         <FieldTranslator
                           value={watch(`ingredients.${index}.materialName`) || ''}
@@ -494,13 +499,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                     {/* 單粒含量 */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
-                      <Input
+                      <input
                         type="number"
                         step="0.00001"
-                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
                         placeholder="0.00000"
-                        className="w-full"
-                        autoComplete="off"
+                        className="w-full px-3 py-2 border border-input bg-background rounded-md text-sm"
+                        onChange={(e) => setValue(`ingredients.${index}.unitContentMg`, parseFloat(e.target.value) || 0)}
+                        value={watch(`ingredients.${index}.unitContentMg`) || ''}
                       />
                       {errors.ingredients?.[index]?.unitContentMg && (
                         <p className="text-sm text-destructive">
