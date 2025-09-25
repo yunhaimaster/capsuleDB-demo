@@ -143,25 +143,40 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   }
 
   const handleSmartImport = (importedIngredients: any[]) => {
-    // 清空現有原料
-    while (fields.length > 0) {
-      remove(0)
-    }
-    
-    // 添加導入的原料
-    importedIngredients.forEach((ingredient) => {
-      append({
-        materialName: ingredient.materialName,
-        unitContentMg: ingredient.unitContentMg
-      })
-    })
-    
-    // 如果沒有導入任何原料，至少保留一個空行
-    if (importedIngredients.length === 0) {
-      append({
-        materialName: '',
-        unitContentMg: 0
-      })
+    try {
+      // 清空現有原料
+      while (fields.length > 0) {
+        remove(0)
+      }
+      
+      // 添加導入的原料
+      if (importedIngredients.length > 0) {
+        importedIngredients.forEach((ingredient) => {
+          append({
+            materialName: ingredient.materialName || '',
+            unitContentMg: Number(ingredient.unitContentMg) || 0
+          })
+        })
+      } else {
+        // 如果沒有導入任何原料，至少保留一個空行
+        append({
+          materialName: '',
+          unitContentMg: 0
+        })
+      }
+      
+      // 觸發表單重新計算
+      setTimeout(() => {
+        // 使用 setValue 觸發表單更新
+        setValue('ingredients', importedIngredients.length > 0 ? importedIngredients.map(ing => ({
+          materialName: ing.materialName || '',
+          unitContentMg: Number(ing.unitContentMg) || 0
+        })) : [{ materialName: '', unitContentMg: 0 }])
+      }, 50)
+      
+    } catch (error) {
+      console.error('導入原料時發生錯誤:', error)
+      alert('導入失敗，請重試')
     }
   }
 

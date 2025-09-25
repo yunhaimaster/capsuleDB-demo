@@ -32,8 +32,9 @@ export async function POST(request: NextRequest) {
 1. 識別所有原料名稱（中文或英文）
 2. 提取每個原料的含量（支援 mg、g、kg 等單位）
 3. 將所有含量統一轉換為 mg
-4. 忽略非原料內容（如膠囊殼、包裝材料等）
-5. 如果含量不明確，請標記為需要確認
+4. 如果沒有指定單位，默認為 mg（例如：25 = 25mg，不是 25000mg）
+5. 忽略非原料內容（如膠囊殼、包裝材料等）
+6. 如果含量不明確，請標記為需要確認
 
 請以 JSON 格式返回結果：
 {
@@ -49,10 +50,19 @@ export async function POST(request: NextRequest) {
   "confidence": "高/中/低"
 }
 
+重要單位轉換規則：
+- 沒有單位時默認為 mg（例如：25 = 25mg）
+- 1g = 1000mg
+- 1kg = 1000000mg
+- 1mcg = 0.001mg
+- 1IU 維生素D3 ≈ 0.025mcg ≈ 0.000025mg
+- 1IU 維生素E ≈ 0.67mg
+
 注意：
-- unitContentMg 必須是數字
+- unitContentMg 必須是數字（以 mg 為單位）
 - 如果含量不明確，設置 needsConfirmation 為 true
-- 只返回原料，不包括膠囊殼等輔料`
+- 只返回原料，不包括膠囊殼等輔料
+- 確保所有數值都是合理的 mg 單位`
 
     const userPrompt = image 
       ? `請解析這張圖片中的配方信息：${image}`
