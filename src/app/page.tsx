@@ -279,19 +279,19 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.4 - 2024年9月23日</h4>
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.5 - 2024年9月25日</h4>
                   <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>系統完善</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🐛 <strong>Bug 修復與繁體中文化</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• Vercel 部署優化：正確連結到 easypack-capsule-management-v1 專案</li>
-                    <li>• AI 助手介面統一：Smart AI 和 Order AI 使用相同的卡片式設計</li>
-                    <li>• Order AI 初始問題優化：更新四個初始建議問題</li>
-                    <li>• 文字顯示修復：修復淺色模式下用戶消息文字不清楚的問題</li>
-                    <li>• 響應式設計完善：確保所有介面在電腦和手機上都美觀一致</li>
-                    <li>• 文檔完善：所有文檔反映最新版本狀態</li>
-                    <li>• 使用 OpenAI GPT-4o Mini 模型提供智能分析</li>
+                    <li>• 修復表單計算和 API 路由中的語法錯誤</li>
+                    <li>• 完全繁體中文化：統一所有錯誤信息和調試日誌</li>
+                    <li>• 增強錯誤處理和用戶體驗</li>
+                    <li>• 提升代碼品質，通過 linting 檢查</li>
+                    <li>• 使用穩定的 OpenAI GPT-4o Mini 模型</li>
+                    <li>• 確保整個網站使用統一的繁體中文</li>
+                    <li>• 改進 API 錯誤回應和處理邏輯</li>
                   </ul>
                 </div>
               </div>
