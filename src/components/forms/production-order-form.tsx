@@ -72,6 +72,14 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     name: 'ingredients'
   })
 
+  // 處理編輯模式的原料數據初始化
+  useEffect(() => {
+    if (initialData?.ingredients && initialData.ingredients.length > 0) {
+      // 如果初始數據中有原料，替換當前的原料列表
+      replace(initialData.ingredients)
+    }
+  }, [initialData?.ingredients, replace])
+
   const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
     // 如果當前只有一個空的原料項目，替換它
     if (fields.length === 1 && !fields[0].materialName && fields[0].unitContentMg === 0) {
