@@ -9,6 +9,7 @@ import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquar
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 interface OrderAIAssistantProps {
   order: ProductionOrder
@@ -148,6 +149,9 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             </div>
           </DialogTitle>
         </DialogHeader>
+        
+        {/* AI 免責聲明 */}
+        <AIDisclaimer variant="compact" className="mb-4" />
         
         {!isMinimized ? (
           <>

@@ -9,6 +9,7 @@ import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download, Settings, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 interface SmartAIAssistantProps {
   orders?: any[]
@@ -118,6 +119,9 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
             </Button>
           </div>
         </DialogHeader>
+
+        {/* AI 免責聲明 */}
+        <AIDisclaimer variant="compact" className="mb-4" />
 
         {isMinimized ? (
           <div className="p-3 sm:p-4 text-center">
