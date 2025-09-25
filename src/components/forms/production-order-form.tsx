@@ -12,7 +12,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
-// import { BulkIngredientsImport } from '@/components/forms/bulk-ingredients-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -61,32 +60,16 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       capsuleSize: initialData?.capsuleSize || null,
       capsuleType: initialData?.capsuleType || null,
       createdBy: initialData?.createdBy || '系統',
-      ingredients: (initialData?.ingredients && initialData.ingredients.length > 0) ? initialData.ingredients : [
+      ingredients: initialData?.ingredients || [
         { materialName: '', unitContentMg: 0 }
       ]
     }
   })
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'ingredients'
   })
-
-  // 暫時移除批量導入功能以調試表單編輯問題
-  // const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
-  //   // 獲取當前的原料數據
-  //   const currentIngredients = watch('ingredients')
-  //   
-  //   // 如果當前只有一個空的原料項目，替換它
-  //   if (fields.length === 1 && currentIngredients[0] && 
-  //       (!currentIngredients[0].materialName || currentIngredients[0].materialName.trim() === '') && 
-  //       currentIngredients[0].unitContentMg === 0) {
-  //     replace(ingredients)
-  //   } else {
-  //     // 否則添加到現有原料後面
-  //     ingredients.forEach(ingredient => append(ingredient))
-  //   }
-  // }
 
   const watchedIngredients = watch('ingredients')
   const watchedQuantity = watch('productionQuantity')
@@ -542,7 +525,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             ))}
           </div>
           
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4">
             <Button
               type="button"
               variant="outline"
@@ -551,7 +534,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <Plus className="mr-2 h-4 w-4" />
               新增原料
             </Button>
-            {/* <BulkIngredientsImport onImport={handleBulkImport} /> */}
           </div>
 
           {errors.ingredients && (
