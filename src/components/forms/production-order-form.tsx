@@ -73,8 +73,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   })
 
   const handleBulkImport = (ingredients: { materialName: string; unitContentMg: number }[]) => {
+    // 獲取當前的原料數據
+    const currentIngredients = watch('ingredients')
+    
     // 如果當前只有一個空的原料項目，替換它
-    if (fields.length === 1 && !fields[0].materialName && fields[0].unitContentMg === 0) {
+    if (fields.length === 1 && currentIngredients[0] && 
+        (!currentIngredients[0].materialName || currentIngredients[0].materialName.trim() === '') && 
+        currentIngredients[0].unitContentMg === 0) {
       replace(ingredients)
     } else {
       // 否則添加到現有原料後面
