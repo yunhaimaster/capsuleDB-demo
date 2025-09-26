@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
@@ -24,7 +24,6 @@ interface ProductionOrderFormProps {
 export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showCalculations, setShowCalculations] = useState(false)
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
   // 處理產品名字的智能預填
@@ -129,22 +128,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     }
   }
 
-  const copyRecipeToClipboard = async () => {
-    const recipeText = watchedIngredients
-      .map((ingredient, index) => 
-        `${index + 1}. ${ingredient.materialName}: ${ingredient.unitContentMg}mg`
-      )
-      .join('\n')
-    
-    const fullText = `配方清單\n${recipeText}\n\n單粒總重量: ${unitTotalWeight.toFixed(3)}mg\n批次總重量: ${convertWeight(batchTotalWeight).display}`
-    
-    try {
-      await copyToClipboard(fullText)
-      alert('配方已複製到剪貼簿')
-    } catch (error) {
-      console.error('Failed to copy:', error)
-    }
-  }
 
   const handleSmartImport = (importedIngredients: any[]) => {
     try {
@@ -452,24 +435,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <span className="hidden sm:block">原料配方（每粒規格）</span>
             </CardTitle>
             <div className="flex gap-2 flex-wrap">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowCalculations(!showCalculations)}
-              >
-                <Calculator className="mr-2 h-4 w-4" />
-                {showCalculations ? '隱藏' : '顯示'}計算
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={copyRecipeToClipboard}
-              >
-                <Copy className="mr-2 h-4 w-4" />
-                複製配方
-              </Button>
               <SmartRecipeImport 
                 onImport={handleSmartImport}
                 disabled={isSubmitting}
@@ -485,12 +450,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 <TableRow>
                   <TableHead>原料品名 *</TableHead>
                   <TableHead>單粒含量 (mg) *</TableHead>
-                  {showCalculations && (
-                    <>
-                      <TableHead>批次用量</TableHead>
-                      <TableHead>小計</TableHead>
-                    </>
-                  )}
                   <TableHead className="w-[100px]">操作</TableHead>
                 </TableRow>
               </TableHeader>
@@ -537,16 +496,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                         </p>
                       )}
                     </TableCell>
-                    {showCalculations && (
-                      <>
-                        <TableCell>
-                          {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
-                        </TableCell>
-                        <TableCell>
-                          {convertWeight(field.unitContentMg).display}
-                        </TableCell>
-                      </>
-                    )}
                     <TableCell>
                       <Button
                         type="button"
@@ -642,23 +591,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       )}
                     </div>
 
-                    {/* 計算結果（僅在顯示計算時） */}
-                    {showCalculations && (
-                      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">批次用量</Label>
-                          <p className="text-sm font-medium">
-                            {convertWeight(field.unitContentMg * (watchedQuantity || 1)).display}
-                          </p>
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-600 dark:text-gray-400">單位重量</Label>
-                          <p className="text-sm font-medium">
-                            {convertWeight(field.unitContentMg).display}
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </CardContent>
               </Card>
