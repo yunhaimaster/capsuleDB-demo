@@ -7,6 +7,7 @@ import { AuthProvider } from '@/components/auth/auth-provider'
 import { ProtectedLayout } from '@/components/auth/protected-layout'
 import { LogoutButton } from '@/components/auth/logout-button'
 import { Analytics } from '@vercel/analytics/next'
+import { Logo } from '@/components/ui/logo'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,13 +36,16 @@ export default function RootLayout({
                 <header className="border-b">
                   <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <h1 className="text-lg md:text-2xl font-bold text-primary">
-                          Easy Health 膠囊配方管理系統
-                        </h1>
-                        <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                          Easy Health 內部生產管理
-                        </p>
+                      <div className="flex items-center space-x-3">
+                        <Logo size="lg" variant="icon" className="text-blue-600 dark:text-blue-400" />
+                        <div>
+                          <h1 className="text-lg md:text-2xl font-bold text-primary">
+                            Easy Health 膠囊配方管理系統
+                          </h1>
+                          <p className="text-xs md:text-sm text-muted-foreground mt-1">
+                            Easy Health 內部生產管理
+                          </p>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <ThemeToggle />

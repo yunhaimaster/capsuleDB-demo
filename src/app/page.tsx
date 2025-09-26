@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
+import { Logo } from '@/components/ui/logo'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Plus, FileText, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
@@ -58,10 +59,10 @@ export default function HomePage() {
       {/* Header Section */}
       <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-purple-800/30">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
-          <div className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl mb-2 sm:mb-3 md:mb-4">
-            <span className="text-base sm:text-lg md:text-xl">🏠</span>
+          <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
+            <Logo size="xl" className="text-blue-600 dark:text-blue-400" />
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent leading-tight">
             Easy Health 膠囊配方管理系統
           </h1>
           <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
