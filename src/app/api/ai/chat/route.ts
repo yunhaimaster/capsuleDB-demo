@@ -163,11 +163,13 @@ ${JSON.stringify(orders, null, 2)}
 
     // 基於 AI 回答動態生成建議問題
     let suggestions = []
-    console.log('開始為訊息生成建議:', message)
-    console.log('AI 回應:', aiResponse)
+    console.log('=== 開始生成動態建議 ===')
+    console.log('用戶問題:', message)
+    console.log('AI 回應長度:', aiResponse.length)
+    console.log('AI 回應前100字符:', aiResponse.substring(0, 100))
     
     try {
-      console.log('嘗試生成動態建議')
+      console.log('正在調用建議生成 API...')
       const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
@@ -209,44 +211,43 @@ AI回答：${aiResponse}
         })
       })
 
+      console.log('建議 API 狀態:', suggestionsResponse.status)
+      
       if (suggestionsResponse.ok) {
         const suggestionsData = await suggestionsResponse.json()
-        console.log('建議 API 回應:', suggestionsData)
+        console.log('建議 API 回應:', JSON.stringify(suggestionsData, null, 2))
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
         
-        // 更寬鬆的過濾條件
+        // 簡化過濾條件
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
-            // 基本過濾條件：長度和有害內容
-            return s.length > 5 && 
-                   !s.includes('問題用中文') && 
-                   !s.includes('用中文') &&
+            // 只過濾明顯無效的內容
+            return s.length > 3 && 
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
-                   !s.includes('end_of_sentence') &&
-                   !s.includes('可以查看更多詳細分析嗎') &&
-                   !s.includes('如何深入分析這個問題') &&
-                   !s.includes('有哪些相關的統計數據') &&
-                   !s.includes('如何優化相關流程')
+                   !s.includes('end_of_sentence')
           })
           .slice(0, 4)
         
         console.log('過濾後的建議:', suggestions)
+        console.log('建議數量:', suggestions.length)
         
-        // 如果過濾後少於4個問題，嘗試更寬鬆的條件
+        // 如果過濾後少於4個問題，使用更寬鬆的條件
         if (suggestions.length < 4) {
           console.log('建議不足，使用更寬鬆的過濾條件')
           suggestions = suggestionsText.split('\n')
             .filter((s: string) => s.trim())
             .map((s: string) => s.trim())
-            .filter((s: string) => s.length > 3 && !s.includes('<|'))
+            .filter((s: string) => s.length > 2)
             .slice(0, 4)
+          console.log('寬鬆過濾後的建議:', suggestions)
         }
         
         console.log('最終建議:', suggestions)
+        console.log('最終建議數量:', suggestions.length)
       } else {
         console.error('建議 API 失敗:', suggestionsResponse.status)
         const errorText = await suggestionsResponse.text()
@@ -266,6 +267,10 @@ AI回答：${aiResponse}
         '生產工藝參數如何優化？'
       ]
     }
+
+    console.log('=== 最終返回的建議 ===')
+    console.log('建議:', suggestions)
+    console.log('建議數量:', suggestions.length)
 
     return NextResponse.json({ 
       response: aiResponse,
