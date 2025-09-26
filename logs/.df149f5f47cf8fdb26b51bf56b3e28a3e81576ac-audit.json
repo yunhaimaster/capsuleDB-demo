@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/yunhaimaster/Library/Mobile Documents/com~apple~CloudDocs/Downloads/capsuleDB/logs/.df149f5f47cf8fdb26b51bf56b3e28a3e81576ac-audit.json",
+    "files": [
+        {
+            "date": 1758873940664,
+            "name": "/Users/yunhaimaster/Library/Mobile Documents/com~apple~CloudDocs/Downloads/capsuleDB/logs/mcp-puppeteer-2025-09-26.log",
+            "hash": "e677bb390e77ff9601b111290ada9c3f862d2dbd7edc78cebf83f9d96087cf78"
+        }
+    ],
+    "hashType": "sha256"
+}

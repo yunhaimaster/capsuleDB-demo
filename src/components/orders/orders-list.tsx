@@ -913,16 +913,17 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                           </DialogContent>
                         </Dialog>
                         <Link href={`/orders/${order.id}/edit`}>
-                          <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
+                          <Button variant="outline" size="sm" className="text-xs">
+                            <Edit className="h-3 w-3" />
                           </Button>
                         </Link>
                         <Button
                           variant="destructive"
                           size="sm"
+                          className="text-xs"
                           onClick={() => handleDelete(order.id)}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </TableCell>
