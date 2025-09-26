@@ -284,15 +284,13 @@ export default function HomePage() {
                   <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 模型升級與錯誤處理優化</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 智能助手升級</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 升級 AI 模型至 DeepSeek Chat v3.1，提升回答質量</li>
-                    <li>• 改善錯誤處理：提供重試選項而非要求聯繫技術支援</li>
-                    <li>• 優化 AI 助手用戶體驗：智能重試功能和友善錯誤訊息</li>
-                    <li>• 修復 TypeScript 編譯錯誤，確保部署成功</li>
-                    <li>• 統一所有 AI 相關組件的錯誤處理邏輯</li>
-                    <li>• 更新網站文案：移除 GPT-4 相關引用，反映最新技術</li>
-                    <li>• 增強 AI 助手穩定性與可靠性</li>
+                    <li>• 升級 AI 智能助手，提供更精準的分析和建議</li>
+                    <li>• 改善錯誤處理：提供重試選項，提升用戶體驗</li>
+                    <li>• 優化 AI 助手回答質量，提供更專業的膠囊灌裝建議</li>
+                    <li>• 增強系統穩定性，確保功能正常運作</li>
+                    <li>• 改善用戶介面，提供更友善的操作體驗</li>
                   </ul>
                 </div>
               </div>
@@ -303,9 +301,9 @@ export default function HomePage() {
                   <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🤖 <strong>AI 升級</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🤖 <strong>智能功能升級</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 智能 AI 助手全面升級，支援基於回答內容的動態建議問題</li>
+                    <li>• 智能 AI 助手全面升級，提供更精準的建議問題</li>
                     <li>• 新增響應式設計，完美支援手機與桌面設備</li>
                     <li>• 深色模式與淺色模式切換功能</li>
                     <li>• AI 翻譯功能：簡體中文轉繁體中文</li>

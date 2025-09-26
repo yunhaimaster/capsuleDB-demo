@@ -106,7 +106,7 @@ ${JSON.stringify(orders, null, 2)}
 重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
     }
 
-    // 調用 OpenRouter API
+    // 調用 OpenRouter API - 優化參數以提高精準度
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
@@ -121,8 +121,11 @@ ${JSON.stringify(orders, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 4000,
-        temperature: 0.7
+        max_tokens: 3000, // 減少到3000以提高精準度
+        temperature: 0.3,  // 降低到0.3以提高精準度和一致性
+        top_p: 0.9,       // 添加top_p參數提高精準度
+        frequency_penalty: 0.1, // 減少重複內容
+        presence_penalty: 0.1   // 鼓勵多樣性但保持精準
       })
     })
 
@@ -190,8 +193,9 @@ AI回答：${aiResponse}
 請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。`
             }
           ],
-          max_tokens: 300,
-          temperature: 0.7
+          max_tokens: 200,  // 減少到200提高精準度
+          temperature: 0.5, // 適中的創造性
+          top_p: 0.9       // 提高精準度
         })
       })
 

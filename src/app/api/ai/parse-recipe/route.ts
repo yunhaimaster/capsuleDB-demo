@@ -82,8 +82,11 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        max_tokens: 2000,
-        temperature: 0.3
+        max_tokens: 1500,  // 減少到1500提高精準度
+        temperature: 0.1,  // 降低到0.1提高精準度
+        top_p: 0.9,        // 添加top_p參數
+        frequency_penalty: 0.1, // 減少重複
+        presence_penalty: 0.1   // 鼓勵多樣性
       })
     })
 
@@ -121,44 +124,73 @@ export async function POST(request: NextRequest) {
       // 提取 JSON 部分
       const jsonMatch = aiResponse.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
-        parsedData = JSON.parse(jsonMatch[0])
+        const jsonString = jsonMatch[0]
+        parsedData = JSON.parse(jsonString)
       } else {
         throw new Error('無法找到有效的 JSON 格式')
       }
     } catch (parseError) {
       console.error('JSON 解析錯誤:', parseError)
-      throw new Error('AI 回應格式不正確，請重試')
+      console.error('原始回應:', aiResponse)
+      
+      // 如果 JSON 解析失敗，嘗試手動構建基本結構
+      const lines = aiResponse.split('\n').filter(line => line.trim())
+      const ingredients = []
+      
+      for (const line of lines) {
+        if (line.includes('mg') || line.includes('g') || line.includes('kg')) {
+          // 嘗試提取原料信息
+          const match = line.match(/(.+?)\s*(\d+(?:\.\d+)?)\s*(mg|g|kg)/i)
+          if (match) {
+            const materialName = match[1].trim()
+            let unitContentMg = parseFloat(match[2])
+            const unit = match[3].toLowerCase()
+            
+            // 轉換單位
+            if (unit === 'g') unitContentMg *= 1000
+            if (unit === 'kg') unitContentMg *= 1000000
+            
+            ingredients.push({
+              materialName,
+              unitContentMg,
+              originalText: line.trim(),
+              needsConfirmation: false
+            })
+          }
+        }
+      }
+      
+      parsedData = {
+        ingredients,
+        summary: '手動解析結果，請確認準確性',
+        confidence: '低'
+      }
     }
 
-    // 驗證解析結果
-    if (!parsedData.ingredients || !Array.isArray(parsedData.ingredients)) {
-      throw new Error('解析結果格式不正確')
+    // 驗證和清理數據
+    if (parsedData.ingredients && Array.isArray(parsedData.ingredients)) {
+      parsedData.ingredients = parsedData.ingredients
+        .filter((item: any) => item && typeof item === 'object')
+        .map((item: any) => ({
+          materialName: item.materialName || '未知原料',
+          unitContentMg: typeof item.unitContentMg === 'number' ? item.unitContentMg : 0,
+          originalText: item.originalText || '',
+          needsConfirmation: Boolean(item.needsConfirmation)
+        }))
+        .filter((item: any) => item.materialName !== '未知原料' || item.unitContentMg > 0)
+    } else {
+      parsedData.ingredients = []
     }
-
-    // 驗證每個原料
-    const validatedIngredients = parsedData.ingredients.map((ingredient: any, index: number) => {
-      if (!ingredient.materialName || typeof ingredient.unitContentMg !== 'number') {
-        throw new Error(`第 ${index + 1} 個原料格式不正確`)
-      }
-      return {
-        materialName: ingredient.materialName.trim(),
-        unitContentMg: Math.max(0, ingredient.unitContentMg),
-        originalText: ingredient.originalText || '',
-        needsConfirmation: ingredient.needsConfirmation || false
-      }
-    })
 
     return NextResponse.json({
       success: true,
-      ingredients: validatedIngredients,
-      summary: parsedData.summary || '解析完成',
-      confidence: parsedData.confidence || '中'
+      data: parsedData
     })
 
   } catch (error) {
     console.error('配方解析錯誤:', error)
     return NextResponse.json(
-      { error: '配方解析失敗，請稍後再試' },
+      { error: '配方解析失敗，請檢查輸入格式或稍後再試' },
       { status: 500 }
     )
   }
