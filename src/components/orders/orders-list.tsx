@@ -210,7 +210,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   return (
     <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 搜尋和篩選 */}
-      <Card>
+      <Card className="glass-card-subtle">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -444,7 +444,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               {/* 手機卡片式佈局 */}
               <div className="block md:hidden space-y-4">
                 {orders.map((order) => (
-                  <Card key={order.id} className="card-subtle-3d border-0 shadow-lg">
+                  <Card key={order.id} className="card-subtle-3d glass-card-subtle border-0 shadow-lg">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         {/* 標題行 */}

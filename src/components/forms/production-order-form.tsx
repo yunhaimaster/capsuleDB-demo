@@ -195,7 +195,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     <div className="animated-gradient-bg-subtle min-h-screen">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
-        <Card className="card-subtle-3d">
+        <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-blue-600">📝</span>
@@ -266,7 +266,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 膠囊規格 */}
-        <Card className="card-subtle-3d">
+        <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-purple-600">💊</span>
@@ -332,7 +332,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 其他信息 */}
-        <Card className="card-subtle-3d">
+        <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-green-600">📋</span>
@@ -512,7 +512,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           {/* 手機版卡片佈局 */}
           <div className="block md:hidden space-y-4">
             {fields.map((field, index) => (
-              <Card key={field.id} className="card-subtle-3d border border-gray-200 dark:border-gray-700">
+              <Card key={field.id} className="card-subtle-3d glass-card-subtle border border-gray-200 dark:border-gray-700">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300">
@@ -630,7 +630,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 計算結果 */}
-        <Card className="card-subtle-3d">
+        <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-emerald-600">📊</span>
