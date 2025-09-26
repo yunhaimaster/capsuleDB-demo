@@ -5,7 +5,7 @@ export const ingredientSchema = z.object({
     .string()
     .min(1, '原料品名不能為空')
     .max(100, '原料品名不能超過100字')
-    .regex(/^[a-zA-Z0-9\u4e00-\u9fff\s\(\)\-]+$/, '原料品名只能包含中英數、括號、連字符'),
+    .refine((val) => val.trim().length > 0, '原料品名不能為空白'),
   unitContentMg: z
     .number()
     .positive('單粒含量必須為正數')

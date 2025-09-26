@@ -10,10 +10,35 @@ describe('Validations', () => {
       expect(() => ingredientSchema.parse(validIngredient)).not.toThrow()
     })
 
+    it('should validate chemical names with special characters', () => {
+      const chemicalIngredients = [
+        { materialName: 'L-Ascorbic Acid (維生素C)', unitContentMg: 500.0 },
+        { materialName: 'α-Tocopherol (維生素E)', unitContentMg: 100.0 },
+        { materialName: 'Cholecalciferol (D3)', unitContentMg: 25.0 },
+        { materialName: 'Methylcobalamin (B12)', unitContentMg: 1.0 },
+        { materialName: '5-MTHF (活性葉酸)', unitContentMg: 400.0 },
+        { materialName: 'CoQ10 (輔酶Q10)', unitContentMg: 30.0 },
+        { materialName: 'Omega-3 EPA/DHA', unitContentMg: 1000.0 },
+        { materialName: 'β-胡蘿蔔素', unitContentMg: 5.0 }
+      ]
+      
+      chemicalIngredients.forEach(ingredient => {
+        expect(() => ingredientSchema.parse(ingredient)).not.toThrow()
+      })
+    })
+
     it('should reject invalid ingredient data', () => {
       const invalidIngredient = {
         materialName: '',
         unitContentMg: -1
+      }
+      expect(() => ingredientSchema.parse(invalidIngredient)).toThrow()
+    })
+
+    it('should reject blank ingredient names', () => {
+      const invalidIngredient = {
+        materialName: '   ',
+        unitContentMg: 100.0
       }
       expect(() => ingredientSchema.parse(invalidIngredient)).toThrow()
     })
