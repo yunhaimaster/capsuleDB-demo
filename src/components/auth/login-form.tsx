@@ -27,7 +27,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-primary/5 to-brand-secondary/5 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen flex items-center justify-center animated-gradient-bg-subtle dark:from-gray-900 dark:to-gray-800">
       <Card className="card-3d-hover w-full max-w-md mx-4 shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 p-3 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-full w-fit">

@@ -208,7 +208,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 搜尋和篩選 */}
       <Card>
         <CardHeader>

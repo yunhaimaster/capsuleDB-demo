@@ -95,7 +95,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 麵包屑導航 */}
       <Breadcrumb
         items={[
