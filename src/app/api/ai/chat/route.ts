@@ -223,7 +223,8 @@ ${JSON.stringify(cleanedOrders, null, 2)}
 
 AI回答：${aiResponse}
 
-請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。`
+請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。
+重要：不要包含編號（如1. 2. 3. 4.），只生成純問題內容。`
             }
           ],
           max_tokens: 200,  // 減少到200提高精準度
@@ -240,10 +241,13 @@ AI回答：${aiResponse}
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
         
-        // 簡化過濾條件
+        // 簡化過濾條件並移除編號
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
-          .map((s: string) => s.trim())
+          .map((s: string) => {
+            // 移除開頭的編號（如 "1. "、"2. "、"3. "、"4. "）
+            return s.trim().replace(/^[1-4]\.\s*/, '')
+          })
           .filter((s: string) => {
             return s.length > 5 && 
                    !s.includes('<|') &&
@@ -267,7 +271,10 @@ AI回答：${aiResponse}
           console.log('建議不足，使用更寬鬆的過濾條件')
           suggestions = suggestionsText.split('\n')
             .filter((s: string) => s.trim())
-            .map((s: string) => s.trim())
+            .map((s: string) => {
+              // 移除開頭的編號（如 "1. "、"2. "、"3. "、"4. "）
+              return s.trim().replace(/^[1-4]\.\s*/, '')
+            })
             .filter((s: string) => {
               return s.length > 3 && 
                      !s.includes('<|') &&
