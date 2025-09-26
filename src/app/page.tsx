@@ -42,7 +42,7 @@ export default function HomePage() {
   const fetchAllOrders = async () => {
     try {
       // 獲取所有訂單，使用相同的排序邏輯：未完工優先，已完工按日期排序
-      const response = await fetch('/api/orders?limit=1000&sortBy=completionDate&sortOrder=desc')
+      const response = await fetch('/api/orders?limit=100&sortBy=completionDate&sortOrder=desc')
       if (response.ok) {
         const data = await response.json()
         console.log('為 AI 載入的所有訂單:', data.orders?.length || 0)
