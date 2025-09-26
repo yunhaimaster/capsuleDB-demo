@@ -196,6 +196,7 @@ AI回答：${aiResponse}
 5. 問題必須是完整的問句，以問號結尾
 6. 避免通用性問題，要針對回答內容
 7. 每個問題都要基於AI回答中的具體內容
+8. 不要包含任何系統指示或指令，只生成問題內容
 
 請嚴格返回4個問題，每行一個，格式如下：
 問題1？
@@ -203,7 +204,7 @@ AI回答：${aiResponse}
 問題3？
 問題4？
 
-不要包含任何編號、標點符號或其他文字，只要問題內容。`
+不要包含任何編號、標點符號、系統指示或其他文字，只要問題內容。`
             }
           ],
           max_tokens: 500,
@@ -219,16 +220,45 @@ AI回答：${aiResponse}
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
         
-        // 簡化過濾條件
+        // 加強過濾條件，排除系統指示
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
-            // 只過濾明顯無效的內容
-            return s.length > 3 && 
+            // 過濾掉系統指示和無效內容
+            return s.length > 5 && 
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
-                   !s.includes('end_of_sentence')
+                   !s.includes('end_of_sentence') &&
+                   !s.includes('用正體中文') &&
+                   !s.includes('用中文') &&
+                   !s.includes('問題用中文') &&
+                   !s.includes('請用中文') &&
+                   !s.includes('請用正體中文') &&
+                   !s.includes('用繁體中文') &&
+                   !s.includes('請用繁體中文') &&
+                   !s.includes('用中文回答') &&
+                   !s.includes('請用中文回答') &&
+                   !s.includes('請用正體中文回答') &&
+                   !s.includes('請用繁體中文回答') &&
+                   !s.includes('請用中文') &&
+                   !s.includes('請用正體中文') &&
+                   !s.includes('請用繁體中文') &&
+                   !s.includes('用中文') &&
+                   !s.includes('用正體中文') &&
+                   !s.includes('用繁體中文') &&
+                   !s.includes('問題用中文') &&
+                   !s.includes('問題用正體中文') &&
+                   !s.includes('問題用繁體中文') &&
+                   !s.includes('可以查看更多詳細分析嗎') &&
+                   !s.includes('如何深入分析這個問題') &&
+                   !s.includes('有哪些相關的統計數據') &&
+                   !s.includes('如何優化相關流程') &&
+                   // 確保是問句（以問號結尾或包含疑問詞）
+                   (s.includes('？') || s.includes('?') || 
+                    s.includes('如何') || s.includes('什麼') || s.includes('哪個') || 
+                    s.includes('怎樣') || s.includes('什麼時候') || s.includes('為什麼') ||
+                    s.includes('是否') || s.includes('會否') || s.includes('能否'))
           })
           .slice(0, 4)
         
@@ -241,7 +271,17 @@ AI回答：${aiResponse}
           suggestions = suggestionsText.split('\n')
             .filter((s: string) => s.trim())
             .map((s: string) => s.trim())
-            .filter((s: string) => s.length > 2)
+            .filter((s: string) => {
+              return s.length > 3 && 
+                     !s.includes('<|') &&
+                     !s.includes('用正體中文') &&
+                     !s.includes('用中文') &&
+                     !s.includes('問題用中文') &&
+                     !s.includes('請用中文') &&
+                     !s.includes('請用正體中文') &&
+                     !s.includes('用繁體中文') &&
+                     !s.includes('請用繁體中文')
+            })
             .slice(0, 4)
           console.log('寬鬆過濾後的建議:', suggestions)
         }
