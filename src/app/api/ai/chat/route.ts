@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!OPENROUTER_API_KEY) {
       console.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
-        { error: 'AI 服務暫時無法使用，請聯繫 Victor' },
+        { error: 'AI 服務暫時無法使用，請稍後再試或聯繫技術支援' },
         { status: 500 }
       )
     }
@@ -116,7 +116,7 @@ ${JSON.stringify(orders, null, 2)}
         'X-Title': 'EasyPack AI Assistant'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4o-mini',
+        model: 'deepseek/deepseek-chat-v3.1',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
@@ -129,7 +129,7 @@ ${JSON.stringify(orders, null, 2)}
     if (!response.ok) {
       const errorText = await response.text()
       console.error('OpenRouter API 錯誤:', errorText)
-      throw new Error('OpenRouter API 請求失敗')
+      throw new Error('AI 服務暫時無法回應，請稍後再試')
     }
 
     const data = await response.json()
@@ -137,14 +137,14 @@ ${JSON.stringify(orders, null, 2)}
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
       console.error('API 回應結構無效:', data)
-      throw new Error('API 回應結構無效')
+      throw new Error('AI 回應格式異常，請重試')
     }
     
     let aiResponse = data.choices[0].message.content
     
     if (!aiResponse || aiResponse.trim() === '') {
       console.error('AI 回應為空')
-      throw new Error('AI 回應為空')
+      throw new Error('AI 回應為空，請重試')
     }
     
     // 清理 AI 回答中的異常文字
@@ -182,7 +182,7 @@ ${JSON.stringify(orders, null, 2)}
           'X-Title': 'EasyPack AI Assistant'
         },
         body: JSON.stringify({
-          model: 'openai/gpt-4o-mini',
+          model: 'deepseek/deepseek-chat-v3.1',
           messages: [
             { 
               role: 'system', 
@@ -305,7 +305,7 @@ AI回答：${aiResponse}
   } catch (error) {
     console.error('AI 聊天錯誤:', error)
     return NextResponse.json(
-      { error: 'AI 助手暫時無法回應，請稍後再試' },
+      { error: 'AI 助手暫時無法回應，請稍後再試或重試' },
       { status: 500 }
     )
   }

@@ -41,7 +41,8 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
     toggleMinimize,
     scrollToTop,
     copyMessage,
-    exportConversation
+    exportConversation,
+    retryLastMessage
   } = useAIAssistant({
     orders: orders,
     currentOrder: currentOrder,
@@ -333,15 +334,31 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                         {/* 顯示建議問題 */}
                         {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">相關問題：</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                              {message.content.includes('抱歉，AI 助手暫時無法回應') ? '您可以：' : '相關問題：'}
+                            </p>
                             <div className="grid grid-cols-1 gap-1">
                               {message.suggestions.map((suggestion, index) => (
                                 <button
                                   key={index}
-                                  onClick={() => setInput(suggestion)}
-                                  className="text-xs text-left p-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
+                                  onClick={() => {
+                                    if (suggestion === '重試') {
+                                      retryLastMessage()
+                                    } else if (suggestion === '檢查網路連線') {
+                                      setInput('請檢查您的網路連線是否正常')
+                                    } else if (suggestion === '稍後再試') {
+                                      setInput('我稍後會再試一次')
+                                    } else {
+                                      setInput(suggestion)
+                                    }
+                                  }}
+                                  className={`text-xs text-left p-2 rounded transition-colors ${
+                                    suggestion === '重試' 
+                                      ? 'bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 text-red-700 dark:text-red-300' 
+                                      : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
+                                  }`}
                                 >
-                                  "{suggestion}"
+                                  {suggestion === '重試' ? '🔄 ' : suggestion === '檢查網路連線' ? '🌐 ' : suggestion === '稍後再試' ? '⏰ ' : ''}"{suggestion}"
                                 </button>
                               ))}
                             </div>

@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (!OPENROUTER_API_KEY) {
       console.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
-        { error: '翻譯服務暫時無法使用，請聯繫 Victor' },
+        { error: '翻譯服務暫時無法使用，請稍後再試' },
         { status: 500 }
       )
     }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         'X-Title': 'EasyPack Translation Service'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-4o-mini',
+        model: 'deepseek/deepseek-chat-v3.1',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }

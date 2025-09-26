@@ -27,18 +27,21 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  const handleSendMessage = async () => {
-    if (!input.trim() || isLoading) return
+  const handleSendMessage = async (retryMessage?: string) => {
+    const messageToSend = retryMessage || input.trim()
+    if (!messageToSend || isLoading) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
-      content: input.trim(),
+      content: messageToSend,
       timestamp: new Date()
     }
 
     setMessages(prev => [...prev, userMessage])
-    setInput('')
+    if (!retryMessage) {
+      setInput('')
+    }
     setIsLoading(true)
 
     try {
@@ -48,7 +51,7 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: input.trim(),
+          message: messageToSend,
           orders: orders,
           context: context
         }),
@@ -78,11 +81,13 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     } catch (error) {
+      console.error('AI 助手錯誤:', error)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: '抱歉，AI 助手暫時無法回應。請稍後再試或聯繫 Victor。',
-        timestamp: new Date()
+        content: '抱歉，AI 助手暫時無法回應。這可能是網路連線問題或服務暫時不可用。\n\n您可以：\n• 點擊下方「重試」按鈕再次嘗試\n• 稍後再試\n• 檢查網路連線',
+        timestamp: new Date(),
+        suggestions: ['重試', '檢查網路連線', '稍後再試']
       }
       setMessages(prev => [...prev, errorMessage])
     } finally {
@@ -163,6 +168,17 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
     URL.revokeObjectURL(url)
   }
 
+  const retryLastMessage = () => {
+    if (messages.length > 0) {
+      const lastUserMessage = messages.filter(msg => msg.role === 'user').pop()
+      if (lastUserMessage) {
+        // Remove the last user message and any error messages
+        setMessages(prev => prev.filter(msg => msg.role === 'user' || !msg.content.includes('抱歉，AI 助手暫時無法回應')))
+        handleSendMessage(lastUserMessage.content)
+      }
+    }
+  }
+
   return {
     messages,
     setMessages,
@@ -185,6 +201,7 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
     toggleMinimize,
     scrollToTop,
     copyMessage,
-    exportConversation
+    exportConversation,
+    retryLastMessage
   }
 }
