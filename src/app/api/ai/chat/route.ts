@@ -2,6 +2,27 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
+// 清理訂單數據，移除系統內部ID，只保留用戶相關信息
+function cleanOrderData(orders: any[]): any[] {
+  return orders.map(order => ({
+    customerName: order.customerName,
+    productName: order.productName,
+    productionQuantity: order.productionQuantity,
+    unitWeightMg: order.unitWeightMg,
+    batchTotalWeightMg: order.batchTotalWeightMg,
+    capsuleColor: order.capsuleColor,
+    capsuleSize: order.capsuleSize,
+    capsuleType: order.capsuleType,
+    completionDate: order.completionDate,
+    processIssues: order.processIssues,
+    qualityNotes: order.qualityNotes,
+    ingredients: order.ingredients,
+    createdBy: order.createdBy,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt
+  }))
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { message, orders, context } = await request.json()
@@ -18,8 +39,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 清理訂單數據，移除系統內部ID
+    const cleanedOrders = orders ? cleanOrderData(orders) : []
+    
     // 構建智能系統提示詞
-    const isSingleOrder = orders && orders.length === 1
+    const isSingleOrder = cleanedOrders && cleanedOrders.length === 1
     const hasContext = context && context.currentPage
     
     let systemPrompt = ''
@@ -29,7 +53,7 @@ export async function POST(request: NextRequest) {
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
 
 當前訂單數據：
-${JSON.stringify(orders[0], null, 2)}
+${JSON.stringify(cleanedOrders[0], null, 2)}
 
 請根據用戶的問題，針對這個特定訂單進行分析。你可以：
 1. 分析原料配比和重量分配
@@ -42,9 +66,14 @@ ${JSON.stringify(orders[0], null, 2)}
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
-重要：你的回答應該專注於膠囊灌裝相關的內容，包括膠囊規格、原料配比、生產工藝、質量控制等。請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
+重要：你的回答應該專注於膠囊灌裝相關的內容，包括膠囊規格、原料配比、生產工藝、質量控制等。請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。
+
+特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     } else if (hasContext) {
       // 智能上下文模式
+      const cleanedCurrentOrder = context.currentOrder ? cleanOrderData([context.currentOrder])[0] : null
+      const cleanedRecentOrders = context.recentOrders ? cleanOrderData(context.recentOrders) : []
+      
       systemPrompt = `你是一個專業的膠囊配方管理系統智能 AI 助手。用戶當前正在 "${context.pageDescription}"，你需要根據用戶的當前頁面和上下文提供相關的幫助。
 
 當前頁面信息：
@@ -54,19 +83,19 @@ ${JSON.stringify(orders[0], null, 2)}
 - 訂單總數：${context.ordersCount}
 - 是否有當前訂單：${context.hasCurrentOrder ? '是' : '否'}
 
-${context.currentOrder ? `當前查看的訂單：
-${JSON.stringify(context.currentOrder, null, 2)}` : ''}
+${cleanedCurrentOrder ? `當前查看的訂單：
+${JSON.stringify(cleanedCurrentOrder, null, 2)}` : ''}
 
-${context.recentOrders && context.recentOrders.length > 0 ? `最近的訂單數據：
-${JSON.stringify(context.recentOrders, null, 2)}` : ''}
+${cleanedRecentOrders && cleanedRecentOrders.length > 0 ? `最近的訂單數據：
+${JSON.stringify(cleanedRecentOrders, null, 2)}` : ''}
 
-${orders && orders.length > 0 ? `完整的訂單數據庫統計：
-- 總訂單數：${orders.length}
-- 未完工訂單數：${orders.filter((order: any) => !order.completionDate).length}
-- 已完工訂單數：${orders.filter((order: any) => order.completionDate).length}
+${cleanedOrders && cleanedOrders.length > 0 ? `完整的訂單數據庫統計：
+- 總訂單數：${cleanedOrders.length}
+- 未完工訂單數：${cleanedOrders.filter((order: any) => !order.completionDate).length}
+- 已完工訂單數：${cleanedOrders.filter((order: any) => order.completionDate).length}
 
 當用戶詢問具體訂單信息時，請從以下完整數據中篩選：
-${JSON.stringify(orders, null, 2)}` : ''}
+${JSON.stringify(cleanedOrders, null, 2)}` : ''}
 
 請根據用戶當前所在的頁面和上下文，提供相關的幫助。你可以：
 1. 分析當前頁面顯示的數據
@@ -85,13 +114,15 @@ ${JSON.stringify(orders, null, 2)}` : ''}
 
 請用中文回答，並提供具體的數據支持和專業建議。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。
+
+特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     } else {
       // 一般查詢模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
 系統數據：
-${JSON.stringify(orders, null, 2)}
+${JSON.stringify(cleanedOrders, null, 2)}
 
 請根據用戶的問題，分析訂單數據並提供有用的回答。你可以：
 1. 查詢特定客戶的訂單
@@ -103,7 +134,9 @@ ${JSON.stringify(orders, null, 2)}
 
 請用中文回答，並提供具體的數據支持。如果數據中有日期，請使用適當的日期格式。
 
-重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。`
+重要：請確保回答內容乾淨整潔，不要包含任何特殊標記或格式符號。回答必須以完整的句子結束，不要包含任何未完成的文字或特殊標記。
+
+特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     }
 
     // 調用 OpenRouter API - 優化參數以提高精準度
