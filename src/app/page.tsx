@@ -55,9 +55,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="space-y-8 animated-gradient-bg-subtle min-h-screen">
+    <div className="space-y-8 animated-gradient-bg-subtle floating-combined min-h-screen">
       {/* Header Section */}
-      <div className="floating-orbs bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
+      <div className="floating-particles bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
           <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
             <Logo size="xl" />
@@ -73,7 +73,7 @@ export default function HomePage() {
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-3d-hover glass-card-easy-health card-micro-hover group border-0 shadow-lg">
+        <Card className="card-3d-hover glass-card-easy-health card-micro-hover floating-shapes group border-0 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
@@ -97,7 +97,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="card-3d-hover glass-card-easy-health card-micro-hover group border-0 shadow-lg">
+        <Card className="card-3d-hover glass-card-easy-health card-micro-hover floating-orbs group border-0 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
@@ -126,7 +126,7 @@ export default function HomePage() {
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
               <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
@@ -224,7 +224,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
               <span className="mr-2">📋</span>
@@ -272,7 +272,7 @@ export default function HomePage() {
         </Card>
 
         {/* 版本更新記錄 */}
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
               <span className="mr-2 text-sm sm:text-base">📝</span>

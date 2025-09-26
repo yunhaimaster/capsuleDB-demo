@@ -247,7 +247,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   }
 
   return (
-    <div className="animated-gradient-bg-subtle min-h-screen">
+    <div className="animated-gradient-bg-subtle floating-geometric min-h-screen">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
         <Card className="card-subtle-3d glass-card-subtle">

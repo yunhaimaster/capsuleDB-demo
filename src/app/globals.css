@@ -584,6 +584,341 @@
   }
 }
 
+/* Floating Elements - Subtle particles and shapes */
+
+/* Floating Particles */
+.floating-particles {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-particles::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(68, 186, 198, 0.06) 0%, transparent 50%);
+  animation: floating-particles 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-particles {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) rotate(90deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-30px) rotate(270deg);
+    opacity: 0.7;
+  }
+}
+
+/* Floating Shapes */
+.floating-shapes {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-shapes::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    conic-gradient(from 0deg at 10% 20%, rgba(68, 186, 198, 0.1) 0deg, transparent 60deg),
+    conic-gradient(from 120deg at 80% 80%, rgba(68, 186, 198, 0.08) 0deg, transparent 60deg),
+    conic-gradient(from 240deg at 50% 50%, rgba(68, 186, 198, 0.06) 0deg, transparent 60deg);
+  animation: floating-shapes 25s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-shapes {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-15px) rotate(180deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+/* Floating Orbs */
+.floating-orbs {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-orbs::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(68, 186, 198, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 85% 85%, rgba(68, 186, 198, 0.12) 0%, transparent 30%),
+    radial-gradient(circle at 50% 70%, rgba(68, 186, 198, 0.08) 0%, transparent 30%);
+  animation: floating-orbs 30s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-orbs {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-25px) scale(1.1);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translateY(-10px) scale(0.9);
+    opacity: 0.4;
+  }
+}
+
+/* Floating Geometric Shapes */
+.floating-geometric {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-geometric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(45deg, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
+    linear-gradient(-45deg, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(68, 186, 198, 0.06) 0%, transparent 50%);
+  animation: floating-geometric 35s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-geometric {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translateY(-20px) rotate(90deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-5px) rotate(180deg);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translateY(-30px) rotate(270deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+/* Floating Dots */
+.floating-dots {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(68, 186, 198, 0.2) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(68, 186, 198, 0.15) 1px, transparent 1px),
+    radial-gradient(circle at 50% 10%, rgba(68, 186, 198, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 10% 60%, rgba(68, 186, 198, 0.12) 1px, transparent 1px),
+    radial-gradient(circle at 90% 40%, rgba(68, 186, 198, 0.08) 1px, transparent 1px);
+  background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, 80px 80px;
+  animation: floating-dots 40s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-dots {
+  0% {
+    transform: translateY(0px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0.3;
+  }
+}
+
+/* Floating Waves */
+.floating-waves {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-waves::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(90deg, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
+    linear-gradient(270deg, rgba(68, 186, 198, 0.06) 0%, transparent 50%);
+  animation: floating-waves 45s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-waves {
+  0%, 100% {
+    transform: translateY(0px) scaleX(1);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translateY(-15px) scaleX(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-5px) scaleX(0.9);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translateY(-25px) scaleX(1.05);
+    opacity: 0.6;
+  }
+}
+
+/* Floating Stars */
+.floating-stars {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-stars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(68, 186, 198, 0.2) 0%, transparent 20%),
+    radial-gradient(circle at 80% 80%, rgba(68, 186, 198, 0.15) 0%, transparent 20%),
+    radial-gradient(circle at 40% 60%, rgba(68, 186, 198, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 60% 30%, rgba(68, 186, 198, 0.12) 0%, transparent 20%);
+  animation: floating-stars 50s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-stars {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  20% {
+    transform: translateY(-10px) rotate(72deg);
+    opacity: 0.6;
+  }
+  40% {
+    transform: translateY(-20px) rotate(144deg);
+    opacity: 0.4;
+  }
+  60% {
+    transform: translateY(-15px) rotate(216deg);
+    opacity: 0.7;
+  }
+  80% {
+    transform: translateY(-25px) rotate(288deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
+    opacity: 0.3;
+  }
+}
+
+/* Combined Floating Effects */
+.floating-combined {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-combined::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
+    linear-gradient(45deg, rgba(68, 186, 198, 0.06) 0%, transparent 50%),
+    conic-gradient(from 0deg at 50% 50%, rgba(68, 186, 198, 0.04) 0deg, transparent 60deg);
+  animation: floating-combined 60s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floating-combined {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translateY(-15px) rotate(90deg) scale(1.05);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px) rotate(180deg) scale(0.95);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translateY(-25px) rotate(270deg) scale(1.1);
+    opacity: 0.6;
+  }
+}
+
 .card-hover {
   transition: all 0.3s ease;
 }
