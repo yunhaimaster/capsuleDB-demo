@@ -63,7 +63,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
         <Button 
           variant="default"
           size="sm"
-          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200"
+          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10"
         >
           <Bot className="h-4 w-4 mr-2" />
           <span className="hidden sm:inline">AI 助手</span>

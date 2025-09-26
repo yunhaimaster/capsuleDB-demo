@@ -145,16 +145,16 @@ export default function OrderDetailPage() {
               {order.customerName} - {order.productName}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 relative z-10">
             <SmartAIAssistant currentOrder={order} />
             <Link href={`/orders/${order.id}/edit`}>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700">
                 <Edit className="mr-2 h-4 w-4" />
                 編輯
               </Button>
             </Link>
             <Link href="/orders">
-              <Button variant="outline">
+              <Button variant="outline" className="ripple-effect btn-micro-hover">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 返回
               </Button>

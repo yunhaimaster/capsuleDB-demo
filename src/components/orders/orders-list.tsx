@@ -136,7 +136,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }, [])
 
   const handleSearch = (newFilters: Partial<SearchFilters>) => {
-    const updatedFilters = { ...filters, ...newFilters, page: 1 }
+    // 如果沒有指定 page，則重置為 1；否則使用指定的 page
+    const updatedFilters = { 
+      ...filters, 
+      ...newFilters, 
+      page: newFilters.page !== undefined ? newFilters.page : 1 
+    }
     setFilters(updatedFilters)
     
     // 觸發聯動篩選
@@ -633,7 +638,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               </DialogHeader>
                               <div className="space-y-4">
                                 {/* AI 助手按鈕 */}
-                                <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0">
+                                <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0 relative z-10">
                                   <div className="w-full sm:w-auto flex justify-center">
                                     <OrderAIAssistant order={order} />
                                   </div>
@@ -972,6 +977,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             variant="outline"
             disabled={filters.page === 1}
             onClick={() => handleSearch({ page: (filters.page || 1) - 1 })}
+            className="ripple-effect btn-micro-hover"
           >
             上一頁
           </Button>
@@ -982,6 +988,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             variant="outline"
             disabled={filters.page === pagination.totalPages}
             onClick={() => handleSearch({ page: (filters.page || 1) + 1 })}
+            className="ripple-effect btn-micro-hover"
           >
             下一頁
           </Button>
@@ -996,7 +1003,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
       {/* AI 助手按鈕 */}
-      <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0">
+      <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0 relative z-10">
         <div className="w-full sm:w-auto flex justify-center">
           <OrderAIAssistant order={order} />
         </div>
