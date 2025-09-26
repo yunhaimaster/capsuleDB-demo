@@ -70,7 +70,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           <span className="sm:hidden">AI</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col floating-particles glass-card-easy-health ${isMinimized ? 'h-16' : ''}`}>
+      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col glass-card-easy-health relative z-[100] ${isMinimized ? 'h-16' : ''}`}>
         <DialogHeader className="pb-3 sm:pb-4">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
