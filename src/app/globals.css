@@ -78,46 +78,25 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* Enhanced 3D hover effects for cards */
+/* Enhanced lift hover effects for cards */
 .card-3d-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-  perspective: 1000px;
 }
 
 .card-3d-hover:hover {
-  transform: translateY(-8px) rotateX(5deg) rotateY(5deg) scale(1.02);
+  transform: translateY(-12px);
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.15),
-    0 10px 20px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.card-3d-hover:hover::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Interactive card content animation */
-.card-3d-hover:hover .card-content {
-  transform: translateZ(20px);
-}
-
-/* Subtle 3D effect for less prominent cards */
+/* Subtle lift effect for less prominent cards */
 .card-subtle-3d {
   transition: all 0.2s ease-out;
 }
 
 .card-subtle-3d:hover {
-  transform: translateY(-4px) rotateX(2deg) rotateY(1deg) scale(1.01);
+  transform: translateY(-6px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
