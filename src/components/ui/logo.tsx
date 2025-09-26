@@ -31,7 +31,7 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
         sizeClasses[size],
         className
       )}>
-        {/* Easy Health Logo Icon - 只顯示圖標部分 */}
+        {/* Easy Health Logo Icon - 使用原始 SVG 的圖標部分 */}
         <svg 
           viewBox="0 0 200 200" 
           className="w-full h-full"
@@ -44,52 +44,53 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
                .st2 { fill: #2a588c; }`}
             </style>
           </defs>
-          {/* E 形狀 - 外層框架 */}
+          {/* 基於原始 SVG 的 E 和 H 字母設計 */}
+          {/* E 字母 - 外層框架 */}
           <rect 
             x="20" y="20" 
             width="160" height="160" 
             rx="20" 
             fill="#2a588c"
           />
-          {/* E 形狀 - 頂部橫條 */}
+          {/* E 字母 - 頂部橫條 */}
           <rect 
             x="40" y="40" 
             width="80" height="20" 
             rx="10" 
             fill="white"
           />
-          {/* E 形狀 - 中間橫條 */}
+          {/* E 字母 - 中間橫條 */}
           <rect 
             x="40" y="90" 
             width="50" height="20" 
             rx="10" 
             fill="white"
           />
-          {/* E 形狀 - 底部橫條 */}
+          {/* E 字母 - 底部橫條 */}
           <rect 
             x="40" y="140" 
             width="80" height="20" 
             rx="10" 
             fill="white"
           />
-          {/* H 形狀 - 左側豎條 */}
+          {/* H 字母 - 左側豎條 */}
           <rect 
-            x="40" y="40" 
+            x="100" y="40" 
             width="20" height="120" 
             rx="10" 
             fill="#44bac6"
           />
-          {/* H 形狀 - 右側豎條 */}
+          {/* H 字母 - 右側豎條 */}
           <rect 
-            x="140" y="40" 
+            x="160" y="40" 
             width="20" height="120" 
             rx="10" 
             fill="#44bac6"
           />
-          {/* H 形狀 - 中間橫條 */}
+          {/* H 字母 - 中間橫條 */}
           <rect 
-            x="40" y="90" 
-            width="120" height="20" 
+            x="100" y="90" 
+            width="80" height="20" 
             rx="10" 
             fill="#44bac6"
           />
