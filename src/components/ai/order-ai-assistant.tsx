@@ -212,11 +212,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                       <p className="text-purple-600 dark:text-purple-300 text-sm">"評估每個原料的堆積密度，計算混合後的堆積密度能否裝入膠囊？是否需要添加流動助劑或調整配比？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？')}
+                      onClick={() => setInput('評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？（給個分數，100分為一定需要製粒，0分為完全不需要，你給多少分）')}
                       className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
                       <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">製粒必要性評估</p>
-                      <p className="text-blue-600 dark:text-blue-300 text-sm">"評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？"</p>
+                      <p className="text-blue-600 dark:text-blue-300 text-sm">"評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？（給個分數，100分為一定需要製粒，0分為完全不需要，你給多少分）"</p>
                     </button>
                     <button
                       onClick={() => setInput('根據此配方的具體成分和含量，分析在香港、大陸、歐洲、美國市場的法規合規性，直接告訴我需要做什麼申報、標籤要求、成分限量檢查？')}
