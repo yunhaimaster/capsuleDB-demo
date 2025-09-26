@@ -27,32 +27,50 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
   if (variant === 'icon') {
     return (
       <div className={cn(
-        'flex items-center justify-center',
+        'flex items-center justify-center relative',
         sizeClasses[size],
         className
       )}>
-        {/* 使用您提供的原始 logo-only SVG，保持準確設計 */}
-        <svg 
-          viewBox="0 0 157.44 220.32" 
-          className="w-full h-full"
-          fill="none"
-        >
-          <defs>
-            <style>
-              {`.st0 { fill: #44bac6; }
-               .st1 { fill: #fefefe; }
-               .st2 { fill: #a0b5cc; }
-               .st3 { fill: #2a588c; }`}
-            </style>
-          </defs>
-          <path className="st1" d="M157.44,198.5v21.82H0V0h157.44v55.62l-.52-.16c-1.18-10.48-9.43-19.06-20.31-19.26l-.74-.48.48.23v182.15l-.48.3.73-.48c10.33-.21,19.16-8.4,20.06-18.72l.53-.7c.07-.21.15-.21.24,0Z"/>
-          <path className="st3" d="M157.44,55.62v.48c-.12,47.01-.2,94.47-.24,142.4-.59,11.2-10.14,20.05-21.33,19.9V35.72c9.57-.23,18.22,6.46,20.67,15.64l.9,4.26Z"/>
-          <path className="st2" d="M157.44,198.5h-.24c.44-47.02-.59-94.08,0-141.09,0-.41-.15-1.07.24-1.32v142.4Z"/>
-          <path className="st3" d="M21.81,35.72v182.68c-10.72.19-19.9-8.07-21.3-18.61l-.04-144.78c.95-10.8,10.42-19.58,21.34-19.29Z"/>
-          <path className="st3" d="M122.21,21.82H35.47v-9.71c0-5.22,4.02-10.16,9.06-11.32,22.35-.7,44.84-.15,67.24-.28,5.28.5,10.45,5.73,10.45,11.12v10.19Z"/>
-          <path className="st3" d="M122.21,218.4H35.47v-21.34h67.46c.83,0,3.21.63,4.14.9,8.94,2.57,14.99,11.23,15.15,20.44Z"/>
-          <path className="st0" d="M122.21,127.06H54.76c-4.29,0-10.82-3.8-13.66-6.95-3.6-3.98-5.38-9.05-5.63-14.39h67.94c.95,0,4.24,1.03,5.28,1.43,8.13,3.14,13.34,11.26,13.53,19.9Z"/>
-        </svg>
+        {/* 科技感背景容器 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl opacity-80"></div>
+        
+        {/* 發光效果 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-xl blur-sm"></div>
+        
+        {/* Easy Health Logo Icon - 使用您提供的原始 logo-only SVG */}
+        <div className="relative z-10 p-2">
+          <svg 
+            viewBox="0 0 157.44 220.32" 
+            className="w-full h-full drop-shadow-lg"
+            fill="none"
+          >
+            <defs>
+              <style>
+                {`.st0 { fill: #44bac6; }
+                 .st1 { fill: #fefefe; }
+                 .st2 { fill: #a0b5cc; }
+                 .st3 { fill: #2a588c; }`}
+              </style>
+              {/* 科技感漸變定義 */}
+              <linearGradient id="techGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#44bac6" />
+                <stop offset="50%" stopColor="#2a588c" />
+                <stop offset="100%" stopColor="#44bac6" />
+              </linearGradient>
+              <linearGradient id="whiteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="100%" stopColor="#f8fafc" />
+              </linearGradient>
+            </defs>
+            <path className="st1" d="M157.44,198.5v21.82H0V0h157.44v55.62l-.52-.16c-1.18-10.48-9.43-19.06-20.31-19.26l-.74-.48.48.23v182.15l-.48.3.73-.48c10.33-.21,19.16-8.4,20.06-18.72l.53-.7c.07-.21.15-.21.24,0Z"/>
+            <path className="st3" d="M157.44,55.62v.48c-.12,47.01-.2,94.47-.24,142.4-.59,11.2-10.14,20.05-21.33,19.9V35.72c9.57-.23,18.22,6.46,20.67,15.64l.9,4.26Z"/>
+            <path className="st2" d="M157.44,198.5h-.24c.44-47.02-.59-94.08,0-141.09,0-.41-.15-1.07.24-1.32v142.4Z"/>
+            <path className="st3" d="M21.81,35.72v182.68c-10.72.19-19.9-8.07-21.3-18.61l-.04-144.78c.95-10.8,10.42-19.58,21.34-19.29Z"/>
+            <path className="st3" d="M122.21,21.82H35.47v-9.71c0-5.22,4.02-10.16,9.06-11.32,22.35-.7,44.84-.15,67.24-.28,5.28.5,10.45,5.73,10.45,11.12v10.19Z"/>
+            <path className="st3" d="M122.21,218.4H35.47v-21.34h67.46c.83,0,3.21.63,4.14.9,8.94,2.57,14.99,11.23,15.15,20.44Z"/>
+            <path className="st0" d="M122.21,127.06H54.76c-4.29,0-10.82-3.8-13.66-6.95-3.6-3.98-5.38-9.05-5.63-14.39h67.94c.95,0,4.24,1.03,5.28,1.43,8.13,3.14,13.34,11.26,13.53,19.9Z"/>
+          </svg>
+        </div>
       </div>
     )
   }
