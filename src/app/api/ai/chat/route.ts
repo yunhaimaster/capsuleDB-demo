@@ -220,7 +220,7 @@ AI回答：${aiResponse}
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
         
-        // 加強過濾條件，排除系統指示
+        // 加強過濾條件，排除更多系統指示
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
@@ -230,6 +230,7 @@ AI回答：${aiResponse}
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
                    !s.includes('end_of_sentence') &&
+                   // 過濾中文指示
                    !s.includes('用正體中文') &&
                    !s.includes('用中文') &&
                    !s.includes('問題用中文') &&
@@ -250,10 +251,28 @@ AI回答：${aiResponse}
                    !s.includes('問題用中文') &&
                    !s.includes('問題用正體中文') &&
                    !s.includes('問題用繁體中文') &&
+                   // 過濾語法檢查指示
+                   !s.includes('請確保問題自然流暢') &&
+                   !s.includes('語法正確') &&
+                   !s.includes('請開始生成') &&
+                   !s.includes('自然流暢') &&
+                   !s.includes('語法') &&
+                   !s.includes('生成') &&
+                   !s.includes('開始') &&
+                   !s.includes('確保') &&
+                   // 過濾其他系統指示
                    !s.includes('可以查看更多詳細分析嗎') &&
                    !s.includes('如何深入分析這個問題') &&
                    !s.includes('有哪些相關的統計數據') &&
                    !s.includes('如何優化相關流程') &&
+                   !s.includes('請') &&
+                   !s.includes('確保') &&
+                   !s.includes('生成') &&
+                   !s.includes('開始') &&
+                   !s.includes('自然') &&
+                   !s.includes('流暢') &&
+                   !s.includes('語法') &&
+                   !s.includes('正確') &&
                    // 確保是問句（以問號結尾或包含疑問詞）
                    (s.includes('？') || s.includes('?') || 
                     s.includes('如何') || s.includes('什麼') || s.includes('哪個') || 
@@ -280,7 +299,20 @@ AI回答：${aiResponse}
                      !s.includes('請用中文') &&
                      !s.includes('請用正體中文') &&
                      !s.includes('用繁體中文') &&
-                     !s.includes('請用繁體中文')
+                     !s.includes('請用繁體中文') &&
+                     !s.includes('請確保問題自然流暢') &&
+                     !s.includes('語法正確') &&
+                     !s.includes('請開始生成') &&
+                     !s.includes('自然流暢') &&
+                     !s.includes('語法') &&
+                     !s.includes('生成') &&
+                     !s.includes('開始') &&
+                     !s.includes('確保') &&
+                     !s.includes('請') &&
+                     !s.includes('自然') &&
+                     !s.includes('流暢') &&
+                     !s.includes('語法') &&
+                     !s.includes('正確')
             })
             .slice(0, 4)
           console.log('寬鬆過濾後的建議:', suggestions)
