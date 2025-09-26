@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -30,42 +31,60 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
         sizeClasses[size],
         className
       )}>
-        {/* Easy Health Logo Icon - SVG version */}
+        {/* Easy Health Logo Icon - 基於實際設計的 SVG */}
         <svg 
           viewBox="0 0 40 40" 
           className="w-full h-full"
           fill="none"
         >
-          {/* E shape - outer frame */}
+          {/* E 形狀 - 外層框架 (深藍色) */}
           <rect 
-            x="2" y="2" 
-            width="36" height="36" 
-            rx="8" 
-            stroke="currentColor" 
-            strokeWidth="2"
-            fill="none"
+            x="4" y="4" 
+            width="32" height="32" 
+            rx="6" 
+            fill="#1e40af"
           />
-          {/* E shape - top bar */}
+          {/* E 形狀 - 頂部橫條 */}
           <rect 
-            x="6" y="6" 
-            width="20" height="4" 
-            rx="2" 
-            fill="currentColor"
+            x="8" y="8" 
+            width="16" height="3" 
+            rx="1.5" 
+            fill="white"
           />
-          {/* H shape - bottom bar */}
+          {/* E 形狀 - 中間橫條 */}
           <rect 
-            x="6" y="30" 
-            width="20" height="4" 
-            rx="2" 
-            fill="currentColor"
-            className="text-cyan-400"
+            x="8" y="18.5" 
+            width="10" height="3" 
+            rx="1.5" 
+            fill="white"
           />
-          {/* E shape - middle bar */}
+          {/* E 形狀 - 底部橫條 */}
           <rect 
-            x="6" y="18" 
-            width="12" height="4" 
-            rx="2" 
-            fill="currentColor"
+            x="8" y="29" 
+            width="16" height="3" 
+            rx="1.5" 
+            fill="white"
+          />
+          {/* H 形狀 - 左側豎條 */}
+          <rect 
+            x="8" y="8" 
+            width="3" height="24" 
+            rx="1.5" 
+            fill="#06b6d4"
+          />
+          {/* H 形狀 - 右側豎條 */}
+          <rect 
+            x="21" y="8" 
+            width="3" height="24" 
+            rx="1.5" 
+            fill="#06b6d4"
+          />
+          {/* H 形狀 - 中間橫條 */}
+          <rect 
+            x="8" y="18.5" 
+            width="16" height="3" 
+            rx="1.5" 
+            fill="#06b6d4"
           />
         </svg>
       </div>
