@@ -205,32 +205,32 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                   <p className="text-sm mb-4">針對當前訂單進行分析，您可以詢問：</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                     <button
-                      onClick={() => setInput('此配方在膠囊灌裝過程中是否存在受潮、黏壁或結塊等潛在困難？應採取哪些生產工藝或輔料處理才能避免？')}
+                      onClick={() => setInput('評估每個原料的堆積密度，計算混合後的堆積密度能否裝入膠囊？是否需要添加流動助劑或調整配比？')}
                       className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">配方灌裝可行性與生產挑戰</p>
-                      <p className="text-purple-600 dark:text-purple-300 text-sm">"此配方在膠囊灌裝過程中是否存在受潮、黏壁或結塊等潛在困難？應採取哪些生產工藝或輔料處理才能避免？"</p>
+                      <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">堆積密度與填充可行性</p>
+                      <p className="text-purple-600 dark:text-purple-300 text-sm">"評估每個原料的堆積密度，計算混合後的堆積密度能否裝入膠囊？是否需要添加流動助劑或調整配比？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('配方中是否含有會加劇流動性差或靜電聚集的危險原料？以其在配方中的比例，生產難度會提升多少？')}
+                      onClick={() => setInput('評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？')}
                       className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">原料風險評估與配比影響</p>
-                      <p className="text-blue-600 dark:text-blue-300 text-sm">"配方中是否含有會加劇流動性差或靜電聚集的危險原料？以其在配方中的比例，生產難度會提升多少？"</p>
+                      <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">製粒必要性評估</p>
+                      <p className="text-blue-600 dark:text-blue-300 text-sm">"評估此配方是否必須製粒才能灌裝？分析原料的流動性、黏性、結塊風險，判斷純粉劑混合後能否直接填充膠囊？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('所選膠囊（大小、材質、填充量）是否適合此配方？是否需要調整膠囊類型或最大充填重量？')}
+                      onClick={() => setInput('根據此配方的具體成分和含量，分析在香港、大陸、歐洲、美國市場的法規合規性，直接告訴我需要做什麼申報、標籤要求、成分限量檢查？')}
                       className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">膠囊規格適配性檢視</p>
-                      <p className="text-green-600 dark:text-green-300 text-sm">"所選膠囊（大小、材質、填充量）是否適合此配方？是否需要調整膠囊類型或最大充填重量？"</p>
+                      <p className="font-medium text-green-800 dark:text-green-200 mb-1">國際市場法規合規性</p>
+                      <p className="text-green-600 dark:text-green-300 text-sm">"根據此配方的具體成分和含量，分析在香港、大陸、歐洲、美國市場的法規合規性，直接告訴我需要做什麼申報、標籤要求、成分限量檢查？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('此配方作為保健品在香港、大陸、美國及歐洲市場的法規合規性如何？是否有成分限量或申報風險？')}
+                      onClick={() => setInput('根據此配方的成分和含量，分析成品的預期功效、適用人群、市場定位，以及如何優化配方以提升產品效果？')}
                       className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">法規合規及市場可行性</p>
-                      <p className="text-orange-600 dark:text-orange-300 text-sm">"此配方作為保健品在香港、大陸、美國及歐洲市場的法規合規性如何？是否有成分限量或申報風險？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">產品功效與市場定位</p>
+                      <p className="text-orange-600 dark:text-orange-300 text-sm">"根據此配方的成分和含量，分析成品的預期功效、適用人群、市場定位，以及如何優化配方以提升產品效果？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
