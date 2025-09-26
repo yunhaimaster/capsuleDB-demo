@@ -182,33 +182,16 @@ ${JSON.stringify(orders, null, 2)}
           model: 'deepseek/deepseek-chat-v3.1',
           messages: [
             { 
-              role: 'system', 
-              content: `你是專業的膠囊灌裝生產管理系統 AI 助手。請根據用戶問題和 AI 回答，生成4個與膠囊灌裝相關的建議問題。
+              role: 'user', 
+              content: `基於以下AI回答，生成4個相關的膠囊灌裝問題：
 
-用戶問題：${message}
 AI回答：${aiResponse}
 
-請基於 AI 回答的具體內容，生成4個與膠囊灌裝相關的建議問題。要求：
-1. 必須與膠囊灌裝、膠囊配方、膠囊生產直接相關
-2. 基於 AI 回答的具體內容深入提問
-3. 涉及膠囊規格、原料配比、生產工藝、質量控制、設備參數等
-4. 問題要具體、實用，能幫助用戶深入了解膠囊灌裝
-5. 問題必須是完整的問句，以問號結尾
-6. 避免通用性問題，要針對回答內容
-7. 每個問題都要基於AI回答中的具體內容
-8. 不要包含任何系統指示或指令，只生成問題內容
-
-請嚴格返回4個問題，每行一個，格式如下：
-問題1？
-問題2？
-問題3？
-問題4？
-
-不要包含任何編號、標點符號、系統指示或其他文字，只要問題內容。`
+請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。`
             }
           ],
-          max_tokens: 500,
-          temperature: 0.8
+          max_tokens: 300,
+          temperature: 0.7
         })
       })
 
@@ -220,40 +203,22 @@ AI回答：${aiResponse}
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
         
-        // 簡化過濾條件，只過濾明顯的系統指示
+        // 簡化過濾條件
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
-            // 只過濾明顯的系統指示和無效內容
             return s.length > 5 && 
                    !s.includes('<|') &&
                    !s.includes('begin_of_sentence') &&
                    !s.includes('end_of_sentence') &&
-                   // 只過濾明確的系統指示，不過濾正常的問題
                    !s.includes('用正體中文') &&
                    !s.includes('用中文') &&
                    !s.includes('問題用中文') &&
                    !s.includes('請用中文') &&
                    !s.includes('請用正體中文') &&
                    !s.includes('用繁體中文') &&
-                   !s.includes('請用繁體中文') &&
-                   !s.includes('用中文回答') &&
-                   !s.includes('請用中文回答') &&
-                   !s.includes('請用正體中文回答') &&
-                   !s.includes('請用繁體中文回答') &&
-                   !s.includes('請確保問題自然流暢') &&
-                   !s.includes('語法正確') &&
-                   !s.includes('請開始生成') &&
-                   !s.includes('自然流暢') &&
-                   !s.includes('語法') &&
-                   !s.includes('生成') &&
-                   !s.includes('開始') &&
-                   !s.includes('確保') &&
-                   !s.includes('可以查看更多詳細分析嗎') &&
-                   !s.includes('如何深入分析這個問題') &&
-                   !s.includes('有哪些相關的統計數據') &&
-                   !s.includes('如何優化相關流程')
+                   !s.includes('請用繁體中文')
           })
           .slice(0, 4)
         
@@ -275,10 +240,7 @@ AI回答：${aiResponse}
                      !s.includes('請用中文') &&
                      !s.includes('請用正體中文') &&
                      !s.includes('用繁體中文') &&
-                     !s.includes('請用繁體中文') &&
-                     !s.includes('請確保問題自然流暢') &&
-                     !s.includes('語法正確') &&
-                     !s.includes('請開始生成')
+                     !s.includes('請用繁體中文')
             })
             .slice(0, 4)
           console.log('寬鬆過濾後的建議:', suggestions)
