@@ -332,7 +332,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 className="flex-1"
               />
               <Button
-                onClick={handleSendMessage}
+                onClick={() => handleSendMessage()}
                 disabled={!input.trim() || isLoading}
                 size="sm"
                 className="bg-purple-600 hover:bg-purple-700"

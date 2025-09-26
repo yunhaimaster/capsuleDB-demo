@@ -396,7 +396,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                     className="flex-1"
                   />
                   <Button
-                    onClick={handleSendMessage}
+                    onClick={() => handleSendMessage()}
                     disabled={isLoading || !input.trim()}
                     className="bg-emerald-600 hover:bg-emerald-700"
                   >
