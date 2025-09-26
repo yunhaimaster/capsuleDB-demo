@@ -73,7 +73,7 @@ export default function HomePage() {
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 dark:from-indigo-900/20 dark:to-indigo-800/20 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/30 dark:border-indigo-800/30">
+        <Card className="card-3d-hover group border-0 shadow-lg bg-gradient-to-br from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 dark:from-indigo-900/20 dark:to-indigo-800/20 dark:hover:from-indigo-900/30 dark:hover:to-indigo-800/30 dark:border-indigo-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
@@ -97,7 +97,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 dark:from-emerald-900/20 dark:to-emerald-800/20 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30 dark:border-emerald-800/30">
+        <Card className="card-3d-hover group border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 dark:from-emerald-900/20 dark:to-emerald-800/20 dark:hover:from-emerald-900/30 dark:hover:to-emerald-800/30 dark:border-emerald-800/30">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
@@ -126,7 +126,7 @@ export default function HomePage() {
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900/50 dark:to-gray-900/50 dark:border-slate-700/30">
+        <Card className="card-subtle-3d border-0 shadow-lg bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900/50 dark:to-gray-900/50 dark:border-slate-700/30">
           <CardHeader>
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
               <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
@@ -219,7 +219,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 dark:border-amber-800/30">
+        <Card className="card-subtle-3d border-0 shadow-lg bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/30 dark:to-orange-900/30 dark:border-amber-800/30">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
               <span className="mr-2">📋</span>
@@ -267,7 +267,7 @@ export default function HomePage() {
         </Card>
 
         {/* 版本更新記錄 */}
-        <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 dark:border-blue-800/30">
+        <Card className="card-subtle-3d border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 dark:border-blue-800/30">
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
               <span className="mr-2 text-sm sm:text-base">📝</span>

@@ -152,7 +152,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
         
         <div className="space-y-6">
           {/* 輸入區域 */}
-          <Card>
+          <Card className="card-subtle-3d">
             <CardHeader>
               <CardTitle className="text-lg">輸入配方文字</CardTitle>
             </CardHeader>

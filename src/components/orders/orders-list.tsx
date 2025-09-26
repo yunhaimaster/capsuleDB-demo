@@ -444,7 +444,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               {/* 手機卡片式佈局 */}
               <div className="block md:hidden space-y-4">
                 {orders.map((order) => (
-                  <Card key={order.id} className="border-0 shadow-lg">
+                  <Card key={order.id} className="card-subtle-3d border-0 shadow-lg">
                     <CardContent className="p-4">
                       <div className="space-y-3">
                         {/* 標題行 */}

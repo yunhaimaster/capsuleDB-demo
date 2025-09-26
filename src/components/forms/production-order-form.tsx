@@ -194,13 +194,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-            <span className="text-blue-600">📝</span>
-            基本資訊
-          </CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+              <span className="text-blue-600">📝</span>
+              基本資訊
+            </CardTitle>
+          </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -265,13 +265,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 膠囊規格 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-            <span className="text-purple-600">💊</span>
-            膠囊規格
-          </CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+              <span className="text-purple-600">💊</span>
+              膠囊規格
+            </CardTitle>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
@@ -331,13 +331,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 其他信息 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-            <span className="text-green-600">📋</span>
-            其他信息
-          </CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+              <span className="text-green-600">📋</span>
+              其他信息
+            </CardTitle>
+          </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="completionDate">完工日期</Label>
@@ -511,7 +511,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           {/* 手機版卡片佈局 */}
           <div className="block md:hidden space-y-4">
             {fields.map((field, index) => (
-              <Card key={field.id} className="border border-gray-200 dark:border-gray-700">
+              <Card key={field.id} className="card-subtle-3d border border-gray-200 dark:border-gray-700">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300">
@@ -629,13 +629,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 計算結果 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-            <span className="text-emerald-600">📊</span>
-            計算結果
-          </CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+              <span className="text-emerald-600">📊</span>
+              計算結果
+            </CardTitle>
+          </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg border border-blue-200 dark:border-blue-800">

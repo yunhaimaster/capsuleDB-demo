@@ -75,7 +75,7 @@ export default function OrderDetailPage() {
           ]}
         />
         <div className="flex items-center justify-center min-h-[400px]">
-          <Card className="max-w-md w-full">
+          <Card className="card-3d-hover max-w-md w-full">
             <CardHeader className="text-center">
               <CardTitle className="text-xl text-red-600">載入失敗</CardTitle>
               <CardDescription>{error || '訂單不存在'}</CardDescription>
@@ -132,10 +132,10 @@ export default function OrderDetailPage() {
       </div>
 
       {/* 基本資訊 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg md:text-xl">基本資訊</CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl">基本資訊</CardTitle>
+          </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -202,10 +202,10 @@ export default function OrderDetailPage() {
       </Card>
 
       {/* 原料配方明細 */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg md:text-xl">原料配方明細</CardTitle>
-        </CardHeader>
+        <Card className="card-subtle-3d">
+          <CardHeader>
+            <CardTitle className="text-lg md:text-xl">原料配方明細</CardTitle>
+          </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
