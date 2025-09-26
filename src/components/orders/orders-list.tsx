@@ -530,7 +530,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                     +{order.ingredients.length - 3} 更多
                                   </button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                                <DialogContent className="max-w-2xl max-h-[80vh] w-[95vw] sm:w-[90vw] overflow-y-auto">
                                   <DialogHeader>
                                     <DialogTitle>原料配方明細 - {order.customerName}</DialogTitle>
                                   </DialogHeader>
@@ -829,7 +829,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                     +{order.ingredients.length - 2} 更多
                                   </button>
                                 </DialogTrigger>
-                                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                                <DialogContent className="max-w-2xl max-h-[80vh] w-[95vw] sm:w-[90vw] overflow-y-auto">
                                   <DialogHeader>
                                     <DialogTitle>原料配方明細 - {order.customerName}</DialogTitle>
                                   </DialogHeader>
@@ -936,7 +936,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               <Eye className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                          <DialogContent className="max-w-4xl max-h-[80vh] w-[95vw] sm:w-[90vw] overflow-y-auto">
                             <DialogHeader>
                               <DialogTitle>訂單詳情</DialogTitle>
                             </DialogHeader>

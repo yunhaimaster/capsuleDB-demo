@@ -240,11 +240,13 @@ export default function HomePage() {
                 <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-100">
                   <li>• 膠囊配方管理與記錄追蹤</li>
-                  <li>• 生產訂單狀態管理與品質控制</li>
-                  <li>• 智能 AI 助手分析與建議</li>
-                  <li>• 響應式設計，支援手機與桌面</li>
+                  <li>• 智能配方導入（文字/圖片解析）</li>
+                  <li>• AI 助手分析與專業建議</li>
+                  <li>• 響應式設計，完美支援手機與桌面</li>
                   <li>• 深色模式與淺色模式切換</li>
                   <li>• 數據導出與備份功能</li>
+                  <li>• 微動畫與浮動元素效果</li>
+                  <li>• 玻璃質感與 3D 視覺效果</li>
                 </ul>
               </div>
               
@@ -284,10 +286,28 @@ export default function HomePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-3">
+              <div className="bg-green-50 dark:bg-green-900/40 p-3 rounded-xl border border-green-200 dark:border-green-700/50">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
+                  <span className="text-xs bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                </div>
+                <div className="text-xs sm:text-xs md:text-sm text-green-700 dark:text-green-100 space-y-1">
+                  <p className="text-xs sm:text-xs md:text-sm">🎨 <strong>視覺效果全面升級</strong></p>
+                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
+                    <li>• 新增微動畫系統：按鈕漣漪、表單聚焦、卡片懸停效果</li>
+                    <li>• 浮動元素系統：8種不同浮動效果，營造動態背景</li>
+                    <li>• 玻璃質感設計：現代化毛玻璃效果，提升視覺層次</li>
+                    <li>• 3D 懸停效果：卡片立體互動，增強用戶體驗</li>
+                    <li>• 響應式優化：完美支援手機與桌面，無縫切換</li>
+                    <li>• 性能優化：CSS 硬體加速，流暢動畫體驗</li>
+                  </ul>
+                </div>
+              </div>
+
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                   <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.6 - 2024年9月25日</h4>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
                   <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 智能助手升級</strong></p>

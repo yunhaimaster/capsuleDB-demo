@@ -59,7 +59,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         <Button 
           variant="outline" 
           size="sm"
-          className="fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg"
+          className="fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg min-w-fit whitespace-nowrap"
         >
           <Bot className="w-4 h-4 mr-2" />
           AI 助手
