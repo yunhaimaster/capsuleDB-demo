@@ -27,28 +27,22 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
   if (variant === 'icon') {
     return (
       <div className={cn(
-        'flex items-center justify-center relative',
+        'flex items-center justify-center',
         sizeClasses[size],
         className
       )}>
-        {/* 科技感背景容器 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-700 rounded-xl shadow-lg">
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent rounded-xl"></div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-cyan-400/20 via-transparent to-blue-600/20 rounded-xl"></div>
-        </div>
-        
-        {/* Logo SVG - 移除白色背景，使用透明背景 */}
+        {/* 使用您提供的原始 logo-only SVG，保持準確設計 */}
         <svg 
           viewBox="0 0 157.44 220.32" 
-          className="relative z-10 w-3/4 h-3/4 drop-shadow-lg"
+          className="w-full h-full"
           fill="none"
         >
           <defs>
             <style>
               {`.st0 { fill: #44bac6; }
-               .st1 { fill: #ffffff; }
+               .st1 { fill: #fefefe; }
                .st2 { fill: #a0b5cc; }
-               .st3 { fill: #ffffff; }`}
+               .st3 { fill: #2a588c; }`}
             </style>
           </defs>
           <path className="st1" d="M157.44,198.5v21.82H0V0h157.44v55.62l-.52-.16c-1.18-10.48-9.43-19.06-20.31-19.26l-.74-.48.48.23v182.15l-.48.3.73-.48c10.33-.21,19.16-8.4,20.06-18.72l.53-.7c.07-.21.15-.21.24,0Z"/>
@@ -59,12 +53,6 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
           <path className="st3" d="M122.21,218.4H35.47v-21.34h67.46c.83,0,3.21.63,4.14.9,8.94,2.57,14.99,11.23,15.15,20.44Z"/>
           <path className="st0" d="M122.21,127.06H54.76c-4.29,0-10.82-3.8-13.66-6.95-3.6-3.98-5.38-9.05-5.63-14.39h67.94c.95,0,4.24,1.03,5.28,1.43,8.13,3.14,13.34,11.26,13.53,19.9Z"/>
         </svg>
-        
-        {/* 科技感光效 */}
-        <div className="absolute inset-0 rounded-xl overflow-hidden">
-          <div className="absolute -top-1 -left-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-          <div className="absolute -bottom-1 -right-1 w-1 h-1 bg-blue-400 rounded-full animate-pulse delay-1000"></div>
-        </div>
       </div>
     )
   }
