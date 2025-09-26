@@ -59,14 +59,14 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
         <Button 
           variant="outline" 
           size="sm"
-          className="ripple-effect btn-micro-hover micro-brand-glow fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg min-w-fit whitespace-nowrap"
+          className="fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg"
         >
-          <Bot className="w-4 h-4 mr-2 icon-micro-bounce" />
+          <Bot className="w-4 h-4 mr-2" />
           AI 助手
         </Button>
       </DialogTrigger>
       
-      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] glass-card-easy-health relative z-[100] ${isMinimized ? 'max-w-sm' : ''}`}>
+      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] ${isMinimized ? 'max-w-sm' : ''}`}>
         <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
           <DialogTitle className="text-base sm:text-lg font-semibold flex items-center">
             <Bot className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-emerald-600" />
@@ -398,12 +398,12 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
                   <Button
                     onClick={() => handleSendMessage()}
                     disabled={isLoading || !input.trim()}
-                    className="ripple-effect btn-micro-hover micro-brand-glow bg-emerald-600 hover:bg-emerald-700"
+                    className="bg-emerald-600 hover:bg-emerald-700"
                   >
                     {isLoading ? (
-                      <Loader2 className="w-4 h-4 micro-loading" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                      <Send className="w-4 h-4 icon-micro-bounce" />
+                      <Send className="w-4 h-4" />
                     )}
                   </Button>
                 </div>

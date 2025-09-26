@@ -63,14 +63,14 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
         <Button 
           variant="default"
           size="sm"
-          className="ripple-effect btn-micro-hover micro-brand-glow bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10"
+          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10"
         >
-          <Bot className="h-4 w-4 mr-2 icon-micro-bounce" />
+          <Bot className="h-4 w-4 mr-2" />
           <span className="hidden sm:inline">AI 助手</span>
           <span className="sm:hidden">AI</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col glass-card-easy-health relative z-[100] ${isMinimized ? 'h-16' : ''}`}>
+      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
         <DialogHeader className="pb-3 sm:pb-4">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
@@ -82,20 +82,20 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 variant="outline"
                 size="sm"
                 onClick={startNewChat}
-                className="ripple-effect btn-micro-hover h-7 w-7 sm:h-8 sm:w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                 title="新對話（保存當前對話）"
               >
-                <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 icon-micro-bounce" />
+                <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
               {chatHistory.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowSettings(!showSettings)}
-                  className="ripple-effect btn-micro-hover h-7 w-7 sm:h-8 sm:w-8 p-0"
+                  className="h-7 w-7 sm:h-8 sm:w-8 p-0"
                   title="對話歷史"
                 >
-                  <History className="h-3 w-3 sm:h-4 sm:w-4 icon-micro-bounce" />
+                  <History className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               )}
               {messages.length > 0 && (
@@ -335,9 +335,9 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                 onClick={() => handleSendMessage()}
                 disabled={!input.trim() || isLoading}
                 size="sm"
-                className="ripple-effect btn-micro-hover micro-brand-glow bg-purple-600 hover:bg-purple-700"
+                className="bg-purple-600 hover:bg-purple-700"
               >
-                <Send className="h-4 w-4 icon-micro-bounce" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
             
