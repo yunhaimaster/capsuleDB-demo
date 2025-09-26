@@ -10,7 +10,6 @@ import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
-import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -50,17 +49,49 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
         <Breadcrumb
           items={[
             { label: '生產記錄', href: '/orders' },
             { label: '載入中...', href: '#' }
           ]}
         />
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="text-lg text-gray-500">載入中...</div>
-          </div>
+        <div className="space-y-6 skeleton-stagger">
+          {/* Basic Info Skeleton */}
+          <Card className="glass-card-subtle">
+            <CardHeader>
+              <div className="skeleton skeleton-title"></div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="skeleton skeleton-text-sm"></div>
+                  <div className="skeleton skeleton-text"></div>
+                  <div className="skeleton skeleton-text"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="skeleton skeleton-text-sm"></div>
+                  <div className="skeleton skeleton-text"></div>
+                  <div className="skeleton skeleton-text"></div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Ingredients Skeleton */}
+          <Card className="glass-card-subtle">
+            <CardHeader>
+              <div className="skeleton skeleton-title"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
@@ -96,8 +127,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <PageTransition>
-      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
+    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 麵包屑導航 */}
       <Breadcrumb
         items={[
@@ -231,7 +261,6 @@ export default function OrderDetailPage() {
           </Table>
         </CardContent>
       </Card>
-      </div>
-    </PageTransition>
+    </div>
   )
 }

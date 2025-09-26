@@ -8,7 +8,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Logo } from '@/components/ui/logo'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
-import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import { Plus, FileText, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
@@ -56,10 +55,9 @@ export default function HomePage() {
   }
 
   return (
-    <PageTransition>
-      <div className="space-y-8 animated-gradient-bg-subtle min-h-screen">
-        {/* Header Section */}
-        <div className="floating-orbs bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
+    <div className="space-y-8 animated-gradient-bg-subtle min-h-screen">
+      {/* Header Section */}
+      <div className="floating-orbs bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
           <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
             <Logo size="xl" />
@@ -74,7 +72,7 @@ export default function HomePage() {
       </div>
 
       {/* Main Action Cards */}
-      <StaggeredList className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         <Card className="card-3d-hover glass-card-easy-health group border-0 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
@@ -122,10 +120,12 @@ export default function HomePage() {
             </Link>
           </CardContent>
         </Card>
-      </StaggeredList>
+
+
+      </div>
 
       {/* Feature Cards */}
-      <StaggeredList className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         <Card className="card-subtle-3d glass-card-subtle border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
@@ -138,8 +138,13 @@ export default function HomePage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {loading ? (
-              <div className="text-center py-4">
-                <div className="text-sm text-gray-500 dark:text-gray-400">載入中...</div>
+              <div className="space-y-3 skeleton-stagger">
+                <div className="skeleton skeleton-title"></div>
+                <div className="skeleton skeleton-text"></div>
+                <div className="skeleton skeleton-text"></div>
+                <div className="skeleton skeleton-text-sm"></div>
+                <div className="skeleton skeleton-text-sm"></div>
+                <div className="skeleton skeleton-button"></div>
               </div>
             ) : recentOrders.length > 0 ? (
               <div className="space-y-2">
@@ -316,7 +321,7 @@ export default function HomePage() {
             </div>
           </CardContent>
         </Card>
-      </StaggeredList>
+      </div>
 
              {/* 智能 AI 助手 */}
              <SmartAIAssistant 
@@ -419,6 +424,5 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
         </Table>
       </div>
     </div>
-    </PageTransition>
   )
 }

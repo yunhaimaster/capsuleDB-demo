@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
-import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import { ProductionOrder, SearchFilters } from '@/types'
 import Link from 'next/link'
 
@@ -209,8 +208,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <PageTransition>
-      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
+    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 搜尋和篩選 */}
       <Card className="glass-card-subtle">
         <CardHeader>
@@ -433,9 +431,36 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-6 md:p-8 text-center">
-              <div className="animate-spin rounded-full h-6 w-6 md:h-8 md:w-8 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-2 text-sm md:text-base text-muted-foreground">載入中...</p>
+            <div className="p-6 md:p-8 space-y-4 skeleton-stagger">
+              {/* Desktop skeleton */}
+              <div className="hidden md:block">
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+                <div className="skeleton skeleton-table-row"></div>
+              </div>
+              {/* Mobile skeleton */}
+              <div className="block md:hidden space-y-4">
+                <div className="skeleton-card">
+                  <div className="skeleton skeleton-title mb-3"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text-sm"></div>
+                </div>
+                <div className="skeleton-card">
+                  <div className="skeleton skeleton-title mb-3"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text-sm"></div>
+                </div>
+                <div className="skeleton-card">
+                  <div className="skeleton skeleton-title mb-3"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text mb-2"></div>
+                  <div className="skeleton skeleton-text-sm"></div>
+                </div>
+              </div>
             </div>
           ) : orders.length === 0 ? (
             <div className="p-6 md:p-8 text-center">
@@ -1051,6 +1076,5 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
         </Table>
       </div>
     </div>
-    </PageTransition>
   )
 }

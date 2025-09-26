@@ -199,8 +199,25 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
             </Alert>
           )}
 
+          {/* 解析中狀態 */}
+          {isParsing && (
+            <Card className="glass-card-subtle">
+              <CardHeader>
+                <div className="skeleton skeleton-title"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 skeleton-stagger">
+                  <div className="skeleton skeleton-table-row"></div>
+                  <div className="skeleton skeleton-table-row"></div>
+                  <div className="skeleton skeleton-table-row"></div>
+                  <div className="skeleton skeleton-table-row"></div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* 解析結果 */}
-          {parsedIngredients.length > 0 && (
+          {parsedIngredients.length > 0 && !isParsing && (
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">

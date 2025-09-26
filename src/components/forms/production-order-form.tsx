@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
-import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -192,10 +191,64 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     }
   }
 
-  return (
-    <PageTransition>
+  if (isSubmitting) {
+    return (
       <div className="animated-gradient-bg-subtle min-h-screen">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-6 skeleton-stagger">
+          {/* Basic Info Skeleton */}
+          <Card className="glass-card-subtle">
+            <CardHeader>
+              <div className="skeleton skeleton-title"></div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <div className="skeleton skeleton-text-sm"></div>
+                  <div className="skeleton skeleton-form-field"></div>
+                </div>
+                <div className="space-y-2">
+                  <div className="skeleton skeleton-text-sm"></div>
+                  <div className="skeleton skeleton-form-field"></div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Capsule Specs Skeleton */}
+          <Card className="glass-card-subtle">
+            <CardHeader>
+              <div className="skeleton skeleton-title"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="skeleton skeleton-form-field"></div>
+                <div className="skeleton skeleton-form-field"></div>
+                <div className="skeleton skeleton-form-field"></div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Ingredients Skeleton */}
+          <Card className="glass-card-subtle">
+            <CardHeader>
+              <div className="skeleton skeleton-title"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="skeleton skeleton-form-field"></div>
+                <div className="skeleton skeleton-form-field"></div>
+                <div className="skeleton skeleton-form-field"></div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="animated-gradient-bg-subtle min-h-screen">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
         <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
@@ -682,7 +735,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         </Button>
       </div>
     </form>
-      </div>
-    </PageTransition>
+    </div>
   )
 }
