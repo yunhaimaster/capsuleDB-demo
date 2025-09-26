@@ -32,7 +32,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             <ProtectedLayout>
-              <div className="min-h-screen bg-background">
+              <div className="min-h-screen">
                 <header className="border-b">
                   <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">

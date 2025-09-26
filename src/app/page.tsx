@@ -55,7 +55,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="space-y-8 animated-gradient-bg-subtle min-h-screen">
+    <div className="space-y-8 animated-gradient-bg-visible min-h-screen">
       {/* Header Section */}
       <div className="floating-orbs bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">

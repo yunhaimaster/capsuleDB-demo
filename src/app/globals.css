@@ -77,14 +77,28 @@
   animation: gradientShift 8s ease-in-out infinite;
 }
 
+/* More visible animated gradient for testing */
+.animated-gradient-bg-visible {
+  background: linear-gradient(
+    45deg,
+    rgba(42, 88, 140, 0.3) 0%,
+    rgba(68, 186, 198, 0.3) 25%,
+    rgba(132, 157, 188, 0.3) 50%,
+    rgba(68, 186, 198, 0.3) 75%,
+    rgba(42, 88, 140, 0.3) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
 .animated-gradient-bg-subtle {
   background: linear-gradient(
     135deg,
-    rgba(42, 88, 140, 0.05) 0%,
-    rgba(68, 186, 198, 0.05) 25%,
-    rgba(132, 157, 188, 0.05) 50%,
-    rgba(68, 186, 198, 0.05) 75%,
-    rgba(42, 88, 140, 0.05) 100%
+    rgba(42, 88, 140, 0.15) 0%,
+    rgba(68, 186, 198, 0.15) 25%,
+    rgba(132, 157, 188, 0.15) 50%,
+    rgba(68, 186, 198, 0.15) 75%,
+    rgba(42, 88, 140, 0.15) 100%
   );
   background-size: 300% 300%;
   animation: gradientShift 12s ease-in-out infinite;
@@ -93,10 +107,10 @@
 .animated-gradient-bg-accent {
   background: linear-gradient(
     225deg,
-    rgba(42, 88, 140, 0.1) 0%,
-    rgba(68, 186, 198, 0.1) 30%,
-    rgba(132, 157, 188, 0.1) 60%,
-    rgba(68, 186, 198, 0.1) 100%
+    rgba(42, 88, 140, 0.2) 0%,
+    rgba(68, 186, 198, 0.2) 30%,
+    rgba(132, 157, 188, 0.2) 60%,
+    rgba(68, 186, 198, 0.2) 100%
   );
   background-size: 200% 200%;
   animation: gradientShift 6s ease-in-out infinite;
@@ -127,7 +141,7 @@
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(68, 186, 198, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(68, 186, 198, 0.2) 0%, transparent 70%);
   animation: float 20s ease-in-out infinite;
   pointer-events: none;
 }
@@ -141,7 +155,7 @@
 .floating-orbs::after {
   bottom: -100px;
   right: -100px;
-  background: radial-gradient(circle, rgba(42, 88, 140, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(42, 88, 140, 0.2) 0%, transparent 70%);
   animation-delay: -10s;
 }
 
