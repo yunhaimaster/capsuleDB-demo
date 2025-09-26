@@ -280,19 +280,19 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.5 - 2024年9月25日</h4>
+                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.6 - 2024年9月25日</h4>
                   <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🐛 <strong>Bug 修復與繁體中文化</strong></p>
+                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 模型升級與錯誤處理優化</strong></p>
                   <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 修復表單計算和 API 路由中的語法錯誤</li>
-                    <li>• 完全繁體中文化：統一所有錯誤信息和調試日誌</li>
-                    <li>• 增強錯誤處理和用戶體驗</li>
-                    <li>• 提升代碼品質，通過 linting 檢查</li>
-                    <li>• 使用穩定的 OpenAI GPT-4o Mini 模型</li>
-                    <li>• 確保整個網站使用統一的繁體中文</li>
-                    <li>• 改進 API 錯誤回應和處理邏輯</li>
+                    <li>• 升級 AI 模型至 DeepSeek Chat v3.1，提升回答質量</li>
+                    <li>• 改善錯誤處理：提供重試選項而非要求聯繫技術支援</li>
+                    <li>• 優化 AI 助手用戶體驗：智能重試功能和友善錯誤訊息</li>
+                    <li>• 修復 TypeScript 編譯錯誤，確保部署成功</li>
+                    <li>• 統一所有 AI 相關組件的錯誤處理邏輯</li>
+                    <li>• 更新網站文案：移除 GPT-4 相關引用，反映最新技術</li>
+                    <li>• 增強 AI 助手穩定性與可靠性</li>
                   </ul>
                 </div>
               </div>

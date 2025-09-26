@@ -30,7 +30,7 @@ export function AIPoweredBadge({
         className={`inline-flex items-center gap-1 text-xs bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 ${className}`}
       >
         {showIcon && <Zap className="w-3 h-3" />}
-        <span>Powered by OpenAI GPT-4o Mini</span>
+        <span>Powered by DeepSeek Chat v3.1</span>
       </Badge>
     )
   }
@@ -48,7 +48,7 @@ export function AIPoweredBadge({
           Powered by AI
         </span>
         <span className="text-xs text-blue-600 dark:text-blue-400">
-          OpenAI GPT-4o Mini
+          DeepSeek Chat v3.1
         </span>
       </div>
     </div>
