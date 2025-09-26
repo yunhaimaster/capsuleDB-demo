@@ -45,6 +45,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     setParsedIngredients([])
 
     try {
+      console.log('開始解析配方:', importText.trim())
+      
       const response = await fetch('/api/ai/parse-recipe', {
         method: 'POST',
         headers: {
@@ -55,17 +57,28 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
         }),
       })
 
+      console.log('API 回應狀態:', response.status)
+
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || '解析失敗')
+        console.error('API 錯誤回應:', errorData)
+        throw new Error(errorData.error || `解析失敗 (${response.status})`)
       }
 
       const data = await response.json()
+      console.log('API 回應數據:', data)
       
-      if (data.success) {
-        setParsedIngredients(data.ingredients)
-        setParseSummary(data.summary)
-        setConfidence(data.confidence)
+      if (data.success && data.data) {
+        const ingredients = data.data.ingredients || []
+        console.log('解析到的原料:', ingredients)
+        
+        if (ingredients.length === 0) {
+          throw new Error('未能解析到任何原料，請檢查配方格式')
+        }
+        
+        setParsedIngredients(ingredients)
+        setParseSummary(data.data.summary || '')
+        setConfidence(data.data.confidence || '中')
       } else {
         throw new Error(data.error || '解析失敗')
       }
