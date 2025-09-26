@@ -415,8 +415,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 variant="outline"
                 size="sm"
                 onClick={() => handleExport('csv')}
+                className="ripple-effect btn-micro-hover micro-brand-glow"
               >
-                <Download className="mr-2 h-4 w-4" />
+                <Download className="mr-2 h-4 w-4 icon-micro-bounce" />
                 匯出 CSV
               </Button>
             </div>

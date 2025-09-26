@@ -266,7 +266,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   id="customerName"
                   {...register('customerName')}
                   placeholder="請輸入客戶名稱"
-                  className="flex-1"
+                  className="flex-1 form-focus-effect input-micro-focus"
                 />
                 <FieldTranslator
                   value={watch('customerName') || ''}
@@ -726,10 +726,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         >
           取消
         </Button>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={isSubmitting}
-          className="w-full sm:w-auto order-1 sm:order-2"
+          className="ripple-effect btn-micro-hover micro-brand-glow w-full sm:w-auto order-1 sm:order-2"
         >
           {isSubmitting ? '儲存中...' : '儲存配方'}
         </Button>

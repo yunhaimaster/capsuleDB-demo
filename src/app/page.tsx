@@ -73,10 +73,10 @@ export default function HomePage() {
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-3d-hover glass-card-easy-health group border-0 shadow-lg">
+        <Card className="card-3d-hover glass-card-easy-health card-micro-hover group border-0 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
@@ -90,17 +90,17 @@ export default function HomePage() {
               建立新的膠囊配方記錄，包含原料配置與生產參數
             </p>
             <Link href="/orders/new">
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+              <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
                 開始建立
               </Button>
             </Link>
           </CardContent>
         </Card>
 
-        <Card className="card-3d-hover glass-card-easy-health group border-0 shadow-lg">
+        <Card className="card-3d-hover glass-card-easy-health card-micro-hover group border-0 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
@@ -114,7 +114,7 @@ export default function HomePage() {
               檢視與管理所有生產記錄，支援搜尋、篩選與編輯
             </p>
             <Link href="/orders">
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+              <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
                 查看記錄
               </Button>
             </Link>
@@ -126,7 +126,7 @@ export default function HomePage() {
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-subtle-3d glass-card-subtle border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
               <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
@@ -224,7 +224,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
 
-        <Card className="card-subtle-3d glass-card-subtle border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
               <span className="mr-2">📋</span>
@@ -272,7 +272,7 @@ export default function HomePage() {
         </Card>
 
         {/* 版本更新記錄 */}
-        <Card className="card-subtle-3d glass-card-subtle border-0 shadow-lg">
+        <Card className="card-subtle-3d glass-card-subtle card-micro-hover border-0 shadow-lg">
           <CardHeader className="pb-3 sm:pb-4">
             <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
               <span className="mr-2 text-sm sm:text-base">📝</span>

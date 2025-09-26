@@ -78,7 +78,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
             
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+              className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
             >
               登陸系統
             </Button>

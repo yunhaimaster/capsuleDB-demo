@@ -356,6 +356,234 @@
 .skeleton-stagger > *:nth-child(4) { --stagger-delay: 3; }
 .skeleton-stagger > *:nth-child(5) { --stagger-delay: 4; }
 
+/* Micro-animations and Interactive Effects */
+
+/* Button Ripple Effect */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ripple-effect:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Enhanced Button Hover Effects */
+.btn-micro-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+}
+
+.btn-micro-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-micro-hover:active {
+  transform: translateY(0);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Form Focus Effects */
+.form-focus-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.form-focus-effect:focus {
+  transform: scale(1.02);
+  box-shadow: 
+    0 0 0 3px rgba(68, 186, 198, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #44bac6;
+}
+
+.form-focus-effect:focus-within {
+  transform: scale(1.02);
+  box-shadow: 
+    0 0 0 3px rgba(68, 186, 198, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #44bac6;
+}
+
+/* Floating Label Animation */
+.floating-label {
+  position: relative;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label {
+  transform: translateY(-1.5rem) scale(0.85);
+  color: #44bac6;
+}
+
+.floating-label label {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  color: #6b7280;
+  background: white;
+  padding: 0 0.25rem;
+}
+
+/* Card Hover Micro-animations */
+.card-micro-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-micro-hover:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(68, 186, 198, 0.1);
+}
+
+/* Icon Micro-animations */
+.icon-micro-bounce {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.icon-micro-bounce:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.icon-micro-pulse {
+  animation: icon-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Input Field Micro-animations */
+.input-micro-focus {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-micro-focus:focus {
+  transform: scale(1.01);
+  box-shadow: 
+    0 0 0 2px rgba(68, 186, 198, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Success/Error Micro-animations */
+.micro-success {
+  animation: micro-success 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes micro-success {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.micro-error {
+  animation: micro-error 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes micro-error {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Loading Micro-animations */
+.micro-loading {
+  animation: micro-loading 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes micro-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Staggered Micro-animations */
+.micro-stagger > * {
+  animation: micro-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.micro-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+.micro-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+.micro-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+.micro-stagger > *:nth-child(4) { animation-delay: 0.4s; }
+.micro-stagger > *:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes micro-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Brand Color Micro-animations */
+.micro-brand-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.micro-brand-glow:hover {
+  box-shadow: 
+    0 0 20px rgba(68, 186, 198, 0.3),
+    0 0 40px rgba(68, 186, 198, 0.1);
+}
+
+.micro-brand-pulse {
+  animation: micro-brand-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes micro-brand-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(68, 186, 198, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(68, 186, 198, 0);
+  }
+}
+
 .card-hover {
   transition: all 0.3s ease;
 }

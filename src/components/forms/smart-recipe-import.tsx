@@ -173,16 +173,16 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                 <Button 
                   onClick={handleParse} 
                   disabled={isParsing || !importText.trim()}
-                  className="flex-1"
+                  className="ripple-effect btn-micro-hover micro-brand-glow flex-1"
                 >
                   {isParsing ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="w-4 h-4 mr-2 micro-loading" />
                       解析中...
                     </>
                   ) : (
                     <>
-                      <FileText className="w-4 h-4 mr-2" />
+                      <FileText className="w-4 h-4 mr-2 icon-micro-bounce" />
                       解析配方
                     </>
                   )}
