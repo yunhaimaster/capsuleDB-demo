@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
+import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import { ProductionOrder, SearchFilters } from '@/types'
 import Link from 'next/link'
 
@@ -208,7 +209,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
+    <PageTransition>
+      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 搜尋和篩選 */}
       <Card className="glass-card-subtle">
         <CardHeader>
@@ -1049,5 +1051,6 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
         </Table>
       </div>
     </div>
+    </PageTransition>
   )
 }

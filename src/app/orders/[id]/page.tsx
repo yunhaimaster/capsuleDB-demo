@@ -10,6 +10,7 @@ import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
+import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -95,7 +96,8 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
+    <PageTransition>
+      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
       {/* 麵包屑導航 */}
       <Breadcrumb
         items={[
@@ -229,6 +231,7 @@ export default function OrderDetailPage() {
           </Table>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </PageTransition>
   )
 }

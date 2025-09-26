@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Trash2, Copy, Calculator } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
+import { PageTransition, StaggeredList } from '@/components/ui/page-transition'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
@@ -192,8 +193,9 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   }
 
   return (
-    <div className="animated-gradient-bg-subtle min-h-screen">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <PageTransition>
+      <div className="animated-gradient-bg-subtle min-h-screen">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
         <Card className="card-subtle-3d glass-card-subtle">
           <CardHeader>
@@ -680,6 +682,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         </Button>
       </div>
     </form>
-    </div>
+      </div>
+    </PageTransition>
   )
 }
