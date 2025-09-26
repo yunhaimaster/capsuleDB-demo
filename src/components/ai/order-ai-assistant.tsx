@@ -226,11 +226,11 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                       <p className="text-green-600 dark:text-green-300 text-sm">"根據此配方的具體成分和含量，分析在香港、大陸、歐洲、美國市場的法規合規性，直接告訴我需要做什麼申報、標籤要求、成分限量檢查？"</p>
                     </button>
                     <button
-                      onClick={() => setInput('根據此配方的成分和含量，分析成品的預期功效、適用人群、市場定位，以及如何優化配方以提升產品效果？')}
+                      onClick={() => setInput('評估一下混合後的粉劑是什麼顏色。使用設定的膠囊殼灌裝會有染色問題嗎？')}
                       className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
                     >
-                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">產品功效與市場定位</p>
-                      <p className="text-orange-600 dark:text-orange-300 text-sm">"根據此配方的成分和含量，分析成品的預期功效、適用人群、市場定位，以及如何優化配方以提升產品效果？"</p>
+                      <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">粉劑顏色與膠囊染色評估</p>
+                      <p className="text-orange-600 dark:text-orange-300 text-sm">"評估一下混合後的粉劑是什麼顏色。使用設定的膠囊殼灌裝會有染色問題嗎？"</p>
                     </button>
                   </div>
                   <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
