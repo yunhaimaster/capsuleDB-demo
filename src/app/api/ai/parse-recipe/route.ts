@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
       console.error('原始回應:', aiResponse)
       
       // 如果 JSON 解析失敗，嘗試手動構建基本結構
-      const lines = aiResponse.split('\n').filter(line => line.trim())
+      const lines = aiResponse.split('\n').filter((line: string) => line.trim())
       const ingredients = []
       
       for (const line of lines) {
