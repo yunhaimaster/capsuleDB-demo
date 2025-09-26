@@ -27,13 +27,13 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-primary/5 to-brand-secondary/5 dark:from-gray-900 dark:to-gray-800">
       <Card className="w-full max-w-md mx-4 shadow-xl">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 p-3 bg-blue-100 dark:bg-blue-900 rounded-full w-fit">
-            <Logo size="lg" variant="icon" className="text-blue-600 dark:text-blue-400" />
+          <div className="mx-auto mb-4 p-3 bg-brand-primary/10 dark:bg-brand-primary/20 rounded-full w-fit">
+            <Logo size="lg" variant="icon" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+          <CardTitle className="text-2xl font-bold text-brand-primary">
             Easy Health 系統登陸
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">

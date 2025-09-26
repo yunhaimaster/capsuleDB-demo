@@ -50,6 +50,12 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Easy Health Brand Colors
+        brand: {
+          primary: "#2a588c",    // Dark blue from logo
+          secondary: "#44bac6",  // Light cyan from logo  
+          accent: "#849dbc",     // Medium blue from logo
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

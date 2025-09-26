@@ -57,12 +57,12 @@ export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-purple-800/30">
+      <div className="bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
           <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
-            <Logo size="xl" className="text-blue-600 dark:text-blue-400" />
+            <Logo size="xl" />
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent leading-tight">
             Easy Health 膠囊配方管理系統
           </h1>
           <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">

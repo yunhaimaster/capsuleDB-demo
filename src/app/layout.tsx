@@ -37,9 +37,9 @@ export default function RootLayout({
                   <div className="container mx-auto px-4 py-3 md:py-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <Logo size="lg" variant="icon" className="text-blue-600 dark:text-blue-400" />
+                        <Logo size="lg" variant="icon" />
                         <div>
-                          <h1 className="text-lg md:text-2xl font-bold text-primary">
+                          <h1 className="text-lg md:text-2xl font-bold text-brand-primary">
                             Easy Health 膠囊配方管理系統
                           </h1>
                           <p className="text-xs md:text-sm text-muted-foreground mt-1">

@@ -56,16 +56,22 @@ export function Logo({ size = 'md', variant = 'default', className }: LogoProps)
   if (variant === 'text') {
     return (
       <div className={cn('flex flex-col', className)}>
-        <span className={cn(
-          'font-bold text-blue-600 dark:text-blue-400',
-          textSizeClasses[size]
-        )}>
+        <span 
+          className={cn(
+            'font-bold',
+            textSizeClasses[size]
+          )}
+          style={{ color: '#2a588c' }}
+        >
           Easy
         </span>
-        <span className={cn(
-          'font-bold text-cyan-400 dark:text-cyan-300',
-          textSizeClasses[size]
-        )}>
+        <span 
+          className={cn(
+            'font-bold',
+            textSizeClasses[size]
+          )}
+          style={{ color: '#44bac6' }}
+        >
           Health
         </span>
       </div>
