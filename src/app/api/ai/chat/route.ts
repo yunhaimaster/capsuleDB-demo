@@ -166,14 +166,9 @@ ${JSON.stringify(orders, null, 2)}
     console.log('開始為訊息生成建議:', message)
     console.log('AI 回應:', aiResponse)
     
-    // 嘗試生成建議問題，最多重試2次
-    let retryCount = 0
-    const maxRetries = 2
-    
-    while (retryCount < maxRetries && suggestions.length === 0) {
-      try {
-        console.log(`嘗試生成建議，第 ${retryCount + 1} 次嘗試`)
-        const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
+    try {
+      console.log('嘗試生成動態建議')
+      const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -198,6 +193,7 @@ AI回答：${aiResponse}
 4. 問題要具體、實用，能幫助用戶深入了解膠囊灌裝
 5. 問題必須是完整的問句，以問號結尾
 6. 避免通用性問題，要針對回答內容
+7. 每個問題都要基於AI回答中的具體內容
 
 請嚴格返回4個問題，每行一個，格式如下：
 問題1？
@@ -208,8 +204,8 @@ AI回答：${aiResponse}
 不要包含任何編號、標點符號或其他文字，只要問題內容。`
             }
           ],
-          max_tokens: 400,
-          temperature: 0.7
+          max_tokens: 500,
+          temperature: 0.8
         })
       })
 
@@ -218,12 +214,14 @@ AI回答：${aiResponse}
         console.log('建議 API 回應:', suggestionsData)
         const suggestionsText = suggestionsData.choices[0].message.content
         console.log('原始建議文字:', suggestionsText)
+        
+        // 更寬鬆的過濾條件
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim())
           .filter((s: string) => {
             // 基本過濾條件：長度和有害內容
-            return s.length > 8 && 
+            return s.length > 5 && 
                    !s.includes('問題用中文') && 
                    !s.includes('用中文') &&
                    !s.includes('<|') &&
@@ -232,63 +230,35 @@ AI回答：${aiResponse}
                    !s.includes('可以查看更多詳細分析嗎') &&
                    !s.includes('如何深入分析這個問題') &&
                    !s.includes('有哪些相關的統計數據') &&
-                   !s.includes('如何優化相關流程') &&
-                   // 確保是問句（以問號結尾或包含疑問詞）
-                   (s.includes('？') || s.includes('?') || 
-                    s.includes('如何') || s.includes('什麼') || s.includes('哪個') || 
-                    s.includes('怎樣') || s.includes('什麼時候') || s.includes('為什麼') ||
-                    s.includes('是否') || s.includes('會否') || s.includes('能否'))
+                   !s.includes('如何優化相關流程')
           })
           .slice(0, 4)
         
-        console.log('Filtered suggestions before fallback:', suggestions)
+        console.log('過濾後的建議:', suggestions)
         
-        // 如果過濾後少於4個問題，嘗試放寬條件
+        // 如果過濾後少於4個問題，嘗試更寬鬆的條件
         if (suggestions.length < 4) {
-          console.log('Not enough suggestions, trying relaxed filtering')
+          console.log('建議不足，使用更寬鬆的過濾條件')
           suggestions = suggestionsText.split('\n')
             .filter((s: string) => s.trim())
             .map((s: string) => s.trim())
-            .filter((s: string) => s.length > 5 && !s.includes('<|'))
+            .filter((s: string) => s.length > 3 && !s.includes('<|'))
             .slice(0, 4)
         }
-        console.log('動態建議已生成:', suggestions)
-        break // 成功生成建議，跳出重試循環
+        
+        console.log('最終建議:', suggestions)
       } else {
         console.error('建議 API 失敗:', suggestionsResponse.status)
         const errorText = await suggestionsResponse.text()
         console.error('建議 API 錯誤回應:', errorText)
-        retryCount++
-        if (retryCount >= maxRetries) {
-          // 如果重試次數用完，提供默認建議
-          console.log('由於 API 失敗，使用備用建議')
-          suggestions = [
-            '這個配方的膠囊灌裝精度如何控制？',
-            '膠囊規格選擇有什麼建議？',
-            '原料配比如何影響灌裝效果？',
-            '生產工藝參數如何優化？'
-          ]
-        }
       }
-      } catch (error) {
-        console.error('生成動態建議時發生錯誤:', error)
-        retryCount++
-        if (retryCount >= maxRetries) {
-          // 如果重試次數用完，提供默認建議
-          console.log('由於 API 失敗，使用備用建議')
-          suggestions = [
-            '這個配方的膠囊灌裝精度如何控制？',
-            '膠囊規格選擇有什麼建議？',
-            '原料配比如何影響灌裝效果？',
-            '生產工藝參數如何優化？'
-          ]
-        }
-      }
+    } catch (error) {
+      console.error('生成動態建議時發生錯誤:', error)
     }
     
     // 確保總是有建議問題
     if (suggestions.length === 0) {
-      console.log('No suggestions generated, using fallback')
+      console.log('沒有生成建議，使用默認建議')
       suggestions = [
         '這個配方的膠囊灌裝精度如何控制？',
         '膠囊規格選擇有什麼建議？',
