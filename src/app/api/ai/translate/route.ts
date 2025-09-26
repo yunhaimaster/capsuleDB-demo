@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-        'X-Title': 'EasyPack Translation Service'
+        'X-Title': 'Easy Health Translation Service'
       },
       body: JSON.stringify({
         model: 'deepseek/deepseek-chat-v3.1',

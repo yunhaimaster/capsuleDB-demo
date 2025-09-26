@@ -146,7 +146,7 @@ ${JSON.stringify(cleanedOrders, null, 2)}
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-        'X-Title': 'EasyPack AI Assistant'
+        'X-Title': 'Easy Health AI Assistant'
       },
       body: JSON.stringify({
         model: 'deepseek/deepseek-chat-v3.1',
@@ -212,7 +212,7 @@ ${JSON.stringify(cleanedOrders, null, 2)}
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-          'X-Title': 'EasyPack AI Assistant'
+          'X-Title': 'Easy Health AI Assistant'
         },
         body: JSON.stringify({
           model: 'deepseek/deepseek-chat-v3.1',

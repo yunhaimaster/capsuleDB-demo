@@ -33,7 +33,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
             <Lock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-            EasyPack 系統登陸
+            Easy Health 系統登陸
           </CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
             請輸入登陸碼以訪問系統

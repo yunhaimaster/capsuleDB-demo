@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-        'X-Title': 'EasyPack Recipe Parser'
+        'X-Title': 'Easy Health Recipe Parser'
       },
       body: JSON.stringify({
         model: 'deepseek/deepseek-chat-v3.1',

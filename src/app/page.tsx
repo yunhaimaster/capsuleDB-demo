@@ -62,7 +62,7 @@ export default function HomePage() {
             <span className="text-base sm:text-lg md:text-xl">🏠</span>
           </div>
           <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
-            EasyPack 膠囊配方管理系統
+            Easy Health 膠囊配方管理系統
           </h1>
           <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
             專業的膠囊配方生產管理平台，提供完整的生產記錄追蹤與智能分析功能
