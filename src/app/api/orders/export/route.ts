@@ -50,7 +50,10 @@ export async function POST(request: NextRequest) {
           order.productionQuantity.toString(),
           order.unitWeightMg.toString(),
           order.batchTotalWeightMg.toString(),
-          order.completionDate?.toISOString().split('T')[0] || '',
+          order.completionDate ? 
+            (order.completionDate instanceof Date ? 
+              order.completionDate.toISOString().split('T')[0] : 
+              order.completionDate) : '',
           order.createdBy || ''
         ]
 
