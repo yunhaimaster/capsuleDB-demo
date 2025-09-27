@@ -90,6 +90,17 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         onClose={handleClose}
         title="AI 訂單分析助手"
         size="xl"
+        headerButtons={
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearChat}
+            className="text-gray-300 hover:text-white"
+            title="重設對話"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        }
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
@@ -98,23 +109,6 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
           </div>
           <div className="flex items-center space-x-2">
             <AIPoweredBadge />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClose}
-              className="text-gray-300 hover:text-white"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearChat}
-              className="text-gray-300 hover:text-white"
-              title="重設對話"
-            >
-              <RefreshCw className="h-4 w-4" />
-            </Button>
           </div>
         </div>
         

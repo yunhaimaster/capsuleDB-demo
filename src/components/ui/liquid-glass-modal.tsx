@@ -10,6 +10,7 @@ interface LiquidGlassModalProps {
   title?: string
   children: ReactNode
   footer?: ReactNode
+  headerButtons?: ReactNode
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   closeOnBackdropClick?: boolean
   closeOnEscape?: boolean
@@ -22,6 +23,7 @@ export function LiquidGlassModal({
   title,
   children,
   footer,
+  headerButtons,
   size = 'md',
   closeOnBackdropClick = true,
   closeOnEscape = true,
@@ -109,21 +111,24 @@ export function LiquidGlassModal({
         role="document"
       >
         {/* Modal Header */}
-        {(title || closeOnEscape) && (
+        {(title || closeOnEscape || headerButtons) && (
           <div className="liquid-glass-modal-header">
             {title && (
               <h2 id="modal-title" className="liquid-glass-modal-title">
                 {title}
               </h2>
             )}
-            <button
-              className="liquid-glass-modal-close"
-              onClick={onClose}
-              aria-label="關閉對話框"
-              type="button"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <div className="flex items-center space-x-2">
+              {headerButtons}
+              <button
+                className="liquid-glass-modal-close"
+                onClick={onClose}
+                aria-label="關閉對話框"
+                type="button"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
         )}
 
