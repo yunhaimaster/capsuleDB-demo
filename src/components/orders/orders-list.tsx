@@ -190,19 +190,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           ingredientOptions={ingredientOptions}
           capsuleOptions={capsuleTypeOptions}
           onSearch={handleSearch}
+          onExport={() => handleExport('csv')}
           loading={loading}
         />
-        
-        {/* 匯出按鈕 */}
-        <div className="flex justify-end">
-          <Button
-            onClick={() => handleExport('csv')}
-            className="bg-green-600 hover:bg-green-700 text-white"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            匯出 CSV
-          </Button>
-        </div>
 
         <div className="liquid-glass-card liquid-glass-card-subtle">
           <div className="overflow-x-auto">

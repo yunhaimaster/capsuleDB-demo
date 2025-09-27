@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, X } from 'lucide-react'
+import { X, Download } from 'lucide-react'
 
 interface FilterOption {
   value: string
@@ -22,6 +22,7 @@ interface LinkedFilterProps {
     ingredientName: string
     capsuleType: string
   }) => void
+  onExport?: () => void
   loading?: boolean
 }
 
@@ -31,6 +32,7 @@ export function LinkedFilter({
   ingredientOptions,
   capsuleOptions,
   onSearch,
+  onExport,
   loading = false
 }: LinkedFilterProps) {
   const [filters, setFilters] = useState({
@@ -176,9 +178,18 @@ export function LinkedFilter({
   }) => {
     const [position, setPosition] = useState({ top: 0, left: 0, width: 0 })
     
+    // 映射 field 到正確的 ref key
+    const fieldToRefKey: { [key: string]: string } = {
+      'customer': 'customerName',
+      'product': 'productName', 
+      'ingredient': 'ingredientName',
+      'capsule': 'capsuleType'
+    }
+    
     useEffect(() => {
-      if (showDropdowns[field as keyof typeof showDropdowns] && inputRefs.current[field]) {
-        const input = inputRefs.current[field]
+      const refKey = fieldToRefKey[field]
+      if (showDropdowns[field as keyof typeof showDropdowns] && inputRefs.current[refKey]) {
+        const input = inputRefs.current[refKey]
         const rect = input.getBoundingClientRect()
         setPosition({
           top: rect.bottom + window.scrollY,
@@ -344,14 +355,15 @@ export function LinkedFilter({
           <X className="h-4 w-4" />
           清除篩選
         </Button>
-        <Button
-          onClick={handleSearch}
-          disabled={loading}
-          className="flex items-center gap-2"
-        >
-          <Search className="h-4 w-4" />
-          {loading ? '搜尋中...' : '搜尋'}
-        </Button>
+        {onExport && (
+          <Button
+            onClick={onExport}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+          >
+            <Download className="h-4 w-4" />
+            匯出 CSV
+          </Button>
+        )}
       </div>
 
       {/* 點擊外部關閉下拉菜單 */}
