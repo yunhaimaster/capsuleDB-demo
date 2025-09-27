@@ -10,6 +10,7 @@ import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
 
@@ -160,6 +161,7 @@ export default function OrderDetailPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 relative z-10">
+            <OrderAIAssistant order={order} />
             <SmartAIAssistant orders={[order]} currentOrder={order} />
             <Link href={`/orders/${order.id}/edit`}>
               <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700">

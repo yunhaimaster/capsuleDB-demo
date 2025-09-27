@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -89,6 +90,18 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
   const [showOrderDetails, setShowOrderDetails] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check authentication
+    const authStatus = localStorage.getItem('isAuthenticated')
+    if (authStatus !== 'true') {
+      router.push('/login')
+      return
+    }
+    setIsAuthenticated(true)
+  }, [router])
 
   useEffect(() => {
     fetchRecentOrders()
@@ -125,6 +138,17 @@ export default function HomePage() {
     }
   }
 
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">驗證中...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen animated-gradient-bg-subtle">
       {/* Liquid Glass Navigation */}
@@ -132,10 +156,11 @@ export default function HomePage() {
         links={[
           { href: '/', label: '首頁', active: true },
           { href: '/orders', label: '訂單管理' },
-          { href: '/production-order-form', label: '新建訂單' }
+          { href: '/orders/new', label: '新建訂單' },
+          { href: '/login', label: '登出' }
         ]}
         ctaText="新建訂單"
-        ctaHref="/production-order-form"
+        ctaHref="/orders/new"
       />
 
       {/* Main Content with padding for fixed nav */}

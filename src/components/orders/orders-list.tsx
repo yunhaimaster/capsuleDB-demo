@@ -22,9 +22,17 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [filters, setFilters] = useState({
     customerName: '',
     productName: '',
+    ingredientName: '',
+    capsuleType: '',
     page: 1,
     limit: 10
   })
+  
+  // Dropdown options
+  const [customerOptions, setCustomerOptions] = useState<string[]>([])
+  const [productOptions, setProductOptions] = useState<string[]>([])
+  const [ingredientOptions, setIngredientOptions] = useState<string[]>([])
+  const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<string[]>([])
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
   const [showOrderDetails, setShowOrderDetails] = useState(false)
 
@@ -51,9 +59,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     }
   }
 
+  const fetchDropdownOptions = async () => {
+    try {
+      const response = await fetch('/api/orders/options')
+      if (response.ok) {
+        const data = await response.json()
+        setCustomerOptions(data.customers || [])
+        setProductOptions(data.products || [])
+        setIngredientOptions(data.ingredients || [])
+        setCapsuleTypeOptions(data.capsuleTypes || [])
+      }
+    } catch (error) {
+      console.error('載入下拉選項錯誤:', error)
+    }
+  }
+
   useEffect(() => {
     fetchOrders(filters)
-  }, [filters.page, filters.limit, filters.customerName, filters.productName])
+  }, [filters.page, filters.limit, filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType])
+
+  useEffect(() => {
+    fetchDropdownOptions()
+  }, [])
 
   const handleSearch = (newFilters: any) => {
     const updatedFilters = { 
@@ -134,36 +161,88 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         </div>
 
         <div className="glass-card-subtle p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 客戶名稱
               </label>
-              <Input
-                placeholder="搜尋客戶..."
-                value={filters.customerName}
-                onChange={(e) => handleSearch({ customerName: e.target.value })}
-              />
+              <Select value={filters.customerName} onValueChange={(value) => handleSearch({ customerName: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇客戶..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">全部客戶</SelectItem>
+                  {customerOptions.map((customer) => (
+                    <SelectItem key={customer} value={customer}>
+                      {customer}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 產品名稱
               </label>
-              <Input
-                placeholder="搜尋產品..."
-                value={filters.productName}
-                onChange={(e) => handleSearch({ productName: e.target.value })}
-              />
+              <Select value={filters.productName} onValueChange={(value) => handleSearch({ productName: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇產品..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">全部產品</SelectItem>
+                  {productOptions.map((product) => (
+                    <SelectItem key={product} value={product}>
+                      {product}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-            <div className="flex items-end">
-              <Button
-                onClick={() => handleExport('csv')}
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                匯出 CSV
-              </Button>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                原料名稱
+              </label>
+              <Select value={filters.ingredientName} onValueChange={(value) => handleSearch({ ingredientName: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇原料..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">全部原料</SelectItem>
+                  {ingredientOptions.map((ingredient) => (
+                    <SelectItem key={ingredient} value={ingredient}>
+                      {ingredient}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                膠囊類型
+              </label>
+              <Select value={filters.capsuleType} onValueChange={(value) => handleSearch({ capsuleType: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="選擇類型..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">全部類型</SelectItem>
+                  {capsuleTypeOptions.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Button
+              onClick={() => handleExport('csv')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              匯出 CSV
+            </Button>
           </div>
         </div>
 

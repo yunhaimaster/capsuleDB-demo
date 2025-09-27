@@ -46,7 +46,15 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
     orders: orders,
     currentOrder: currentOrder,
     context: pageData,
-    initialAssistantMessage: null
+    initialAssistantMessage: {
+      content: '您好！我是 Smart AI 助手，專門協助您分析生產數據、優化配方、提供質量建議。請選擇以下問題開始，或直接輸入您的問題：',
+      suggestions: [
+        '分析當前生產數據趨勢，識別異常值和改進機會。',
+        '優化膠囊配方，提供成本效益分析和質量提升建議。',
+        '評估生產工藝參數，建議最佳化配置方案。',
+        '提供質量控制建議，包括檢測方法和標準制定。'
+      ]
+    }
   })
 
   const handleClose = () => {
@@ -103,7 +111,23 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
                     : 'bg-gray-100 text-gray-900'
                 }`}>
                   {message.role === 'assistant' ? (
-                    <MarkdownRenderer content={message.content} />
+                    <div>
+                      <MarkdownRenderer content={message.content} />
+                      {message.suggestions && message.suggestions.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
+                          {message.suggestions.map((suggestion, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setInput(suggestion)}
+                              className="block w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 text-blue-700 hover:text-blue-800 transition-colors"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <p className="whitespace-pre-wrap">{message.content}</p>
                   )}
