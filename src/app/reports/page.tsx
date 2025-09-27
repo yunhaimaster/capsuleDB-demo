@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { ReportsHero } from '@/components/ui/liquid-glass-hero'
 
 interface IngredientStat {
   materialName: string
@@ -165,6 +166,9 @@ export default function ReportsPage() {
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+
+      {/* Hero Section */}
+      <ReportsHero stats={stats} />
 
       {/* Summary Cards */}
       {stats && (

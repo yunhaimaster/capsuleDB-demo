@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { LoginForm } from '@/components/auth/login-form'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { LoginHero } from '@/components/ui/liquid-glass-hero'
 
 export default function LoginPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -39,7 +40,11 @@ export default function LoginPage() {
       />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-24 floating-combined">
+      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+        {/* Hero Section */}
+        <LoginHero />
+        
+        {/* Login Form */}
         <LoginForm onLogin={handleLogin} />
       </div>
     </div>

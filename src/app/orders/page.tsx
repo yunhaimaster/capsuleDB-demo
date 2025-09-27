@@ -5,6 +5,7 @@ import { OrdersList } from '@/components/orders/orders-list'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Card, CardContent } from '@/components/ui/card'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { OrdersHero } from '@/components/ui/liquid-glass-hero'
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([])
@@ -41,6 +42,9 @@ export default function OrdersPage() {
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+
+      {/* Hero Section */}
+      <OrdersHero orderCount={orders.length} />
 
       <OrdersList />
       

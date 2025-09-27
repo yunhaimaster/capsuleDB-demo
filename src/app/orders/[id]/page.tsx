@@ -10,6 +10,7 @@ import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } fro
 import { ProductionOrder } from '@/types'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { OrderDetailHero } from '@/components/ui/liquid-glass-hero'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -129,6 +130,9 @@ export default function OrderDetailPage() {
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-6 floating-combined">
+
+      {/* Hero Section */}
+      <OrderDetailHero order={order} />
 
       {/* 操作按鈕 */}
       <div className="flex flex-wrap items-center justify-end gap-3 relative z-10">
