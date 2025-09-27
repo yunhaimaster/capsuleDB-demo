@@ -380,7 +380,13 @@ ${JSON.stringify(cleanedOrders, null, 2)}
     if (!upstreamResponse.ok || !upstreamResponse.body) {
       const errorText = await upstreamResponse.text()
       console.error('OpenRouter API 錯誤:', errorText)
-      throw new Error('AI 服務暫時無法回應，請稍後再試')
+      
+      // 檢查是否是認證錯誤
+      if (upstreamResponse.status === 401) {
+        throw new Error('AI 服務認證失敗，請聯繫系統管理員檢查 API 密鑰')
+      }
+      
+      throw new Error('AI 服務暫時無法回應，請稍後再試或重試')
     }
 
     let finalText = ''
