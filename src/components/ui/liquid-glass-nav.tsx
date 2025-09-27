@@ -87,14 +87,24 @@ export function LiquidGlassNav({
       aria-label="主要導航"
     >
       <div className="liquid-glass-nav-content">
-        {/* Logo Section */}
-        <Link 
-          href="/" 
-          className="liquid-glass-nav-logo"
-          aria-label="回到首頁"
-        >
-          {logo}
-        </Link>
+        {/* Logo and Brand Section */}
+        <div className="flex items-center space-x-3">
+          <Link 
+            href="/" 
+            className="liquid-glass-nav-logo"
+            aria-label="回到首頁"
+          >
+            {logo}
+          </Link>
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-bold text-gray-900">
+              Easy Health 膠囊配方管理系統
+            </h1>
+            <p className="text-xs text-gray-600">
+              Easy Health 內部生產管理
+            </p>
+          </div>
+        </div>
 
         {/* Desktop Navigation Links */}
         <div className="liquid-glass-nav-links">
