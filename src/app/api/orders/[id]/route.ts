@@ -65,7 +65,7 @@ export async function PUT(
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate ? new Date(validatedData.completionDate) : null,
+        completionDate: validatedData.completionDate && validatedData.completionDate !== '' ? new Date(validatedData.completionDate) : null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         capsuleColor: validatedData.capsuleColor,
