@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
-import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
@@ -131,35 +130,25 @@ export default function OrderDetailPage() {
       {/* Main Content with padding for fixed nav */}
       <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-6 floating-stars">
 
-      {/* 頁面標題 */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-100 rounded-xl p-6 md:p-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-blue-800">訂單詳情</h1>
-            <p className="text-blue-700 text-sm md:text-base mt-1">
-              {order.customerName} - {order.productName}
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 relative z-10">
-            <OrderAIAssistant order={order} />
-            <Link href={`/orders/${order.id}/edit`}>
-              <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700">
-                <Edit className="mr-2 h-4 w-4" />
-                編輯
-              </Button>
-            </Link>
-            <Link href="/orders">
-              <Button variant="outline" className="ripple-effect btn-micro-hover">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                返回
-              </Button>
-            </Link>
-          </div>
-        </div>
+      {/* 操作按鈕 */}
+      <div className="flex flex-wrap items-center justify-end gap-3 relative z-10">
+        <OrderAIAssistant order={order} />
+        <Link href={`/orders/${order.id}/edit`}>
+          <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700 h-10 px-4">
+            <Edit className="mr-2 h-4 w-4" />
+            編輯
+          </Button>
+        </Link>
+        <Link href="/orders">
+          <Button variant="outline" className="ripple-effect btn-micro-hover h-10 px-4">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            返回
+          </Button>
+        </Link>
       </div>
 
       {/* 基本資訊 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl">基本資訊</CardTitle>
           </CardHeader>
@@ -229,7 +218,7 @@ export default function OrderDetailPage() {
       </Card>
 
       {/* 原料配方明細 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-subtle">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl">原料配方明細</CardTitle>
           </CardHeader>
@@ -271,20 +260,6 @@ export default function OrderDetailPage() {
         </CardContent>
       </Card>
 
-      {/* 智能 AI 助手 - 浮動按鈕 */}
-      <SmartAIAssistant 
-        orders={[order]} 
-        currentOrder={order}
-        pageData={{
-          currentPage: `/orders/${order.id}`,
-          pageDescription: `訂單詳情頁面 - ${order.customerName} - ${order.productName}`,
-          timestamp: new Date().toISOString(),
-          ordersCount: 1,
-          hasCurrentOrder: true,
-          currentOrder: order,
-          recentOrders: [order]
-        }}
-      />
       </div>
     </div>
   )

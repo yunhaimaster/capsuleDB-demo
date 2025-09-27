@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 
 interface IngredientStat {
   materialName: string
@@ -150,19 +151,20 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header Section */}
-      <div className="text-center space-y-3 md:space-y-4 py-4 md:py-6">
-        <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-3 md:mb-4">
-          <BarChart3 className="h-5 w-5 md:h-6 md:w-6 text-white" />
-        </div>
-        <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-          原料使用統計
-        </h1>
-        <p className="text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
-          分析所有原料的使用情況、重量佔比和灌裝難度風險指數
-        </p>
-      </div>
+    <div className="min-h-screen animated-gradient-bg-subtle">
+      {/* Liquid Glass Navigation */}
+      <LiquidGlassNav 
+        links={[
+          { href: '/', label: '首頁' },
+          { href: '/orders', label: '訂單管理' },
+          { href: '/orders/new', label: '新建訂單' }
+        ]}
+        ctaText="登出"
+        ctaHref="/login"
+      />
+      
+      {/* Main Content with padding for fixed nav */}
+      <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8">
 
       {/* Summary Cards */}
       {stats && (
@@ -318,6 +320,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
       )}
+      </div>
     </div>
   )
 }

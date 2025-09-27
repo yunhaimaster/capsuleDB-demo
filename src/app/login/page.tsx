@@ -31,13 +31,9 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen animated-gradient-bg-subtle">
-      {/* Liquid Glass Navigation */}
+      {/* Liquid Glass Navigation - 登陸頁面只顯示導航欄，無導航連結 */}
       <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/orders/new', label: '新建訂單' }
-        ]}
+        links={[]}
         ctaText="系統登陸"
         ctaHref="/login"
       />

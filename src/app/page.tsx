@@ -165,20 +165,6 @@ export default function HomePage() {
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
-      {/* Header Section */}
-      <div className="floating-particles bg-white/80 backdrop-blur-sm bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-xl p-4 sm:p-6 md:p-8 border border-blue-200/20 shadow-lg">
-        <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
-          <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
-            <Logo size="xl" />
-          </div>
-          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-            Easy Health 膠囊配方管理系統
-          </h1>
-          <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
-            專業的膠囊配方生產管理平台，提供完整的生產記錄追蹤與智能分析功能
-          </p>
-        </div>
-      </div>
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
