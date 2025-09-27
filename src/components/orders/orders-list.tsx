@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 
 interface OrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -352,33 +353,71 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           title="訂單詳情"
           size="xl"
         >
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* 基本資訊 */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 ">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   客戶名稱
                 </label>
-                <p className="text-gray-900 ">{selectedOrder.customerName}</p>
+                <p className="text-gray-900 font-medium">{selectedOrder.customerName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 ">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   產品名稱
                 </label>
-                <p className="text-gray-900 ">{selectedOrder.productName}</p>
+                <p className="text-gray-900 font-medium">{selectedOrder.productName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 ">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   生產數量
                 </label>
-                <p className="text-gray-900 ">{selectedOrder.productionQuantity?.toLocaleString()}</p>
+                <p className="text-gray-900 font-medium">{selectedOrder.productionQuantity?.toLocaleString()}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 ">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   完工日期
                 </label>
-                <p className="text-gray-900 ">
+                <p className="text-gray-900 font-medium">
                   {selectedOrder.completionDate ? formatDateOnly(selectedOrder.completionDate) : '未完工'}
                 </p>
+              </div>
+            </div>
+
+            {/* 膠囊資料 */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">膠囊規格</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    膠囊顏色
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-6 h-6 rounded-full border border-gray-300" 
+                      style={{ backgroundColor: selectedOrder.capsuleColor === '紅色' ? '#ef4444' : 
+                                 selectedOrder.capsuleColor === '藍色' ? '#3b82f6' :
+                                 selectedOrder.capsuleColor === '綠色' ? '#10b981' :
+                                 selectedOrder.capsuleColor === '黃色' ? '#f59e0b' :
+                                 selectedOrder.capsuleColor === '白色' ? '#ffffff' :
+                                 selectedOrder.capsuleColor === '透明' ? 'transparent' : '#6b7280'
+                      }}
+                    />
+                    <p className="text-gray-900 font-medium">{selectedOrder.capsuleColor || '未設定'}</p>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    膠囊大小
+                  </label>
+                  <p className="text-gray-900 font-medium">{selectedOrder.capsuleSize || '未設定'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    膠囊類型
+                  </label>
+                  <p className="text-gray-900 font-medium">{selectedOrder.capsuleType || '未設定'}</p>
+                </div>
               </div>
             </div>
             
@@ -389,14 +428,19 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                 </label>
                 <div className="space-y-2">
                   {selectedOrder.ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50  rounded">
-                      <span className="text-gray-900 ">{ingredient.materialName}</span>
-                      <span className="text-gray-600 ">{ingredient.unitContentMg}mg</span>
+                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                      <span className="text-gray-900">{ingredient.materialName}</span>
+                      <span className="text-gray-600">{ingredient.unitContentMg}mg</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
+
+            {/* Order AI 按鈕 */}
+            <div className="flex justify-center pt-4 border-t border-gray-200">
+              <OrderAIAssistant order={selectedOrder} />
+            </div>
           </div>
         </LiquidGlassModal>
       )}
