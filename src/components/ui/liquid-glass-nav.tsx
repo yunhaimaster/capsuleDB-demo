@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 import { Menu, X, Plus } from 'lucide-react'
@@ -36,6 +37,15 @@ export function LiquidGlassNav({
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
+  const pathname = usePathname()
+
+  // Auto-detect active link based on current pathname
+  const processedLinks = links.map(link => ({
+    ...link,
+    active: pathname === link.href || 
+            (link.href !== '/' && pathname.startsWith(link.href)) ||
+            (link.href === '/' && pathname === '/')
+  }))
 
   // Intersection Observer for scroll-based transparency
   useEffect(() => {
@@ -108,7 +118,7 @@ export function LiquidGlassNav({
 
         {/* Desktop Navigation Links */}
         <div className="liquid-glass-nav-links">
-          {links.map((link) => (
+          {processedLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -151,11 +161,11 @@ export function LiquidGlassNav({
           role="menu"
           aria-label="行動版導航選單"
         >
-          {links.map((link) => (
+          {processedLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className="liquid-glass-nav-link"
+            className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
             onClick={() => {
               setIsMobileMenuOpen(false)
               if (link.label === '登出') {

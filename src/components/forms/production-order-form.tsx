@@ -434,23 +434,28 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 原料配方 */}
-      <Card>
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
-            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <span className="text-orange-600">🧪</span>
-              <span className="block sm:hidden">原料配方</span>
-              <span className="hidden sm:block">原料配方（每粒規格）</span>
-            </CardTitle>
-            <div className="flex gap-2 flex-wrap">
-              <SmartRecipeImport 
-                onImport={handleSmartImport}
-                disabled={isSubmitting}
-              />
+      <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+        <div className="liquid-glass-content">
+          <div className="mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <span style={{ color: '#2a588c' }}>原料配方（每粒規格）</span>
+              </h2>
+              <div className="flex gap-2 flex-wrap">
+                <SmartRecipeImport 
+                  onImport={handleSmartImport}
+                  disabled={isSubmitting}
+                />
+              </div>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div className="px-6 pb-6">
           {/* 桌面版表格 */}
           <div className="hidden md:block">
             <Table>
@@ -656,8 +661,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               {errors.ingredients.message}
             </p>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* 計算結果 */}
         <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
