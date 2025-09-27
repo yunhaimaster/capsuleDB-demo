@@ -24,12 +24,12 @@ interface LiquidGlassNavProps {
 
 export function LiquidGlassNav({
   logo = <Logo />,
-  links = [
-    { href: '/', label: '首頁' },
-    { href: '/orders', label: '訂單管理' },
-    { href: '/orders/new', label: '新建訂單' }
-  ],
-  ctaText = '新建訂單',
+      links = [
+        { href: '/', label: '首頁' },
+        { href: '/orders', label: '訂單' },
+        { href: '/orders/new', label: '新建' }
+      ],
+  ctaText = '新建',
   ctaHref = '/orders/new',
   ctaIcon = <Plus className="h-4 w-4" />,
   className = ''
@@ -106,12 +106,12 @@ export function LiquidGlassNav({
           >
             {logo}
           </Link>
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <h1 className="text-lg font-bold text-gray-900">
-              Easy Health 膠囊配方管理系統
+              Easy Health
             </h1>
             <p className="text-xs text-gray-600">
-              Easy Health 內部生產管理
+              膠囊配方管理系統
             </p>
           </div>
         </div>

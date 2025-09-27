@@ -480,10 +480,10 @@
 
 /* Navigation Content Grid */
 .liquid-glass-nav-content {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 2rem;
+  justify-content: space-between;
+  gap: 1.5rem;
   max-width: 1280px;
   margin: 0 auto;
   padding: 1rem 1.5rem;
@@ -510,8 +510,7 @@
 .liquid-glass-nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  justify-self: center;
+  gap: 1.5rem;
 }
 
 .liquid-glass-nav-link {

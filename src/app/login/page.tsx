@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { LoginForm } from '@/components/auth/login-form'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { LoginHero } from '@/components/ui/liquid-glass-hero'
 
 export default function LoginPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)

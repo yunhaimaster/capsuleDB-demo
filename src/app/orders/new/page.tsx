@@ -3,7 +3,6 @@
 import { ProductionOrderForm } from '@/components/forms/production-order-form'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { NewOrderHero } from '@/components/ui/liquid-glass-hero'
 
 export default function NewOrderPage() {
   return (
@@ -22,8 +21,6 @@ export default function NewOrderPage() {
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
-      {/* Hero Section */}
-      <NewOrderHero />
 
       {/* Form Card */}
       <ProductionOrderForm />
