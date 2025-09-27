@@ -28,6 +28,7 @@ export function LiquidGlassNav({
   className = ''
 }: LiquidGlassNavProps) {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
 
@@ -50,6 +51,10 @@ export function LiquidGlassNav({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Mobile menu toggle
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
   return (
     <nav
@@ -97,7 +102,45 @@ export function LiquidGlassNav({
           ))}
         </div>
 
+        {/* Mobile Menu Toggle */}
+        <button
+          className="liquid-glass-nav-mobile-toggle"
+          onClick={handleMobileMenuToggle}
+          aria-expanded={isMobileMenuOpen}
+          aria-label={isMobileMenuOpen ? '關閉選單' : '開啟選單'}
+        >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div className="liquid-glass-nav-mobile">
+          {processedLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                if (link.label === '登出') {
+                  localStorage.removeItem('isAuthenticated')
+                }
+              }}
+              aria-current={link.active ? 'page' : undefined}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
 
     </nav>
   )
