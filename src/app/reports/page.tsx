@@ -164,7 +164,7 @@ export default function ReportsPage() {
       />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8">
+      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8">
 
       {/* Summary Cards */}
       {stats && (

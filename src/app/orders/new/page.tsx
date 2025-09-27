@@ -19,7 +19,7 @@ export default function NewOrderPage() {
       />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8">
+      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8">
 
       {/* Form Card */}
       <div className="max-w-4xl mx-auto px-4 md:px-0">

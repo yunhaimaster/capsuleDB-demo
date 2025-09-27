@@ -164,7 +164,7 @@ export default function HomePage() {
       />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
