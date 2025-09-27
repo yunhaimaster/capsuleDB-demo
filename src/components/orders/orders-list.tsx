@@ -357,28 +357,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             {/* 基本資訊 */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-200 mb-1">
                   客戶名稱
                 </label>
-                <p className="text-gray-900 font-medium">{selectedOrder.customerName}</p>
+                <p className="text-white font-medium">{selectedOrder.customerName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-200 mb-1">
                   產品名稱
                 </label>
-                <p className="text-gray-900 font-medium">{selectedOrder.productName}</p>
+                <p className="text-white font-medium">{selectedOrder.productName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-200 mb-1">
                   生產數量
                 </label>
-                <p className="text-gray-900 font-medium">{selectedOrder.productionQuantity?.toLocaleString()}</p>
+                <p className="text-white font-medium">{selectedOrder.productionQuantity?.toLocaleString()}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-200 mb-1">
                   完工日期
                 </label>
-                <p className="text-gray-900 font-medium">
+                <p className="text-white font-medium">
                   {selectedOrder.completionDate ? formatDateOnly(selectedOrder.completionDate) : '未完工'}
                 </p>
               </div>
@@ -386,15 +386,15 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
             {/* 膠囊資料 */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">膠囊規格</h3>
+              <h3 className="text-lg font-semibold text-white mb-3">膠囊規格</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-200 mb-1">
                     膠囊顏色
                   </label>
                   <div className="flex items-center gap-2">
                     <div 
-                      className="w-6 h-6 rounded-full border border-gray-300" 
+                      className="w-6 h-6 rounded-full border border-gray-400" 
                       style={{ backgroundColor: selectedOrder.capsuleColor === '紅色' ? '#ef4444' : 
                                  selectedOrder.capsuleColor === '藍色' ? '#3b82f6' :
                                  selectedOrder.capsuleColor === '綠色' ? '#10b981' :
@@ -403,34 +403,34 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                                  selectedOrder.capsuleColor === '透明' ? 'transparent' : '#6b7280'
                       }}
                     />
-                    <p className="text-gray-900 font-medium">{selectedOrder.capsuleColor || '未設定'}</p>
+                    <p className="text-white font-medium">{selectedOrder.capsuleColor || '未設定'}</p>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-200 mb-1">
                     膠囊大小
                   </label>
-                  <p className="text-gray-900 font-medium">{selectedOrder.capsuleSize || '未設定'}</p>
+                  <p className="text-white font-medium">{selectedOrder.capsuleSize || '未設定'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-200 mb-1">
                     膠囊類型
                   </label>
-                  <p className="text-gray-900 font-medium">{selectedOrder.capsuleType || '未設定'}</p>
+                  <p className="text-white font-medium">{selectedOrder.capsuleType || '未設定'}</p>
                 </div>
               </div>
             </div>
             
             {selectedOrder.ingredients && selectedOrder.ingredients.length > 0 && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-200 mb-2">
                   配方成分
                 </label>
                 <div className="space-y-2">
                   {selectedOrder.ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                      <span className="text-gray-900">{ingredient.materialName}</span>
-                      <span className="text-gray-600">{ingredient.unitContentMg}mg</span>
+                    <div key={index} className="flex justify-between items-center p-3 bg-transparent border border-white/20 rounded-lg backdrop-blur-sm">
+                      <span className="text-white font-medium">{ingredient.materialName}</span>
+                      <span className="text-gray-200">{ingredient.unitContentMg}mg</span>
                     </div>
                   ))}
                 </div>
@@ -438,8 +438,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             )}
 
             {/* Order AI 按鈕 */}
-            <div className="flex justify-center pt-4 border-t border-gray-200">
-              <OrderAIAssistant order={selectedOrder} />
+            <div className="flex justify-center pt-4 border-t border-white/20">
+              <div onClick={() => setShowOrderDetails(false)}>
+                <OrderAIAssistant order={selectedOrder} />
+              </div>
             </div>
           </div>
         </LiquidGlassModal>
