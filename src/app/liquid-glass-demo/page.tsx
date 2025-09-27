@@ -9,6 +9,7 @@ import { Plus, Settings, Info, Trash2, CheckCircle } from 'lucide-react'
 
 export default function LiquidGlassDemoPage() {
   const [activeModal, setActiveModal] = useState<string | null>(null)
+  const [useBrandLogoBg, setUseBrandLogoBg] = useState(false)
   
   // Modal hooks
   const confirmModal = useLiquidGlassModal()
@@ -28,7 +29,7 @@ export default function LiquidGlassDemoPage() {
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-subtle">
+    <div className={`min-h-screen ${useBrandLogoBg ? 'brand-logo-bg-animation' : 'animated-gradient-bg-subtle'}`}>
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[
@@ -46,6 +47,15 @@ export default function LiquidGlassDemoPage() {
           subtitle="展示 iOS 26 風格的 Liquid Glass 導航、模態框和標題組件"
           actions={
             <div className="flex gap-2">
+              <Button
+                onClick={() => setUseBrandLogoBg(!useBrandLogoBg)}
+                variant={useBrandLogoBg ? "default" : "outline"}
+                size="sm"
+                className="liquid-glass-card-interactive"
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                {useBrandLogoBg ? '切換到漸變背景' : '切換到品牌 Logo 背景'}
+              </Button>
               <Button
                 onClick={handleInfo}
                 variant="outline"
