@@ -73,20 +73,18 @@ export default function HomePage() {
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-3d-hover glass-card-easy-health card-micro-hover floating-shapes group border-0 shadow-lg">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group">
+          <div className="liquid-glass-content">
+            <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <CardTitle className="text-sm sm:text-base md:text-lg font-semibold text-indigo-700">新增配方</CardTitle>
-                <CardDescription className="text-xs sm:text-sm md:text-base text-indigo-600">建立新記錄</CardDescription>
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-indigo-700">新增配方</h3>
+                <p className="text-xs sm:text-sm md:text-base text-indigo-600">建立新記錄</p>
               </div>
             </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xs sm:text-xs md:text-sm text-gray-600 mb-3 sm:mb-3 md:mb-4 leading-relaxed">
+            <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
               建立新的膠囊配方記錄，包含原料配置與生產參數
             </p>
             <Link href="/orders/new">
@@ -94,23 +92,21 @@ export default function HomePage() {
                 開始建立
               </Button>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="card-3d-hover glass-card-easy-health card-micro-hover floating-orbs group border-0 shadow-lg">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
+        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group">
+          <div className="liquid-glass-content">
+            <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <CardTitle className="text-sm sm:text-base md:text-lg font-semibold text-emerald-700">生產記錄</CardTitle>
-                <CardDescription className="text-xs sm:text-sm md:text-base text-emerald-600">檢視管理</CardDescription>
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-emerald-700">生產記錄</h3>
+                <p className="text-xs sm:text-sm md:text-base text-emerald-600">檢視管理</p>
               </div>
             </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xs sm:text-xs md:text-sm text-gray-600 mb-3 sm:mb-3 md:mb-4 leading-relaxed">
+            <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
               檢視與管理所有生產記錄，支援搜尋、篩選與編輯
             </p>
             <Link href="/orders">
@@ -118,25 +114,26 @@ export default function HomePage() {
                 查看記錄
               </Button>
             </Link>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
 
       </div>
 
       {/* Feature Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-              <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
-              最近生產紀錄
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300">
-              最新的生產訂單狀態
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="mb-4">
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold flex items-center mb-2">
+                <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
+                最近生產紀錄
+              </h3>
+              <p className="text-xs sm:text-sm md:text-base opacity-80">
+                最新的生產訂單狀態
+              </p>
+            </div>
+            <div className="space-y-3">
             {loading ? (
               <div className="space-y-3 skeleton-stagger">
                 <div className="skeleton skeleton-title"></div>
@@ -221,20 +218,22 @@ export default function HomePage() {
                 </Link>
               </div>
             )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
 
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center">
-              <span className="mr-2">📋</span>
-              功能介紹
-            </CardTitle>
-            <CardDescription className="text-sm md:text-base text-amber-600 dark:text-amber-200">
-              系統功能說明與使用指南
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 md:space-y-6">
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="mb-4">
+              <h3 className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center mb-2">
+                <span className="mr-2">📋</span>
+                功能介紹
+              </h3>
+              <p className="text-sm md:text-base text-amber-600 dark:text-amber-200 opacity-80">
+                系統功能說明與使用指南
+              </p>
+            </div>
+            <div className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
               <div className="bg-amber-50 dark:bg-amber-900/40 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-700/50">
                 <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
@@ -270,21 +269,23 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
 
         {/* 版本更新記錄 */}
-        <Card className="card-subtle-3d glass-card-subtle card-micro-hover floating-dots border-0 shadow-lg">
-          <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center">
-              <span className="mr-2 text-sm sm:text-base">📝</span>
-              版本更新記錄
-            </CardTitle>
-            <CardDescription className="text-xs sm:text-sm md:text-base text-blue-600 dark:text-blue-200">
-              系統功能更新與改進記錄
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="mb-4">
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center mb-2">
+                <span className="mr-2 text-sm sm:text-base">📝</span>
+                版本更新記錄
+              </h3>
+              <p className="text-xs sm:text-sm md:text-base text-blue-600 dark:text-blue-200 opacity-80">
+                系統功能更新與改進記錄
+              </p>
+            </div>
+            <div className="space-y-4">
             <div className="space-y-3">
               <div className="bg-green-50 dark:bg-green-900/40 p-3 rounded-xl border border-green-200 dark:border-green-700/50">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
@@ -339,8 +340,9 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </div>
 
              {/* 智能 AI 助手 */}
