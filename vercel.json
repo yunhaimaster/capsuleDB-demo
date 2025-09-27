@@ -2,15 +2,5 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "framework": "nextjs",
-  "build": {
-    "env": {
-      "DATABASE_URL": "@database_url"
-    }
-  },
-  "env": {
-    "OPENROUTER_API_KEY": "@openrouter_api_key",
-    "OPENROUTER_API_URL": "@openrouter_api_url",
-    "NEXT_PUBLIC_APP_URL": "@next_public_app_url"
-  }
+  "framework": "nextjs"
 }
