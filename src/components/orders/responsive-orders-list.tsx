@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
+import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
 
@@ -16,6 +17,11 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
+  const [orderToDelete, setOrderToDelete] = useState<string | null>(null)
+  
+  // Modal hooks
+  const deleteConfirmModal = useLiquidGlassModal()
+  
   const [filters, setFilters] = useState({
     customerName: '',
     productName: '',
@@ -108,17 +114,23 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     window.open(`/api/orders/export?${params}`, '_blank')
   }
 
-  const handleDelete = async (orderId: string) => {
-    if (!confirm('確定要刪除此訂單嗎？此操作無法復原。')) return
+  const handleDeleteClick = (orderId: string) => {
+    setOrderToDelete(orderId)
+    deleteConfirmModal.openModal()
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!orderToDelete) return
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await fetch(`/api/orders/${orderToDelete}`, {
         method: 'DELETE'
       })
       
       if (!response.ok) throw new Error('刪除訂單失敗')
       
       fetchOrders(filters)
+      setOrderToDelete(null)
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
       alert('刪除失敗，請重試')
@@ -312,7 +324,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
-                              handleDelete(order.id)
+                              handleDeleteClick(order.id)
                             }}
                             className="text-red-600 hover:text-red-800 transition-colors"
                             title="刪除訂單"
@@ -372,7 +384,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
-                        handleDelete(order.id)
+                        handleDeleteClick(order.id)
                       }}
                       className="text-red-600 hover:text-red-800 transition-colors p-1"
                       title="刪除訂單"
@@ -469,6 +481,18 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           </Button>
         </div>
       )}
+
+      {/* 刪除確認模態框 */}
+      <LiquidGlassConfirmModal
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={deleteConfirmModal.closeModal}
+        onConfirm={handleDeleteConfirm}
+        title="確認刪除訂單"
+        message="您確定要刪除此訂單嗎？此操作無法撤銷，所有相關的配方和原料資料都將被永久刪除。"
+        confirmText="刪除"
+        cancelText="取消"
+        variant="danger"
+      />
     </div>
   )
 }
