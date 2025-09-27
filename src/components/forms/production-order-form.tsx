@@ -54,11 +54,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       customerName: initialData?.customerName || '',
       productName: initialData?.productName || '未命名產品',
       productionQuantity: initialData?.productionQuantity || 1,
-      completionDate: initialData?.completionDate
-        ? (typeof initialData.completionDate === 'string'
-            ? initialData.completionDate.split('T')[0]
-            : initialData.completionDate.toISOString().split('T')[0])
-        : '',
+      completionDate: initialData?.completionDate || '',
       processIssues: initialData?.processIssues || '',
       qualityNotes: initialData?.qualityNotes || '',
       capsuleColor: initialData?.capsuleColor || '',

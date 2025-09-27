@@ -73,7 +73,7 @@ export default function EditOrderPage() {
             customerName: order.customerName,
             productName: order.productName,
             productionQuantity: order.productionQuantity,
-            completionDate: order.completionDate,
+            completionDate: order.completionDate?.toISOString().split('T')[0] || '',
             processIssues: order.processIssues,
             qualityNotes: order.qualityNotes,
             capsuleColor: order.capsuleColor,
