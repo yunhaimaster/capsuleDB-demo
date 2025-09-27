@@ -26,7 +26,10 @@ export async function GET(
       ...order,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
-      completionDate: order.completionDate?.toISOString() || null
+      completionDate: order.completionDate ? 
+        (order.completionDate instanceof Date ? 
+          order.completionDate.toISOString().split('T')[0] : 
+          order.completionDate) : null
     }
 
     return NextResponse.json(serializedOrder)
@@ -88,7 +91,10 @@ export async function PUT(
       ...order,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
-      completionDate: order.completionDate?.toISOString() || null
+      completionDate: order.completionDate ? 
+        (order.completionDate instanceof Date ? 
+          order.completionDate.toISOString().split('T')[0] : 
+          order.completionDate) : null
     }
 
     return NextResponse.json(serializedOrder)

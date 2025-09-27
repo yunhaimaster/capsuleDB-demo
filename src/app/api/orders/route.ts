@@ -151,7 +151,10 @@ export async function GET(request: NextRequest) {
       ...order,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
-      completionDate: order.completionDate?.toISOString() || null
+      completionDate: order.completionDate ? 
+        (order.completionDate instanceof Date ? 
+          order.completionDate.toISOString().split('T')[0] : 
+          order.completionDate) : null
     }))
 
     return NextResponse.json({
@@ -227,7 +230,10 @@ export async function POST(request: NextRequest) {
       ...order,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
-      completionDate: order.completionDate?.toISOString() || null
+      completionDate: order.completionDate ? 
+        (order.completionDate instanceof Date ? 
+          order.completionDate.toISOString().split('T')[0] : 
+          order.completionDate) : null
     }
 
     return NextResponse.json(serializedOrder, { status: 201 })
