@@ -816,25 +816,25 @@
 }
 
 /* Scale Animation Classes */
-.liquid-glass-modal-scale-from-center {
-  transform: scale(0.8);
+.liquid-glass-modal.liquid-glass-modal-scale-from-center {
+  transform: scale(0.8) !important;
   opacity: 0;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
 }
 
-.liquid-glass-modal-scale-from-button {
-  transform: scale(0.1);
+.liquid-glass-modal.liquid-glass-modal-scale-from-button {
+  transform: scale(0.1) !important;
   opacity: 0;
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
 
-.liquid-glass-modal-backdrop.active .liquid-glass-modal-scale-from-center {
-  transform: scale(1);
+.liquid-glass-modal-backdrop.active .liquid-glass-modal.liquid-glass-modal-scale-from-center {
+  transform: scale(1) !important;
   opacity: 1;
 }
 
-.liquid-glass-modal-backdrop.active .liquid-glass-modal-scale-from-button {
-  transform: scale(1);
+.liquid-glass-modal-backdrop.active .liquid-glass-modal.liquid-glass-modal-scale-from-button {
+  transform: scale(1) !important;
   opacity: 1;
 }
 
@@ -851,25 +851,25 @@
   }
   
   /* Mobile scale animations override slide animations */
-  .liquid-glass-modal-scale-from-center {
-    transform: scale(0.8);
+  .liquid-glass-modal.liquid-glass-modal-scale-from-center {
+    transform: scale(0.8) !important;
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
   }
   
-  .liquid-glass-modal-scale-from-button {
-    transform: scale(0.1);
+  .liquid-glass-modal.liquid-glass-modal-scale-from-button {
+    transform: scale(0.1) !important;
     opacity: 0;
     transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
   }
   
-  .liquid-glass-modal-backdrop.active .liquid-glass-modal-scale-from-center {
-    transform: scale(1);
+  .liquid-glass-modal-backdrop.active .liquid-glass-modal.liquid-glass-modal-scale-from-center {
+    transform: scale(1) !important;
     opacity: 1;
   }
   
-  .liquid-glass-modal-backdrop.active .liquid-glass-modal-scale-from-button {
-    transform: scale(1);
+  .liquid-glass-modal-backdrop.active .liquid-glass-modal.liquid-glass-modal-scale-from-button {
+    transform: scale(1) !important;
     opacity: 1;
   }
   
