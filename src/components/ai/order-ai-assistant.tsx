@@ -397,7 +397,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             </div>
           </div>
         )}
-      </LiquidGlassModal>
+      {/* </LiquidGlassModal> */}
     </div>
   )
 }
