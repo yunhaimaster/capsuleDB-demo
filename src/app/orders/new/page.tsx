@@ -6,7 +6,7 @@ import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 
 export default function NewOrderPage() {
   return (
-    <div className="min-h-screen animated-gradient-bg-subtle">
+    <div className="min-h-screen brand-logo-pattern-bg">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[

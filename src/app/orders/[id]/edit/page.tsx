@@ -47,7 +47,7 @@ export default function EditOrderPage() {
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-subtle">
+    <div className="min-h-screen brand-logo-pattern-bg">
       {/* Liquid Glass Navigation */}
         <LiquidGlassNav 
           links={[

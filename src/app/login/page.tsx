@@ -30,7 +30,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-subtle">
+    <div className="min-h-screen brand-logo-pattern-bg">
       {/* Liquid Glass Navigation - 登陸頁面只顯示導航欄，無導航連結 */}
       <LiquidGlassNav 
         links={[]}

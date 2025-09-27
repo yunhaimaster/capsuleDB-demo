@@ -8,7 +8,7 @@ import { Logo } from '@/components/ui/logo'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center animated-gradient-bg-subtle px-4">
+    <div className="min-h-screen flex items-center justify-center brand-logo-pattern-bg px-4">
       <div className="w-full max-w-md">
         <Card className="liquid-glass-card liquid-glass-card-elevated shadow-xl">
           <CardHeader className="text-center">

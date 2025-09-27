@@ -49,7 +49,7 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
+      <div className="space-y-6 brand-logo-pattern-bg min-h-screen">
         <div className="space-y-6 skeleton-stagger">
           {/* Basic Info Skeleton */}
           <Card className="liquid-glass-card liquid-glass-card-subtle">
@@ -115,7 +115,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="animated-gradient-bg-subtle min-h-screen">
+    <div className="brand-logo-pattern-bg min-h-screen">
       {/* Liquid Glass Navigation */}
         <LiquidGlassNav 
           links={[

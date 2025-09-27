@@ -29,7 +29,7 @@ export default function LiquidGlassDemoPage() {
   }
 
   return (
-    <div className={`min-h-screen ${useBrandLogoBg ? 'brand-logo-bg-animation' : 'animated-gradient-bg-subtle'}`}>
+    <div className={`min-h-screen ${useBrandLogoBg ? 'brand-logo-bg-animation' : 'brand-logo-pattern-bg'}`}>
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[
