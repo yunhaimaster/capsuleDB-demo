@@ -307,7 +307,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                         <div className="text-sm max-w-xs">
                           {order.ingredients && order.ingredients.length > 0 ? (
                             <div className="space-y-1">
-                              {order.ingredients.slice(0, 2).map((ingredient, index) => (
+                              {order.ingredients
+                                .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
+                                .slice(0, 2)
+                                .map((ingredient, index) => (
                                 <div key={index}>
                                   <span className="text-sm">{ingredient.materialName}</span>
                                 </div>

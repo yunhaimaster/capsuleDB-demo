@@ -116,27 +116,44 @@ export async function GET(request: NextRequest) {
 
     // 應用自定義排序
     const sortedOrders = allOrders.sort((a, b) => {
-      // 未完工的訂單排在前面
-      const aCompleted = a.completionDate !== null
-      const bCompleted = b.completionDate !== null
-      
-      if (aCompleted !== bCompleted) {
-        return aCompleted ? 1 : -1 // 未完工的在前
+      // 如果是按完工日期排序，使用默認邏輯（未完工在前）
+      if (validatedFilters.sortBy === 'completionDate') {
+        const aCompleted = a.completionDate !== null
+        const bCompleted = b.completionDate !== null
+        
+        if (aCompleted !== bCompleted) {
+          return aCompleted ? 1 : -1 // 未完工的在前
+        }
+        
+        // 都是未完工或都是已完工時，按日期排序
+        const aDate = a.completionDate ? new Date(a.completionDate) : new Date(0)
+        const bDate = b.completionDate ? new Date(b.completionDate) : new Date(0)
+        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
       }
       
-      // 如果都是未完工或都是已完工，按指定字段排序
+      // 其他字段直接按指定字段排序
       if (validatedFilters.sortBy === 'createdAt') {
         const aDate = new Date(a.createdAt)
         const bDate = new Date(b.createdAt)
         return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
-      } else if (validatedFilters.sortBy === 'completionDate') {
-        const aDate = a.completionDate ? new Date(a.completionDate) : new Date(0)
-        const bDate = b.completionDate ? new Date(b.completionDate) : new Date(0)
-        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
       } else {
-        // 其他字段的排序
+        // 字符串和數字字段的排序
         const aValue = (a as any)[validatedFilters.sortBy]
         const bValue = (b as any)[validatedFilters.sortBy]
+        
+        // 處理 null/undefined 值
+        if (aValue == null && bValue == null) return 0
+        if (aValue == null) return validatedFilters.sortOrder === 'asc' ? -1 : 1
+        if (bValue == null) return validatedFilters.sortOrder === 'asc' ? 1 : -1
+        
+        // 字符串排序
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          return validatedFilters.sortOrder === 'asc' 
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue)
+        }
+        
+        // 數字排序
         if (aValue < bValue) return validatedFilters.sortOrder === 'asc' ? -1 : 1
         if (aValue > bValue) return validatedFilters.sortOrder === 'asc' ? 1 : -1
         return 0
