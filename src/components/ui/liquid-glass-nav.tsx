@@ -1,0 +1,179 @@
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
+import { Menu, X, Plus } from 'lucide-react'
+
+interface NavLink {
+  href: string
+  label: string
+  active?: boolean
+}
+
+interface LiquidGlassNavProps {
+  logo?: React.ReactNode
+  links?: NavLink[]
+  ctaText?: string
+  ctaHref?: string
+  ctaIcon?: React.ReactNode
+  className?: string
+}
+
+export function LiquidGlassNav({
+  logo = <Logo />,
+  links = [
+    { href: '/', label: '首頁' },
+    { href: '/orders', label: '訂單管理' },
+    { href: '/production-order-form', label: '新建訂單' }
+  ],
+  ctaText = '新建訂單',
+  ctaHref = '/production-order-form',
+  ctaIcon = <Plus className="h-4 w-4" />,
+  className = ''
+}: LiquidGlassNavProps) {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
+
+  // Intersection Observer for scroll-based transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      setIsScrolled(scrollTop > 50)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // ResizeObserver for responsive glass effects
+  useEffect(() => {
+    if (!navRef.current) return
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width } = entry.contentRect
+        if (width < 768 && isMobileMenuOpen) {
+          // Close mobile menu on resize to desktop
+          setIsMobileMenuOpen(false)
+        }
+      }
+    })
+
+    resizeObserver.observe(navRef.current)
+    return () => resizeObserver.disconnect()
+  }, [isMobileMenuOpen])
+
+  // Keyboard navigation support
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape' && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false)
+    }
+  }
+
+  // Focus management for accessibility
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  return (
+    <nav
+      ref={navRef}
+      className={`liquid-glass-nav ${isScrolled ? 'scrolled' : ''} ${className}`}
+      onKeyDown={handleKeyDown}
+      role="navigation"
+      aria-label="主要導航"
+    >
+      <div className="liquid-glass-nav-content">
+        {/* Logo Section */}
+        <Link 
+          href="/" 
+          className="liquid-glass-nav-logo"
+          aria-label="回到首頁"
+        >
+          {logo}
+        </Link>
+
+        {/* Desktop Navigation Links */}
+        <div className="liquid-glass-nav-links">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
+              aria-current={link.active ? 'page' : undefined}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* CTA Button */}
+        <Link href={ctaHref} className="liquid-glass-nav-cta">
+          {ctaIcon}
+          <span className="hidden sm:inline">{ctaText}</span>
+        </Link>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="liquid-glass-nav-mobile-toggle"
+          onClick={handleMobileMenuToggle}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={isMobileMenuOpen ? '關閉選單' : '開啟選單'}
+        >
+          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {isMobileMenuOpen && (
+        <div
+          id="mobile-menu"
+          className="liquid-glass-nav-mobile"
+          role="menu"
+          aria-label="行動版導航選單"
+        >
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="liquid-glass-nav-link"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-current={link.active ? 'page' : undefined}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href={ctaHref}
+            className="liquid-glass-nav-cta"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {ctaIcon}
+            {ctaText}
+          </Link>
+        </div>
+      )}
+    </nav>
+  )
+}
+
+// Hook for managing scroll-based navigation state
+export function useScrollNav() {
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      setIsScrolled(scrollTop > 50)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return { isScrolled }
+}

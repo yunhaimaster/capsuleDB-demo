@@ -121,7 +121,7 @@ export default function HomePage() {
       </div>
 
       {/* Feature Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
@@ -270,6 +270,28 @@ export default function HomePage() {
               </div>
             </div>
             </div>
+          </div>
+        </div>
+
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="mb-4">
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold flex items-center mb-2">
+                <span className="mr-2 text-sm sm:text-base">✨</span>
+                Liquid Glass UI
+              </h3>
+              <p className="text-xs sm:text-sm md:text-base opacity-80">
+                iOS 26 風格介面展示
+              </p>
+            </div>
+            <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
+              體驗最新的 Liquid Glass 導航、模態框和標題組件
+            </p>
+            <Link href="/liquid-glass-demo">
+              <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+                查看展示
+              </Button>
+            </Link>
           </div>
         </div>
 
