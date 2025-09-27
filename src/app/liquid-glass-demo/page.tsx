@@ -33,11 +33,9 @@ export default function LiquidGlassDemoPage() {
       <LiquidGlassNav 
         links={[
           { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
+          { href: '/orders', label: '訂單' },
           { href: '/liquid-glass-demo', label: 'Liquid Glass 展示', active: true }
         ]}
-        ctaText="新建訂單"
-        ctaHref="/production-order-form"
       />
 
       {/* Main Content with padding for fixed nav */}

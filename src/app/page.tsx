@@ -152,16 +152,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen animated-gradient-bg-subtle">
       {/* Liquid Glass Navigation */}
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁', active: true },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/orders/new', label: '新建訂單' },
-          { href: '/login', label: '登出' }
-        ]}
-        ctaText="新建訂單"
-        ctaHref="/orders/new"
-      />
+        <LiquidGlassNav 
+          links={[
+            { href: '/', label: '首頁', active: true },
+            { href: '/orders', label: '訂單' },
+            { href: '/orders/new', label: '新建' },
+            { href: '/login', label: '登出' }
+          ]}
+        />
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">

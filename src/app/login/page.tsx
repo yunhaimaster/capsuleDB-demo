@@ -34,8 +34,6 @@ export default function LoginPage() {
       {/* Liquid Glass Navigation - 登陸頁面只顯示導航欄，無導航連結 */}
       <LiquidGlassNav 
         links={[]}
-        ctaText="系統登陸"
-        ctaHref="/login"
       />
       
       {/* Main Content with padding for fixed nav */}

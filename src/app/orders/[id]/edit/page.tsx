@@ -49,15 +49,13 @@ export default function EditOrderPage() {
   return (
     <div className="min-h-screen animated-gradient-bg-subtle">
       {/* Liquid Glass Navigation */}
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/orders/new', label: '新建訂單' }
-        ]}
-        ctaText="登出"
-        ctaHref="/login"
-      />
+        <LiquidGlassNav 
+          links={[
+            { href: '/', label: '首頁' },
+            { href: '/orders', label: '訂單' },
+            { href: '/orders/new', label: '新建' }
+          ]}
+        />
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">

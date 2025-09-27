@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
-import { Menu, X, Plus } from 'lucide-react'
 
 interface NavLink {
   href: string
@@ -16,26 +15,19 @@ interface NavLink {
 interface LiquidGlassNavProps {
   logo?: React.ReactNode
   links?: NavLink[]
-  ctaText?: string
-  ctaHref?: string
-  ctaIcon?: React.ReactNode
   className?: string
 }
 
 export function LiquidGlassNav({
   logo = <Logo />,
-      links = [
-        { href: '/', label: '首頁' },
-        { href: '/orders', label: '訂單' },
-        { href: '/orders/new', label: '新建' }
-      ],
-  ctaText = '新建',
-  ctaHref = '/orders/new',
-  ctaIcon = <Plus className="h-4 w-4" />,
+  links = [
+    { href: '/', label: '首頁' },
+    { href: '/orders', label: '訂單' },
+    { href: '/orders/new', label: '新建' }
+  ],
   className = ''
 }: LiquidGlassNavProps) {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
 
@@ -58,47 +50,17 @@ export function LiquidGlassNav({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // ResizeObserver for responsive glass effects
-  useEffect(() => {
-    if (!navRef.current) return
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width } = entry.contentRect
-        if (width < 768 && isMobileMenuOpen) {
-          // Close mobile menu on resize to desktop
-          setIsMobileMenuOpen(false)
-        }
-      }
-    })
-
-    resizeObserver.observe(navRef.current)
-    return () => resizeObserver.disconnect()
-  }, [isMobileMenuOpen])
-
-  // Keyboard navigation support
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape' && isMobileMenuOpen) {
-      setIsMobileMenuOpen(false)
-    }
-  }
-
-  // Focus management for accessibility
-  const handleMobileMenuToggle = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
 
   return (
     <nav
       ref={navRef}
       className={`liquid-glass-nav ${isScrolled ? 'scrolled' : ''} ${className}`}
-      onKeyDown={handleKeyDown}
       role="navigation"
       aria-label="主要導航"
     >
       <div className="liquid-glass-nav-content">
-        {/* Logo and Brand Section */}
-        <div className="flex items-center space-x-3">
+        {/* Logo and Brand Section - Left side */}
+        <div className="flex items-center space-x-3 mr-auto">
           <Link 
             href="/" 
             className="liquid-glass-nav-logo"
@@ -116,7 +78,7 @@ export function LiquidGlassNav({
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links - Right side */}
         <div className="liquid-glass-nav-links">
           {processedLinks.map((link) => (
             <Link
@@ -135,58 +97,8 @@ export function LiquidGlassNav({
           ))}
         </div>
 
-        {/* CTA Button */}
-        <Link href={ctaHref} className="liquid-glass-nav-cta">
-          {ctaIcon}
-          <span className="hidden sm:inline">{ctaText}</span>
-        </Link>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className="liquid-glass-nav-mobile-toggle"
-          onClick={handleMobileMenuToggle}
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label={isMobileMenuOpen ? '關閉選單' : '開啟選單'}
-        >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      {isMobileMenuOpen && (
-        <div
-          id="mobile-menu"
-          className="liquid-glass-nav-mobile"
-          role="menu"
-          aria-label="行動版導航選單"
-        >
-          {processedLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
-            onClick={() => {
-              setIsMobileMenuOpen(false)
-              if (link.label === '登出') {
-                localStorage.removeItem('isAuthenticated')
-              }
-            }}
-            aria-current={link.active ? 'page' : undefined}
-          >
-            {link.label}
-          </Link>
-          ))}
-          <Link
-            href={ctaHref}
-            className="liquid-glass-nav-cta"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {ctaIcon}
-            {ctaText}
-          </Link>
-        </div>
-      )}
     </nav>
   )
 }

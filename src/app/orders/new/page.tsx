@@ -11,11 +11,9 @@ export default function NewOrderPage() {
       <LiquidGlassNav 
         links={[
           { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/orders/new', label: '新建訂單' }
+          { href: '/orders', label: '訂單' },
+          { href: '/orders/new', label: '新建' }
         ]}
-        ctaText="登出"
-        ctaHref="/login"
       />
       
       {/* Main Content with padding for fixed nav */}

@@ -117,15 +117,13 @@ export default function OrderDetailPage() {
   return (
     <div className="animated-gradient-bg-subtle min-h-screen">
       {/* Liquid Glass Navigation */}
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/production-order-form', label: '新建訂單' }
-        ]}
-        ctaText="返回首頁"
-        ctaHref="/"
-      />
+        <LiquidGlassNav 
+          links={[
+            { href: '/', label: '首頁' },
+            { href: '/orders', label: '訂單' },
+            { href: '/orders/new', label: '新建' }
+          ]}
+        />
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-6 floating-combined">
