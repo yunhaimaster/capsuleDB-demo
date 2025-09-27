@@ -72,10 +72,13 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         variant="default"
         className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10 liquid-glass-card-interactive h-10 px-4"
         onClick={() => {
-          if (onModalReplace) {
-            onModalReplace()
-          }
           setIsOpen(true)
+          if (onModalReplace) {
+            // 使用 setTimeout 確保 Order AI 模態框先打開
+            setTimeout(() => {
+              onModalReplace()
+            }, 50)
+          }
         }}
       >
         <Bot className="h-4 w-4 mr-2" />

@@ -247,6 +247,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                     產品名稱
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 ">
+                    膠囊規格
+                  </th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
+                    原料成分
+                  </th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     生產數量
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 ">
@@ -260,13 +266,13 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-8 text-gray-500">
+                    <td colSpan={7} className="text-center py-8 text-gray-500">
                       載入中...
                     </td>
                   </tr>
                 ) : orders.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-8 text-gray-500">
+                    <td colSpan={7} className="text-center py-8 text-gray-500">
                       沒有找到訂單
                     </td>
                   </tr>
@@ -278,6 +284,46 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                       </td>
                       <td className="py-3 px-4 text-gray-900 ">
                         {order.productName}
+                      </td>
+                      <td className="py-3 px-4 text-gray-900 ">
+                        <div className="flex items-center gap-2">
+                          {order.capsuleColor && (
+                            <div 
+                              className="w-4 h-4 rounded-full border border-gray-300" 
+                              style={{ backgroundColor: order.capsuleColor === '紅色' ? '#ef4444' : 
+                                         order.capsuleColor === '藍色' ? '#3b82f6' :
+                                         order.capsuleColor === '綠色' ? '#10b981' :
+                                         order.capsuleColor === '黃色' ? '#f59e0b' :
+                                         order.capsuleColor === '白色' ? '#ffffff' :
+                                         order.capsuleColor === '透明' ? 'transparent' : '#6b7280'
+                              }}
+                            />
+                          )}
+                          <span className="text-sm">
+                            {order.capsuleColor || '未設定'}{order.capsuleSize ? order.capsuleSize : ''}{order.capsuleType || ''}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-900 ">
+                        <div className="text-sm max-w-xs">
+                          {order.ingredients && order.ingredients.length > 0 ? (
+                            <div className="space-y-1">
+                              {order.ingredients.slice(0, 2).map((ingredient, index) => (
+                                <div key={index} className="flex justify-between">
+                                  <span className="truncate">{ingredient.materialName}</span>
+                                  <span className="text-gray-500 ml-2">{ingredient.unitContentMg}mg</span>
+                                </div>
+                              ))}
+                              {order.ingredients.length > 2 && (
+                                <div className="text-gray-500 text-xs">
+                                  +{order.ingredients.length - 2} 更多...
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-gray-500">無原料資料</span>
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-gray-900 ">
                         {order.productionQuantity?.toLocaleString()}
