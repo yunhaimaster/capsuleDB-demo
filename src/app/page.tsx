@@ -265,6 +265,59 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* PDF 參考資料下載 */}
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="mb-4">
+              <h3 className="text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
+                <span className="mr-2">📚</span>
+                參考資料下載
+              </h3>
+              <p className="text-sm md:text-base text-blue-600 opacity-80">
+                行業相關培訓資料和風險管控指南
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center">
+                  <div className="p-2 bg-blue-500 rounded-lg mr-3">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-blue-900">保健品行業常見生產風險原料清單</h4>
+                    <p className="text-sm text-blue-600">PDF 文件</p>
+                  </div>
+                </div>
+                <a 
+                  href="/pdf/保健品行業常見生產風險原料清單.pdf"
+                  download
+                  className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
+                >
+                  下載
+                </a>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-500 rounded-lg mr-3">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-green-900">膠囊生產培訓手冊（香港版-修訂版）</h4>
+                    <p className="text-sm text-green-600">PDF 文件</p>
+                  </div>
+                </div>
+                <a 
+                  href="/pdf/膠囊生產培訓手冊（香港版-修訂版）.pdf"
+                  download
+                  className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors"
+                >
+                  下載
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* 功能介紹 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
@@ -283,12 +336,14 @@ export default function HomePage() {
                 <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                   <li>• 膠囊配方管理與記錄追蹤</li>
-                  <li>• 智能配方導入（文字/圖片解析）</li>
+                  <li>• 智能配方導入（文字解析）</li>
                   <li>• AI 助手分析與專業建議</li>
                   <li>• 響應式設計，完美支援手機與桌面</li>
-                  <li>• 深色模式與淺色模式切換</li>
+                  <li>• Liquid Glass 設計語言</li>
                   <li>• 動態漸變背景與浮動元素</li>
                   <li>• 玻璃擬態卡片與微動畫效果</li>
+                  <li>• 品牌 Logo 背景動畫</li>
+                  <li>• 確認模態框與用戶體驗優化</li>
                 </ul>
               </div>
               <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
@@ -321,10 +376,24 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
+                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2024年12月19日</h4>
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
+                  <li>• 更換訂單管理和原料配方明細圖標，提升視覺效果</li>
+                  <li>• 新增 PDF 參考資料下載區域，提供培訓手冊和風險清單</li>
+                  <li>• 修復訂單編輯頁面的 toISOString 錯誤</li>
+                  <li>• 修復下拉菜單選擇後自動收回功能</li>
+                  <li>• 使用 Liquid Glass 確認模態框替代原生 confirm 對話框</li>
+                  <li>• 修正智能配方導入描述，明確只支援文字解析</li>
+                  <li>• 優化用戶體驗和界面一致性</li>
+                </ul>
+              </div>
+              <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h4 className="font-medium text-blue-800 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
+                </div>
+                <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
                   <li>• 引入 Liquid Glass Cards，提升 UI 質感與互動性</li>
                   <li>• 解決 Vercel 部署中 Prisma Schema 與環境變量問題</li>
                   <li>• 修正 AI API 密鑰配置，確保 AI 助手正常運作</li>
