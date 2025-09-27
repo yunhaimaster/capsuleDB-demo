@@ -202,7 +202,7 @@ export function LiquidGlassConfirmModal({
       title={title}
       size="sm"
     >
-      <p className="mb-6">{message}</p>
+      <p className="mb-6 text-white">{message}</p>
       <div className="liquid-glass-modal-footer">
         <Button
           variant="outline"
@@ -242,7 +242,7 @@ export function LiquidGlassInfoModal({
       title={title}
       size="sm"
     >
-      <p className="mb-6">{message}</p>
+      <p className="mb-6 text-white">{message}</p>
       <div className="liquid-glass-modal-footer">
         <Button
           onClick={onClose}
