@@ -4,9 +4,10 @@ import remarkGfm from 'remark-gfm'
 interface MarkdownRendererProps {
   content: string
   className?: string
+  whiteText?: boolean
 }
 
-export function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, className = '', whiteText = false }: MarkdownRendererProps) {
   return (
     <div className={`prose prose-sm max-w-none ${className}`}>
       <ReactMarkdown
@@ -14,23 +15,23 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
         components={{
           // 自定義標題樣式
           h1: ({ children }) => (
-            <h1 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 mt-4 first:mt-0">
+            <h1 className={`text-lg font-bold mb-2 mt-4 first:mt-0 ${whiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-3 first:mt-0">
+            <h2 className={`text-base font-semibold mb-2 mt-3 first:mt-0 ${whiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1 mt-2 first:mt-0">
+            <h3 className={`text-sm font-medium mb-1 mt-2 first:mt-0 ${whiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </h3>
           ),
           // 自定義段落樣式
           p: ({ children }) => (
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">
+            <p className={`text-sm mb-2 leading-relaxed ${whiteText ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>
               {children}
             </p>
           ),
@@ -46,35 +47,35 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
             </ol>
           ),
           li: ({ children }) => (
-            <li className="text-sm text-gray-700 dark:text-gray-300">
+            <li className={`text-sm ${whiteText ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>
               {children}
             </li>
           ),
           // 自定義強調樣式
           strong: ({ children }) => (
-            <strong className="font-semibold text-gray-900 dark:text-gray-100">
+            <strong className={`font-semibold ${whiteText ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>
               {children}
             </strong>
           ),
           em: ({ children }) => (
-            <em className="italic text-gray-800 dark:text-gray-200">
+            <em className={`italic ${whiteText ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
               {children}
             </em>
           ),
           // 自定義代碼樣式
           code: ({ children }) => (
-            <code className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1 py-0.5 rounded text-xs font-mono">
+            <code className={`px-1 py-0.5 rounded text-xs font-mono ${whiteText ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'}`}>
               {children}
             </code>
           ),
           pre: ({ children }) => (
-            <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded text-xs font-mono overflow-x-auto mb-2">
+            <pre className={`p-2 rounded text-xs font-mono overflow-x-auto mb-2 ${whiteText ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800'}`}>
               {children}
             </pre>
           ),
           // 自定義引用樣式
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-blue-200 dark:border-blue-800 pl-3 py-1 mb-2 bg-blue-50 dark:bg-blue-900/20 rounded-r">
+            <blockquote className={`border-l-4 pl-3 py-1 mb-2 rounded-r ${whiteText ? 'border-white/40 bg-white/10' : 'border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20'}`}>
               {children}
             </blockquote>
           ),
@@ -119,7 +120,7 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
           a: ({ children, href }) => (
             <a 
               href={href} 
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className={`hover:underline ${whiteText ? 'text-blue-300 hover:text-blue-200' : 'text-blue-600 dark:text-blue-400'}`}
               target="_blank"
               rel="noopener noreferrer"
             >

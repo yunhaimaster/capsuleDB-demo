@@ -110,12 +110,12 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
                   message.role === 'user' 
-                    ? 'bg-blue-600 text-white' 
+                    ? 'bg-transparent border border-white/20 text-white backdrop-blur-sm' 
                     : 'bg-transparent border border-white/20 text-white backdrop-blur-sm'
                 }`}>
                   {message.role === 'assistant' ? (
                     <div>
-                      <MarkdownRenderer content={message.content} />
+                      <MarkdownRenderer content={message.content} whiteText={true} />
                       {message.suggestions && message.suggestions.length > 0 && (
                         <div className="mt-3 space-y-2">
                           <p className="text-sm font-medium text-gray-200">建議問題：</p>
