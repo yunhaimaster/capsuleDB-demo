@@ -136,38 +136,38 @@ export function AIAssistant({ orders }: AIAssistantProps) {
         
         <div className="flex-1 overflow-y-auto space-y-4 mb-4">
           {messages.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <div className="text-center py-8 text-gray-500">
               <Bot className="h-12 w-12 mx-auto mb-4 opacity-50 text-blue-600" />
               <p className="text-lg font-medium mb-2">歡迎使用 AI 訂單助手！</p>
               <p className="text-sm mb-4">您可以詢問關於訂單的任何問題，例如：</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                 <button
                   onClick={() => setInput('顯示所有未完工的訂單')}
-                  className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                  className="bg-blue-50 hover:bg-blue-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
-                  <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">查詢訂單</p>
-                  <p className="text-blue-600 dark:text-blue-300">"顯示所有未完工的訂單"</p>
+                  <p className="font-medium text-blue-800 mb-1">查詢訂單</p>
+                  <p className="text-blue-600">"顯示所有未完工的訂單"</p>
                 </button>
                 <button
                   onClick={() => setInput('哪個客戶的訂單最多？')}
-                  className="bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                  className="bg-green-50 hover:bg-green-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
-                  <p className="font-medium text-green-800 dark:text-green-200 mb-1">統計分析</p>
-                  <p className="text-green-600 dark:text-green-300">"哪個客戶的訂單最多？"</p>
+                  <p className="font-medium text-green-800 mb-1">統計分析</p>
+                  <p className="text-green-600">"哪個客戶的訂單最多？"</p>
                 </button>
                 <button
                   onClick={() => setInput('維生素C相關的訂單有哪些？')}
-                  className="bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                  className="bg-purple-50 hover:bg-purple-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
-                  <p className="font-medium text-purple-800 dark:text-purple-200 mb-1">原料查詢</p>
-                  <p className="text-purple-600 dark:text-purple-300">"維生素C相關的訂單有哪些？"</p>
+                  <p className="font-medium text-purple-800 mb-1">原料查詢</p>
+                  <p className="text-purple-600">"維生素C相關的訂單有哪些？"</p>
                 </button>
                 <button
                   onClick={() => setInput('最近一週的生產情況如何？')}
-                  className="bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 p-3 rounded-lg text-left transition-colors cursor-pointer"
+                  className="bg-orange-50 hover:bg-orange-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
-                  <p className="font-medium text-orange-800 dark:text-orange-200 mb-1">時間分析</p>
-                  <p className="text-orange-600 dark:text-orange-300">"最近一週的生產情況如何？"</p>
+                  <p className="font-medium text-orange-800 mb-1">時間分析</p>
+                  <p className="text-orange-600">"最近一週的生產情況如何？"</p>
                 </button>
               </div>
             </div>
@@ -181,7 +181,7 @@ export function AIAssistant({ orders }: AIAssistantProps) {
                   className={`max-w-[80%] rounded-lg p-3 ${
                     message.role === 'user'
                       ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                      : 'bg-gray-100 text-gray-900'
                   }`}
                 >
                   <MarkdownRenderer content={message.content} />
@@ -192,10 +192,10 @@ export function AIAssistant({ orders }: AIAssistantProps) {
           
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+              <div className="bg-gray-100 rounded-lg p-3">
                 <div className="flex items-center space-x-2">
                   <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">AI 正在思考...</span>
+                  <span className="text-sm text-gray-600">AI 正在思考...</span>
                 </div>
               </div>
             </div>

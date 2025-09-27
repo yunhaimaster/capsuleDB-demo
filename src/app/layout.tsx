@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/components/auth/auth-provider'
 import { ProtectedLayout } from '@/components/auth/protected-layout'
 import { Analytics } from '@vercel/analytics/next'
@@ -19,22 +18,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-TW" suppressHydrationWarning>
+    <html lang="zh-TW">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>
-            <ProtectedLayout>
-              <div className="min-h-screen">
-                {children}
-              </div>
-            </ProtectedLayout>
-          </AuthProvider>
-        </ThemeProvider>
+        <AuthProvider>
+          <ProtectedLayout>
+            <div className="min-h-screen">
+              {children}
+            </div>
+          </ProtectedLayout>
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

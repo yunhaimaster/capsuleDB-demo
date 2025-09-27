@@ -249,8 +249,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                       key={index}
                       className={`p-3 rounded-lg border ${
                         ingredient.needsConfirmation 
-                          ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-700' 
-                          : 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-700'
+                          ? 'bg-yellow-50 border-yellow-200' 
+                          : 'bg-green-50 border-green-200'
                       }`}
                     >
                       <div className="flex items-center justify-between">

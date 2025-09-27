@@ -194,7 +194,7 @@ export default function LiquidGlassDemoPage() {
                 <p className="mb-6 opacity-90">
                   滾動頁面以查看導航欄的透明度變化效果。導航欄會根據滾動位置自動調整背景透明度和模糊效果。
                 </p>
-                <div className="h-96 bg-gradient-to-b from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl flex items-center justify-center">
+                <div className="h-96 bg-gradient-to-b from-blue-100 to-purple-100 rounded-xl flex items-center justify-center">
                   <p className="text-lg font-medium opacity-70">滾動測試區域</p>
                 </div>
               </div>
@@ -220,7 +220,7 @@ export default function LiquidGlassDemoPage() {
             <li>• 焦點管理</li>
             <li>• 點擊背景關閉</li>
           </ul>
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+          <div className="bg-blue-50 p-4 rounded-xl">
             <p className="font-medium">提示：</p>
             <p>在手機設備上，模態框會從底部滑入，模擬原生應用體驗。</p>
           </div>

@@ -143,7 +143,7 @@ export default function HomePage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">驗證中...</p>
+          <p className="text-gray-600">驗證中...</p>
         </div>
       </div>
     )
@@ -240,14 +240,14 @@ export default function HomePage() {
               <div className="space-y-2">
                 {recentOrders.map((order) => (
                   <Link href={`/orders/${order.id}`} key={order.id} className="block">
-                    <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors liquid-glass-card-interactive">
+                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors liquid-glass-card-interactive">
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{order.customerName} - {order.productName}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">數量: {formatNumber(order.productionQuantity)} 粒</p>
+                        <p className="text-sm font-medium text-gray-900 truncate">{order.customerName} - {order.productName}</p>
+                        <p className="text-xs text-gray-500">數量: {formatNumber(order.productionQuantity)} 粒</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">{order.completionDate ? '已完工' : '進行中'}</p>
+                        <p className="text-sm font-medium text-gray-900">{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
+                        <p className="text-xs text-gray-500">{order.completionDate ? '已完工' : '進行中'}</p>
                       </div>
                     </div>
                   </Link>
@@ -255,7 +255,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-500 dark:text-gray-400 mb-4">目前沒有最近的生產記錄。</p>
+                <p className="text-gray-500 mb-4">目前沒有最近的生產記錄。</p>
                 <Link href="/orders/new">
                   <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                     建立第一筆記錄
@@ -271,19 +271,19 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
-              <h3 className="text-lg md:text-xl font-semibold text-amber-800 dark:text-amber-200 flex items-center mb-2">
+              <h3 className="text-lg md:text-xl font-semibold text-amber-800 flex items-center mb-2">
                 <span className="mr-2">📋</span>
                 功能介紹
               </h3>
-              <p className="text-sm md:text-base text-amber-600 dark:text-amber-200 opacity-80">
+              <p className="text-sm md:text-base text-amber-600 opacity-80">
                 系統功能說明與使用指南
               </p>
             </div>
             <div className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
-              <div className="bg-amber-50 dark:bg-amber-900/40 p-3 md:p-4 rounded-xl border border-amber-200 dark:border-amber-700/50">
-                <h4 className="font-medium text-amber-800 dark:text-amber-200 mb-2">主要功能</h4>
-                <ul className="space-y-1 text-xs md:text-sm text-amber-700 dark:text-amber-100">
+              <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
+                <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
+                <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                   <li>• 膠囊配方管理與記錄追蹤</li>
                   <li>• 智能配方導入（文字/圖片解析）</li>
                   <li>• AI 助手分析與專業建議</li>
@@ -293,12 +293,12 @@ export default function HomePage() {
                   <li>• 玻璃擬態卡片與微動畫效果</li>
                 </ul>
               </div>
-              <div className="bg-yellow-50 dark:bg-yellow-900/40 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-700/50">
-                <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">技術支援</h4>
-                <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-100">
+              <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
+                <h4 className="font-medium text-yellow-800 mb-2">技術支援</h4>
+                <div className="text-xs md:text-sm text-yellow-700">
                   <p className="mb-1">如有任何問題或建議，請聯繫：</p>
                   <p className="font-medium">Victor</p>
-                  <p className="text-xs text-yellow-600 dark:text-yellow-200 mt-1">系統管理員</p>
+                  <p className="text-xs text-yellow-600 mt-1">系統管理員</p>
                 </div>
               </div>
             </div>
@@ -311,22 +311,22 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
-              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 dark:text-blue-200 flex items-center mb-2">
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
                 <span className="mr-2 text-sm sm:text-base">📝</span>
                 版本更新記錄
               </h3>
-              <p className="text-xs sm:text-sm md:text-base text-blue-600 dark:text-blue-200 opacity-80">
+              <p className="text-xs sm:text-sm md:text-base text-blue-600 opacity-80">
                 系統功能更新與改進記錄
               </p>
             </div>
             <div className="space-y-4">
             <div className="space-y-3">
-              <div className="bg-green-50 dark:bg-green-900/40 p-3 rounded-xl border border-green-200 dark:border-green-700/50">
+              <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
-                  <span className="text-xs bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
-                <ul className="list-disc list-inside space-y-1 text-xs text-green-700 dark:text-green-100">
+                <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
                   <li>• 引入 Liquid Glass Cards，提升 UI 質感與互動性</li>
                   <li>• 解決 Vercel 部署中 Prisma Schema 與環境變量問題</li>
                   <li>• 修正 AI API 密鑰配置，確保 AI 助手正常運作</li>
