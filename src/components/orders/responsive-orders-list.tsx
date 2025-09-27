@@ -108,6 +108,23 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     window.open(`/api/orders/export?${params}`, '_blank')
   }
 
+  const handleDelete = async (orderId: string) => {
+    if (!confirm('確定要刪除此訂單嗎？此操作無法復原。')) return
+
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: 'DELETE'
+      })
+      
+      if (!response.ok) throw new Error('刪除訂單失敗')
+      
+      fetchOrders(filters)
+    } catch (error) {
+      console.error('刪除訂單錯誤:', error)
+      alert('刪除失敗，請重試')
+    }
+  }
+
   const getCapsuleColorCode = (color: string) => {
     switch (color) {
       case '紅色': return '#ef4444'
@@ -292,6 +309,16 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                           >
                             <Edit className="h-4 w-4" />
                           </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDelete(order.id)
+                            }}
+                            className="text-red-600 hover:text-red-800 transition-colors"
+                            title="刪除訂單"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -331,16 +358,28 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       {order.customerName}
                     </p>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      window.location.href = `/orders/${order.id}/edit`
-                    }}
-                    className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                    title="編輯訂單"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.location.href = `/orders/${order.id}/edit`
+                      }}
+                      className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+                      title="編輯訂單"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDelete(order.id)
+                      }}
+                      className="text-red-600 hover:text-red-800 transition-colors p-1"
+                      title="刪除訂單"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* 膠囊規格 */}
