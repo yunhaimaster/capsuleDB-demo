@@ -42,6 +42,57 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+/* 統一響應式間距系統 */
+.page-content-spacing {
+  padding-top: 7rem; /* pt-28 for mobile */
+  padding-left: 1rem; /* px-4 for mobile */
+  padding-right: 1rem; /* px-4 for mobile */
+  padding-bottom: 2rem; /* pb-8 */
+}
+
+@media (min-width: 640px) {
+  .page-content-spacing {
+    padding-top: 6rem; /* pt-24 for sm and up */
+    padding-left: 1.5rem; /* px-6 for sm and up */
+    padding-right: 1.5rem; /* px-6 for sm and up */
+  }
+}
+
+@media (min-width: 768px) {
+  .page-content-spacing {
+    padding-left: 2rem; /* px-8 for md and up */
+    padding-right: 2rem; /* px-8 for md and up */
+  }
+}
+
+/* 統一卡片間距 */
+.card-spacing {
+  margin-bottom: 2rem; /* space-y-8 = 2rem */
+}
+
+.card-spacing:last-child {
+  margin-bottom: 0;
+}
+
+/* 響應式卡片間距 */
+@media (max-width: 639px) {
+  .card-spacing {
+    margin-bottom: 1.5rem; /* 稍小的間距在手機上 */
+  }
+}
+
+@media (min-width: 640px) {
+  .card-spacing {
+    margin-bottom: 2rem; /* 標準間距 */
+  }
+}
+
+@media (min-width: 2560px) {
+  .card-spacing {
+    margin-bottom: 2.5rem; /* 大螢幕上稍大的間距 */
+  }
+}
+
 /* Animated Gradient Backgrounds using Easy Health Brand Colors */
 .animated-gradient-bg {
   background: linear-gradient(
