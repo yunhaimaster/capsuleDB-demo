@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model ProductionOrder {
@@ -37,6 +36,7 @@ model Ingredient {
   orderId       String
   materialName  String          // 原料品名
   unitContentMg Float           // 單粒含量
+  isCustomerProvided Boolean    @default(true) // 是否為客戶指定原料
   order         ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("ingredients")

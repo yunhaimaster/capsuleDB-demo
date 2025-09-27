@@ -62,17 +62,19 @@ export async function PUT(
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate || null,
+        completionDate: validatedData.completionDate ? new Date(validatedData.completionDate) : null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         capsuleColor: validatedData.capsuleColor,
         capsuleSize: validatedData.capsuleSize,
         capsuleType: validatedData.capsuleType,
+        // 更新原料：先刪除舊的再新增，包含客戶指定標記
         ingredients: {
           deleteMany: {},
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
-            unitContentMg: ingredient.unitContentMg
+            unitContentMg: ingredient.unitContentMg,
+            isCustomerProvided: ingredient.isCustomerProvided ?? true
           }))
         }
       },

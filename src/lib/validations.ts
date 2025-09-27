@@ -11,7 +11,10 @@ export const ingredientSchema = z.object({
     .positive('單粒含量必須為正數')
     .min(0.00001, '單粒含量不能小於0.00001mg')
     .max(10000, '單粒含量不能超過10,000mg')
-    .refine((val) => Number(val.toFixed(5)) === val, '單粒含量精度不能超過小數點後5位')
+    .refine((val) => Number(val.toFixed(5)) === val, '單粒含量精度不能超過小數點後5位'),
+  isCustomerProvided: z
+    .boolean()
+    .default(true)
 })
 
 export const productionOrderSchema = z.object({

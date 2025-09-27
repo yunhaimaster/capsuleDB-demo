@@ -22,6 +22,7 @@ export interface Ingredient {
   orderId: string
   materialName: string
   unitContentMg: number
+  isCustomerProvided: boolean
 }
 
 export interface CreateProductionOrderData {
@@ -41,6 +42,7 @@ export interface CreateProductionOrderData {
 export interface CreateIngredientData {
   materialName: string
   unitContentMg: number
+  isCustomerProvided?: boolean
 }
 
 export interface UpdateProductionOrderData extends Partial<CreateProductionOrderData> {

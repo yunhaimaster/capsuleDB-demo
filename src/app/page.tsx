@@ -391,7 +391,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
           <h4 className="font-medium mb-2">生產狀態</h4>
           <div className="space-y-2 text-sm">
             <p><span className="font-medium">完工日期：</span>
-              {order.completionDate ? formatDate(order.completionDate) : '未完工'}
+              {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
             </p>
             <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
             <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>

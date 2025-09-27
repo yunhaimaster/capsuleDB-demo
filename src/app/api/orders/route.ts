@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate || null,
+        completionDate: validatedData.completionDate ? new Date(validatedData.completionDate) : null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         capsuleColor: validatedData.capsuleColor,
@@ -210,7 +210,8 @@ export async function POST(request: NextRequest) {
         ingredients: {
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
-            unitContentMg: ingredient.unitContentMg
+            unitContentMg: ingredient.unitContentMg,
+            isCustomerProvided: ingredient.isCustomerProvided ?? true
           }))
         }
       },

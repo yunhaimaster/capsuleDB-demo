@@ -15,6 +15,7 @@ import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { Checkbox } from '@/components/ui/checkbox'
 
 interface ProductionOrderFormProps {
   initialData?: Partial<ProductionOrderFormData>
@@ -53,19 +54,22 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       customerName: initialData?.customerName || '',
       productName: initialData?.productName || '未命名產品',
       productionQuantity: initialData?.productionQuantity || 1,
-      completionDate: initialData?.completionDate 
-        ? (typeof initialData.completionDate === 'string' 
-            ? new Date(initialData.completionDate) 
-            : initialData.completionDate)
-        : null,
+      completionDate: initialData?.completionDate
+        ? (typeof initialData.completionDate === 'string'
+            ? initialData.completionDate.split('T')[0]
+            : initialData.completionDate.toISOString().split('T')[0])
+        : '',
       processIssues: initialData?.processIssues || '',
       qualityNotes: initialData?.qualityNotes || '',
       capsuleColor: initialData?.capsuleColor || '',
       capsuleSize: initialData?.capsuleSize || null,
       capsuleType: initialData?.capsuleType || null,
       createdBy: initialData?.createdBy || '系統',
-      ingredients: initialData?.ingredients || [
-        { materialName: '', unitContentMg: 0 }
+      ingredients: initialData?.ingredients?.map(ingredient => ({
+        ...ingredient,
+        isCustomerProvided: ingredient.isCustomerProvided ?? true
+      })) || [
+        { materialName: '', unitContentMg: 0, isCustomerProvided: true }
       ]
     }
   })
@@ -138,7 +142,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         throw new Error('導入數據格式不正確')
       }
       
-      // 準備新的原料數據
+      // 初始原料：預設為客戶指定
       const newIngredients = importedIngredients.length > 0 
         ? importedIngredients
             .map((ing, index) => {
@@ -152,11 +156,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               
               return {
                 materialName,
-                unitContentMg: Math.max(0, unitContentMg)
+                unitContentMg: Math.max(0, unitContentMg),
+                // 導入的配方原料預設視為客戶指定
+                isCustomerProvided: true
               }
             })
-            .filter((item): item is { materialName: string; unitContentMg: number } => item !== null)
-        : [{ materialName: '', unitContentMg: 0 }]
+            .filter((item): item is { materialName: string; unitContentMg: number; isCustomerProvided: boolean } => item !== null)
+        : [{ materialName: '', unitContentMg: 0, isCustomerProvided: true }]
       
       console.log('處理後的原料:', newIngredients)
       
@@ -387,11 +393,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 <Input
                   id="completionDate"
                   type="date"
-                  value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-                  onChange={(e) => {
-                    const value = e.target.value
-                    field.onChange(value ? new Date(value) : null)
-                  }}
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(e.target.value || '')}
                 />
               )}
             />
@@ -484,12 +487,31 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       )}
                     </TableCell>
                     <TableCell>
-                      <Input
-                        type="number"
-                        step="0.00001"
-                        {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
-                        placeholder="0.00000"
-                      />
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          step="0.00001"
+                          {...register(`ingredients.${index}.unitContentMg`, { valueAsNumber: true })}
+                          placeholder="0.00000"
+                        />
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Controller
+                            name={`ingredients.${index}.isCustomerProvided`}
+                            control={control}
+                            defaultValue={true}
+                            render={({ field }) => (
+                              <label className="flex items-center gap-2">
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={(checked) => field.onChange(Boolean(checked))}
+                                  className="h-4 w-4"
+                                />
+                                <span>客戶指定原料</span>
+                              </label>
+                            )}
+                          />
+                        </div>
+                      </div>
                       {errors.ingredients?.[index]?.unitContentMg && (
                         <p className="text-sm text-destructive mt-1">
                           {errors.ingredients[index]?.unitContentMg?.message}
@@ -565,7 +587,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       )}
                     </div>
 
-                    {/* 單粒含量 */}
+                    {/* 單粒含量、客戶指定 */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
                       <Controller
@@ -589,6 +611,22 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           {errors.ingredients[index]?.unitContentMg?.message}
                         </p>
                       )}
+
+                      <Controller
+                        name={`ingredients.${index}.isCustomerProvided`}
+                        control={control}
+                        defaultValue={true}
+                        render={({ field }) => (
+                          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={(checked) => field.onChange(Boolean(checked))}
+                              className="h-4 w-4"
+                            />
+                            <span>客戶指定原料</span>
+                          </label>
+                        )}
+                      />
                     </div>
 
                   </div>
@@ -601,7 +639,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             <Button
               type="button"
               variant="outline"
-              onClick={() => append({ materialName: '', unitContentMg: 0 })}
+              onClick={() => append({ materialName: '', unitContentMg: 0, isCustomerProvided: true })}
             >
               <Plus className="mr-2 h-4 w-4" />
               新增原料

@@ -18,6 +18,7 @@ interface ParsedIngredient {
   unitContentMg: number
   originalText: string
   needsConfirmation: boolean
+  isCustomerProvided?: boolean
 }
 
 interface SmartRecipeImportProps {
@@ -69,7 +70,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
       console.log('API 回應數據:', data)
       
       if (data.success && data.data) {
-        const ingredients = data.data.ingredients || []
+        const ingredients = (data.data.ingredients || []).map((ingredient: ParsedIngredient) => ({
+          ...ingredient,
+          isCustomerProvided: ingredient.isCustomerProvided ?? true
+        }))
         console.log('解析到的原料:', ingredients)
         
         if (ingredients.length === 0) {

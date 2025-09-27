@@ -23,11 +23,232 @@ function cleanOrderData(orders: any[]): any[] {
   }))
 }
 
+const DEFAULT_SUGGESTIONS = [
+  '分析配方成分堆積密度，計算粉劑容積，對比膠囊殼容積，評估填充可行性並提供建議。',
+  '分析原料流動性、黏性、結塊風險，評估製粒必要性（0-100分），推薦流動性改善輔料及用量。',
+  '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
+  '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
+]
+
+function sanitizeChunk(text: string): string {
+  if (!text) return ''
+  return text
+    .replace(/<\|begin_of_sentence\s*\|>/g, '')
+    .replace(/<\|end_of_sentence\s*\|>/g, '')
+    .replace(/<\|begin_of_sentence\s*\|/g, '')
+    .replace(/<\|end_of_sentence\s*\|/g, '')
+    .replace(/<\|.*?\|>/g, '')
+    .replace(/<\|.*?\|/g, '')
+    .replace(/<\|.*?>/g, '')
+    .replace(/<\|.*?/g, '')
+    .replace(/<\|/g, '')
+    .replace(/\|>/g, '')
+}
+
+function sanitizeFinal(text: string): string {
+  return sanitizeChunk(text).trim()
+}
+
+async function generateSuggestions(
+  aiResponse: string,
+  userMessage: string,
+  OPENROUTER_API_URL: string,
+  OPENROUTER_API_KEY: string
+): Promise<string[]> {
+  if (!aiResponse) {
+    return [...DEFAULT_SUGGESTIONS]
+  }
+
+  let suggestions: string[] = []
+
+  console.log('=== 開始生成動態建議 ===')
+  console.log('用戶問題:', userMessage)
+  console.log('AI 回應長度:', aiResponse.length)
+  console.log('AI 回應前100字符:', aiResponse.substring(0, 100))
+
+  try {
+    console.log('正在調用建議生成 API...')
+    const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+        'X-Title': 'Easy Health AI Assistant'
+      },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-chat-v3.1',
+        messages: [
+          {
+            role: 'user',
+            content: `基於以下AI回答，生成4個相關的膠囊灌裝問題：
+
+AI回答：${aiResponse}
+
+請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。
+重要：不要包含編號（如1. 2. 3. 4.），只生成純問題內容。`
+          }
+        ],
+        max_tokens: 200,
+        temperature: 0.5,
+        top_p: 0.9
+      })
+    })
+
+    console.log('建議 API 狀態:', suggestionsResponse.status)
+
+    if (suggestionsResponse.ok) {
+      const suggestionsData = await suggestionsResponse.json()
+      console.log('建議 API 回應:', JSON.stringify(suggestionsData, null, 2))
+      const suggestionsText = suggestionsData.choices?.[0]?.message?.content || ''
+      console.log('原始建議文字:', suggestionsText)
+
+      suggestions = suggestionsText.split('\n')
+        .filter((s: string) => s.trim())
+        .map((s: string) => s.trim().replace(/^[1-4]\.\s*/, ''))
+        .filter((s: string) => {
+          return s.length > 5 &&
+            !s.includes('<|') &&
+            !s.includes('begin_of_sentence') &&
+            !s.includes('end_of_sentence') &&
+            !s.includes('用正體中文') &&
+            !s.includes('用中文') &&
+            !s.includes('問題用中文') &&
+            !s.includes('請用中文') &&
+            !s.includes('請用正體中文') &&
+            !s.includes('用繁體中文') &&
+            !s.includes('請用繁體中文')
+        })
+        .slice(0, 4)
+
+      console.log('過濾後的建議:', suggestions)
+      console.log('建議數量:', suggestions.length)
+
+      if (suggestions.length < 4) {
+        console.log('建議不足，使用更寬鬆的過濾條件')
+        suggestions = suggestionsText.split('\n')
+          .filter((s: string) => s.trim())
+          .map((s: string) => s.trim().replace(/^[1-4]\.\s*/, ''))
+          .filter((s: string) => {
+            return s.length > 3 &&
+              !s.includes('<|') &&
+              !s.includes('用正體中文') &&
+              !s.includes('用中文') &&
+              !s.includes('問題用中文') &&
+              !s.includes('請用中文') &&
+              !s.includes('請用正體中文') &&
+              !s.includes('用繁體中文') &&
+              !s.includes('請用繁體中文')
+          })
+          .slice(0, 4)
+        console.log('寬鬆過濾後的建議:', suggestions)
+      }
+    } else {
+      const errorText = await suggestionsResponse.text()
+      console.error('建議 API 失敗:', suggestionsResponse.status)
+      console.error('建議 API 錯誤回應:', errorText)
+    }
+  } catch (error) {
+    console.error('生成動態建議時發生錯誤:', error)
+  }
+
+  if (suggestions.length === 0) {
+    console.log('沒有生成建議，使用默認建議')
+    suggestions = [...DEFAULT_SUGGESTIONS]
+  }
+
+  console.log('最終建議:', suggestions)
+  console.log('建議數量:', suggestions.length)
+
+  return suggestions
+}
+
+async function streamOpenRouterResponse(
+  openRouterResponse: Response,
+  controller: ReadableStreamDefaultController
+): Promise<string> {
+  const reader = openRouterResponse.body?.getReader()
+  if (!reader) {
+    throw new Error('OpenRouter 回應缺少 body')
+  }
+
+  const decoder = new TextDecoder()
+  let buffer = ''
+  let finalText = ''
+
+  const processEvent = (rawEvent: string): 'continue' | 'done' => {
+    const lines = rawEvent.split('\n')
+    let dataPayload = ''
+
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      if (trimmed.startsWith('data:')) {
+        const dataContent = trimmed.replace(/^data:\s*/, '')
+        dataPayload += dataPayload ? `\n${dataContent}` : dataContent
+      }
+    }
+
+    if (!dataPayload) {
+      return 'continue'
+    }
+
+    if (dataPayload === '[DONE]') {
+      return 'done'
+    }
+
+    try {
+      const json = JSON.parse(dataPayload)
+      const delta = json.choices?.[0]?.delta?.content || ''
+      if (delta) {
+        const sanitized = sanitizeChunk(delta)
+        if (sanitized) {
+          finalText += sanitized
+          controller.enqueue(`event: delta\ndata: ${JSON.stringify(sanitized)}\n\n`)
+        }
+      }
+    } catch (error) {
+      console.error('解析流資料時出錯:', error)
+    }
+
+    return 'continue'
+  }
+
+  while (true) {
+    const { value, done } = await reader.read()
+    if (done) {
+      buffer += decoder.decode()
+      break
+    }
+
+    buffer += decoder.decode(value, { stream: true })
+
+    let eventBoundary = buffer.indexOf('\n\n')
+    while (eventBoundary !== -1) {
+      const rawEvent = buffer.slice(0, eventBoundary)
+      buffer = buffer.slice(eventBoundary + 2)
+      const result = processEvent(rawEvent)
+      if (result === 'done') {
+        return finalText
+      }
+      eventBoundary = buffer.indexOf('\n\n')
+    }
+  }
+
+  if (buffer.trim()) {
+    const result = processEvent(buffer)
+    if (result === 'done') {
+      return finalText
+    }
+  }
+
+  return finalText
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { message, orders, context } = await request.json()
 
-    // 從環境變數獲取 API 配置
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -39,17 +260,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 清理訂單數據，移除系統內部ID
     const cleanedOrders = orders ? cleanOrderData(orders) : []
-    
-    // 構建智能系統提示詞
     const isSingleOrder = cleanedOrders && cleanedOrders.length === 1
     const hasContext = context && context.currentPage
-    
+
     let systemPrompt = ''
-    
+
     if (isSingleOrder) {
-      // 單個訂單分析模式 - 優先級最高
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。用戶正在查看一個特定的生產訂單，你需要針對這個訂單進行詳細分析。
 
 當前訂單數據：
@@ -70,10 +287,9 @@ ${JSON.stringify(cleanedOrders[0], null, 2)}
 
 特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     } else if (hasContext) {
-      // 智能上下文模式
       const cleanedCurrentOrder = context.currentOrder ? cleanOrderData([context.currentOrder])[0] : null
       const cleanedRecentOrders = context.recentOrders ? cleanOrderData(context.recentOrders) : []
-      
+
       systemPrompt = `你是一個專業的膠囊配方管理系統智能 AI 助手。用戶當前正在 "${context.pageDescription}"，你需要根據用戶的當前頁面和上下文提供相關的幫助。
 
 當前頁面信息：
@@ -118,7 +334,6 @@ ${JSON.stringify(cleanedOrders, null, 2)}` : ''}
 
 特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     } else {
-      // 一般查詢模式
       systemPrompt = `你是一個專業的膠囊配方管理系統 AI 助手。你可以幫助用戶查詢和分析生產訂單數據。
 
 系統數據：
@@ -139,8 +354,7 @@ ${JSON.stringify(cleanedOrders, null, 2)}
 特別注意：不要提及任何系統內部ID或編號，只使用客戶名稱、產品名稱等用戶友好的信息來描述訂單。`
     }
 
-    // 調用 OpenRouter API - 優化參數以提高精準度
-    const response = await fetch(OPENROUTER_API_URL, {
+    const upstreamResponse = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
@@ -154,173 +368,47 @@ ${JSON.stringify(cleanedOrders, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 3000, // 減少到3000以提高精準度
-        temperature: 0.3,  // 降低到0.3以提高精準度和一致性
-        top_p: 0.9,       // 添加top_p參數提高精準度
-        frequency_penalty: 0.1, // 減少重複內容
-        presence_penalty: 0.1   // 鼓勵多樣性但保持精準
+        max_tokens: 3000,
+        temperature: 0.3,
+        top_p: 0.9,
+        frequency_penalty: 0.1,
+        presence_penalty: 0.1,
+        stream: true
       })
     })
 
-    if (!response.ok) {
-      const errorText = await response.text()
+    if (!upstreamResponse.ok || !upstreamResponse.body) {
+      const errorText = await upstreamResponse.text()
       console.error('OpenRouter API 錯誤:', errorText)
       throw new Error('AI 服務暫時無法回應，請稍後再試')
     }
 
-    const data = await response.json()
-    console.log('API 回應:', JSON.stringify(data, null, 2))
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('API 回應結構無效:', data)
-      throw new Error('AI 回應格式異常，請重試')
-    }
-    
-    let aiResponse = data.choices[0].message.content
-    
-    if (!aiResponse || aiResponse.trim() === '') {
-      console.error('AI 回應為空')
-      throw new Error('AI 回應為空，請重試')
-    }
-    
-    // 清理 AI 回答中的異常文字
-    aiResponse = aiResponse
-      .replace(/<\|begin_of_sentence\s*\|>/g, '')
-      .replace(/<\|end_of_sentence\s*\|>/g, '')
-      .replace(/<\|begin_of_sentence\s*\|/g, '')
-      .replace(/<\|end_of_sentence\s*\|/g, '')
-      .replace(/<\|.*?\|>/g, '')
-      .replace(/<\|.*?\|/g, '')
-      .replace(/<\|.*?>/g, '')
-      .replace(/<\|.*?/g, '')
-      .replace(/<\|/g, '')
-      .replace(/\|>/g, '')
-      .trim()
+    let finalText = ''
 
-    // 基於 AI 回答動態生成建議問題
-    let suggestions = []
-    console.log('=== 開始生成動態建議 ===')
-    console.log('用戶問題:', message)
-    console.log('AI 回應長度:', aiResponse.length)
-    console.log('AI 回應前100字符:', aiResponse.substring(0, 100))
-    
-    try {
-      console.log('正在調用建議生成 API...')
-      const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-          'X-Title': 'Easy Health AI Assistant'
-        },
-        body: JSON.stringify({
-          model: 'deepseek/deepseek-chat-v3.1',
-          messages: [
-            { 
-              role: 'user', 
-              content: `基於以下AI回答，生成4個相關的膠囊灌裝問題：
+    const stream = new ReadableStream({
+      start: async (controller) => {
+        try {
+          finalText = sanitizeFinal(await streamOpenRouterResponse(upstreamResponse, controller))
 
-AI回答：${aiResponse}
-
-請生成4個與膠囊灌裝相關的問題，每行一個，以問號結尾。
-重要：不要包含編號（如1. 2. 3. 4.），只生成純問題內容。`
-            }
-          ],
-          max_tokens: 200,  // 減少到200提高精準度
-          temperature: 0.5, // 適中的創造性
-          top_p: 0.9       // 提高精準度
-        })
-      })
-
-      console.log('建議 API 狀態:', suggestionsResponse.status)
-      
-      if (suggestionsResponse.ok) {
-        const suggestionsData = await suggestionsResponse.json()
-        console.log('建議 API 回應:', JSON.stringify(suggestionsData, null, 2))
-        const suggestionsText = suggestionsData.choices[0].message.content
-        console.log('原始建議文字:', suggestionsText)
-        
-        // 簡化過濾條件並移除編號
-        suggestions = suggestionsText.split('\n')
-          .filter((s: string) => s.trim())
-          .map((s: string) => {
-            // 移除開頭的編號（如 "1. "、"2. "、"3. "、"4. "）
-            return s.trim().replace(/^[1-4]\.\s*/, '')
-          })
-          .filter((s: string) => {
-            return s.length > 5 && 
-                   !s.includes('<|') &&
-                   !s.includes('begin_of_sentence') &&
-                   !s.includes('end_of_sentence') &&
-                   !s.includes('用正體中文') &&
-                   !s.includes('用中文') &&
-                   !s.includes('問題用中文') &&
-                   !s.includes('請用中文') &&
-                   !s.includes('請用正體中文') &&
-                   !s.includes('用繁體中文') &&
-                   !s.includes('請用繁體中文')
-          })
-          .slice(0, 4)
-        
-        console.log('過濾後的建議:', suggestions)
-        console.log('建議數量:', suggestions.length)
-        
-        // 如果過濾後少於4個問題，使用更寬鬆的條件
-        if (suggestions.length < 4) {
-          console.log('建議不足，使用更寬鬆的過濾條件')
-          suggestions = suggestionsText.split('\n')
-            .filter((s: string) => s.trim())
-            .map((s: string) => {
-              // 移除開頭的編號（如 "1. "、"2. "、"3. "、"4. "）
-              return s.trim().replace(/^[1-4]\.\s*/, '')
-            })
-            .filter((s: string) => {
-              return s.length > 3 && 
-                     !s.includes('<|') &&
-                     !s.includes('用正體中文') &&
-                     !s.includes('用中文') &&
-                     !s.includes('問題用中文') &&
-                     !s.includes('請用中文') &&
-                     !s.includes('請用正體中文') &&
-                     !s.includes('用繁體中文') &&
-                     !s.includes('請用繁體中文')
-            })
-            .slice(0, 4)
-          console.log('寬鬆過濾後的建議:', suggestions)
+          const suggestions = await generateSuggestions(finalText, message, OPENROUTER_API_URL, OPENROUTER_API_KEY)
+          controller.enqueue(`event: suggestions\ndata: ${JSON.stringify(suggestions)}\n\n`)
+          controller.enqueue(`event: done\ndata: {"success":true}\n\n`)
+          controller.close()
+        } catch (error) {
+          console.error('流式處理時發生錯誤:', error)
+          controller.enqueue(`event: error\ndata: {"error":"AI 服務暫時無法回應，請稍後再試"}\n\n`)
+          controller.close()
         }
-        
-        console.log('最終建議:', suggestions)
-        console.log('最終建議數量:', suggestions.length)
-      } else {
-        console.error('建議 API 失敗:', suggestionsResponse.status)
-        const errorText = await suggestionsResponse.text()
-        console.error('建議 API 錯誤回應:', errorText)
       }
-    } catch (error) {
-      console.error('生成動態建議時發生錯誤:', error)
-    }
-    
-    // 確保總是有建議問題
-    if (suggestions.length === 0) {
-      console.log('沒有生成建議，使用默認建議')
-      suggestions = [
-        '分析配方成分堆積密度，計算粉劑容積，對比膠囊殼容積，評估填充可行性並提供建議。',
-        '分析原料流動性、黏性、結塊風險，評估製粒必要性（0-100分），推薦流動性改善輔料及用量。',
-        '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
-        '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
-      ]
-    }
-
-    console.log('=== 最終返回的建議 ===')
-    console.log('建議:', suggestions)
-    console.log('建議數量:', suggestions.length)
-
-    return NextResponse.json({ 
-      response: aiResponse,
-      suggestions: suggestions
     })
 
+    return new NextResponse(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive'
+      }
+    })
   } catch (error) {
     console.error('AI 聊天錯誤:', error)
     return NextResponse.json(

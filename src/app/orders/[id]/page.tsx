@@ -244,6 +244,7 @@ export default function OrderDetailPage() {
               <TableRow>
                 <TableHead>原料品名</TableHead>
                 <TableHead>單粒含量 (mg)</TableHead>
+                <TableHead>客戶指定</TableHead>
                 <TableHead>批次用量</TableHead>
               </TableRow>
             </TableHeader>
@@ -252,6 +253,19 @@ export default function OrderDetailPage() {
                 <TableRow key={index}>
                   <TableCell>{ingredient.materialName}</TableCell>
                   <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                  <TableCell>
+                    {ingredient.isCustomerProvided ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
+                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                        客戶指定
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-blue-500 text-xs sm:text-sm">
+                        <span className="h-2 w-2 rounded-full bg-blue-400" />
+                        自行添加
+                      </span>
+                    )}
+                  </TableCell>
                   <TableCell>
                     {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
                   </TableCell>

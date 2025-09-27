@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
       "materialName": "原料名稱",
       "unitContentMg": 含量數字,
       "originalText": "原始文字",
-      "needsConfirmation": true/false
+          "needsConfirmation": true/false,
+          "isCustomerProvided": true/false
     }
   ],
   "summary": "解析摘要",
@@ -154,7 +155,8 @@ export async function POST(request: NextRequest) {
               materialName,
               unitContentMg,
               originalText: line.trim(),
-              needsConfirmation: false
+              needsConfirmation: false,
+              isCustomerProvided: true
             })
           }
         }
@@ -175,7 +177,8 @@ export async function POST(request: NextRequest) {
           materialName: item.materialName || '未知原料',
           unitContentMg: typeof item.unitContentMg === 'number' ? item.unitContentMg : 0,
           originalText: item.originalText || '',
-          needsConfirmation: Boolean(item.needsConfirmation)
+          needsConfirmation: Boolean(item.needsConfirmation),
+          isCustomerProvided: item.isCustomerProvided !== undefined ? Boolean(item.isCustomerProvided) : true
         }))
         .filter((item: any) => item.materialName !== '未知原料' || item.unitContentMg > 0)
     } else {

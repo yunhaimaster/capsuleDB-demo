@@ -46,7 +46,8 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   } = useAIAssistant({
     orders: orders,
     currentOrder: currentOrder,
-    context: pageData
+    context: pageData,
+    initialAssistantMessage: null
   })
 
   const handleClose = () => {
