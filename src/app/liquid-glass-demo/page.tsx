@@ -40,7 +40,7 @@ export default function LiquidGlassDemoPage() {
       />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-20">
+      <div className="pt-28 sm:pt-24">
         {/* Page Header */}
         <LiquidGlassPageHeader
           title="Liquid Glass 組件展示"
