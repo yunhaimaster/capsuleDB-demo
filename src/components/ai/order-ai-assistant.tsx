@@ -90,6 +90,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         onClose={handleClose}
         title="AI 訂單分析助手"
         size="xl"
+        animateFrom="button"
         headerButtons={
           <button
             className="liquid-glass-modal-close"

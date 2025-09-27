@@ -15,6 +15,7 @@ interface LiquidGlassModalProps {
   closeOnBackdropClick?: boolean
   closeOnEscape?: boolean
   className?: string
+  animateFrom?: 'button' | 'center'
 }
 
 export function LiquidGlassModal({
@@ -27,7 +28,8 @@ export function LiquidGlassModal({
   size = 'md',
   closeOnBackdropClick = true,
   closeOnEscape = true,
-  className = ''
+  className = '',
+  animateFrom = 'center'
 }: LiquidGlassModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
@@ -106,7 +108,7 @@ export function LiquidGlassModal({
     >
       <div
         ref={modalRef}
-        className={`liquid-glass-modal ${sizeClasses[size]}`}
+        className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'}`}
         onClick={handleModalClick}
         role="document"
       >

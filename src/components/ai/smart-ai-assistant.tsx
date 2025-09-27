@@ -91,6 +91,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         onClose={handleClose}
         title="Smart AI 助手"
         size="xl"
+        animateFrom="button"
         headerButtons={
           <button
             className="liquid-glass-modal-close"
