@@ -55,7 +55,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   }
 
   return (
-    <>
+    <div>
       <Button 
         variant="outline" 
         size="sm"
@@ -449,6 +449,6 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
           </div>
         )}
       </LiquidGlassModal>
-    </>
+    </div>
   )
 }

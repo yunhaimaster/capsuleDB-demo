@@ -66,7 +66,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
   }
 
   return (
-    <>
+    <div>
       <Button 
         variant="default"
         size="sm"
@@ -398,6 +398,6 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
           </div>
         )}
       </LiquidGlassModal>
-    </>
+    </div>
   )
 }

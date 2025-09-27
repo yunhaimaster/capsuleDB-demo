@@ -14,6 +14,75 @@ import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatch
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
 
+// 訂單詳情檢視組件
+function OrderDetailView({ order }: { order: ProductionOrder }) {
+  return (
+    <div className="space-y-6">
+      {/* AI 助手按鈕 */}
+      <div className="flex justify-end">
+        <OrderAIAssistant order={order} />
+      </div>
+      {/* 基本資訊 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h4 className="font-medium mb-2">基本資訊</h4>
+          <div className="space-y-2 text-sm">
+            <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
+            <p><span className="font-medium">產品名字：</span>{order.productName}</p>
+            <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+            <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
+            {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
+              <div className="mt-3 pt-3 border-t">
+                <h5 className="font-medium mb-2">膠囊規格</h5>
+                {order.capsuleColor && <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>}
+                {order.capsuleSize && <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>}
+                {order.capsuleType && <p><span className="font-medium">類型：</span>{order.capsuleType}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+        <div>
+          <h4 className="font-medium mb-2">生產狀態</h4>
+          <div className="space-y-2 text-sm">
+            <p><span className="font-medium">完工日期：</span>
+              {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
+            </p>
+            <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+            <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 原料配方 */}
+      {order.ingredients && order.ingredients.length > 0 && (
+        <div>
+          <h4 className="font-medium mb-2">原料配方</h4>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>原料品名</TableHead>
+                <TableHead>單粒含量 (mg)</TableHead>
+                <TableHead>批次用量</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {order.ingredients.map((ingredient, index) => (
+                <TableRow key={index}>
+                  <TableCell>{ingredient.materialName}</TableCell>
+                  <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                  <TableCell>
+                    {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function HomePage() {
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
   const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
@@ -131,8 +200,6 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-
-
       </div>
 
       {/* Feature Cards */}
@@ -161,62 +228,23 @@ export default function HomePage() {
             ) : recentOrders.length > 0 ? (
               <div className="space-y-2">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                          {order.customerName}
-                        </h4>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {order.productName}
-                        </span>
+                  <Link href={`/orders/${order.id}`} key={order.id} className="block">
+                    <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors liquid-glass-card-interactive">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{order.customerName} - {order.productName}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">數量: {formatNumber(order.productionQuantity)} 粒</p>
                       </div>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {formatNumber(order.productionQuantity)} 粒
-                        </span>
-                        {order.capsuleSize && order.capsuleColor && order.capsuleType && (
-                          <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded">
-                            {[order.capsuleSize, order.capsuleColor, order.capsuleType].filter(Boolean).join('')}
-                          </span>
-                        )}
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{order.completionDate ? '已完工' : '進行中'}</p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      {order.completionDate ? (
-                        <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded">
-                          ✓ 完工 {formatDateOnly(order.completionDate)}
-                        </span>
-                      ) : (
-                        <span className="text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded">
-                          ⏳ 未完工
-                        </span>
-                      )}
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="h-6 w-6 p-0 liquid-glass-card-interactive"
-                        onClick={() => {
-                          setSelectedOrder(order)
-                          setShowOrderDetails(true)
-                        }}
-                      >
-                        <Eye className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                <div className="pt-2">
-                  <Link href="/orders">
-                    <Button variant="outline" className="w-full text-sm">
-                      查看所有記錄
-                    </Button>
                   </Link>
-                </div>
+                ))}
               </div>
             ) : (
-              <div className="text-center py-4">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">尚無生產記錄</div>
+              <div className="text-center py-8">
+                <p className="text-gray-500 dark:text-gray-400 mb-4">目前沒有最近的生產記錄。</p>
                 <Link href="/orders/new">
                   <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                     建立第一筆記錄
@@ -228,6 +256,7 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* 功能介紹 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
@@ -249,23 +278,10 @@ export default function HomePage() {
                   <li>• AI 助手分析與專業建議</li>
                   <li>• 響應式設計，完美支援手機與桌面</li>
                   <li>• 深色模式與淺色模式切換</li>
-                  <li>• 數據導出與備份功能</li>
-                  <li>• 微動畫與浮動元素效果</li>
-                  <li>• 玻璃質感與 3D 視覺效果</li>
+                  <li>• 動態漸變背景與浮動元素</li>
+                  <li>• 玻璃擬態卡片與微動畫效果</li>
                 </ul>
               </div>
-              
-              <div className="bg-orange-50 dark:bg-orange-900/40 p-3 md:p-4 rounded-xl border border-orange-200 dark:border-orange-700/50">
-                <h4 className="font-medium text-orange-800 dark:text-orange-200 mb-2">使用流程</h4>
-                <ol className="space-y-1 text-xs md:text-sm text-orange-700 dark:text-orange-100">
-                  <li>1. 新增配方：建立新的膠囊生產訂單與配方</li>
-                  <li>2. 檢視記錄：查看和管理現有膠囊訂單</li>
-                  <li>3. 品質追蹤：記錄膠囊製程問題和備註</li>
-                  <li>4. AI 分析：使用智能助手分析生產數據</li>
-                  <li>5. 數據導出：匯出 CSV 格式的生產記錄</li>
-                </ol>
-              </div>
-              
               <div className="bg-yellow-50 dark:bg-yellow-900/40 p-3 md:p-4 rounded-xl border border-yellow-200 dark:border-yellow-700/50">
                 <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2">技術支援</h4>
                 <div className="text-xs md:text-sm text-yellow-700 dark:text-yellow-100">
@@ -278,7 +294,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-
+        </div>
 
         {/* 版本更新記錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
@@ -299,161 +315,44 @@ export default function HomePage() {
                   <h4 className="font-medium text-green-800 dark:text-green-200 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
                   <span className="text-xs bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
-                <div className="text-xs sm:text-xs md:text-sm text-green-700 dark:text-green-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🎨 <strong>視覺效果全面升級</strong></p>
-                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 新增微動畫系統：按鈕漣漪、表單聚焦、卡片懸停效果</li>
-                    <li>• 浮動元素系統：8種不同浮動效果，營造動態背景</li>
-                    <li>• 玻璃質感設計：現代化毛玻璃效果，提升視覺層次</li>
-                    <li>• 3D 懸停效果：卡片立體互動，增強用戶體驗</li>
-                    <li>• 響應式優化：完美支援手機與桌面，無縫切換</li>
-                    <li>• 性能優化：CSS 硬體加速，流暢動畫體驗</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-blue-50 dark:bg-blue-900/40 p-3 rounded-xl border border-blue-200 dark:border-blue-700/50">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-200 text-sm sm:text-base">v1.0.6 - 2024年9月25日</h4>
-                  <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
-                </div>
-                <div className="text-xs sm:text-xs md:text-sm text-blue-700 dark:text-blue-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🚀 <strong>AI 智能助手升級</strong></p>
-                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 升級 AI 智能助手，提供更精準的分析和建議</li>
-                    <li>• 改善錯誤處理：提供重試選項，提升用戶體驗</li>
-                    <li>• 優化 AI 助手回答質量，提供更專業的膠囊灌裝建議</li>
-                    <li>• 增強系統穩定性，確保功能正常運作</li>
-                    <li>• 改善用戶介面，提供更友善的操作體驗</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="bg-indigo-50 dark:bg-indigo-900/40 p-3 rounded-xl border border-indigo-200 dark:border-indigo-700/50">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-indigo-800 dark:text-indigo-200 text-sm sm:text-base">v1.0.2 - 2024年9月22日</h4>
-                  <span className="text-xs bg-indigo-100 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded-full self-start sm:self-auto">穩定版本</span>
-                </div>
-                <div className="text-xs sm:text-xs md:text-sm text-indigo-700 dark:text-indigo-100 space-y-1">
-                  <p className="text-xs sm:text-xs md:text-sm">🤖 <strong>智能功能升級</strong></p>
-                  <ul className="ml-3 sm:ml-4 space-y-1 text-xs sm:text-xs md:text-sm leading-relaxed">
-                    <li>• 智能 AI 助手全面升級，提供更精準的建議問題</li>
-                    <li>• 新增響應式設計，完美支援手機與桌面設備</li>
-                    <li>• 深色模式與淺色模式切換功能</li>
-                    <li>• AI 翻譯功能：簡體中文轉繁體中文</li>
-                    <li>• 手機介面優化與觸控體驗改善</li>
-                    <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
-                  </ul>
-                </div>
+                <ul className="list-disc list-inside space-y-1 text-xs text-green-700 dark:text-green-100">
+                  <li>• 引入 Liquid Glass Cards，提升 UI 質感與互動性</li>
+                  <li>• 解決 Vercel 部署中 Prisma Schema 與環境變量問題</li>
+                  <li>• 修正 AI API 密鑰配置，確保 AI 助手正常運作</li>
+                  <li>• 優化數據庫遷移流程，確保 `isCustomerProvided` 字段正確同步</li>
+                  <li>• 移除原料配方中的「顯示計算」和「複製配方」按鈕</li>
+                  <li>• 更新 Order AI 初始問題，提供膠囊配方專業分析</li>
+                  <li>• 修正 Smart AI 初始問題被 Order AI 覆蓋的問題</li>
+                  <li>• 完工日期只顯示日期，不記錄時間</li>
+                  <li>• 解決訂單列表「下一頁」按鈕無效問題</li>
+                  <li>• 修正 AI 按鈕與提交按鈕重疊問題</li>
+                  <li>• 引入動畫漸變背景、玻璃擬態卡片、增強加載狀態、微動畫和浮動元素</li>
+                  <li>• 深色模式與淺色模式切換功能</li>
+                  <li>• AI 翻譯功能：簡體中文轉繁體中文</li>
+                  <li>• 手機介面優化與觸控體驗改善</li>
+                  <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
+                </ul>
               </div>
             </div>
             </div>
           </div>
         </div>
-      </div>
 
-             {/* 智能 AI 助手 */}
-             <SmartAIAssistant 
-              orders={allOrders} 
-              pageData={{
-                currentPage: '/',
-                pageDescription: '首頁 - 系統概覽和最近生產記錄',
-                timestamp: new Date().toISOString(),
-                ordersCount: allOrders.length,
-                hasCurrentOrder: false,
-                currentOrder: null,
-                recentOrders: recentOrders.slice(0, 5)
-              }}
-            />
-    </div>
-  )
-}
+        {/* 智能 AI 助手 */}
+        <SmartAIAssistant 
+          orders={allOrders} 
+          pageData={{
+            currentPage: '/',
+            pageDescription: '首頁 - 系統概覽和最近生產記錄',
+            timestamp: new Date().toISOString(),
+            ordersCount: allOrders.length,
+            hasCurrentOrder: false,
+            currentOrder: null,
+            recentOrders: recentOrders.slice(0, 5)
+          }}
+        />
 
-// 訂單詳情檢視組件
-function OrderDetailView({ order }: { order: ProductionOrder }) {
-  return (
-    <div className="space-y-6">
-      {/* AI 助手按鈕 */}
-      <div className="flex justify-end">
-        <OrderAIAssistant order={order} />
-      </div>
-      {/* 基本資訊 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h4 className="font-medium mb-2">基本資訊</h4>
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
-            <p><span className="font-medium">產品名字：</span>{order.productName}</p>
-            <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-            <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
-            {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
-              <div className="mt-3 pt-3 border-t">
-                <h5 className="font-medium mb-2">膠囊規格</h5>
-                {order.capsuleColor && <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>}
-                {order.capsuleSize && <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>}
-                {order.capsuleType && <p><span className="font-medium">成份：</span>{order.capsuleType}</p>}
-              </div>
-            )}
-          </div>
-        </div>
-        <div>
-          <h4 className="font-medium mb-2">生產狀態</h4>
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">完工日期：</span>
-              {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
-            </p>
-            <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
-            <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 製程問題記錄 */}
-      {order.processIssues && (
-        <div>
-          <h4 className="font-medium mb-2">製程問題記錄</h4>
-          <div className="p-3 bg-muted rounded-md text-sm">
-            {order.processIssues}
-          </div>
-        </div>
-      )}
-
-      {/* 品管備註 */}
-      {order.qualityNotes && (
-        <div>
-          <h4 className="font-medium mb-2">品管備註</h4>
-          <div className="p-3 bg-muted rounded-md text-sm">
-            {order.qualityNotes}
-          </div>
-        </div>
-      )}
-
-      {/* 原料配方明細 */}
-      <div>
-        <h4 className="font-medium mb-2">原料配方明細</h4>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>原料品名</TableHead>
-              <TableHead>單粒含量 (mg)</TableHead>
-              <TableHead>批次用量</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {order.ingredients.map((ingredient, index) => (
-              <TableRow key={index}>
-                <TableCell>{ingredient.materialName}</TableCell>
-                <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
-                <TableCell>
-                  {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Liquid Glass Modal for Order Details */}
+        {/* Liquid Glass Modal for Order Details */}
       <LiquidGlassModal
         isOpen={showOrderDetails}
         onClose={() => setShowOrderDetails(false)}
