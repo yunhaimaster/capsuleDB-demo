@@ -439,12 +439,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
             {/* Order AI 按鈕 */}
             <div className="flex justify-center pt-4 border-t border-white/20">
-              <div onClick={() => {
-                // 延遲關閉模態框，讓 Order AI 有時間打開
-                setTimeout(() => setShowOrderDetails(false), 100)
-              }}>
-                <OrderAIAssistant order={selectedOrder} />
-              </div>
+              <OrderAIAssistant 
+                order={selectedOrder} 
+                onModalReplace={() => setShowOrderDetails(false)}
+              />
             </div>
           </div>
         </LiquidGlassModal>

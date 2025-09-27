@@ -13,9 +13,10 @@ import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 interface OrderAIAssistantProps {
   order: ProductionOrder
+  onModalReplace?: () => void
 }
 
-export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
+export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   
   const {
@@ -70,7 +71,12 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
       <Button 
         variant="default"
         className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10 liquid-glass-card-interactive h-10 px-4"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          if (onModalReplace) {
+            onModalReplace()
+          }
+          setIsOpen(true)
+        }}
       >
         <Bot className="h-4 w-4 mr-2" />
         <span className="hidden sm:inline">AI 助手</span>
