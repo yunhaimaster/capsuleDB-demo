@@ -142,7 +142,7 @@ export function LinkedFilter({
     [debounce, onSearch]
   )
 
-  const handleOptionSelect = (field: keyof typeof filters, value: string, label: string) => {
+  const handleOptionSelect = async (field: keyof typeof filters, value: string, label: string) => {
     const newFilters = { ...filters, [field]: value }
     
     // 清空後續篩選條件
@@ -159,6 +159,24 @@ export function LinkedFilter({
     
     setFilters(newFilters)
     setShowDropdowns(prev => ({ ...prev, [field]: false }))
+    
+    // 立即觸發聯動選項更新
+    try {
+      const params = new URLSearchParams()
+      if (newFilters.customerName) params.append('customerName', newFilters.customerName)
+      if (newFilters.productName) params.append('productName', newFilters.productName)
+      if (newFilters.ingredientName) params.append('ingredientName', newFilters.ingredientName)
+
+      const response = await fetch(`/api/orders/options?${params}`)
+      if (response.ok) {
+        const data = await response.json()
+        setLinkedProductOptions(data.products.map((item: string) => ({ value: item, label: item })))
+        setLinkedIngredientOptions(data.ingredients.map((item: string) => ({ value: item, label: item })))
+        setLinkedCapsuleOptions(data.capsuleTypes.map((item: string) => ({ value: item, label: item })))
+      }
+    } catch (error) {
+      console.error('Error fetching linked options:', error)
+    }
     
     // 立即觸發搜索
     const processedFilters = {

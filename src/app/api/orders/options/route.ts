@@ -7,52 +7,53 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl
     
-    // 構建篩選條件
-    const where: any = {}
-    
-    if (searchParams.get('customerName')) {
-      where.customerName = searchParams.get('customerName')
-    }
-    
-    if (searchParams.get('productName')) {
-      where.productName = searchParams.get('productName')
-    }
-    
-    if (searchParams.get('ingredientName')) {
-      where.ingredients = {
-        some: {
-          materialName: searchParams.get('ingredientName')
-        }
-      }
-    }
-
-    // 獲取篩選後的訂單數據
-    const orders = await prisma.productionOrder.findMany({
-      where,
+    // 獲取所有訂單數據
+    const allOrders = await prisma.productionOrder.findMany({
       include: {
         ingredients: true
       }
     })
 
-    // 提取客戶名稱（去重）
-    const customers = Array.from(new Set(orders.map(order => order.customerName))).sort()
+    // 提取所有客戶名稱（去重）
+    const allCustomers = Array.from(new Set(allOrders.map(order => order.customerName))).sort()
 
-    // 提取產品名稱（去重）
-    const products = Array.from(new Set(orders.map(order => order.productName))).sort()
+    // 根據客戶名稱篩選產品
+    let filteredOrders = allOrders
+    const customerName = searchParams.get('customerName')
+    if (customerName) {
+      filteredOrders = filteredOrders.filter(order => order.customerName === customerName)
+    }
 
-    // 提取原料名稱（去重）
-    const ingredients = Array.from(new Set(orders.flatMap(order => 
+    // 根據產品名稱進一步篩選
+    const productName = searchParams.get('productName')
+    if (productName) {
+      filteredOrders = filteredOrders.filter(order => order.productName === productName)
+    }
+
+    // 根據原料名稱進一步篩選
+    const ingredientName = searchParams.get('ingredientName')
+    if (ingredientName) {
+      filteredOrders = filteredOrders.filter(order => 
+        order.ingredients.some(ingredient => ingredient.materialName === ingredientName)
+      )
+    }
+
+    // 提取產品名稱（基於篩選後的訂單）
+    const products = Array.from(new Set(filteredOrders.map(order => order.productName))).sort()
+
+    // 提取原料名稱（基於篩選後的訂單）
+    const ingredients = Array.from(new Set(filteredOrders.flatMap(order => 
       order.ingredients.map(ingredient => ingredient.materialName)
     ))).sort()
 
-    // 提取膠囊類型（去重）
-    const capsuleTypes = Array.from(new Set(orders
+    // 提取膠囊類型（基於篩選後的訂單）
+    const capsuleTypes = Array.from(new Set(filteredOrders
       .map(order => order.capsuleType)
       .filter(Boolean)
     )).sort()
 
     return NextResponse.json({
-      customers,
+      customers: allCustomers,
       products,
       ingredients,
       capsuleTypes
