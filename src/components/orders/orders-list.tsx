@@ -151,7 +151,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 客戶名稱
               </label>
-              <Select value={filters.customerName || 'all'} onValueChange={(value) => handleSearch({ customerName: value })}>
+              <Select value={filters.customerName || 'all'} onValueChange={(value) => handleSearch({ ...filters, customerName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇客戶..." />
                 </SelectTrigger>
@@ -169,7 +169,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 產品名稱
               </label>
-              <Select value={filters.productName || 'all'} onValueChange={(value) => handleSearch({ productName: value })}>
+              <Select value={filters.productName || 'all'} onValueChange={(value) => handleSearch({ ...filters, productName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇產品..." />
                 </SelectTrigger>
@@ -187,7 +187,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 原料名稱
               </label>
-              <Select value={filters.ingredientName || 'all'} onValueChange={(value) => handleSearch({ ingredientName: value })}>
+              <Select value={filters.ingredientName || 'all'} onValueChange={(value) => handleSearch({ ...filters, ingredientName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇原料..." />
                 </SelectTrigger>
@@ -205,7 +205,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 膠囊類型
               </label>
-              <Select value={filters.capsuleType || 'all'} onValueChange={(value) => handleSearch({ capsuleType: value })}>
+              <Select value={filters.capsuleType || 'all'} onValueChange={(value) => handleSearch({ ...filters, capsuleType: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇類型..." />
                 </SelectTrigger>

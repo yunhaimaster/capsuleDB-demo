@@ -26,10 +26,10 @@ export function LiquidGlassNav({
   links = [
     { href: '/', label: '首頁' },
     { href: '/orders', label: '訂單管理' },
-    { href: '/production-order-form', label: '新建訂單' }
+    { href: '/orders/new', label: '新建訂單' }
   ],
   ctaText = '新建訂單',
-  ctaHref = '/production-order-form',
+  ctaHref = '/orders/new',
   ctaIcon = <Plus className="h-4 w-4" />,
   className = ''
 }: LiquidGlassNavProps) {
