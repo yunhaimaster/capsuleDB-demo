@@ -106,7 +106,7 @@ export function LiquidGlassNav({
           >
             {logo}
           </Link>
-          <div className="hidden lg:block">
+          <div className="hidden md:block">
             <h1 className="text-lg font-bold text-gray-900">
               Easy Health
             </h1>

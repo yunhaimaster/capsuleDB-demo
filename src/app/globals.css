@@ -513,6 +513,13 @@
   gap: 1.5rem;
 }
 
+/* Ensure links are visible on desktop */
+@media (min-width: 769px) {
+  .liquid-glass-nav-links {
+    display: flex !important;
+  }
+}
+
 .liquid-glass-nav-link {
   position: relative;
   color: var(--liquid-glass-nav-text-secondary);
@@ -621,6 +628,13 @@
   transition: all 0.3s ease;
 }
 
+/* Ensure mobile toggle is hidden on desktop */
+@media (min-width: 769px) {
+  .liquid-glass-nav-mobile-toggle {
+    display: none !important;
+  }
+}
+
 .liquid-glass-nav-mobile-toggle:hover {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -628,7 +642,6 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .liquid-glass-nav-content {
-    grid-template-columns: auto 1fr auto;
     gap: 1rem;
     padding: 1rem;
   }
