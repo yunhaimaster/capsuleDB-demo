@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { ProductionOrder } from '@/types'
-import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -139,31 +138,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-subtle">
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理', active: true },
-          { href: '/production-order-form', label: '新建訂單' }
-        ]}
-        ctaText="新建訂單"
-        ctaHref="/production-order-form"
-      />
-      
-      <main className="container mx-auto px-4 py-8 pt-20">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            生產訂單管理
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            管理所有膠囊生產訂單，包括查看、編輯、刪除和匯出功能
-          </p>
-        </div>
+    <div className="space-y-6">
 
-        <div className="glass-card-subtle p-6 mb-6">
+        <div className="liquid-glass-card liquid-glass-card-subtle p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 客戶名稱
               </label>
               <Select value={filters.customerName} onValueChange={(value) => handleSearch({ customerName: value })}>
@@ -181,7 +161,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 產品名稱
               </label>
               <Select value={filters.productName} onValueChange={(value) => handleSearch({ productName: value })}>
@@ -199,7 +179,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 原料名稱
               </label>
               <Select value={filters.ingredientName} onValueChange={(value) => handleSearch({ ingredientName: value })}>
@@ -217,7 +197,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 膠囊類型
               </label>
               <Select value={filters.capsuleType} onValueChange={(value) => handleSearch({ capsuleType: value })}>
@@ -246,24 +226,24 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           </div>
         </div>
 
-        <div className="glass-card-subtle">
+        <div className="liquid-glass-card liquid-glass-card-subtle">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">
+                <tr className="border-b border-gray-200 ">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     客戶名稱
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     產品名稱
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     生產數量
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     完工日期
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">
+                  <th className="text-left py-3 px-4 font-medium text-gray-900 ">
                     操作
                   </th>
                 </tr>
@@ -283,17 +263,17 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                   </tr>
                 ) : (
                   orders.map((order) => (
-                    <tr key={order.id} className="border-b border-gray-100 dark:border-gray-800">
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">
+                    <tr key={order.id} className="border-b border-gray-100 ">
+                      <td className="py-3 px-4 text-gray-900 ">
                         {order.customerName}
                       </td>
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">
+                      <td className="py-3 px-4 text-gray-900 ">
                         {order.productName}
                       </td>
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">
+                      <td className="py-3 px-4 text-gray-900 ">
                         {order.productionQuantity?.toLocaleString()}
                       </td>
-                      <td className="py-3 px-4 text-gray-900 dark:text-white">
+                      <td className="py-3 px-4 text-gray-900 ">
                         {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
                       </td>
                       <td className="py-3 px-4">
@@ -343,7 +323,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               >
                 上一頁
               </Button>
-              <span className="flex items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
+              <span className="flex items-center px-4 py-2 text-sm text-gray-600 ">
                 第 {pagination.page} 頁，共 {pagination.totalPages} 頁
               </span>
               <Button
@@ -356,7 +336,6 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             </div>
           </div>
         )}
-      </main>
 
       {showOrderDetails && selectedOrder && (
         <LiquidGlassModal
@@ -368,28 +347,28 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 ">
                   客戶名稱
                 </label>
-                <p className="text-gray-900 dark:text-white">{selectedOrder.customerName}</p>
+                <p className="text-gray-900 ">{selectedOrder.customerName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 ">
                   產品名稱
                 </label>
-                <p className="text-gray-900 dark:text-white">{selectedOrder.productName}</p>
+                <p className="text-gray-900 ">{selectedOrder.productName}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 ">
                   生產數量
                 </label>
-                <p className="text-gray-900 dark:text-white">{selectedOrder.productionQuantity?.toLocaleString()}</p>
+                <p className="text-gray-900 ">{selectedOrder.productionQuantity?.toLocaleString()}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-medium text-gray-700 ">
                   完工日期
                 </label>
-                <p className="text-gray-900 dark:text-white">
+                <p className="text-gray-900 ">
                   {selectedOrder.completionDate ? formatDateOnly(selectedOrder.completionDate) : '未完工'}
                 </p>
               </div>
@@ -397,14 +376,14 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             
             {selectedOrder.ingredients && selectedOrder.ingredients.length > 0 && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   配方成分
                 </label>
                 <div className="space-y-2">
                   {selectedOrder.ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50 dark:bg-gray-800 rounded">
-                      <span className="text-gray-900 dark:text-white">{ingredient.materialName}</span>
-                      <span className="text-gray-600 dark:text-gray-400">{ingredient.unitContentMg}mg</span>
+                    <div key={index} className="flex justify-between items-center p-2 bg-gray-50  rounded">
+                      <span className="text-gray-900 ">{ingredient.materialName}</span>
+                      <span className="text-gray-600 ">{ingredient.unitContentMg}mg</span>
                     </div>
                   ))}
                 </div>
