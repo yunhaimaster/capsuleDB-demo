@@ -514,7 +514,7 @@
 }
 
 /* Ensure links are visible on desktop */
-@media (min-width: 769px) {
+@media (min-width: 481px) {
   .liquid-glass-nav-links {
     display: flex !important;
   }
@@ -602,10 +602,10 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .liquid-glass-nav-content {
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
   
   .liquid-glass-nav-links {

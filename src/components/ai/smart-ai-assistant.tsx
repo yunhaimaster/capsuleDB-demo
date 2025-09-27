@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
@@ -15,10 +16,19 @@ interface SmartAIAssistantProps {
   orders: ProductionOrder[]
   currentOrder?: ProductionOrder | null
   pageData?: any
+  showOnPages?: string[]
 }
 
-export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssistantProps) {
+export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+  
+  // 檢查當前頁面是否應該顯示 Smart AI
+  const shouldShow = showOnPages.some(page => pathname.startsWith(page))
+  
+  if (!shouldShow) {
+    return null
+  }
   
   const {
     messages,
@@ -47,12 +57,12 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
     currentOrder: currentOrder,
     context: pageData,
     initialAssistantMessage: {
-      content: '您好！我是 Smart AI 助手，專門協助您分析生產數據、優化配方、提供質量建議。請選擇以下問題開始，或直接輸入您的問題：',
+      content: '您好！我是 Smart AI 助手，專門協助您分析訂單數據、客戶統計和生產效率。請選擇以下問題開始，或直接輸入您的問題：',
       suggestions: [
-        '分析當前生產數據趨勢，識別異常值和改進機會。',
-        '優化膠囊配方，提供成本效益分析和質量提升建議。',
-        '評估生產工藝參數，建議最佳化配置方案。',
-        '提供質量控制建議，包括檢測方法和標準制定。'
+        '顯示所有未完工的生產訂單',
+        '哪個客戶的膠囊訂單最多?',
+        '最近一週的膠囊生產情況如何?',
+        '分析膠囊灌裝的生產效率'
       ]
     }
   })
