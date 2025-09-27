@@ -160,7 +160,7 @@ export default function OrderDetailPage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 relative z-10">
-            <SmartAIAssistant currentOrder={order} />
+            <SmartAIAssistant orders={[order]} currentOrder={order} />
             <Link href={`/orders/${order.id}/edit`}>
               <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700">
                 <Edit className="mr-2 h-4 w-4" />
