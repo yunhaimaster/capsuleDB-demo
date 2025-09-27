@@ -101,19 +101,19 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             <Button
               variant="ghost"
               size="sm"
+              onClick={handleClose}
+              className="text-gray-300 hover:text-white"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={clearChat}
               className="text-gray-300 hover:text-white"
               title="重設對話"
             >
               <RefreshCw className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClose}
-              className="text-gray-300 hover:text-white"
-            >
-              <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
