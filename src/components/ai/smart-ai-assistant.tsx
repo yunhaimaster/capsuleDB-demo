@@ -92,15 +92,14 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         title="Smart AI 助手"
         size="xl"
         headerButtons={
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
+            className="liquid-glass-modal-close"
             onClick={clearChat}
-            className="text-gray-300 hover:text-white"
             title="重設對話"
+            type="button"
           >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
+            <RefreshCw className="h-5 w-5" />
+          </button>
         }
       >
         <div className="flex items-center justify-between mb-4">
