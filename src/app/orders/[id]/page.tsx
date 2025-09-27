@@ -10,6 +10,7 @@ import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
+import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -127,14 +128,27 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="space-y-6 animated-gradient-bg-subtle floating-stars min-h-screen">
-      {/* 麵包屑導航 */}
-      <Breadcrumb
-        items={[
-          { label: '生產記錄', href: '/orders' },
-          { label: `${order.customerName} - ${order.productName}`, href: '#' }
+    <div className="animated-gradient-bg-subtle min-h-screen">
+      {/* Liquid Glass Navigation */}
+      <LiquidGlassNav 
+        links={[
+          { href: '/', label: '首頁' },
+          { href: '/orders', label: '訂單管理' },
+          { href: '/production-order-form', label: '新建訂單' }
         ]}
+        ctaText="返回首頁"
+        ctaHref="/"
       />
+
+      {/* Main Content with padding for fixed nav */}
+      <div className="pt-20 space-y-6 floating-stars">
+        {/* 麵包屑導航 */}
+        <Breadcrumb
+          items={[
+            { label: '生產記錄', href: '/orders' },
+            { label: `${order.customerName} - ${order.productName}`, href: '#' }
+          ]}
+        />
 
       {/* 頁面標題 */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-100 rounded-xl p-6 md:p-8">
@@ -275,6 +289,7 @@ export default function OrderDetailPage() {
           </Table>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }

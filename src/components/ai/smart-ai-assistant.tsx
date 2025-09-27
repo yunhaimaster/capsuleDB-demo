@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
+import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, Eye, FileText, Plus, RotateCcw, ArrowUp, Copy, Download, Settings, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
@@ -55,24 +55,28 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg min-w-fit whitespace-nowrap"
-        >
-          <Bot className="w-4 h-4 mr-2" />
-          AI 助手
-        </Button>
-      </DialogTrigger>
+    <>
+      <Button 
+        variant="outline" 
+        size="sm"
+        className="fixed bottom-4 right-4 z-50 bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 shadow-lg min-w-fit whitespace-nowrap liquid-glass-card-interactive"
+        onClick={() => setIsOpen(true)}
+      >
+        <Bot className="w-4 h-4 mr-2" />
+        AI 助手
+      </Button>
       
-      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] ${isMinimized ? 'max-w-sm' : ''}`}>
-        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
-          <DialogTitle className="text-base sm:text-lg font-semibold flex items-center">
+      <LiquidGlassModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title="Smart AI 助手"
+        size="xl"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
             <Bot className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-emerald-600" />
-            Smart AI 助手
-          </DialogTitle>
+            <span className="text-base sm:text-lg font-semibold">Smart AI 助手</span>
+          </div>
           <div className="flex items-center space-x-1 sm:space-x-2">
             <Button
               variant="ghost"
@@ -444,7 +448,7 @@ export function SmartAIAssistant({ orders = [], currentOrder, pageData }: SmartA
             </div>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </LiquidGlassModal>
+    </>
   )
 }

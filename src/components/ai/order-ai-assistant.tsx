@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog-custom'
+import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
 import { ProductionOrder } from '@/types'
@@ -66,25 +66,28 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button 
-          variant="default"
-          size="sm"
-          className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10"
-        >
-          <Bot className="h-4 w-4 mr-2" />
-          <span className="hidden sm:inline">AI 助手</span>
-          <span className="sm:hidden">AI</span>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className={`max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] flex flex-col ${isMinimized ? 'h-16' : ''}`}>
-        <DialogHeader className="pb-3 sm:pb-4">
-          <DialogTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-purple-600" />
-              <span className="text-base sm:text-lg">AI 訂單分析助手</span>
-            </div>
+    <>
+      <Button 
+        variant="default"
+        size="sm"
+        className="bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-200 relative z-10 liquid-glass-card-interactive"
+        onClick={() => setIsOpen(true)}
+      >
+        <Bot className="h-4 w-4 mr-2" />
+        <span className="hidden sm:inline">AI 助手</span>
+        <span className="sm:hidden">AI</span>
+      </Button>
+      <LiquidGlassModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        title="AI 訂單分析助手"
+        size="xl"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-purple-600" />
+            <span className="text-base sm:text-lg">AI 訂單分析助手</span>
+          </div>
             <div className="flex items-center space-x-1">
               <Button
                 variant="outline"
@@ -394,7 +397,7 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
             </div>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </LiquidGlassModal>
+    </>
   )
 }
