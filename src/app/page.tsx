@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Logo } from '@/components/ui/logo'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
+import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { Plus, FileText, Eye } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
@@ -18,6 +19,7 @@ export default function HomePage() {
   const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
+  const [showOrderDetails, setShowOrderDetails] = useState(false)
 
   useEffect(() => {
     fetchRecentOrders()
@@ -55,7 +57,20 @@ export default function HomePage() {
   }
 
   return (
-    <div className="space-y-8 animated-gradient-bg-subtle floating-combined min-h-screen">
+    <div className="min-h-screen animated-gradient-bg-subtle">
+      {/* Liquid Glass Navigation */}
+      <LiquidGlassNav 
+        links={[
+          { href: '/', label: '首頁', active: true },
+          { href: '/orders', label: '訂單管理' },
+          { href: '/production-order-form', label: '新建訂單' }
+        ]}
+        ctaText="新建訂單"
+        ctaHref="/production-order-form"
+      />
+
+      {/* Main Content with padding for fixed nav */}
+      <div className="pt-20 space-y-8 floating-combined">
       {/* Header Section */}
       <div className="floating-particles bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
@@ -177,26 +192,17 @@ export default function HomePage() {
                           ⏳ 未完工
                         </span>
                       )}
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="h-6 w-6 p-0"
-                            onClick={() => setSelectedOrder(order)}
-                          >
-                            <Eye className="h-3 w-3" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                          <DialogHeader>
-                            <DialogTitle>訂單詳情</DialogTitle>
-                          </DialogHeader>
-                          {selectedOrder && (
-                            <OrderDetailView order={selectedOrder} />
-                          )}
-                        </DialogContent>
-                      </Dialog>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="h-6 w-6 p-0 liquid-glass-card-interactive"
+                        onClick={() => {
+                          setSelectedOrder(order)
+                          setShowOrderDetails(true)
+                        }}
+                      >
+                        <Eye className="h-3 w-3" />
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -466,6 +472,17 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Liquid Glass Modal for Order Details */}
+      <LiquidGlassModal
+        isOpen={showOrderDetails}
+        onClose={() => setShowOrderDetails(false)}
+        title="訂單詳情"
+        size="xl"
+      >
+        {selectedOrder && <OrderDetailView order={selectedOrder} />}
+      </LiquidGlassModal>
       </div>
     </div>
   )

@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { Search, Filter, Download, Eye, Edit, Trash2, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
@@ -38,6 +39,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   })
   const [showFilters, setShowFilters] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
+  const [showOrderDetails, setShowOrderDetails] = useState(false)
+  const [showIngredientDetails, setShowIngredientDetails] = useState(false)
+  const [selectedOrderForIngredients, setSelectedOrderForIngredients] = useState<ProductionOrder | null>(null)
   
   // 下拉選單選項狀態
   const [customerOptions, setCustomerOptions] = useState<string[]>([])
@@ -213,7 +217,20 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <div className="space-y-6 animated-gradient-bg-subtle floating-waves min-h-screen">
+    <div className="min-h-screen animated-gradient-bg-subtle">
+      {/* Liquid Glass Navigation */}
+      <LiquidGlassNav 
+        links={[
+          { href: '/', label: '首頁' },
+          { href: '/orders', label: '訂單管理', active: true },
+          { href: '/production-order-form', label: '新建訂單' }
+        ]}
+        ctaText="新建訂單"
+        ctaHref="/production-order-form"
+      />
+
+      {/* Main Content with padding for fixed nav */}
+      <div className="pt-20 space-y-6 floating-waves">
       {/* 搜尋和篩選 */}
       <Card className="glass-card-subtle">
         <CardHeader>
@@ -524,64 +541,15 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                               <span className="text-xs text-gray-400">無原料資料</span>
                             )}
                             {order.ingredients && order.ingredients.length > 3 && (
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <button className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer">
-                                    +{order.ingredients.length - 3} 更多
-                                  </button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-2xl max-h-[80vh] w-[95vw] sm:w-[90vw] overflow-y-auto">
-                                  <DialogHeader>
-                                    <DialogTitle>原料配方明細 - {order.customerName}</DialogTitle>
-                                  </DialogHeader>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                      <div>
-                                        <h4 className="font-medium mb-2">基本資訊</h4>
-                                        <div className="space-y-1 text-sm">
-                                          <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
-                                          <p><span className="font-medium">產品名字：</span>{order.productName}</p>
-                                          <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-                                        </div>
-                                      </div>
-                                      <div>
-                                        <h4 className="font-medium mb-2">生產狀態</h4>
-                                        <div className="space-y-1 text-sm">
-                                          <p><span className="font-medium">完工日期：</span>
-                                            {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
-                                          </p>
-                                          <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
-                                          <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    
-                                    <div>
-                                      <h4 className="font-medium mb-2">原料配方明細</h4>
-                                      <Table>
-                                        <TableHeader>
-                                          <TableRow>
-                                            <TableHead>原料品名</TableHead>
-                                            <TableHead>單粒含量 (mg)</TableHead>
-                                            <TableHead>批次用量</TableHead>
-                                          </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                          {order.ingredients.map((ingredient, index) => (
-                                            <TableRow key={index}>
-                                              <TableCell>{ingredient.materialName}</TableCell>
-                                              <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
-                                              <TableCell>
-                                                {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
-                                              </TableCell>
-                                            </TableRow>
-                                          ))}
-                                        </TableBody>
-                                      </Table>
-                                    </div>
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
+                              <button 
+                                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline cursor-pointer liquid-glass-card-interactive"
+                                onClick={() => {
+                                  setSelectedOrderForIngredients(order)
+                                  setShowIngredientDetails(true)
+                                }}
+                              >
+                                +{order.ingredients.length - 3} 更多
+                              </button>
                             )}
                           </div>
                         </div>
@@ -625,89 +593,18 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
                         {/* 操作按鈕 */}
                         <div className="flex gap-2 pt-2 border-t">
-                          <Dialog>
-                            <DialogTrigger asChild>
-                              <Button variant="outline" size="sm" className="flex-1 text-xs">
-                                <Eye className="mr-1 h-3 w-3" />
-                                查看
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[60vw] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle>生產記錄詳情</DialogTitle>
-                              </DialogHeader>
-                              <div className="space-y-4">
-                                {/* AI 助手按鈕 */}
-                                <div className="flex justify-center sm:justify-end mb-4 px-2 sm:px-0 relative z-10">
-                                  <div className="w-full sm:w-auto flex justify-center">
-                                    <OrderAIAssistant order={order} />
-                                  </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                  <div>
-                                    <Label className="text-sm font-medium">客戶名稱</Label>
-                                    <p className="text-sm">{order.customerName}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-sm font-medium">產品名字</Label>
-                                    <p className="text-sm">{order.productName}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-sm font-medium">生產數量</Label>
-                                    <p className="text-sm">{formatNumber(order.productionQuantity)} 粒</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-sm font-medium">單粒總重量</Label>
-                                    <p className="text-sm">{order.unitWeightMg.toFixed(3)} mg</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-sm font-medium">批次總重量</Label>
-                                    <p className="text-sm">{convertWeight(order.batchTotalWeightMg).display}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-sm font-medium">完工日期</Label>
-                                    <p className="text-sm">{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-                                  </div>
-                                </div>
-                                
-                                {order.processIssues && (
-                                  <div>
-                                    <Label className="text-sm font-medium">製程問題記錄</Label>
-                                    <p className="text-sm bg-red-50 p-3 rounded border border-red-200">{order.processIssues}</p>
-                                  </div>
-                                )}
-                                
-                                {order.qualityNotes && (
-                                  <div>
-                                    <Label className="text-sm font-medium">品管備註</Label>
-                                    <p className="text-sm bg-blue-50 p-3 rounded border border-blue-200">{order.qualityNotes}</p>
-                                  </div>
-                                )}
-
-                                <div>
-                                  <Label className="text-sm font-medium">原料明細</Label>
-                                  <Table>
-                                    <TableHeader>
-                                      <TableRow>
-                                        <TableHead>原料名稱</TableHead>
-                                        <TableHead>單粒含量(mg)</TableHead>
-                                        <TableHead>批次用量</TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {order.ingredients?.map((ingredient, index) => (
-                                        <TableRow key={index}>
-                                          <TableCell>{ingredient.materialName}</TableCell>
-                                          <TableCell>{ingredient.unitContentMg.toFixed(5)}</TableCell>
-                                          <TableCell>{convertWeight(ingredient.unitContentMg * order.productionQuantity).display}</TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </div>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1 text-xs liquid-glass-card-interactive"
+                            onClick={() => {
+                              setSelectedOrder(order)
+                              setShowOrderDetails(true)
+                            }}
+                          >
+                            <Eye className="mr-1 h-3 w-3" />
+                            查看
+                          </Button>
                           
                           <Link href={`/orders/${order.id}/edit`}>
                             <Button variant="outline" size="sm" className="flex-1 text-xs">
@@ -1082,6 +979,62 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Liquid Glass Modals */}
+      <LiquidGlassModal
+        isOpen={showOrderDetails}
+        onClose={() => setShowOrderDetails(false)}
+        title="訂單詳情"
+        size="xl"
+      >
+        {selectedOrder && <OrderDetailView order={selectedOrder} />}
+      </LiquidGlassModal>
+
+      <LiquidGlassModal
+        isOpen={showIngredientDetails}
+        onClose={() => setShowIngredientDetails(false)}
+        title="原料配方明細"
+        size="lg"
+      >
+        {selectedOrderForIngredients && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label className="text-sm font-medium">客戶名稱</Label>
+                <p className="text-sm">{selectedOrderForIngredients.customerName}</p>
+              </div>
+              <div>
+                <Label className="text-sm font-medium">產品名字</Label>
+                <p className="text-sm">{selectedOrderForIngredients.productName}</p>
+              </div>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">原料配方</Label>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>原料品名</TableHead>
+                    <TableHead>單粒含量 (mg)</TableHead>
+                    <TableHead>批次用量</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {selectedOrderForIngredients.ingredients.map((ingredient, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{ingredient.materialName}</TableCell>
+                      <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                      <TableCell>
+                        {calculateBatchWeight(ingredient.unitContentMg, selectedOrderForIngredients.productionQuantity).display}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )}
+      </LiquidGlassModal>
       </div>
     </div>
   )
