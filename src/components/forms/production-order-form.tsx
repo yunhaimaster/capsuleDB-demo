@@ -16,7 +16,6 @@ import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { Checkbox } from '@/components/ui/checkbox'
-import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 
 interface ProductionOrderFormProps {
   initialData?: Partial<ProductionOrderFormData>
@@ -179,8 +178,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
   if (isSubmitting) {
     return (
-      <div className="animated-gradient-bg-subtle min-h-screen">
-        <div className="space-y-6 skeleton-stagger">
+      <div className="space-y-6 skeleton-stagger">
           {/* Basic Info Skeleton */}
           <Card className="glass-card-subtle">
             <CardHeader>
@@ -228,25 +226,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             </CardContent>
           </Card>
         </div>
-      </div>
     )
   }
 
   return (
-    <div className="animated-gradient-bg-subtle min-h-screen">
-      {/* Liquid Glass Navigation */}
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/production-order-form', label: '新建訂單', active: true }
-        ]}
-        ctaText="返回首頁"
-        ctaHref="/"
-      />
-
-      {/* Main Content with padding for fixed nav */}
-      <div className="pt-20 floating-geometric">
+    <div className="floating-geometric">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
         <Card className="card-subtle-3d glass-card-subtle">
@@ -715,7 +699,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         </Button>
       </div>
     </form>
-      </div>
     </div>
   )
 }
