@@ -17,7 +17,20 @@ interface UseAIAssistantProps {
 }
 
 export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssistantProps) {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'welcome',
+      role: 'assistant',
+      content: '您好！我是 Easy Health AI 助手，專門協助您分析膠囊配方和生產工藝。請選擇以下問題開始，或直接輸入您的問題：',
+      timestamp: new Date(),
+      suggestions: [
+        '分析配方成分堆積密度，計算粉劑容積，對比膠囊殼容積，評估填充可行性並提供建議。',
+        '分析原料流動性、黏性、結塊風險，評估製粒必要性（0-100分），推薦流動性改善輔料及用量。',
+        '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
+        '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
+      ]
+    }
+  ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
@@ -103,7 +116,20 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
   }
 
   const clearChat = () => {
-    setMessages([])
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: '您好！我是 Easy Health AI 助手，專門協助您分析膠囊配方和生產工藝。請選擇以下問題開始，或直接輸入您的問題：',
+        timestamp: new Date(),
+        suggestions: [
+          '分析配方成分堆積密度，計算粉劑容積，對比膠囊殼容積，評估填充可行性並提供建議。',
+          '分析原料流動性、黏性、結塊風險，評估製粒必要性（0-100分），推薦流動性改善輔料及用量。',
+          '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
+          '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
+        ]
+      }
+    ])
     setShowSettings(false)
   }
 
@@ -113,7 +139,20 @@ export function useAIAssistant({ orders = [], currentOrder, context }: UseAIAssi
       setChatHistory(newHistory)
       setCurrentChatIndex(newHistory.length - 1)
     }
-    setMessages([])
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: '您好！我是 Easy Health AI 助手，專門協助您分析膠囊配方和生產工藝。請選擇以下問題開始，或直接輸入您的問題：',
+        timestamp: new Date(),
+        suggestions: [
+          '分析配方成分堆積密度，計算粉劑容積，對比膠囊殼容積，評估填充可行性並提供建議。',
+          '分析原料流動性、黏性、結塊風險，評估製粒必要性（0-100分），推薦流動性改善輔料及用量。',
+          '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
+          '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
+        ]
+      }
+    ])
     setShowSettings(false)
   }
 
