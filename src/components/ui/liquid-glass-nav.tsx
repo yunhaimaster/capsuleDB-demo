@@ -73,11 +73,11 @@ export function LiquidGlassNav({
           >
             {logo}
           </Link>
-          <div className="hidden md:block">
-            <h1 className="text-lg font-bold text-gray-900">
+          <div className="block">
+            <h1 className="text-base sm:text-lg font-bold text-gray-900">
               Easy Health
             </h1>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 hidden sm:block">
               膠囊配方管理系統
             </p>
           </div>
