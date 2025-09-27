@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2 } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
@@ -99,6 +99,15 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
           </div>
           <div className="flex items-center space-x-2">
             <AIPoweredBadge />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearChat}
+              className="text-gray-300 hover:text-white"
+              title="重設對話"
+            >
+              <RefreshCw className="h-4 w-4" />
+            </Button>
             <Button
               variant="ghost"
               size="sm"
