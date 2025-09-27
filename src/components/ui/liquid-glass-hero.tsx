@@ -33,7 +33,7 @@ export function LiquidGlassHero({
     <div className={`liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction ${className}`}>
       <div className="liquid-glass-content">
         <div className="px-6 py-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             {/* Left Content */}
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-4">

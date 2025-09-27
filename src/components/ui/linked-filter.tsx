@@ -253,7 +253,7 @@ export function LinkedFilter({
 
   return (
     <div className="liquid-glass-card liquid-glass-card-subtle p-6 relative">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* 客戶名稱篩選 */}
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -372,7 +372,7 @@ export function LinkedFilter({
       </div>
 
       {/* 操作按鈕 */}
-      <div className="flex justify-end gap-3 mt-6">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
         <Button
           variant="outline"
           onClick={clearFilters}

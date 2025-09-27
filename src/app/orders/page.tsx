@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { OrdersList } from '@/components/orders/orders-list'
+import { ResponsiveOrdersList } from '@/components/orders/responsive-orders-list'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Card, CardContent } from '@/components/ui/card'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
@@ -46,7 +46,7 @@ export default function OrdersPage() {
       {/* Hero Section */}
       <OrdersHero orderCount={orders.length} />
 
-      <OrdersList />
+      <ResponsiveOrdersList />
       
       {/* 智能 AI 助手 - 浮動按鈕 */}
       <SmartAIAssistant 
