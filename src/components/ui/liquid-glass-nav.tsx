@@ -103,6 +103,11 @@ export function LiquidGlassNav({
               key={link.href}
               href={link.href}
               className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
+              onClick={() => {
+                if (link.label === '登出') {
+                  localStorage.removeItem('isAuthenticated')
+                }
+              }}
               aria-current={link.active ? 'page' : undefined}
             >
               {link.label}
@@ -137,15 +142,20 @@ export function LiquidGlassNav({
           aria-label="行動版導航選單"
         >
           {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="liquid-glass-nav-link"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-current={link.active ? 'page' : undefined}
-            >
-              {link.label}
-            </Link>
+          <Link
+            key={link.href}
+            href={link.href}
+            className="liquid-glass-nav-link"
+            onClick={() => {
+              setIsMobileMenuOpen(false)
+              if (link.label === '登出') {
+                localStorage.removeItem('isAuthenticated')
+              }
+            }}
+            aria-current={link.active ? 'page' : undefined}
+          >
+            {link.label}
+          </Link>
           ))}
           <Link
             href={ctaHref}

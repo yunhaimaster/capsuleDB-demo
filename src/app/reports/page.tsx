@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
@@ -131,10 +130,9 @@ export default function ReportsPage() {
   if (loading) {
     return (
       <div className="space-y-8">
-        <Breadcrumb items={[{ label: '統計報表' }]} />
         <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">載入統計數據中...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">載入統計數據中...</p>
         </div>
       </div>
     )
@@ -143,7 +141,6 @@ export default function ReportsPage() {
   if (error) {
     return (
       <div className="space-y-8">
-        <Breadcrumb items={[{ label: '統計報表' }]} />
         <div className="text-center py-8">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <p className="text-red-600">{error}</p>
@@ -154,8 +151,6 @@ export default function ReportsPage() {
 
   return (
     <div className="space-y-8">
-      <Breadcrumb items={[{ label: '統計報表' }]} />
-
       {/* Header Section */}
       <div className="text-center space-y-3 md:space-y-4 py-4 md:py-6">
         <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-3 md:mb-4">

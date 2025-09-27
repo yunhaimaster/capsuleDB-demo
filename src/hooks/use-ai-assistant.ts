@@ -55,6 +55,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
   const [showSettings, setShowSettings] = useState(false)
   const [chatHistory, setChatHistory] = useState<Message[][]>([])
   const [currentChatIndex, setCurrentChatIndex] = useState(-1)
+  const [lastUserMessage, setLastUserMessage] = useState<string>('') // 儲存最後一個用戶消息
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
@@ -67,6 +68,11 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
       role: 'user',
       content: messageToSend,
       timestamp: new Date()
+    }
+
+    // 儲存最後一個用戶消息（用於重試）
+    if (!retryMessage) {
+      setLastUserMessage(messageToSend)
     }
 
     const assistantMessageId = `assistant-${Date.now() + 1}`
@@ -111,13 +117,13 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
     }
 
     const handleErrorState = (errorMessage?: string) => {
-      const fallback = errorMessage || '抱歉，AI 助手暫時無法回應。這可能是網路連線問題或服務暫時不可用。\n\n您可以：\n• 點擊下方「重試」按鈕再次嘗試\n• 稍後再試\n• 檢查網路連線'
+      const fallback = errorMessage || '抱歉，AI 助手暫時無法回應。這可能是網路連線問題或服務暫時不可用。\n\n您可以點擊下方「重試」按鈕再次嘗試。'
       setMessages(prev => prev.map(message => {
         if (message.id === assistantMessageId) {
           return {
             ...message,
             content: fallback,
-            suggestions: ['重試', '檢查網路連線', '稍後再試']
+            suggestions: ['重試'] // 只提供重試選項
           }
         }
         return message
@@ -337,13 +343,10 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
   }
 
   const retryLastMessage = () => {
-    if (messages.length > 0) {
-      const lastUserMessage = messages.filter(msg => msg.role === 'user').pop()
-      if (lastUserMessage) {
-        // Remove the last user message and any error messages
-        setMessages(prev => prev.filter(msg => msg.role === 'user' || !msg.content.includes('抱歉，AI 助手暫時無法回應')))
-        handleSendMessage(lastUserMessage.content)
-      }
+    if (lastUserMessage) {
+      // Remove the last assistant message (error message)
+      setMessages(prev => prev.filter(msg => !msg.content.includes('抱歉，AI 助手暫時無法回應')))
+      handleSendMessage(lastUserMessage)
     }
   }
 

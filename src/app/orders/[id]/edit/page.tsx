@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { ProductionOrderForm } from '@/components/forms/production-order-form'
-import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { ProductionOrder } from '@/types'
 
 export default function EditOrderPage() {
@@ -41,18 +40,13 @@ export default function EditOrderPage() {
   if (!order) {
     return (
       <div className="text-center py-8">
-        <p className="text-muted-foreground">找不到指定的訂單</p>
+        <p className="text-gray-600">找不到指定的訂單</p>
       </div>
     )
   }
 
   return (
     <div className="space-y-8">
-      <Breadcrumb items={[
-        { label: '生產記錄管理', href: '/orders' },
-        { label: '編輯配方' }
-      ]} />
-      
       {/* Header Section */}
       <div className="text-center space-y-3 md:space-y-4 py-4 md:py-6">
         <div className="inline-flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl mb-3 md:mb-4">

@@ -15,8 +15,8 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ items, className }: BreadcrumbProps) {
   return (
-    <nav className={cn("flex items-center space-x-1 text-sm text-muted-foreground", className)}>
-      <Link href="/" className="flex items-center hover:text-foreground transition-colors">
+    <nav className={cn("flex items-center space-x-1 text-sm text-gray-600", className)}>
+      <Link href="/" className="flex items-center hover:text-gray-900 transition-colors">
         <Home className="h-4 w-4" />
         <span className="ml-1">首頁</span>
       </Link>
@@ -27,12 +27,12 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
           {item.href ? (
             <Link 
               href={item.href} 
-              className="hover:text-foreground transition-colors"
+              className="hover:text-gray-900 transition-colors"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-foreground font-medium">{item.label}</span>
+            <span className="text-gray-900 font-medium">{item.label}</span>
           )}
         </React.Fragment>
       ))}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -89,6 +90,18 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
   const [showOrderDetails, setShowOrderDetails] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check authentication
+    const authStatus = localStorage.getItem('isAuthenticated')
+    if (authStatus !== 'true') {
+      router.push('/login')
+      return
+    }
+    setIsAuthenticated(true)
+  }, [router])
 
   useEffect(() => {
     fetchRecentOrders()
@@ -125,6 +138,17 @@ export default function HomePage() {
     }
   }
 
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">驗證中...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen animated-gradient-bg-subtle">
       {/* Liquid Glass Navigation */}
@@ -132,24 +156,25 @@ export default function HomePage() {
         links={[
           { href: '/', label: '首頁', active: true },
           { href: '/orders', label: '訂單管理' },
-          { href: '/production-order-form', label: '新建訂單' }
+          { href: '/orders/new', label: '新建訂單' },
+          { href: '/login', label: '登出' }
         ]}
         ctaText="新建訂單"
-        ctaHref="/production-order-form"
+        ctaHref="/orders/new"
       />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-20 space-y-8 floating-combined">
+      <div className="pt-20 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
       {/* Header Section */}
-      <div className="floating-particles bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 dark:from-brand-primary/10 dark:to-brand-secondary/10 rounded-xl p-4 sm:p-6 md:p-8 border dark:border-brand-primary/20 shadow-lg">
+      <div className="floating-particles bg-white/80 backdrop-blur-sm bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-xl p-4 sm:p-6 md:p-8 border border-blue-200/20 shadow-lg">
         <div className="text-center space-y-2 sm:space-y-3 md:space-y-4">
           <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
             <Logo size="xl" />
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent leading-tight">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
             Easy Health 膠囊配方管理系統
           </h1>
-          <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">
             專業的膠囊配方生產管理平台，提供完整的生產記錄追蹤與智能分析功能
           </p>
         </div>
@@ -338,7 +363,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 智能 AI 助手 */}
+        {/* 智能 AI 助手 - 浮動按鈕 */}
         <SmartAIAssistant 
           orders={allOrders} 
           pageData={{

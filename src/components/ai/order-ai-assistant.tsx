@@ -115,7 +115,29 @@ export function OrderAIAssistant({ order }: OrderAIAssistantProps) {
                     : 'bg-gray-100 text-gray-900'
                 }`}>
                   {message.role === 'assistant' ? (
-                    <MarkdownRenderer content={message.content} />
+                    <div>
+                      <MarkdownRenderer content={message.content} />
+                      {message.suggestions && message.suggestions.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
+                          {message.suggestions.map((suggestion, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => {
+                                if (suggestion === '重試') {
+                                  retryLastMessage()
+                                } else {
+                                  setInput(suggestion)
+                                }
+                              }}
+                              className="block w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 text-blue-700 hover:text-blue-800 transition-colors"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <p className="whitespace-pre-wrap">{message.content}</p>
                   )}

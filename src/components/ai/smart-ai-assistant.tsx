@@ -46,7 +46,15 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
     orders: orders,
     currentOrder: currentOrder,
     context: pageData,
-    initialAssistantMessage: null
+    initialAssistantMessage: {
+      content: '您好！我是 Smart AI 助手，專門協助您分析生產數據、優化配方、提供質量建議。請選擇以下問題開始，或直接輸入您的問題：',
+      suggestions: [
+        '分析當前生產數據趨勢，識別異常值和改進機會。',
+        '優化膠囊配方，提供成本效益分析和質量提升建議。',
+        '評估生產工藝參數，建議最佳化配置方案。',
+        '提供質量控制建議，包括檢測方法和標準制定。'
+      ]
+    }
   })
 
   const handleClose = () => {
@@ -55,16 +63,19 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
 
   return (
     <div>
-      <Button 
-        variant="outline" 
-        size="sm"
-        className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 relative z-10 liquid-glass-card-interactive"
-        onClick={() => setIsOpen(true)}
-      >
-        <Bot className="h-4 w-4 mr-2" />
-        <span className="hidden sm:inline">Smart AI</span>
-        <span className="sm:hidden">AI</span>
-      </Button>
+      {/* 浮動 Smart AI 按鈕 */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <Button 
+          variant="outline" 
+          size="lg"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 liquid-glass-card-interactive rounded-full h-14 w-14 sm:h-auto sm:w-auto sm:rounded-lg"
+          onClick={() => setIsOpen(true)}
+        >
+          <Bot className="h-5 w-5 sm:mr-2" />
+          <span className="hidden sm:inline">Smart AI</span>
+          <span className="sm:hidden">AI</span>
+        </Button>
+      </div>
       <LiquidGlassModal
         isOpen={isOpen}
         onClose={handleClose}
@@ -103,7 +114,29 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
                     : 'bg-gray-100 text-gray-900'
                 }`}>
                   {message.role === 'assistant' ? (
-                    <MarkdownRenderer content={message.content} />
+                    <div>
+                      <MarkdownRenderer content={message.content} />
+                      {message.suggestions && message.suggestions.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
+                          {message.suggestions.map((suggestion, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => {
+                                if (suggestion === '重試') {
+                                  retryLastMessage()
+                                } else {
+                                  setInput(suggestion)
+                                }
+                              }}
+                              className="block w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 text-blue-700 hover:text-blue-800 transition-colors"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <p className="whitespace-pre-wrap">{message.content}</p>
                   )}
