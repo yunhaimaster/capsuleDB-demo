@@ -158,7 +158,13 @@ export function LinkedFilter({
     }
     
     setFilters(newFilters)
-    setShowDropdowns(prev => ({ ...prev, [field]: false }))
+    
+    // 關閉對應的下拉菜單
+    const dropdownField = field === 'customerName' ? 'customer' :
+                         field === 'productName' ? 'product' :
+                         field === 'ingredientName' ? 'ingredient' :
+                         field === 'capsuleType' ? 'capsule' : field
+    setShowDropdowns(prev => ({ ...prev, [dropdownField]: false }))
     
     // 立即觸發聯動選項更新
     try {
