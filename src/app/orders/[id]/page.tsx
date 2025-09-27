@@ -52,7 +52,7 @@ export default function OrderDetailPage() {
       <div className="space-y-6 animated-gradient-bg-subtle min-h-screen">
         <div className="space-y-6 skeleton-stagger">
           {/* Basic Info Skeleton */}
-          <Card className="glass-card-subtle">
+          <Card className="liquid-glass-card liquid-glass-card-subtle">
             <CardHeader>
               <div className="skeleton skeleton-title"></div>
             </CardHeader>
@@ -73,7 +73,7 @@ export default function OrderDetailPage() {
           </Card>
           
           {/* Ingredients Skeleton */}
-          <Card className="glass-card-subtle">
+          <Card className="liquid-glass-card liquid-glass-card-subtle">
             <CardHeader>
               <div className="skeleton skeleton-title"></div>
             </CardHeader>
@@ -95,7 +95,7 @@ export default function OrderDetailPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-center min-h-[400px]">
-          <Card className="card-3d-hover glass-card-easy-health max-w-md w-full">
+          <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction max-w-md w-full">
             <CardHeader className="text-center">
               <CardTitle className="text-xl text-red-600">載入失敗</CardTitle>
               <CardDescription>{error || '訂單不存在'}</CardDescription>
@@ -148,9 +148,16 @@ export default function OrderDetailPage() {
       </div>
 
       {/* 基本資訊 */}
-        <Card className="liquid-glass-card liquid-glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">基本資訊</CardTitle>
+            <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+              <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                </svg>
+              </div>
+              <span style={{ color: '#2a588c' }}>基本資訊</span>
+            </CardTitle>
           </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -218,9 +225,16 @@ export default function OrderDetailPage() {
       </Card>
 
       {/* 原料配方明細 */}
-        <Card className="liquid-glass-card liquid-glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
-            <CardTitle className="text-lg md:text-xl">原料配方明細</CardTitle>
+            <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+              <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span style={{ color: '#2a588c' }}>原料配方明細</span>
+            </CardTitle>
           </CardHeader>
         <CardContent>
           <Table>

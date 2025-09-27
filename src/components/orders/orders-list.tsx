@@ -194,7 +194,20 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           loading={loading}
         />
 
-        <div className="liquid-glass-card liquid-glass-card-subtle">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+          <div className="liquid-glass-content">
+            <div className="mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <span style={{ color: '#2a588c' }}>訂單管理</span>
+              </h2>
+              <p className="text-gray-600 mt-2">管理所有膠囊生產訂單</p>
+            </div>
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

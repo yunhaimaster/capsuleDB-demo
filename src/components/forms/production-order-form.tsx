@@ -180,7 +180,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     return (
       <div className="space-y-6 skeleton-stagger">
           {/* Basic Info Skeleton */}
-          <Card className="glass-card-subtle">
+          <Card className="liquid-glass-card liquid-glass-card-subtle">
             <CardHeader>
               <div className="skeleton skeleton-title"></div>
             </CardHeader>
@@ -199,7 +199,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           </Card>
           
           {/* Capsule Specs Skeleton */}
-          <Card className="glass-card-subtle">
+          <Card className="liquid-glass-card liquid-glass-card-subtle">
             <CardHeader>
               <div className="skeleton skeleton-title"></div>
             </CardHeader>
@@ -213,7 +213,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           </Card>
           
           {/* Ingredients Skeleton */}
-          <Card className="glass-card-subtle">
+          <Card className="liquid-glass-card liquid-glass-card-subtle">
             <CardHeader>
               <div className="skeleton skeleton-title"></div>
             </CardHeader>
@@ -233,11 +233,15 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     <div className="floating-geometric">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <span className="text-blue-600">📝</span>
-              基本資訊
+              <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                </svg>
+              </div>
+              <span style={{ color: '#2a588c' }}>基本資訊</span>
             </CardTitle>
           </CardHeader>
         <CardContent className="space-y-4">
@@ -304,11 +308,15 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 膠囊規格 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <span className="text-purple-600">💊</span>
-              膠囊規格
+              <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                </svg>
+              </div>
+              <span style={{ color: '#2a588c' }}>膠囊規格</span>
             </CardTitle>
           </CardHeader>
         <CardContent className="space-y-6">
@@ -370,7 +378,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 其他信息 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-green-600">📋</span>
@@ -532,7 +540,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           {/* 手機版卡片佈局 */}
           <div className="block md:hidden space-y-4">
             {fields.map((field, index) => (
-              <Card key={field.id} className="card-subtle-3d glass-card-subtle border border-gray-200">
+              <Card key={field.id} className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction border border-gray-200">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium text-sm text-gray-700">
@@ -649,7 +657,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       </Card>
 
       {/* 計算結果 */}
-        <Card className="card-subtle-3d glass-card-subtle">
+        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <CardHeader>
             <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
               <span className="text-emerald-600">📊</span>
