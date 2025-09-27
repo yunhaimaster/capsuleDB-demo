@@ -5,9 +5,9 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { productionOrderSchema, type ProductionOrderFormData } from '@/lib/validations'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2 } from 'lucide-react'
@@ -233,18 +233,20 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     <div className="floating-geometric">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
-        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
-          <CardHeader>
-            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                </svg>
-              </div>
-              <span style={{ color: '#2a588c' }}>基本資訊</span>
-            </CardTitle>
-          </CardHeader>
-        <CardContent className="space-y-4">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+          <div className="liquid-glass-content">
+            <div className="mb-6">
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                  </svg>
+                </div>
+                <span style={{ color: '#2a588c' }}>基本資訊</span>
+              </h2>
+            </div>
+          </div>
+          <div className="px-6 pb-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="customerName">客戶名稱 *</Label>
@@ -304,22 +306,24 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
 
       {/* 膠囊規格 */}
-        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
-          <CardHeader>
-            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-                </svg>
-              </div>
-              <span style={{ color: '#2a588c' }}>膠囊規格</span>
-            </CardTitle>
-          </CardHeader>
-        <CardContent className="space-y-6">
+        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction">
+          <div className="liquid-glass-content">
+            <div className="mb-6">
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                  </svg>
+                </div>
+                <span style={{ color: '#2a588c' }}>膠囊規格</span>
+              </h2>
+            </div>
+          </div>
+          <div className="px-6 pb-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="capsuleColor">膠囊顏色</Label>
@@ -374,8 +378,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
 
       {/* 其他信息 */}
         <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
