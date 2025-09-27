@@ -22,9 +22,7 @@ export default function NewOrderPage() {
       <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Form Card */}
-      <div className="max-w-4xl mx-auto px-4 md:px-0">
-        <ProductionOrderForm />
-      </div>
+      <ProductionOrderForm />
       
       {/* 智能 AI 助手 - 浮動按鈕 */}
       <SmartAIAssistant 
