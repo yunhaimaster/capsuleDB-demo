@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search, X } from 'lucide-react'
@@ -68,6 +68,15 @@ export function LinkedFilter({
     return capsuleOptions
   }, [filters.customerName, filters.productName, filters.ingredientName, capsuleOptions])
 
+  // Debounce function for search
+  const debounce = useCallback((func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout
+    return (...args: any[]) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => func.apply(null, args), delay)
+    }
+  }, [])
+
   const handleInputChange = (field: keyof typeof filters, value: string) => {
     const newFilters = { ...filters, [field]: value }
     
@@ -84,7 +93,23 @@ export function LinkedFilter({
     }
     
     setFilters(newFilters)
+    
+    // 自動搜索（延遲 500ms）
+    debouncedSearch(newFilters)
   }
+
+  const debouncedSearch = useMemo(
+    () => debounce((searchFilters: typeof filters) => {
+      const processedFilters = {
+        customerName: searchFilters.customerName === '全部客戶' ? '' : searchFilters.customerName,
+        productName: searchFilters.productName === '全部產品' ? '' : searchFilters.productName,
+        ingredientName: searchFilters.ingredientName === '全部原料' ? '' : searchFilters.ingredientName,
+        capsuleType: searchFilters.capsuleType === '全部類型' ? '' : searchFilters.capsuleType,
+      }
+      onSearch(processedFilters)
+    }, 500),
+    [debounce, onSearch]
+  )
 
   const handleOptionSelect = (field: keyof typeof filters, value: string, label: string) => {
     handleInputChange(field, value)
@@ -142,7 +167,7 @@ export function LinkedFilter({
               ▼
             </button>
             {showDropdowns.customer && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
                 {customerOptions.map((option) => (
                   <button
                     key={option.value}
@@ -179,7 +204,7 @@ export function LinkedFilter({
               ▼
             </button>
             {showDropdowns.product && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
                 {filteredProductOptions.map((option) => (
                   <button
                     key={option.value}
@@ -216,7 +241,7 @@ export function LinkedFilter({
               ▼
             </button>
             {showDropdowns.ingredient && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
                 {filteredIngredientOptions.map((option) => (
                   <button
                     key={option.value}
@@ -253,7 +278,7 @@ export function LinkedFilter({
               ▼
             </button>
             {showDropdowns.capsule && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
                 {filteredCapsuleOptions.map((option) => (
                   <button
                     key={option.value}

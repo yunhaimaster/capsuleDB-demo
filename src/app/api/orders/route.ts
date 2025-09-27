@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       isCompleted: searchParams.get('isCompleted') ? searchParams.get('isCompleted') === 'true' : undefined,
       page: parseInt(searchParams.get('page') || '1'),
       limit: parseInt(searchParams.get('limit') || '10'),
-      sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
+      sortBy: (searchParams.get('sortBy') as any) || 'completionDate',
       sortOrder: (searchParams.get('sortOrder') as any) || 'desc'
     }
 

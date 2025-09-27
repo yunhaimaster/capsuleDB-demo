@@ -22,7 +22,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     ingredientName: '',
     capsuleType: '',
     page: 1,
-    limit: 10
+    limit: 10,
+    sortBy: 'completionDate',
+    sortOrder: 'desc'
   })
   
   // Dropdown options
@@ -101,6 +103,37 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     fetchOrders(updatedFilters)
   }
 
+  const handleSort = (column: string) => {
+    let newSortOrder = 'asc'
+    
+    // 如果點擊的是當前排序列，切換排序順序
+    if (filters.sortBy === column && filters.sortOrder === 'asc') {
+      newSortOrder = 'desc'
+    } else if (filters.sortBy === column && filters.sortOrder === 'desc') {
+      newSortOrder = 'asc'
+    }
+    
+    const updatedFilters = {
+      ...filters,
+      sortBy: column,
+      sortOrder: newSortOrder,
+      page: 1 // Reset to first page when sorting
+    }
+    
+    setFilters(updatedFilters)
+    fetchOrders(updatedFilters)
+  }
+
+  const getSortIcon = (column: string) => {
+    if (filters.sortBy !== column) {
+      return <ArrowUpDown className="h-3 w-3 text-gray-400" />
+    }
+    
+    return filters.sortOrder === 'asc' 
+      ? <ArrowUp className="h-3 w-3 text-gray-600" />
+      : <ArrowDown className="h-3 w-3 text-gray-600" />
+  }
+
   const handleDelete = async (orderId: string) => {
     if (!confirm('確定要刪除此訂單嗎？此操作無法復原。')) return
 
@@ -177,22 +210,58 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    客戶名稱
+                    <button
+                      onClick={() => handleSort('customerName')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      客戶名稱
+                      {getSortIcon('customerName')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    產品名稱
+                    <button
+                      onClick={() => handleSort('productName')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      產品名稱
+                      {getSortIcon('productName')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    膠囊規格
+                    <button
+                      onClick={() => handleSort('capsuleColor')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      膠囊規格
+                      {getSortIcon('capsuleColor')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    原料成分
+                    <button
+                      onClick={() => handleSort('ingredients')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      原料成分
+                      {getSortIcon('ingredients')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    生產數量
+                    <button
+                      onClick={() => handleSort('productionQuantity')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      生產數量
+                      {getSortIcon('productionQuantity')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    完工日期
+                    <button
+                      onClick={() => handleSort('completionDate')}
+                      className="flex items-center gap-1 hover:text-gray-700"
+                    >
+                      完工日期
+                      {getSortIcon('completionDate')}
+                    </button>
                   </th>
                   <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
                     操作
