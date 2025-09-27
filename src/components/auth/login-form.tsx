@@ -27,7 +27,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center floating-particles py-8">
+    <div className="min-h-[calc(100vh-6rem)] flex items-center justify-center floating-particles py-8">
       <Card className="liquid-glass-card liquid-glass-card-elevated w-full max-w-md mx-4 shadow-xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 p-3 bg-blue-500/10 rounded-full w-fit">

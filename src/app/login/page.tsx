@@ -40,11 +40,7 @@ export default function LoginPage() {
       />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
-        {/* Hero Section */}
-        <LoginHero />
-        
-        {/* Login Form */}
+      <div className="pt-24">
         <LoginForm onLogin={handleLogin} />
       </div>
     </div>
