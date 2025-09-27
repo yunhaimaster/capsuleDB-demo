@@ -84,8 +84,8 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-600" />
-            <span className="text-base sm:text-lg">Smart AI 助手</span>
+            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-400" />
+            <span className="text-base sm:text-lg text-white">Smart AI 助手</span>
           </div>
           <div className="flex items-center space-x-2">
             <AIPoweredBadge />
@@ -93,7 +93,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
               variant="ghost"
               size="sm"
               onClick={handleClose}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-300 hover:text-white"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -101,8 +101,8 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
         </div>
         
         <div className="space-y-4">
-          <div className="text-sm text-gray-600 bg-green-50 p-3 rounded-lg">
-            <strong>智能助手：</strong> 我可以幫助您分析生產數據、優化配方、提供質量建議，並回答任何與膠囊生產相關的問題。
+          <div className="text-sm text-gray-200 bg-transparent border border-white/20 p-3 rounded-lg backdrop-blur-sm">
+            <strong className="text-white">智能助手：</strong> 我可以幫助您分析生產數據、優化配方、提供質量建議，並回答任何與膠囊生產相關的問題。
           </div>
           
           <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
@@ -111,14 +111,14 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
                 <div className={`max-w-[85%] p-3 rounded-lg ${
                   message.role === 'user' 
                     ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-100 text-gray-900'
+                    : 'bg-transparent border border-white/20 text-white backdrop-blur-sm'
                 }`}>
                   {message.role === 'assistant' ? (
                     <div>
                       <MarkdownRenderer content={message.content} />
                       {message.suggestions && message.suggestions.length > 0 && (
                         <div className="mt-3 space-y-2">
-                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
+                          <p className="text-sm font-medium text-gray-200">建議問題：</p>
                           {message.suggestions.map((suggestion, idx) => (
                             <button
                               key={idx}
@@ -129,7 +129,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
                                   setInput(suggestion)
                                 }
                               }}
-                              className="block w-full text-left p-2 text-sm bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 text-blue-700 hover:text-blue-800 transition-colors"
+                              className="block w-full text-left p-2 text-sm bg-transparent hover:bg-white/10 rounded border border-white/20 text-gray-200 hover:text-white transition-colors backdrop-blur-sm"
                             >
                               {suggestion}
                             </button>
@@ -162,13 +162,13 @@ export function SmartAIAssistant({ orders, currentOrder, pageData }: SmartAIAssi
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="輸入您的問題..."
-              className="flex-1"
+              className="flex-1 bg-transparent border-white/20 text-white placeholder:text-gray-300 focus:border-blue-400"
               disabled={isLoading}
             />
             <Button 
               onClick={() => handleSendMessage()} 
               disabled={!input.trim() || isLoading}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Send className="h-4 w-4" />
             </Button>
