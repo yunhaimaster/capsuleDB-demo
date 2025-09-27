@@ -230,8 +230,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
   }
 
   return (
-    <div className="floating-geometric">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 基本資訊 */}
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
           <div className="liquid-glass-content">
@@ -711,6 +710,5 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         </Button>
       </div>
     </form>
-    </div>
   )
 }
