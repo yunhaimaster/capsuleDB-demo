@@ -19,7 +19,8 @@ export default function NewOrderPage() {
       />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+      <div className="pt-24 space-y-8 floating-combined">
+        <div className="px-4 sm:px-6 md:px-8">
 
       {/* Form Card */}
       <ProductionOrderForm />
@@ -37,6 +38,7 @@ export default function NewOrderPage() {
           recentOrders: []
         }}
       />
+        </div>
       </div>
     </div>
   )
