@@ -76,8 +76,9 @@ export async function PUT(
           deleteMany: {},
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
-            unitContentMg: ingredient.unitContentMg,
-            isCustomerProvided: ingredient.isCustomerProvided ?? true
+            unitContentMg: ingredient.unitContentMg
+            // 暫時移除 isCustomerProvided 字段直到數據庫遷移完成
+            // isCustomerProvided: ingredient.isCustomerProvided ?? true
           }))
         }
       },
