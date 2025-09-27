@@ -82,9 +82,17 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }, [])
 
   const handleSearch = (newFilters: any) => {
+    // Convert "all" values to empty strings for API
+    const processedFilters = { ...newFilters }
+    Object.keys(processedFilters).forEach(key => {
+      if (processedFilters[key] === 'all') {
+        processedFilters[key] = ''
+      }
+    })
+    
     const updatedFilters = { 
       ...filters, 
-      ...newFilters, 
+      ...processedFilters, 
       page: newFilters.page !== undefined ? newFilters.page : 1 
     }
     setFilters(updatedFilters)
@@ -146,12 +154,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 客戶名稱
               </label>
-              <Select value={filters.customerName} onValueChange={(value) => handleSearch({ customerName: value })}>
+              <Select value={filters.customerName || 'all'} onValueChange={(value) => handleSearch({ customerName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇客戶..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">全部客戶</SelectItem>
+                  <SelectItem value="all">全部客戶</SelectItem>
                   {customerOptions.map((customer) => (
                     <SelectItem key={customer} value={customer}>
                       {customer}
@@ -164,12 +172,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 產品名稱
               </label>
-              <Select value={filters.productName} onValueChange={(value) => handleSearch({ productName: value })}>
+              <Select value={filters.productName || 'all'} onValueChange={(value) => handleSearch({ productName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇產品..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">全部產品</SelectItem>
+                  <SelectItem value="all">全部產品</SelectItem>
                   {productOptions.map((product) => (
                     <SelectItem key={product} value={product}>
                       {product}
@@ -182,12 +190,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 原料名稱
               </label>
-              <Select value={filters.ingredientName} onValueChange={(value) => handleSearch({ ingredientName: value })}>
+              <Select value={filters.ingredientName || 'all'} onValueChange={(value) => handleSearch({ ingredientName: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇原料..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">全部原料</SelectItem>
+                  <SelectItem value="all">全部原料</SelectItem>
                   {ingredientOptions.map((ingredient) => (
                     <SelectItem key={ingredient} value={ingredient}>
                       {ingredient}
@@ -200,12 +208,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 膠囊類型
               </label>
-              <Select value={filters.capsuleType} onValueChange={(value) => handleSearch({ capsuleType: value })}>
+              <Select value={filters.capsuleType || 'all'} onValueChange={(value) => handleSearch({ capsuleType: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="選擇類型..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">全部類型</SelectItem>
+                  <SelectItem value="all">全部類型</SelectItem>
                   {capsuleTypeOptions.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type}
