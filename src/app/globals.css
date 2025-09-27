@@ -442,6 +442,7 @@
   overflow: hidden;
 }
 
+/* Background gradient layer */
 .brand-logo-bg-animation::before {
   content: '';
   position: absolute;
@@ -450,28 +451,34 @@
   width: 200%;
   height: 200%;
   background-image: 
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 60%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 40% 60%, rgba(168, 85, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 70% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
   animation: brandLogoFloat 20s ease-in-out infinite;
-  z-index: -1;
+  z-index: -3;
 }
 
+/* Main brand text */
 .brand-logo-bg-animation::after {
   content: 'Easy Health';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-15deg);
-  font-size: 15rem;
+  font-size: 18rem;
   font-weight: 900;
-  color: rgba(59, 130, 246, 0.03);
-  letter-spacing: 0.5rem;
+  color: rgba(59, 130, 246, 0.08);
+  letter-spacing: 1rem;
   white-space: nowrap;
   animation: brandLogoRotate 30s linear infinite;
   z-index: -1;
   pointer-events: none;
   user-select: none;
+  text-shadow: 
+    0 0 20px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(16, 185, 129, 0.2),
+    0 0 60px rgba(168, 85, 247, 0.1);
 }
 
 @keyframes brandLogoFloat {
@@ -491,10 +498,35 @@
 
 @keyframes brandLogoRotate {
   0% {
-    transform: translate(-50%, -50%) rotate(-15deg);
+    transform: translate(-50%, -50%) rotate(-15deg) scale(1);
+    opacity: 0.08;
+  }
+  25% {
+    transform: translate(-50%, -50%) rotate(75deg) scale(1.05);
+    opacity: 0.12;
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(165deg) scale(1);
+    opacity: 0.08;
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(255deg) scale(1.05);
+    opacity: 0.12;
   }
   100% {
-    transform: translate(-50%, -50%) rotate(345deg);
+    transform: translate(-50%, -50%) rotate(345deg) scale(1);
+    opacity: 0.08;
+  }
+}
+
+@keyframes brandLogoPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.08;
   }
 }
 
