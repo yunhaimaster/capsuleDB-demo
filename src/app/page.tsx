@@ -336,14 +336,14 @@ export default function HomePage() {
                 <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                   <li>• 膠囊配方管理與記錄追蹤</li>
-                  <li>• 智能配方導入（文字解析）</li>
-                  <li>• AI 助手分析與專業建議</li>
-                  <li>• 響應式設計，完美支援手機與桌面</li>
-                  <li>• Liquid Glass 設計語言</li>
-                  <li>• 動態漸變背景與浮動元素</li>
-                  <li>• 玻璃擬態卡片與微動畫效果</li>
-                  <li>• 品牌 Logo 背景動畫</li>
-                  <li>• 確認模態框與用戶體驗優化</li>
+                  <li>• 智能配方導入（支援文字格式）</li>
+                  <li>• AI 助手提供專業分析和建議</li>
+                  <li>• 支援手機、平板和電腦使用</li>
+                  <li>• 現代化玻璃質感介面設計</li>
+                  <li>• 流暢的動畫效果</li>
+                  <li>• 直觀易用的操作介面</li>
+                  <li>• 品牌形象動態背景</li>
+                  <li>• 優化的用戶操作體驗</li>
                 </ul>
               </div>
               <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
@@ -380,13 +380,13 @@ export default function HomePage() {
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                  <li>• 更換訂單管理和原料配方明細圖標，提升視覺效果</li>
-                  <li>• 新增 PDF 參考資料下載區域，提供培訓手冊和風險清單</li>
-                  <li>• 修復訂單編輯頁面的 toISOString 錯誤</li>
-                  <li>• 修復下拉菜單選擇後自動收回功能</li>
-                  <li>• 使用 Liquid Glass 確認模態框替代原生 confirm 對話框</li>
-                  <li>• 修正智能配方導入描述，明確只支援文字解析</li>
-                  <li>• 優化用戶體驗和界面一致性</li>
+                  <li>• 更新系統圖標，提升視覺效果</li>
+                  <li>• 新增參考資料下載功能，提供培訓手冊和風險清單</li>
+                  <li>• 修復訂單編輯功能</li>
+                  <li>• 改善搜尋選單操作體驗</li>
+                  <li>• 優化確認對話框設計</li>
+                  <li>• 完善智能配方導入功能說明</li>
+                  <li>• 整體用戶體驗優化</li>
                 </ul>
               </div>
               <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
@@ -394,21 +394,21 @@ export default function HomePage() {
                   <h4 className="font-medium text-blue-800 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
-                  <li>• 引入 Liquid Glass Cards，提升 UI 質感與互動性</li>
-                  <li>• 解決 Vercel 部署中 Prisma Schema 與環境變量問題</li>
-                  <li>• 修正 AI API 密鑰配置，確保 AI 助手正常運作</li>
-                  <li>• 優化數據庫遷移流程，確保 `isCustomerProvided` 字段正確同步</li>
-                  <li>• 移除原料配方中的「顯示計算」和「複製配方」按鈕</li>
-                  <li>• 更新 Order AI 初始問題，提供膠囊配方專業分析</li>
-                  <li>• 修正 Smart AI 初始問題被 Order AI 覆蓋的問題</li>
-                  <li>• 完工日期只顯示日期，不記錄時間</li>
-                  <li>• 解決訂單列表「下一頁」按鈕無效問題</li>
-                  <li>• 修正 AI 按鈕與提交按鈕重疊問題</li>
-                  <li>• 引入動畫漸變背景、玻璃擬態卡片、增強加載狀態、微動畫和浮動元素</li>
-                  <li>• 深色模式與淺色模式切換功能</li>
-                  <li>• AI 翻譯功能：簡體中文轉繁體中文</li>
-                  <li>• 手機介面優化與觸控體驗改善</li>
-                  <li>• 膠囊規格管理：支援顏色、大小、成分選擇</li>
+                  <li>• 全新玻璃質感介面設計</li>
+                  <li>• 修復系統部署和穩定性問題</li>
+                  <li>• 優化 AI 助手功能</li>
+                  <li>• 改善數據同步和處理流程</li>
+                  <li>• 簡化配方操作介面</li>
+                  <li>• 增強 AI 專業分析能力</li>
+                  <li>• 修復 AI 助手功能衝突</li>
+                  <li>• 優化日期顯示格式</li>
+                  <li>• 修復分頁功能問題</li>
+                  <li>• 解決按鈕重疊問題</li>
+                  <li>• 新增動畫效果和視覺元素</li>
+                  <li>• 支援深色和淺色模式</li>
+                  <li>• 新增中文字體翻譯功能</li>
+                  <li>• 優化手機操作體驗</li>
+                  <li>• 完善膠囊規格管理功能</li>
                 </ul>
               </div>
             </div>
