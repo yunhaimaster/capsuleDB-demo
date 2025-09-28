@@ -1977,16 +1977,28 @@
   background: rgba(59, 130, 246, 1);
 }
 
-/* 白色主題全屏樣式 */
+/* 白色主題全屏樣式 - 放大到整個網站 */
 .liquid-glass-modal.white-theme.fullscreen {
-  width: 100vw !important;
-  height: 100vh !important;
+  width: 95vw !important;
+  height: 90vh !important;
   max-width: none !important;
   max-height: none !important;
   margin: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 20px !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
 }
 
 .liquid-glass-modal.white-theme.fullscreen .liquid-glass-modal-content {
-  max-height: calc(100vh - 8rem) !important;
+  max-height: calc(90vh - 8rem) !important;
+  height: calc(90vh - 8rem) !important;
+}
+
+/* 全屏模式下的背景遮罩 */
+.liquid-glass-modal.white-theme.fullscreen ~ .liquid-glass-modal-backdrop {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
 }

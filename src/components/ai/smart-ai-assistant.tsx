@@ -205,17 +205,24 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                 </div>
               </div>
             ))}
-            {isThinking && enableReasoning && (
+            {isLoading && isThinking && enableReasoning && (
               <div className="flex justify-start">
                 <div className="max-w-[85%]">
                   <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
                 </div>
               </div>
             )}
-            {isThinking && !enableReasoning && (
+            {isLoading && isThinking && !enableReasoning && (
               <div className="flex justify-start">
                 <div className="max-w-[85%]">
                   <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
+                </div>
+              </div>
+            )}
+            {isLoading && !isThinking && (
+              <div className="flex justify-start">
+                <div className="max-w-[85%]">
+                  <AIThinkingIndicator isThinking={isLoading} enableReasoning={false} />
                 </div>
               </div>
             )}
