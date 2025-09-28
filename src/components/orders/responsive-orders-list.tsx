@@ -5,7 +5,7 @@ import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
-import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight } from 'lucide-react'
+import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
@@ -15,6 +15,12 @@ interface ResponsiveOrdersListProps {
 
 export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: ResponsiveOrdersListProps) {
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
+  
+  // 檢查訂單是否有製程問題或品管備註
+  const hasProcessOrQualityIssues = (order: ProductionOrder) => {
+    return (order.processIssues && order.processIssues.trim() !== '') || 
+           (order.qualityNotes && order.qualityNotes.trim() !== '')
+  }
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null)
@@ -262,7 +268,23 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       onClick={() => window.location.href = `/orders/${order.id}`}
                     >
                       <td className="py-3 px-4 text-gray-900 text-sm">
-                        {order.customerName}
+                        <div className="flex items-center gap-2">
+                          <span>{order.customerName}</span>
+                          {hasProcessOrQualityIssues(order) && (
+                            <div className="flex items-center gap-1">
+                              {order.processIssues && order.processIssues.trim() !== '' && (
+                                <div title={`製程問題: ${order.processIssues}`}>
+                                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                                </div>
+                              )}
+                              {order.qualityNotes && order.qualityNotes.trim() !== '' && (
+                                <div title={`品管備註: ${order.qualityNotes}`}>
+                                  <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-gray-900 text-sm">
                         {order.productName}
@@ -363,9 +385,25 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                 {/* 標題行 */}
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 text-base">
-                      {order.productName}
-                    </h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-semibold text-gray-900 text-base">
+                        {order.productName}
+                      </h3>
+                      {hasProcessOrQualityIssues(order) && (
+                        <div className="flex items-center gap-1">
+                          {order.processIssues && order.processIssues.trim() !== '' && (
+                            <div title={`製程問題: ${order.processIssues}`}>
+                              <AlertTriangle className="h-4 w-4 text-red-500" />
+                            </div>
+                          )}
+                          {order.qualityNotes && order.qualityNotes.trim() !== '' && (
+                            <div title={`品管備註: ${order.qualityNotes}`}>
+                              <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <p className="text-sm text-gray-600">
                       {order.customerName}
                     </p>
