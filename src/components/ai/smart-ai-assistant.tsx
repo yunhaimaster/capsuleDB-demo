@@ -124,8 +124,8 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
                   message.role === 'user' 
-                    ? 'bg-transparent border border-white/20 text-white backdrop-blur-sm' 
-                    : 'bg-transparent border border-white/20 text-white backdrop-blur-sm'
+                    ? 'bg-white/90 border border-gray-200 text-gray-800 backdrop-blur-sm' 
+                    : 'bg-white/95 border border-gray-200 text-gray-900 backdrop-blur-sm'
                 }`}>
                   {message.role === 'assistant' ? (
                     <div>
@@ -135,10 +135,10 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                         enableReasoning={enableReasoning} 
                       />
                       
-                      <MarkdownRenderer content={message.content} whiteText={true} />
+                      <MarkdownRenderer content={message.content} whiteText={false} />
                       {message.suggestions && message.suggestions.length > 0 && (
                         <div className="mt-3 space-y-2">
-                          <p className="text-sm font-medium text-gray-200">建議問題：</p>
+                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
                           {message.suggestions.map((suggestion, idx) => (
                             <button
                               key={idx}
@@ -149,7 +149,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                                   setInput(suggestion)
                                 }
                               }}
-                              className="block w-full text-left p-2 text-sm bg-transparent hover:bg-white/10 rounded border border-white/20 text-gray-200 hover:text-white transition-colors backdrop-blur-sm"
+                              className="block w-full text-left p-2 text-sm bg-gray-50 hover:bg-gray-100 rounded border border-gray-200 text-gray-700 hover:text-gray-900 transition-colors"
                             >
                               {suggestion}
                             </button>
@@ -160,7 +160,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                         <div className="mt-3 flex space-x-2">
                           <button
                             onClick={() => copyMessage(message.content)}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 text-white transition-colors"
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 transition-colors"
                           >
                             <Copy className="w-3 h-3" />
                             <span>複製</span>
@@ -180,7 +180,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                                 setInput('請重新回答這個問題')
                               }
                             }}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 text-white transition-colors"
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 transition-colors"
                           >
                             <RotateCcw className="w-3 h-3" />
                             <span>重新回答</span>
