@@ -27,7 +27,7 @@ export function AIThinkingIndicator({ isThinking, enableReasoning = false }: AIT
   if (!isThinking) return null
 
   return (
-    <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+    <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
       <div className="flex-shrink-0">
         {enableReasoning ? (
           <div className="relative">
@@ -40,14 +40,14 @@ export function AIThinkingIndicator({ isThinking, enableReasoning = false }: AIT
       </div>
       <div className="flex-1">
         <div className="flex items-center space-x-2">
-          <h4 className="font-medium text-blue-900">
+          <h4 className="font-medium text-gray-900">
             {enableReasoning ? 'AI 深度思考中' : 'AI 正在處理'}
           </h4>
-          <span className="text-blue-600 text-sm">
+          <span className="text-gray-600 text-sm">
             {enableReasoning ? '深度推理模式' : '快速響應模式'}
           </span>
         </div>
-        <p className="text-sm text-blue-700 mt-1">
+        <p className="text-sm text-gray-700 mt-1">
           {enableReasoning ? (
             <>
               AI 正在進行深度分析與推理
@@ -68,9 +68,9 @@ export function AIThinkingIndicator({ isThinking, enableReasoning = false }: AIT
       {enableReasoning && (
         <div className="flex-shrink-0">
           <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
           </div>
         </div>
       )}

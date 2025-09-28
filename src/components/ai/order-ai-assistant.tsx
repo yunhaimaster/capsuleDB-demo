@@ -217,7 +217,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="輸入您的問題..."
-              className="flex-1 bg-transparent border-white/20 text-white placeholder:text-gray-300 focus:border-purple-400"
+              className="flex-1 bg-white/50 border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-purple-500 focus:bg-white/80"
               disabled={isLoading}
             />
             <Button 
