@@ -1987,9 +1987,9 @@
   margin: 0 !important;
   border-radius: 20px !important;
   position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  top: 5vh !important;
+  left: 2.5vw !important;
+  transform: none !important;
   z-index: 9999 !important;
 }
 
