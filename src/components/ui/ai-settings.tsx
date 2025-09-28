@@ -14,15 +14,14 @@ export function AISettings({ enableReasoning, onToggleReasoning }: AISettingsPro
 
   return (
     <div className="relative">
-      <Button
-        variant="ghost"
-        size="sm"
+      <button
+        className="liquid-glass-modal-close"
         onClick={() => setIsOpen(!isOpen)}
-        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-300"
         title="AI 設置"
+        type="button"
       >
-        <Settings className="h-4 w-4" />
-      </Button>
+        <Settings className="h-5 w-5" />
+      </button>
 
       {isOpen && (
         <>
