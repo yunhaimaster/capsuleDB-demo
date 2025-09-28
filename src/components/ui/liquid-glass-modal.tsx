@@ -87,6 +87,11 @@ export function LiquidGlassModal({
     event.stopPropagation()
   }
 
+  // Handle scroll events within modal
+  const handleModalScroll = (event: React.WheelEvent) => {
+    event.stopPropagation()
+  }
+
   // Size classes
   const sizeClasses = {
     sm: 'max-w-md',
@@ -110,6 +115,7 @@ export function LiquidGlassModal({
         ref={modalRef}
         className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'}`}
         onClick={handleModalClick}
+        onWheel={handleModalScroll}
         role="document"
       >
         {/* Modal Header */}

@@ -120,7 +120,11 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
           </div>
           
           {/* 可滾動的對話區域 */}
-          <div className="flex-1 overflow-y-auto space-y-3 min-h-0" ref={messagesContainerRef}>
+          <div 
+            className="flex-1 overflow-y-auto space-y-3 min-h-0" 
+            ref={messagesContainerRef}
+            onWheel={(e) => e.stopPropagation()}
+          >
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${

@@ -949,6 +949,7 @@
   flex-direction: column;
   max-height: calc(90vh - 8rem);
   min-height: 0; /* 允許 flex 子元素收縮 */
+  overflow: hidden; /* 防止內容溢出 */
 }
 
 /* Modal Footer */
