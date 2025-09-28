@@ -1925,3 +1925,33 @@
   background-color: hsl(var(--background));
   border-bottom: 1px solid hsl(var(--border));
 }
+
+/* AI 聊天模態框特殊樣式 - 白色霧化玻璃 */
+.liquid-glass-modal.ai-chat-modal {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* AI 聊天模態框標題樣式 */
+.liquid-glass-modal.ai-chat-modal .liquid-glass-modal-header {
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.liquid-glass-modal.ai-chat-modal .liquid-glass-modal-title {
+  color: rgba(0, 0, 0, 0.9);
+}
+
+/* AI 聊天模態框關閉按鈕樣式 */
+.liquid-glass-modal.ai-chat-modal .liquid-glass-modal-close {
+  color: rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.liquid-glass-modal.ai-chat-modal .liquid-glass-modal-close:hover {
+  color: rgba(0, 0, 0, 0.9);
+  background: rgba(255, 255, 255, 0.8);
+}

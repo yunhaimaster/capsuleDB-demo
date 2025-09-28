@@ -95,6 +95,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         isOpen={isOpen}
         onClose={handleClose}
         title="AI 訂單分析助手"
+        className="ai-chat-modal"
         size="xl"
         animateFrom="button"
         headerButtons={
@@ -123,8 +124,8 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
                   message.role === 'user' 
-                    ? 'bg-white/90 border border-gray-200 text-gray-800 backdrop-blur-sm' 
-                    : 'bg-white/95 border border-gray-200 text-gray-900 backdrop-blur-sm'
+                    ? 'bg-gray-50 border border-gray-200 text-gray-700' 
+                    : 'bg-gray-50 border border-gray-200 text-gray-700'
                 }`}>
                   {message.role === 'assistant' ? (
                     <div>
@@ -159,7 +160,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
                         <div className="mt-3 flex space-x-2">
                           <button
                             onClick={() => copyMessage(message.content)}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 transition-colors"
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 hover:text-gray-900 transition-colors"
                           >
                             <Copy className="w-3 h-3" />
                             <span>複製</span>
@@ -179,7 +180,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
                                 setInput('請重新回答這個問題')
                               }
                             }}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 transition-colors"
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 hover:text-gray-900 transition-colors"
                           >
                             <RotateCcw className="w-3 h-3" />
                             <span>重新回答</span>

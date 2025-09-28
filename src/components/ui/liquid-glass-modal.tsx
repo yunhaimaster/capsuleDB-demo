@@ -141,7 +141,7 @@ export function LiquidGlassModal({
     >
       <div
         ref={modalRef}
-        className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'}`}
+        className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'} ${className}`}
         onClick={handleModalClick}
         role="document"
       >
