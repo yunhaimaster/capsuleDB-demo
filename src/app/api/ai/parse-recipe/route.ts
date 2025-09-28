@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        max_tokens: 2000,        // 增加輸出長度，支持更複雜的配方解析
+        max_tokens: 32000,       // 設置到極限，確保複雜配方完整解析
         temperature: 0.05,       // 極低溫度，確保解析精確度
         top_p: 0.95,            // 提高 top_p
         frequency_penalty: 0.0,  // 移除懲罰，保持解析一致性

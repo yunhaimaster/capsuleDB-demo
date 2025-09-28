@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }
         ],
-        max_tokens: 800,         // 增加輸出長度，支持更長的翻譯
+        max_tokens: 32000,       // 設置到極限，支持超長文本翻譯
         temperature: 0.05,       // 極低溫度，確保翻譯準確性
         top_p: 0.95,            // 提高 top_p
         frequency_penalty: 0.0,  // 翻譯不需要懲罰重複

@@ -89,7 +89,7 @@ AI回答：${aiResponse}
 重要：不要包含編號（如1. 2. 3. 4.），只生成純問題內容。`
           }
         ],
-        max_tokens: 300,         // 稍微增加，確保完整生成
+        max_tokens: 1000,        // 建議生成也增加，確保完整
         temperature: 0.3,        // 降低溫度，提高一致性
         top_p: 0.95,            // 提高 top_p
         frequency_penalty: 0.0,  // 移除懲罰
@@ -370,7 +370,7 @@ ${JSON.stringify(cleanedOrders, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
         ],
-        max_tokens: 4000,        // 增加輸出長度，利用更大的 context
+        max_tokens: 32000,       // 設置到極限，確保完整分析不被截斷
         temperature: 0.2,        // 降低溫度，提高一致性
         top_p: 0.95,            // 稍微提高 top_p
         frequency_penalty: 0.0,  // 移除頻率懲罰，讓 AI 更自然
