@@ -103,15 +103,6 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
           </button>
         }
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-400" />
-            <span className="text-base sm:text-lg text-white">Smart AI 助手</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <AIPoweredBadge />
-          </div>
-        </div>
         
         <div className="space-y-4">
           <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
