@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw, Maximize } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
@@ -25,6 +25,7 @@ interface SmartAIAssistantProps {
 export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const pathname = usePathname()
   
   // 檢查當前頁面是否應該顯示 Smart AI
@@ -108,13 +109,22 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
             <button
               className="liquid-glass-modal-close"
               onClick={clearChat}
-            title="重設對話"
-            type="button"
-          >
-            <RefreshCw className="h-5 w-5" />
-          </button>
+              title="重設對話"
+              type="button"
+            >
+              <RefreshCw className="h-5 w-5" />
+            </button>
+            <button
+              className="liquid-glass-modal-close"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              title={isFullscreen ? "退出全屏" : "全屏模式"}
+              type="button"
+            >
+              <Maximize className="h-5 w-5" />
+            </button>
           </div>
         }
+        fullscreen={isFullscreen}
       >
         
         <AIDisclaimerCompact />

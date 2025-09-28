@@ -16,6 +16,7 @@ interface LiquidGlassModalProps {
   closeOnEscape?: boolean
   className?: string
   animateFrom?: 'button' | 'center'
+  fullscreen?: boolean
 }
 
 export function LiquidGlassModal({
@@ -29,7 +30,8 @@ export function LiquidGlassModal({
   closeOnBackdropClick = true,
   closeOnEscape = true,
   className = '',
-  animateFrom = 'center'
+  animateFrom = 'center',
+  fullscreen = false
 }: LiquidGlassModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
@@ -141,7 +143,7 @@ export function LiquidGlassModal({
     >
       <div
         ref={modalRef}
-        className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'} ${className}`}
+        className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'} ${fullscreen ? 'fullscreen' : ''} ${className}`}
         onClick={handleModalClick}
         role="document"
       >
@@ -234,8 +236,9 @@ export function LiquidGlassConfirmModal({
       onClose={onClose}
       title={title}
       size="sm"
+      className="white-theme"
     >
-      <p className="mb-6 text-white">{message}</p>
+      <p className="mb-6 text-gray-900">{message}</p>
       <div className="liquid-glass-modal-footer">
         <Button
           variant="outline"
@@ -274,8 +277,9 @@ export function LiquidGlassInfoModal({
       onClose={onClose}
       title={title}
       size="sm"
+      className="white-theme"
     >
-      <p className="mb-6 text-white">{message}</p>
+      <p className="mb-6 text-gray-900">{message}</p>
       <div className="liquid-glass-modal-footer">
         <Button
           onClick={onClose}
