@@ -945,11 +945,8 @@
   padding: 2rem;
   color: var(--liquid-glass-nav-text);
   line-height: 1.6;
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto;
   max-height: calc(90vh - 8rem);
-  min-height: 0; /* 允許 flex 子元素收縮 */
-  overflow: hidden; /* 防止內容溢出 */
 }
 
 /* Modal Footer */

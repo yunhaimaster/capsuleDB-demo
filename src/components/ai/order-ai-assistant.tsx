@@ -112,18 +112,12 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
           </div>
         </div>
         
-        <div className="flex flex-col h-full">
-          {/* 固定介紹區域 */}
-          <div className="text-sm text-gray-200 bg-transparent border border-white/20 p-3 rounded-lg backdrop-blur-sm mb-4">
+        <div className="space-y-4">
+          <div className="text-sm text-gray-200 bg-transparent border border-white/20 p-3 rounded-lg backdrop-blur-sm">
             <strong className="text-white">專業分析：</strong> 我可以分析當前膠囊配方的技術細節，包括成分堆積密度、流動性評估、顏色混合效果和法規合規性。
           </div>
           
-          {/* 可滾動的對話區域 */}
-          <div 
-            className="flex-1 overflow-y-auto space-y-3 min-h-0" 
-            ref={messagesContainerRef}
-            onWheel={(e) => e.stopPropagation()}
-          >
+          <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
@@ -174,8 +168,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             <div ref={messagesEndRef} />
           </div>
           
-          {/* 固定輸入區域 */}
-          <div className="flex space-x-2 mt-4 pt-4 border-t border-white/10">
+          <div className="flex space-x-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
