@@ -148,9 +148,29 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
                           ))}
                         </div>
                       )}
+                      {message.content && (
+                        <div className="mt-3 flex space-x-2">
+                          <button
+                            onClick={() => copyMessage(message.content)}
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 text-white transition-colors"
+                          >
+                            <Copy className="w-3 h-3" />
+                            <span>複製</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              setInput(`請重新回答：${message.content}`)
+                            }}
+                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 text-white transition-colors"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>重新回答</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ) : (
-                    <p className="whitespace-pre-wrap">{message.content}</p>
+                    <div className="text-sm whitespace-pre-wrap">{message.content}</div>
                   )}
                 </div>
               </div>
