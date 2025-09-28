@@ -160,7 +160,18 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                           </button>
                           <button
                             onClick={() => {
-                              setInput(`請重新回答：${message.content}`)
+                              // 找到對應的用戶問題
+                              const messageIndex = messages.findIndex(msg => msg.id === message.id)
+                              if (messageIndex > 0) {
+                                const userMessage = messages[messageIndex - 1]
+                                if (userMessage && userMessage.role === 'user') {
+                                  setInput(userMessage.content)
+                                } else {
+                                  setInput('請重新回答這個問題')
+                                }
+                              } else {
+                                setInput('請重新回答這個問題')
+                              }
                             }}
                             className="flex items-center space-x-1 px-2 py-1 text-xs bg-white/10 hover:bg-white/20 rounded border border-white/20 text-white transition-colors"
                           >
