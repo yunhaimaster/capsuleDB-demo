@@ -380,7 +380,7 @@ export default function HomePage() {
             <div className="mb-4">
               <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
                 <span className="mr-2 text-sm sm:text-base">📝</span>
-                版本更新記錄
+                最新版本更新
               </h3>
               <p className="text-xs sm:text-sm md:text-base text-blue-600 opacity-80">
                 系統功能更新與改進記錄
@@ -393,38 +393,24 @@ export default function HomePage() {
                   <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
-                <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                  <li>• AI 助手功能全面優化，移除 reasoning 參數提升性能</li>
-                  <li>• 新增用戶可選的深度推理模式，平衡速度與質量</li>
-                  <li>• 添加 AI 免責條款，提升用戶透明度和法律合規性</li>
-                  <li>• 統一 AI 設置按鈕樣式，保持界面一致性</li>
-                  <li>• 優化 AI 參數配置，32K tokens 極限設置確保最高質量</li>
-                  <li>• 新增參考資料下載功能，提供培訓手冊和風險清單</li>
-                  <li>• 修復訂單編輯功能和搜尋選單操作體驗</li>
-                  <li>• 整體用戶體驗優化和界面統一性提升</li>
+                <ul className="list-disc list-inside space-y-2 text-xs text-green-700">
+                  <li>AI 助手功能全面優化，移除 reasoning 參數提升性能</li>
+                  <li>新增用戶可選的深度推理模式，平衡速度與質量</li>
+                  <li>添加 AI 免責條款，提升用戶透明度和法律合規性</li>
+                  <li>統一 AI 設置按鈕樣式，保持界面一致性</li>
+                  <li>優化 AI 參數配置，32K tokens 極限設置確保最高質量</li>
+                  <li>新增參考資料下載功能，提供培訓手冊和風險清單</li>
+                  <li>修復訂單編輯功能和搜尋選單操作體驗</li>
+                  <li>整體用戶體驗優化和界面統一性提升</li>
                 </ul>
               </div>
-              <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 text-sm sm:text-base">v1.0.7 - 2025年9月27日</h4>
-                </div>
-                <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
-                  <li>• 全新玻璃質感介面設計</li>
-                  <li>• 修復系統部署和穩定性問題</li>
-                  <li>• 優化 AI 助手功能</li>
-                  <li>• 改善數據同步和處理流程</li>
-                  <li>• 簡化配方操作介面</li>
-                  <li>• 增強 AI 專業分析能力</li>
-                  <li>• 修復 AI 助手功能衝突</li>
-                  <li>• 優化日期顯示格式</li>
-                  <li>• 修復分頁功能問題</li>
-                  <li>• 解決按鈕重疊問題</li>
-                  <li>• 新增動畫效果和視覺元素</li>
-                  <li>• 支援深色和淺色模式</li>
-                  <li>• 新增中文字體翻譯功能</li>
-                  <li>• 優化手機操作體驗</li>
-                  <li>• 完善膠囊規格管理功能</li>
-                </ul>
+              <div className="text-center pt-2">
+                <Link 
+                  href="/history"
+                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  查看完整版本歷史 →
+                </Link>
               </div>
             </div>
             </div>
