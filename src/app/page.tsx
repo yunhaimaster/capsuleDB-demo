@@ -332,8 +332,10 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 功能介紹 */}
-        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+        {/* 功能介紹和版本更新 - 並排布局 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+          {/* 功能介紹 */}
+          <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-amber-800 flex items-center mb-2">
@@ -374,8 +376,8 @@ export default function HomePage() {
         </div>
         </div>
 
-        {/* 版本更新記錄 */}
-        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          {/* 版本更新記錄 */}
+          <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
               <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
@@ -414,6 +416,7 @@ export default function HomePage() {
               </div>
             </div>
             </div>
+          </div>
           </div>
         </div>
 
