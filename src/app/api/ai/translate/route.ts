@@ -51,11 +51,12 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: text }
         ],
-        max_tokens: 500,   // 減少到500提高精準度
-        temperature: 0.1, // 降低到0.1提高精準度
-        top_p: 0.9,       // 添加top_p參數
-        frequency_penalty: 0.0, // 翻譯不需要懲罰重複
-        presence_penalty: 0.0    // 翻譯不需要懲罰存在
+        max_tokens: 800,         // 增加輸出長度，支持更長的翻譯
+        temperature: 0.05,       // 極低溫度，確保翻譯準確性
+        top_p: 0.95,            // 提高 top_p
+        frequency_penalty: 0.0,  // 翻譯不需要懲罰重複
+        presence_penalty: 0.0,   // 翻譯不需要懲罰存在
+        reasoning: true          // 啟用思考模式，提升翻譯質量
       })
     })
 

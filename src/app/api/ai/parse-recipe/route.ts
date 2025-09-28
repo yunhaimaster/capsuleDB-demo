@@ -83,11 +83,12 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        max_tokens: 1500,  // 減少到1500提高精準度
-        temperature: 0.1,  // 降低到0.1提高精準度
-        top_p: 0.9,        // 添加top_p參數
-        frequency_penalty: 0.1, // 減少重複
-        presence_penalty: 0.1   // 鼓勵多樣性
+        max_tokens: 2000,        // 增加輸出長度，支持更複雜的配方解析
+        temperature: 0.05,       // 極低溫度，確保解析精確度
+        top_p: 0.95,            // 提高 top_p
+        frequency_penalty: 0.0,  // 移除懲罰，保持解析一致性
+        presence_penalty: 0.0,   // 移除懲罰
+        reasoning: true          // 啟用思考模式，提升解析準確性
       })
     })
 
