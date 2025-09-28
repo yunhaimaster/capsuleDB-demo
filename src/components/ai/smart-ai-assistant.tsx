@@ -132,8 +132,8 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         
         <AIDisclaimerCompact />
         
-        <div className="space-y-4">
-          <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
+        <div className={`space-y-4 ${isFullscreen ? 'flex flex-col h-full' : ''}`}>
+          <div className={`${isFullscreen ? 'flex-1 overflow-y-auto space-y-3' : 'max-h-96 overflow-y-auto space-y-3'}`} ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
@@ -232,7 +232,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
             <div ref={messagesEndRef} />
           </div>
           
-          <div className="flex space-x-2">
+          <div className={`flex space-x-2 ${isFullscreen ? 'flex-shrink-0' : ''}`}>
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}

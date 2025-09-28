@@ -1995,8 +1995,9 @@
 
 .liquid-glass-modal.white-theme.fullscreen .liquid-glass-modal-content,
 .liquid-glass-modal.ai-chat-modal.fullscreen .liquid-glass-modal-content {
-  max-height: calc(90vh - 8rem) !important;
-  height: calc(90vh - 8rem) !important;
+  max-height: calc(90vh - 12rem) !important;
+  height: calc(90vh - 12rem) !important;
+  overflow-y: auto !important;
 }
 
 /* 全屏模式下的背景遮罩 */
