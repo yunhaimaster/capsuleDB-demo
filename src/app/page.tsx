@@ -278,7 +278,7 @@ export default function HomePage() {
                 行業相關培訓資料和風險管控指南
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* 風險原料清單 */}
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start space-x-4">
