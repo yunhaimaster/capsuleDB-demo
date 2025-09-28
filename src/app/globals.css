@@ -491,11 +491,12 @@
 .brand-logo-pattern-bg {
   position: relative;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .brand-logo-pattern-bg::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: -50%;
   left: -50%;
   width: 200%;
@@ -507,6 +508,7 @@
   background-position: center;
   animation: brandLogoPatternFloat 30s ease-in-out infinite;
   z-index: -1;
+  pointer-events: none;
 }
 
 @keyframes brandLogoPatternFloat {
