@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw, Maximize } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
@@ -22,7 +22,6 @@ interface OrderAIAssistantProps {
 export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   
   const {
     messages,
@@ -97,7 +96,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         onClose={handleClose}
         title="AI 訂單分析助手"
         className="ai-chat-modal"
-        size="xl"
+        size="full"
         animateFrom="button"
         headerButtons={
           <div className="flex items-center space-x-2">
@@ -113,26 +112,14 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             >
               <RefreshCw className="h-5 w-5" />
             </button>
-            <button
-              className="liquid-glass-modal-close"
-              onClick={() => {
-                console.log('Order AI 全屏狀態切換:', isFullscreen, '->', !isFullscreen)
-                setIsFullscreen(!isFullscreen)
-              }}
-              title={isFullscreen ? "退出全屏" : "全屏模式"}
-              type="button"
-            >
-              <Maximize className="h-5 w-5" />
-            </button>
           </div>
         }
-        fullscreen={isFullscreen}
       >
         
         <AIDisclaimerCompact />
         
-        <div className={`space-y-4 ${isFullscreen ? 'flex flex-col h-full' : ''}`}>
-          <div className={`${isFullscreen ? 'flex-1 overflow-y-auto space-y-3' : 'max-h-96 overflow-y-auto space-y-3'}`} ref={messagesContainerRef}>
+        <div className="space-y-4">
+          <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
@@ -231,7 +218,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             <div ref={messagesEndRef} />
           </div>
           
-          <div className={`flex space-x-2 ${isFullscreen ? 'flex-shrink-0' : ''}`}>
+          <div className="flex space-x-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
