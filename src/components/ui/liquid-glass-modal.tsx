@@ -66,12 +66,45 @@ export function LiquidGlassModal({
     if (isOpen) {
       document.addEventListener('keydown', handleEscape)
       // Prevent body scroll when modal is open
+      const originalStyle = window.getComputedStyle(document.body).overflow
+      const originalPosition = window.getComputedStyle(document.body).position
+      const originalTop = window.getComputedStyle(document.body).top
+      const scrollY = window.scrollY
+      
+      // Store original values for restoration
+      document.body.dataset.originalOverflow = originalStyle
+      document.body.dataset.originalPosition = originalPosition
+      document.body.dataset.originalTop = originalTop
+      document.body.dataset.scrollY = scrollY.toString()
+      
+      // Apply scroll lock styles
       document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
-      document.body.style.overflow = 'unset'
+      // Restore original body styles
+      const originalOverflow = document.body.dataset.originalOverflow
+      const originalPosition = document.body.dataset.originalPosition
+      const originalTop = document.body.dataset.originalTop
+      const scrollY = parseInt(document.body.dataset.scrollY || '0')
+      
+      document.body.style.overflow = originalOverflow || 'unset'
+      document.body.style.position = originalPosition || 'unset'
+      document.body.style.top = originalTop || 'unset'
+      document.body.style.width = 'unset'
+      
+      // Restore scroll position
+      window.scrollTo(0, scrollY)
+      
+      // Clean up data attributes
+      delete document.body.dataset.originalOverflow
+      delete document.body.dataset.originalPosition
+      delete document.body.dataset.originalTop
+      delete document.body.dataset.scrollY
     }
   }, [isOpen, closeOnEscape, onClose])
 
