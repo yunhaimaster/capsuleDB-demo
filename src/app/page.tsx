@@ -278,7 +278,7 @@ export default function HomePage() {
                 行業相關培訓資料和風險管控指南
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 風險原料清單 */}
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start space-x-4">
@@ -331,92 +331,92 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* 功能介紹和版本更新 - 並排布局 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+      {/* 功能介紹和版本更新 - 並排布局 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 功能介紹 */}
           <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content">
-            <div className="mb-4">
-              <h3 className="text-lg md:text-xl font-semibold text-amber-800 flex items-center mb-2">
-                <span className="mr-2">📋</span>
-                功能介紹
-              </h3>
-              <p className="text-sm md:text-base text-amber-600 opacity-80">
-                系統功能說明與使用指南
-              </p>
-            </div>
-            <div className="space-y-3 md:space-y-4">
-            <div className="space-y-2 md:space-y-3">
-              <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
-                <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
-                <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                  <li>• 膠囊配方管理與記錄追蹤</li>
-                  <li>• 智能配方導入（支援文字格式）</li>
-                  <li>• AI 助手提供專業分析和建議</li>
-                  <li>• 支援手機、平板和電腦使用</li>
-                  <li>• 現代化玻璃質感介面設計</li>
-                  <li>• 流暢的動畫效果</li>
-                  <li>• 直觀易用的操作介面</li>
-                  <li>• 品牌形象動態背景</li>
-                  <li>• 優化的用戶操作體驗</li>
-                </ul>
+            <div className="liquid-glass-content">
+              <div className="mb-4">
+                <h3 className="text-lg md:text-xl font-semibold text-amber-800 flex items-center mb-2">
+                  <span className="mr-2">📋</span>
+                  功能介紹
+                </h3>
+                <p className="text-sm md:text-base text-amber-600 opacity-80">
+                  系統功能說明與使用指南
+                </p>
               </div>
-              <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
-                <h4 className="font-medium text-yellow-800 mb-2">技術支援</h4>
-                <div className="text-xs md:text-sm text-yellow-700">
-                  <p className="mb-1">如有任何問題或建議，請聯繫：</p>
-                  <p className="font-medium">Victor</p>
-                  <p className="text-xs text-yellow-600 mt-1">系統管理員</p>
+              <div className="space-y-4 md:space-y-6">
+              <div className="space-y-3 md:space-y-4">
+                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
+                  <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
+                  <ul className="space-y-1 text-xs md:text-sm text-amber-700">
+                    <li>• 膠囊配方管理與記錄追蹤</li>
+                    <li>• 智能配方導入（支援文字格式）</li>
+                    <li>• AI 助手提供專業分析和建議</li>
+                    <li>• 支援手機、平板和電腦使用</li>
+                    <li>• 現代化玻璃質感介面設計</li>
+                    <li>• 流暢的動畫效果</li>
+                    <li>• 直觀易用的操作介面</li>
+                    <li>• 品牌形象動態背景</li>
+                    <li>• 優化的用戶操作體驗</li>
+                  </ul>
+                </div>
+                <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
+                  <h4 className="font-medium text-yellow-800 mb-2">技術支援</h4>
+                  <div className="text-xs md:text-sm text-yellow-700">
+                    <p className="mb-1">如有任何問題或建議，請聯繫：</p>
+                    <p className="font-medium">Victor</p>
+                    <p className="text-xs text-yellow-600 mt-1">系統管理員</p>
+                  </div>
                 </div>
               </div>
-            </div>
+              </div>
             </div>
           </div>
-        </div>
-        </div>
 
           {/* 版本更新記錄 */}
           <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content">
-            <div className="mb-4">
-              <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
-                <span className="mr-2 text-sm sm:text-base">📝</span>
-                最新版本更新
-              </h3>
-              <p className="text-xs sm:text-sm md:text-base text-blue-600 opacity-80">
-                系統功能更新與改進記錄
-              </p>
-            </div>
+            <div className="liquid-glass-content">
+              <div className="mb-4">
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
+                  <span className="mr-2 text-sm sm:text-base">📝</span>
+                  最新版本更新
+                </h3>
+                <p className="text-xs sm:text-sm md:text-base text-blue-600 opacity-80">
+                  系統功能更新與改進記錄
+                </p>
+              </div>
+              <div className="space-y-4">
               <div className="space-y-3">
-              <div className="space-y-2">
-              <div className="bg-green-50 p-3 rounded-xl border border-green-200">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
-                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                <div className="bg-green-50 p-3 rounded-xl border border-green-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
+                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
+                  </div>
+                  <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
+                    <li>AI 助手功能全面優化</li>
+                    <li>新增深度推理模式</li>
+                    <li>添加 AI 免責條款</li>
+                    <li>統一界面設計</li>
+                    <li>優化參數配置</li>
+                    <li>新增參考資料下載</li>
+                    <li>修復訂單編輯功能</li>
+                    <li>整體體驗優化</li>
+                  </ul>
                 </div>
-                <ul className="list-disc list-inside space-y-2 text-xs text-green-700">
-                  <li>AI 助手功能全面優化，移除 reasoning 參數提升性能</li>
-                  <li>新增用戶可選的深度推理模式，平衡速度與質量</li>
-                  <li>添加 AI 免責條款，提升用戶透明度和法律合規性</li>
-                  <li>統一 AI 設置按鈕樣式，保持界面一致性</li>
-                  <li>優化 AI 參數配置，32K tokens 極限設置確保最高質量</li>
-                  <li>新增參考資料下載功能，提供培訓手冊和風險清單</li>
-                  <li>修復訂單編輯功能和搜尋選單操作體驗</li>
-                  <li>整體用戶體驗優化和界面統一性提升</li>
-                </ul>
+                <div className="text-center pt-2">
+                  <Link 
+                    href="/history"
+                    className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    查看完整版本歷史 →
+                  </Link>
+                </div>
               </div>
-              <div className="text-center pt-2">
-                <Link 
-                  href="/history"
-                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  查看完整版本歷史 →
-                </Link>
               </div>
             </div>
-            </div>
-          </div>
           </div>
         </div>
 
@@ -435,14 +435,14 @@ export default function HomePage() {
         />
 
         {/* Liquid Glass Modal for Order Details */}
-      <LiquidGlassModal
-        isOpen={showOrderDetails}
-        onClose={() => setShowOrderDetails(false)}
-        title="訂單詳情"
-        size="xl"
-      >
-        {selectedOrder && <OrderDetailView order={selectedOrder} />}
-      </LiquidGlassModal>
+        <LiquidGlassModal
+          isOpen={showOrderDetails}
+          onClose={() => setShowOrderDetails(false)}
+          title="訂單詳情"
+          size="xl"
+        >
+          {selectedOrder && <OrderDetailView order={selectedOrder} />}
+        </LiquidGlassModal>
       </div>
     </div>
   )
