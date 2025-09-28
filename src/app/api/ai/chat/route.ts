@@ -249,7 +249,7 @@ async function streamOpenRouterResponse(
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, orders, context } = await request.json()
+    const { message, orders, context, enableReasoning = false } = await request.json()
 
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
@@ -376,9 +376,11 @@ ${JSON.stringify(cleanedOrders, null, 2)}
         frequency_penalty: 0.0,  // 移除頻率懲罰，讓 AI 更自然
         presence_penalty: 0.0,   // 移除存在懲罰
         stream: true,
-        reasoning: {
-          effort: "high"  // 使用高強度推理，提升分析質量
-        }
+        ...(enableReasoning && {
+          reasoning: {
+            effort: "high"  // 用戶可選的深度推理模式
+          }
+        })
       })
     })
 

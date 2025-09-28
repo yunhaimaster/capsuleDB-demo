@@ -9,7 +9,8 @@ import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquar
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
-import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
+import { AIDisclaimer, AIDisclaimerCompact } from '@/components/ui/ai-disclaimer'
+import { AISettings } from '@/components/ui/ai-settings'
 
 interface OrderAIAssistantProps {
   order: ProductionOrder
@@ -18,6 +19,7 @@ interface OrderAIAssistantProps {
 
 export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [enableReasoning, setEnableReasoning] = useState(false)
   
   const {
     messages,
@@ -51,6 +53,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
       hasCurrentOrder: true,
       currentOrder: order
     },
+    enableReasoning: enableReasoning,
     initialAssistantMessage: {
       content: '您好！我是 Easy Health 訂單分析助手，專門針對當前膠囊配方訂單提供深入分析。請選擇下列專業問題之一或直接輸入您的問題：',
       suggestions: [
@@ -92,16 +95,24 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         size="xl"
         animateFrom="button"
         headerButtons={
-          <button
-            className="liquid-glass-modal-close"
-            onClick={clearChat}
+          <div className="flex items-center space-x-2">
+            <AISettings 
+              enableReasoning={enableReasoning}
+              onToggleReasoning={setEnableReasoning}
+            />
+            <button
+              className="liquid-glass-modal-close"
+              onClick={clearChat}
             title="重設對話"
             type="button"
           >
             <RefreshCw className="h-5 w-5" />
           </button>
+          </div>
         }
       >
+        
+        <AIDisclaimerCompact />
         
         <div className="space-y-4">
           <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>

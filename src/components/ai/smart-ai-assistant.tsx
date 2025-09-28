@@ -10,7 +10,8 @@ import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquar
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
-import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
+import { AIDisclaimer, AIDisclaimerCompact } from '@/components/ui/ai-disclaimer'
+import { AISettings } from '@/components/ui/ai-settings'
 
 interface SmartAIAssistantProps {
   orders: ProductionOrder[]
@@ -21,6 +22,7 @@ interface SmartAIAssistantProps {
 
 export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [enableReasoning, setEnableReasoning] = useState(false)
   const pathname = usePathname()
   
   // 檢查當前頁面是否應該顯示 Smart AI
@@ -56,6 +58,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
     orders: orders,
     currentOrder: currentOrder,
     context: pageData,
+    enableReasoning: enableReasoning,
     initialAssistantMessage: {
       content: '您好！我是 Smart AI 助手，專門協助您分析訂單數據、客戶統計和生產效率。請選擇以下問題開始，或直接輸入您的問題：',
       suggestions: [
@@ -93,16 +96,24 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         size="xl"
         animateFrom="button"
         headerButtons={
-          <button
-            className="liquid-glass-modal-close"
-            onClick={clearChat}
+          <div className="flex items-center space-x-2">
+            <AISettings 
+              enableReasoning={enableReasoning}
+              onToggleReasoning={setEnableReasoning}
+            />
+            <button
+              className="liquid-glass-modal-close"
+              onClick={clearChat}
             title="重設對話"
             type="button"
           >
             <RefreshCw className="h-5 w-5" />
           </button>
+          </div>
         }
       >
+        
+        <AIDisclaimerCompact />
         
         <div className="space-y-4">
           <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>

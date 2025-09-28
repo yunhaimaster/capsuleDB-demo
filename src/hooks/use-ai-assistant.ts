@@ -20,6 +20,7 @@ interface UseAIAssistantProps {
   currentOrder?: any
   context?: any
   initialAssistantMessage?: InitialAssistantMessage | null
+  enableReasoning?: boolean
 }
 
 const DEFAULT_INITIAL_ASSISTANT: InitialAssistantMessage = {
@@ -46,7 +47,7 @@ const buildAssistantMessage = (config?: InitialAssistantMessage | null): Message
   }
 }
 
-export function useAIAssistant({ orders = [], currentOrder, context, initialAssistantMessage }: UseAIAssistantProps) {
+export function useAIAssistant({ orders = [], currentOrder, context, initialAssistantMessage, enableReasoning = false }: UseAIAssistantProps) {
   const initialMessage = buildAssistantMessage(initialAssistantMessage)
   const [messages, setMessages] = useState<Message[]>(() => (initialMessage ? [initialMessage] : []))
   const [input, setInput] = useState('')
@@ -166,7 +167,8 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
         body: JSON.stringify({
           message: messageToSend,
           orders: orders,
-          context: context
+          context: context,
+          enableReasoning: enableReasoning
         }),
       })
 
