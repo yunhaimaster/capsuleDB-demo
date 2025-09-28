@@ -375,9 +375,8 @@ ${JSON.stringify(cleanedOrders, null, 2)}
         top_p: 0.95,            // 稍微提高 top_p
         frequency_penalty: 0.0,  // 移除頻率懲罰，讓 AI 更自然
         presence_penalty: 0.0,   // 移除存在懲罰
-        stream: true,
-        // DeepSeek V3.1 特定參數
-        reasoning: true          // 啟用思考模式，提升推理質量
+        stream: true
+        // 注意：reasoning 參數可能不被 OpenRouter 支持，已移除
       })
     })
 
