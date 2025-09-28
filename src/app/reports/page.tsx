@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown, Bot, RefreshCw } from 'lucide-react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 
 interface IngredientStat {
@@ -15,6 +15,10 @@ interface IngredientStat {
   riskLevel: string
   riskScore: number
   riskDescription: string
+  riskReasons?: string[]
+  recommendations?: string[]
+  technicalNotes?: string
+  isAIAssessed?: boolean
 }
 
 interface StatsSummary {
@@ -39,6 +43,8 @@ export default function ReportsPage() {
   const [error, setError] = useState<string | null>(null)
   const [sortField, setSortField] = useState<SortField>('totalUsageMg')
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
+  const [aiAssessing, setAiAssessing] = useState(false)
+  const [showAIAssessment, setShowAIAssessment] = useState(false)
 
   useEffect(() => {
     fetchStats()
@@ -56,6 +62,71 @@ export default function ReportsPage() {
       setError('載入統計數據失敗')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const assessRiskWithAI = async () => {
+    if (!stats?.ingredients) return
+
+    try {
+      setAiAssessing(true)
+      const materials = stats.ingredients.map(ingredient => ingredient.materialName)
+      
+      const response = await fetch('/api/ai/assess-risk', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ materials })
+      })
+
+      if (!response.ok) throw new Error('AI 評估失敗')
+      
+      const aiData = await response.json()
+      
+      if (aiData.assessments) {
+        // 更新統計數據，合併 AI 評估結果
+        const updatedIngredients = stats.ingredients.map(ingredient => {
+          const aiAssessment = aiData.assessments.find((a: any) => 
+            a.materialName === ingredient.materialName
+          )
+          
+          if (aiAssessment) {
+            return {
+              ...ingredient,
+              riskScore: aiAssessment.riskScore,
+              riskLevel: aiAssessment.riskLevel,
+              riskDescription: aiAssessment.riskReasons?.join(', ') || ingredient.riskDescription,
+              riskReasons: aiAssessment.riskReasons,
+              recommendations: aiAssessment.recommendations,
+              technicalNotes: aiAssessment.technicalNotes,
+              isAIAssessed: true
+            }
+          }
+          return ingredient
+        })
+
+        // 重新計算摘要統計
+        const updatedSummary = {
+          totalIngredients: updatedIngredients.length,
+          highRiskIngredients: updatedIngredients.filter(s => s.riskScore >= 7).length,
+          mediumRiskIngredients: updatedIngredients.filter(s => s.riskScore >= 4 && s.riskScore < 7).length,
+          lowRiskIngredients: updatedIngredients.filter(s => s.riskScore < 4).length
+        }
+
+        setStats({
+          ...stats,
+          ingredients: updatedIngredients,
+          summary: updatedSummary
+        })
+        
+        setShowAIAssessment(true)
+      }
+    } catch (error) {
+      console.error('AI 風險評估錯誤:', error)
+      alert('AI 風險評估失敗，請稍後再試')
+    } finally {
+      setAiAssessing(false)
     }
   }
 
@@ -246,13 +317,34 @@ export default function ReportsPage() {
       {stats && stats.ingredients.length > 0 && (
         <Card className="border-0 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-semibold text-gray-800 flex items-center">
-              <BarChart3 className="h-5 w-5 mr-2 text-amber-600" />
-              原料使用詳情
-            </CardTitle>
-            <CardDescription className="text-gray-600">
-              按使用量排序，顯示重量佔比和風險評估
-            </CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <CardTitle className="text-xl font-semibold text-gray-800 flex items-center">
+                  <BarChart3 className="h-5 w-5 mr-2 text-amber-600" />
+                  原料使用詳情
+                </CardTitle>
+                <CardDescription className="text-gray-600">
+                  {showAIAssessment ? 'AI 專業風險評估結果' : '按使用量排序，顯示重量佔比和風險評估'}
+                </CardDescription>
+              </div>
+              <button
+                onClick={assessRiskWithAI}
+                disabled={aiAssessing || !stats?.ingredients?.length}
+                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                {aiAssessing ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                    AI 評估中...
+                  </>
+                ) : (
+                  <>
+                    <Bot className="h-4 w-4 mr-2" />
+                    AI 專業評估
+                  </>
+                )}
+              </button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -286,6 +378,14 @@ export default function ReportsPage() {
                         {getSortIcon('totalUsageMg')}
                       </div>
                     </TableHead>
+                    <TableHead className="text-sm font-semibold">
+                      風險評估
+                    </TableHead>
+                    {showAIAssessment && (
+                      <TableHead className="text-sm font-semibold">
+                        AI 分析詳情
+                      </TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -300,6 +400,54 @@ export default function ReportsPage() {
                       <TableCell className="text-sm text-gray-600">
                         {formatWeight(ingredient.totalUsageMg)}
                       </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col space-y-1">
+                          <Badge className={`${getRiskBadgeColor(ingredient.riskScore)} text-xs`}>
+                            {getRiskLevelText(ingredient.riskScore)} ({ingredient.riskScore}/10)
+                          </Badge>
+                          {ingredient.isAIAssessed && (
+                            <span className="text-xs text-blue-600 flex items-center">
+                              <Bot className="h-3 w-3 mr-1" />
+                              AI 評估
+                            </span>
+                          )}
+                          <p className="text-xs text-gray-500 max-w-xs">
+                            {ingredient.riskDescription}
+                          </p>
+                        </div>
+                      </TableCell>
+                      {showAIAssessment && ingredient.isAIAssessed && (
+                        <TableCell>
+                          <div className="space-y-2 max-w-md">
+                            {ingredient.riskReasons && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-700 mb-1">風險原因:</p>
+                                <ul className="text-xs text-gray-600 space-y-1">
+                                  {ingredient.riskReasons.map((reason, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                      <span className="text-red-500 mr-1">•</span>
+                                      {reason}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            {ingredient.recommendations && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-700 mb-1">建議處理:</p>
+                                <ul className="text-xs text-gray-600 space-y-1">
+                                  {ingredient.recommendations.map((rec, idx) => (
+                                    <li key={idx} className="flex items-start">
+                                      <span className="text-green-500 mr-1">•</span>
+                                      {rec}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
