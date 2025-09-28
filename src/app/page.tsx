@@ -94,9 +94,10 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check authentication
+    // Check authentication - 檢查兩個認證狀態
     const authStatus = localStorage.getItem('isAuthenticated')
-    if (authStatus !== 'true') {
+    const easypackAuth = localStorage.getItem('easypack_auth')
+    if (authStatus !== 'true' && easypackAuth !== 'true') {
       router.push('/login')
       return
     }
@@ -157,7 +158,7 @@ export default function HomePage() {
             { href: '/', label: '首頁', active: true },
             { href: '/orders', label: '訂單' },
             { href: '/orders/new', label: '新建' },
-            { href: '/login', label: '登出' }
+            { href: '/login?logout=true', label: '登出' }
           ]}
         />
 
