@@ -52,6 +52,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
   const [messages, setMessages] = useState<Message[]>(() => (initialMessage ? [initialMessage] : []))
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isThinking, setIsThinking] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [chatHistory, setChatHistory] = useState<Message[][]>([])
@@ -90,6 +91,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
       setInput('')
     }
     setIsLoading(true)
+    setIsThinking(true)
 
     const appendAssistantContent = (chunk: string) => {
       if (!chunk) return
@@ -200,6 +202,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
               const textChunk = JSON.parse(data)
               if (typeof textChunk === 'string') {
                 appendAssistantContent(textChunk)
+                setIsThinking(false) // 開始接收內容時停止思考狀態
                 scrollToBottom()
               }
             } catch (err) {
@@ -240,6 +243,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
             const textChunk = JSON.parse(data)
             if (typeof textChunk === 'string') {
               appendAssistantContent(textChunk)
+              setIsThinking(false) // 開始接收內容時停止思考狀態
             }
           } catch (err) {
             console.error('解析最終 delta 事件失敗:', err)
@@ -265,6 +269,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
       handleErrorState()
     } finally {
       setIsLoading(false)
+      setIsThinking(false)
       scrollToBottom()
     }
   }
@@ -358,6 +363,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
     input,
     setInput,
     isLoading,
+    isThinking,
     isMinimized,
     showSettings,
     setShowSettings,

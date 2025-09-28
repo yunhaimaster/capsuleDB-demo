@@ -11,6 +11,7 @@ import { useAIAssistant } from '@/hooks/use-ai-assistant'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 import { AIDisclaimer, AIDisclaimerCompact } from '@/components/ui/ai-disclaimer'
 import { AISettings } from '@/components/ui/ai-settings'
+import { AIThinkingIndicator, AIThinkingSteps } from '@/components/ui/ai-thinking-indicator'
 
 interface OrderAIAssistantProps {
   order: ProductionOrder
@@ -26,6 +27,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
     input,
     setInput,
     isLoading,
+    isThinking,
     isMinimized,
     showSettings,
     setShowSettings,
@@ -153,13 +155,17 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
                 </div>
               </div>
             ))}
-            {isLoading && (
+            {isThinking && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 p-3 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-gray-600">AI 正在思考...</span>
-                  </div>
+                <div className="max-w-[85%]">
+                  <AIThinkingSteps isThinking={isThinking} enableReasoning={enableReasoning} />
+                </div>
+              </div>
+            )}
+            {isLoading && !isThinking && (
+              <div className="flex justify-start">
+                <div className="max-w-[85%]">
+                  <AIThinkingIndicator isThinking={isLoading} enableReasoning={enableReasoning} />
                 </div>
               </div>
             )}
