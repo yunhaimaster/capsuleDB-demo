@@ -18,18 +18,8 @@ export function AIRealReasoning({ reasoning, enableReasoning = false }: AIRealRe
       return
     }
 
-    // 打字機效果顯示思考過程
-    let index = 0
-    const timer = setInterval(() => {
-      if (index < reasoning.length) {
-        setDisplayText(reasoning.slice(0, index + 1))
-        index++
-      } else {
-        clearInterval(timer)
-      }
-    }, 20) // 20ms 間隔，模擬真實思考速度
-
-    return () => clearInterval(timer)
+    // 直接顯示完整的思考過程，不需要打字機效果
+    setDisplayText(reasoning)
   }, [reasoning])
 
   if (!enableReasoning || !reasoning) return null
@@ -65,9 +55,6 @@ export function AIRealReasoning({ reasoning, enableReasoning = false }: AIRealRe
           <div className="bg-white/50 rounded-lg p-3 max-h-64 overflow-y-auto">
             <div className="text-sm text-gray-800 whitespace-pre-wrap font-mono leading-relaxed">
               {displayText}
-              {displayText.length < reasoning.length && (
-                <span className="inline-block w-2 h-4 bg-purple-500 animate-pulse ml-1" />
-              )}
             </div>
           </div>
           <div className="mt-2 text-xs text-purple-600">
