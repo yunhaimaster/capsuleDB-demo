@@ -115,7 +115,10 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             </button>
             <button
               className="liquid-glass-modal-close"
-              onClick={() => setIsFullscreen(!isFullscreen)}
+              onClick={() => {
+                console.log('Order AI 全屏狀態切換:', isFullscreen, '->', !isFullscreen)
+                setIsFullscreen(!isFullscreen)
+              }}
               title={isFullscreen ? "退出全屏" : "全屏模式"}
               type="button"
             >

@@ -1978,7 +1978,8 @@
 }
 
 /* 白色主題全屏樣式 - 放大到整個網站 */
-.liquid-glass-modal.white-theme.fullscreen {
+.liquid-glass-modal.white-theme.fullscreen,
+.liquid-glass-modal.ai-chat-modal.fullscreen {
   width: 95vw !important;
   height: 90vh !important;
   max-width: none !important;
@@ -1992,13 +1993,15 @@
   z-index: 9999 !important;
 }
 
-.liquid-glass-modal.white-theme.fullscreen .liquid-glass-modal-content {
+.liquid-glass-modal.white-theme.fullscreen .liquid-glass-modal-content,
+.liquid-glass-modal.ai-chat-modal.fullscreen .liquid-glass-modal-content {
   max-height: calc(90vh - 8rem) !important;
   height: calc(90vh - 8rem) !important;
 }
 
 /* 全屏模式下的背景遮罩 */
-.liquid-glass-modal.white-theme.fullscreen ~ .liquid-glass-modal-backdrop {
+.liquid-glass-modal.white-theme.fullscreen ~ .liquid-glass-modal-backdrop,
+.liquid-glass-modal.ai-chat-modal.fullscreen ~ .liquid-glass-modal-backdrop {
   background: rgba(0, 0, 0, 0.8) !important;
   backdrop-filter: blur(10px) !important;
 }
