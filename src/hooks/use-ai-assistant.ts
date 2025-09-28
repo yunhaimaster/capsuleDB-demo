@@ -6,6 +6,7 @@ interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
+  reasoning?: string
   timestamp: Date
   suggestions?: string[]
 }
@@ -82,6 +83,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
       id: assistantMessageId,
       role: 'assistant',
       content: '',
+      reasoning: '',
       timestamp: new Date(),
       suggestions: []
     }
@@ -100,6 +102,19 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
           return {
             ...message,
             content: (message.content || '') + chunk
+          }
+        }
+        return message
+      }))
+    }
+
+    const appendAssistantReasoning = (chunk: string) => {
+      if (!chunk) return
+      setMessages(prev => prev.map(message => {
+        if (message.id === assistantMessageId) {
+          return {
+            ...message,
+            reasoning: (message.reasoning || '') + chunk
           }
         }
         return message
@@ -197,7 +212,17 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
           buffer = buffer.slice(eventBoundary + 2)
           const { event, data } = parseSSEEvent(rawEvent)
 
-          if (event === 'delta' && data) {
+          if (event === 'reasoning' && data) {
+            try {
+              const reasoningChunk = JSON.parse(data)
+              if (typeof reasoningChunk === 'string') {
+                appendAssistantReasoning(reasoningChunk)
+                scrollToBottom()
+              }
+            } catch (err) {
+              console.error('解析 reasoning 事件失敗:', err)
+            }
+          } else if (event === 'delta' && data) {
             try {
               const textChunk = JSON.parse(data)
               if (typeof textChunk === 'string') {
@@ -238,7 +263,16 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
 
       if (buffer.trim().length > 0) {
         const { event, data } = parseSSEEvent(buffer)
-        if (event === 'delta' && data) {
+        if (event === 'reasoning' && data) {
+          try {
+            const reasoningChunk = JSON.parse(data)
+            if (typeof reasoningChunk === 'string') {
+              appendAssistantReasoning(reasoningChunk)
+            }
+          } catch (err) {
+            console.error('解析最終 reasoning 事件失敗:', err)
+          }
+        } else if (event === 'delta' && data) {
           try {
             const textChunk = JSON.parse(data)
             if (typeof textChunk === 'string') {

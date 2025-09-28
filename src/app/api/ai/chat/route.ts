@@ -203,7 +203,21 @@ async function streamOpenRouterResponse(
 
     try {
       const json = JSON.parse(dataPayload)
-      const delta = json.choices?.[0]?.delta?.content || ''
+      const choice = json.choices?.[0]
+      
+      // 處理 reasoning 思考過程
+      if (choice?.delta?.reasoning) {
+        const reasoningDelta = choice.delta.reasoning
+        if (reasoningDelta) {
+          const sanitized = sanitizeChunk(reasoningDelta)
+          if (sanitized) {
+            controller.enqueue(`event: reasoning\ndata: ${JSON.stringify(sanitized)}\n\n`)
+          }
+        }
+      }
+      
+      // 處理 content 回答內容
+      const delta = choice?.delta?.content || ''
       if (delta) {
         const sanitized = sanitizeChunk(delta)
         if (sanitized) {

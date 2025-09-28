@@ -13,6 +13,7 @@ import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 import { AIDisclaimer, AIDisclaimerCompact } from '@/components/ui/ai-disclaimer'
 import { AISettings } from '@/components/ui/ai-settings'
 import { AIThinkingIndicator, AIThinkingSteps } from '@/components/ui/ai-thinking-indicator'
+import { AIRealReasoning, AIReasoningIndicator } from '@/components/ui/ai-real-reasoning'
 
 interface SmartAIAssistantProps {
   orders: ProductionOrder[]
@@ -128,6 +129,12 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                 }`}>
                   {message.role === 'assistant' ? (
                     <div>
+                      {/* 真實思考過程 */}
+                      <AIRealReasoning 
+                        reasoning={message.reasoning} 
+                        enableReasoning={enableReasoning} 
+                      />
+                      
                       <MarkdownRenderer content={message.content} whiteText={true} />
                       {message.suggestions && message.suggestions.length > 0 && (
                         <div className="mt-3 space-y-2">
@@ -187,17 +194,17 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
                 </div>
               </div>
             ))}
-            {isThinking && (
+            {isThinking && enableReasoning && (
               <div className="flex justify-start">
                 <div className="max-w-[85%]">
-                  <AIThinkingSteps isThinking={isThinking} enableReasoning={enableReasoning} />
+                  <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
                 </div>
               </div>
             )}
-            {isLoading && !isThinking && (
+            {isThinking && !enableReasoning && (
               <div className="flex justify-start">
                 <div className="max-w-[85%]">
-                  <AIThinkingIndicator isThinking={isLoading} enableReasoning={enableReasoning} />
+                  <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
                 </div>
               </div>
             )}
