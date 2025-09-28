@@ -333,7 +333,7 @@ export default function HomePage() {
         </div>
 
         {/* 功能介紹和版本更新 - 並排布局 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
           {/* 功能介紹 */}
           <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
@@ -346,8 +346,8 @@ export default function HomePage() {
                 系統功能說明與使用指南
               </p>
             </div>
-            <div className="space-y-4 md:space-y-6">
             <div className="space-y-3 md:space-y-4">
+            <div className="space-y-2 md:space-y-3">
               <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                 <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
                 <ul className="space-y-1 text-xs md:text-sm text-amber-700">
@@ -388,8 +388,8 @@ export default function HomePage() {
                 系統功能更新與改進記錄
               </p>
             </div>
-            <div className="space-y-4">
-            <div className="space-y-3">
+              <div className="space-y-3">
+              <div className="space-y-2">
               <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                   <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
