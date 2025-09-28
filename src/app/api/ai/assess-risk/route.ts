@@ -32,6 +32,12 @@ export async function POST(request: NextRequest) {
 - 具體風險原因 (基於專業知識)
 - 建議處理方法
 
+語言要求：請使用香港繁體中文，包括：
+- 使用繁體中文字符
+- 使用香港常用的專業術語
+- 保持專業但親切的語調
+- 避免簡體中文或台灣用詞
+
 請以JSON格式回應，格式如下：
 {
   "assessments": [
@@ -51,7 +57,8 @@ export async function POST(request: NextRequest) {
 
 ${materials.map((material: string) => `- ${material}`).join('\n')}
 
-請基於你的專業經驗，從膠囊灌裝技術角度進行評估。`
+請基於你的專業經驗，從膠囊灌裝技術角度進行評估。
+語言要求：請使用香港繁體中文，使用繁體中文字符和香港常用的專業術語。`
 
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
