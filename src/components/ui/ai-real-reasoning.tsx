@@ -35,10 +35,10 @@ export function AIRealReasoning({ reasoning, enableReasoning = false }: AIRealRe
         </div>
         <div className="flex-1">
           <h4 className="font-medium text-purple-900">
-            AI 真實思考過程
+            AI 思考過程
           </h4>
           <p className="text-sm text-purple-600">
-            {isExpanded ? '點擊收起' : '點擊查看 AI 的實際思考步驟'}
+            {isExpanded ? '點擊收起' : '點擊查看思考步驟'}
           </p>
         </div>
         <div className="flex-shrink-0">
@@ -56,9 +56,6 @@ export function AIRealReasoning({ reasoning, enableReasoning = false }: AIRealRe
             <div className="text-sm text-gray-800 whitespace-pre-wrap font-mono leading-relaxed">
               {displayText}
             </div>
-          </div>
-          <div className="mt-2 text-xs text-purple-600">
-            💡 這是 AI 的真實思考過程，不是模擬的動畫
           </div>
         </div>
       )}
@@ -85,7 +82,7 @@ export function AIReasoningIndicator({ isReasoning, enableReasoning = false }: A
             AI 深度思考中
           </h4>
           <span className="text-purple-600 text-sm">
-            真實推理模式
+            推理模式
           </span>
         </div>
         <p className="text-sm text-purple-700 mt-1">
