@@ -104,7 +104,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-purple-400" />
+            <Bot className="h-4 w-4 sm:h-5 sm:w-5 mr-2 text-blue-400" />
             <span className="text-base sm:text-lg text-white">AI 訂單分析助手</span>
           </div>
           <div className="flex items-center space-x-2">
@@ -157,10 +157,10 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 p-3 rounded-lg">
+                <div className="bg-transparent border border-white/20 text-white backdrop-blur-sm p-3 rounded-lg">
                   <div className="flex items-center space-x-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-gray-600">AI 正在思考...</span>
+                    <Loader2 className="h-4 w-4 animate-spin text-white" />
+                    <span className="text-sm text-white">AI 正在思考...</span>
                   </div>
                 </div>
               </div>
@@ -174,13 +174,13 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="輸入您的問題..."
-              className="flex-1 bg-transparent border-white/20 text-white placeholder:text-gray-300 focus:border-purple-400"
+              className="flex-1 bg-transparent border-white/20 text-white placeholder:text-gray-300 focus:border-blue-400"
               disabled={isLoading}
             />
             <Button 
               onClick={() => handleSendMessage()} 
               disabled={!input.trim() || isLoading}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Send className="h-4 w-4" />
             </Button>
