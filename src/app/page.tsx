@@ -390,22 +390,23 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2024年12月19日</h4>
+                  <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
                   <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                  <li>• 更新系統圖標，提升視覺效果</li>
+                  <li>• AI 助手功能全面優化，移除 reasoning 參數提升性能</li>
+                  <li>• 新增用戶可選的深度推理模式，平衡速度與質量</li>
+                  <li>• 添加 AI 免責條款，提升用戶透明度和法律合規性</li>
+                  <li>• 統一 AI 設置按鈕樣式，保持界面一致性</li>
+                  <li>• 優化 AI 參數配置，32K tokens 極限設置確保最高質量</li>
                   <li>• 新增參考資料下載功能，提供培訓手冊和風險清單</li>
-                  <li>• 修復訂單編輯功能</li>
-                  <li>• 改善搜尋選單操作體驗</li>
-                  <li>• 優化確認對話框設計</li>
-                  <li>• 完善智能配方導入功能說明</li>
-                  <li>• 整體用戶體驗優化</li>
+                  <li>• 修復訂單編輯功能和搜尋選單操作體驗</li>
+                  <li>• 整體用戶體驗優化和界面統一性提升</li>
                 </ul>
               </div>
               <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                  <h4 className="font-medium text-blue-800 text-sm sm:text-base">v1.0.7 - 2024年12月19日</h4>
+                  <h4 className="font-medium text-blue-800 text-sm sm:text-base">v1.0.7 - 2025年9月27日</h4>
                 </div>
                 <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
                   <li>• 全新玻璃質感介面設計</li>
