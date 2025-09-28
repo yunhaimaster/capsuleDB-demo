@@ -55,8 +55,10 @@ export async function POST(request: NextRequest) {
         temperature: 0.05,       // 極低溫度，確保翻譯準確性
         top_p: 0.95,            // 提高 top_p
         frequency_penalty: 0.0,  // 翻譯不需要懲罰重複
-        presence_penalty: 0.0    // 翻譯不需要懲罰存在
-        // 注意：reasoning 參數可能不被 OpenRouter 支持，已移除
+        presence_penalty: 0.0,   // 翻譯不需要懲罰存在
+        reasoning: {
+          effort: "medium"  // 中等推理強度，平衡準確性和效率
+        }
       })
     })
 

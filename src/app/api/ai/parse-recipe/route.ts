@@ -87,8 +87,10 @@ export async function POST(request: NextRequest) {
         temperature: 0.05,       // 極低溫度，確保解析精確度
         top_p: 0.95,            // 提高 top_p
         frequency_penalty: 0.0,  // 移除懲罰，保持解析一致性
-        presence_penalty: 0.0    // 移除懲罰
-        // 注意：reasoning 參數可能不被 OpenRouter 支持，已移除
+        presence_penalty: 0.0,   // 移除懲罰
+        reasoning: {
+          max_tokens: 4000  // 為配方解析分配專門的推理 tokens
+        }
       })
     })
 
