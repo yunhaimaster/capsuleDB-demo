@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { PriceAnalysisRequest, PriceAnalysisResponse, PriceData } from '@/types/v2-types'
-import { TrendingUp, Loader2, Search, DollarSign, Calendar, Package } from 'lucide-react'
+import { TrendingUp, Loader2, Search, DollarSign, Calendar, Package, Globe, RefreshCw } from 'lucide-react'
 import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 export default function PriceAnalyzerPage() {
@@ -19,6 +19,8 @@ export default function PriceAnalyzerPage() {
   const [analysisResult, setAnalysisResult] = useState<PriceAnalysisResponse['analysis'] | null>(null)
   const [priceData, setPriceData] = useState<PriceData[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [isWebSearching, setIsWebSearching] = useState(false)
+  const [webSearchResult, setWebSearchResult] = useState<any>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -61,6 +63,38 @@ export default function PriceAnalyzerPage() {
       }
     } catch (err) {
       console.error('獲取價格數據失敗:', err)
+    }
+  }
+
+  const handleWebSearch = async () => {
+    if (!formData.materialName) return
+
+    setIsWebSearching(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/ai/web-search-price', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          materialName: formData.materialName,
+          searchType: 'price'
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setWebSearchResult(result.searchResult)
+      } else {
+        setError(result.error || '網絡搜索失敗')
+      }
+    } catch (err) {
+      setError('網絡搜索錯誤，請稍後再試')
+    } finally {
+      setIsWebSearching(false)
     }
   }
 
@@ -163,6 +197,39 @@ export default function PriceAnalyzerPage() {
                         <Search className="h-4 w-4 mr-2" />
                         查看歷史數據
                       </Button>
+
+                      <Button
+                        type="button"
+                        onClick={handleWebSearch}
+                        disabled={isWebSearching || !formData.materialName}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {isWebSearching ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            搜索中...
+                          </>
+                        ) : (
+                          <>
+                            <Globe className="h-4 w-4 mr-2" />
+                            搜索最新價格
+                          </>
+                        )}
+                      </Button>
+
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setWebSearchResult(null)
+                          setAnalysisResult(null)
+                          setPriceData([])
+                        }}
+                        variant="outline"
+                        className="w-full"
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" />
+                        清除結果
+                      </Button>
                     </div>
                   </form>
                 </div>
@@ -237,6 +304,37 @@ export default function PriceAnalyzerPage() {
                         </div>
                         <p className="text-sm">這可能需要 15-45 秒，請耐心等待...</p>
                       </div>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {/* 網絡搜索結果 */}
+              {webSearchResult && !isWebSearching && (
+                <Card className="liquid-glass-card liquid-glass-card-elevated">
+                  <div className="liquid-glass-content">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="icon-container icon-container-green">
+                        <Globe className="h-5 w-5 text-white" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-800">最新價格搜索結果</h2>
+                    </div>
+                    
+                    <div className="prose max-w-none">
+                      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                        {webSearchResult.content}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                      <p className="text-sm text-blue-700">
+                        <strong>數據來源：</strong>{webSearchResult.source} | 
+                        <strong> 搜索時間：</strong>{new Date(webSearchResult.searchedAt).toLocaleString('zh-HK')}
+                      </p>
+                    </div>
+                    
+                    <div className="mt-6">
+                      <AIDisclaimer type="analysis" />
                     </div>
                   </div>
                 </Card>
