@@ -125,6 +125,7 @@ function Footer() {
               <h3 className="text-lg font-semibold mb-4">系統功能</h3>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
+                <li><Link href="/setup" className="hover:text-white transition-colors">數據庫設置</Link></li>
                 <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
                 <li><Link href="/" className="hover:text-white transition-colors">返回首頁</Link></li>
                 <li><Link href="/orders" className="hover:text-white transition-colors">查看訂單</Link></li>

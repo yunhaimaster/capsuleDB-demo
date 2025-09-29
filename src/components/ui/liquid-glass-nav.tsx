@@ -39,7 +39,8 @@ export function LiquidGlassNav({
         { href: '/ai-recipe-generator', label: 'AI配方生成器' },
         { href: '/work-orders', label: '工作單生成' }
       ]
-    }
+    },
+    { href: '/setup', label: '設置' }
   ],
   className = ''
 }: LiquidGlassNavProps) {
