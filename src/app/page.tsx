@@ -109,27 +109,27 @@ function Footer() {
             </div>
           </div>
 
-          {/* 主要功能 */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">主要功能</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
-              <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
-              <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
-              <li><Link href="/reports" className="hover:text-white transition-colors">原料報表</Link></li>
-            </ul>
-          </div>
+            {/* 主要功能 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">主要功能</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
+                <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
+                <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
+                <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
+              </ul>
+            </div>
 
-          {/* 系統功能 */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">系統功能</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
-              <li><Link href="/liquid-glass-demo" className="hover:text-white transition-colors">UI 演示</Link></li>
-              <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
-              <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
-            </ul>
-          </div>
+            {/* 系統功能 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">系統功能</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
+                <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">返回首頁</Link></li>
+                <li><Link href="/orders" className="hover:text-white transition-colors">查看訂單</Link></li>
+              </ul>
+            </div>
 
           {/* 技術支援 */}
           <div>
@@ -232,7 +232,6 @@ export default function HomePage() {
             { href: '/orders/new', label: '新建' },
             { href: '/ai-recipe-generator', label: 'AI 配方' },
             { href: '/work-orders', label: '工作單' },
-            { href: '/reports', label: '原料報表' },
             { href: '/history', label: '歷史' },
             { href: '/login?logout=true', label: '登出' }
           ]}

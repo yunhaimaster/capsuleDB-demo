@@ -37,7 +37,6 @@ export default function OrdersPage() {
           { href: '/orders/new', label: '新建' },
           { href: '/ai-recipe-generator', label: 'AI 配方' },
           { href: '/work-orders', label: '工作單' },
-          { href: '/reports', label: '原料報表' },
           { href: '/history', label: '歷史' },
           { href: '/login?logout=true', label: '登出' }
         ]}

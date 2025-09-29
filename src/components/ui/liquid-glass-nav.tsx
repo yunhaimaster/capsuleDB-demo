@@ -40,7 +40,6 @@ export function LiquidGlassNav({
         { href: '/work-orders', label: '工作單生成' }
       ]
     },
-    { href: '/reports', label: '原料報表' },
     { href: '/history', label: '歷史記錄' }
   ],
   className = ''
@@ -83,7 +82,7 @@ export function LiquidGlassNav({
     >
       <div className="liquid-glass-nav-content">
         {/* Logo and Brand Section - Left side */}
-        <div className="flex items-center space-x-3 mr-auto">
+        <div className="flex items-center space-x-2 sm:space-x-3 mr-auto">
           <Link 
             href="/" 
             className="liquid-glass-nav-logo"
@@ -91,11 +90,11 @@ export function LiquidGlassNav({
           >
             {logo}
           </Link>
-          <div className="block">
+          <div className="hidden sm:block">
             <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">
               Easy Health
             </h1>
-            <p className="text-xs text-gray-600 block">
+            <p className="text-xs text-gray-600">
               膠囊配方管理系統
             </p>
           </div>
