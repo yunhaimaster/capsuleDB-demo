@@ -68,7 +68,7 @@ ${JSON.stringify(priceData, null, 2)}
           { role: 'user', content: `請分析${materialName}的價格趨勢和採購建議` }
         ],
         max_tokens: 4000,
-        temperature: 0.3,
+        temperature: 0.1,
         top_p: 0.95,
         frequency_penalty: 0.0,
         presence_penalty: 0.0,
