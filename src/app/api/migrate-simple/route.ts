@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
       { 
         success: false,
         error: '數據庫遷移失敗', 
-        details: error.message 
+        details: error instanceof Error ? error.message : String(error)
       },
       { status: 500 }
     )

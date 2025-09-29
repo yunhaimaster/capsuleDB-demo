@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       }
 
       // 創建缺失的表
-      const migrationResults = []
+      const migrationResults: string[] = []
       
       for (const tableName of missingTables) {
         try {
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('遷移錯誤:', error)
     return NextResponse.json(
-      { error: '數據庫遷移失敗', details: error.message },
+      { error: '數據庫遷移失敗', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }
