@@ -64,6 +64,37 @@ export default function AIRecipeGeneratorPage() {
 
       if (result.success) {
         setGeneratedRecipe(result.recipe)
+        
+        // 使用AI提取和優化產品信息
+        try {
+          const extractResponse = await fetch('/api/ai/extract-product-info', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: result.recipe.content
+            })
+          })
+          
+          const extractData = await extractResponse.json()
+          if (extractData.success && extractData.extractedInfo) {
+            // 更新配方信息為AI提取的優化版本
+            setGeneratedRecipe(prev => {
+              if (!prev) return prev
+              return {
+                ...prev,
+                structured: {
+                  ...prev.structured,
+                  name: extractData.extractedInfo.name || prev.structured.name,
+                  description: extractData.extractedInfo.description || prev.structured.description
+                }
+              }
+            })
+          }
+        } catch (extractError) {
+          console.warn('AI產品信息提取失敗，使用原始信息:', extractError)
+        }
       } else {
         setError(result.error || '配方生成失敗')
       }
