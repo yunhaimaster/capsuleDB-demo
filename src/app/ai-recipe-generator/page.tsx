@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,6 +28,21 @@ export default function AIRecipeGeneratorPage() {
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
   const [chatInput, setChatInput] = useState('')
   const [isChatLoading, setIsChatLoading] = useState(false)
+  const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
+
+  // 檢查數據庫狀態
+  useEffect(() => {
+    const checkDbStatus = async () => {
+      try {
+        const response = await fetch('/api/ai/recipes?limit=1')
+        const data = await response.json()
+        setDbStatus(data.success && data.hasTable ? 'connected' : 'disconnected')
+      } catch (error) {
+        setDbStatus('disconnected')
+      }
+    }
+    checkDbStatus()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -149,6 +164,24 @@ export default function AIRecipeGeneratorPage() {
             <p className="text-lg text-gray-600">
               專為膠囊灌裝工廠代工生產設計，智能生成專業配方並提供代工成本分析
             </p>
+            
+            {/* 數據庫狀態指示器 */}
+            <div className="mt-4 flex items-center justify-center">
+              <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
+                dbStatus === 'checking' ? 'bg-yellow-100 text-yellow-800' :
+                dbStatus === 'connected' ? 'bg-green-100 text-green-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                <div className={`w-2 h-2 rounded-full mr-2 ${
+                  dbStatus === 'checking' ? 'bg-yellow-500 animate-pulse' :
+                  dbStatus === 'connected' ? 'bg-green-500' :
+                  'bg-red-500'
+                }`}></div>
+                {dbStatus === 'checking' && '檢查數據庫狀態...'}
+                {dbStatus === 'connected' && '數據庫已連接，配方將被保存'}
+                {dbStatus === 'disconnected' && '數據庫未設置，配方僅臨時保存'}
+              </div>
+            </div>
           </div>
 
           {/* 表單區域 */}
@@ -364,7 +397,9 @@ export default function AIRecipeGeneratorPage() {
                     </div>
                     <div>
                       <span className="font-medium text-gray-600">狀態:</span>
-                      <span className="ml-2 text-green-600">已保存</span>
+                      <span className={`ml-2 ${generatedRecipe.id?.startsWith('temp-') ? 'text-orange-600' : 'text-green-600'}`}>
+                        {generatedRecipe.id?.startsWith('temp-') ? '臨時保存（數據庫未設置）' : '已保存到數據庫'}
+                      </span>
                     </div>
                   </div>
                 </div>
