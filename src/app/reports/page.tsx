@@ -239,77 +239,77 @@ export default function ReportsPage() {
       {/* Summary Cards */}
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-blue-500 rounded-lg">
+          <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive">
+            <div className="liquid-glass-content">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="icon-container icon-container-blue">
                   <Package className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-semibold text-blue-700">總原料種類</CardTitle>
-                  <CardDescription className="text-blue-600">已使用原料</CardDescription>
+                  <h3 className="text-lg font-semibold text-blue-700">總原料種類</h3>
+                  <p className="text-blue-600">已使用原料</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-blue-800">{stats.summary.totalIngredients}</p>
-              <p className="text-sm text-blue-600">種不同原料</p>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-bold text-blue-800">{stats.summary.totalIngredients}</p>
+                <p className="text-sm text-blue-600">種不同原料</p>
+              </div>
+            </div>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-red-50 to-red-100">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-red-500 rounded-lg">
+          <div className="liquid-glass-card liquid-glass-card-interactive">
+            <div className="liquid-glass-content">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="icon-container icon-container-red">
                   <AlertTriangle className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-semibold text-red-700">高風險原料</CardTitle>
-                  <CardDescription className="text-red-600">需要特別注意</CardDescription>
+                  <h3 className="text-lg font-semibold text-red-700">高風險原料</h3>
+                  <p className="text-red-600">需要特別注意</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-red-800">{stats.summary.highRiskIngredients}</p>
-              <p className="text-sm text-red-600">種高風險原料</p>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-bold text-red-800">{stats.summary.highRiskIngredients}</p>
+                <p className="text-sm text-red-600">種高風險原料</p>
+              </div>
+            </div>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-50 to-yellow-100">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-yellow-500 rounded-lg">
+          <div className="liquid-glass-card liquid-glass-card-interactive">
+            <div className="liquid-glass-content">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="icon-container icon-container-yellow">
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-semibold text-yellow-700">中風險原料</CardTitle>
-                  <CardDescription className="text-yellow-600">需要標準處理</CardDescription>
+                  <h3 className="text-lg font-semibold text-yellow-700">中風險原料</h3>
+                  <p className="text-yellow-600">需要標準處理</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-yellow-800">{stats.summary.mediumRiskIngredients}</p>
-              <p className="text-sm text-yellow-600">種中風險原料</p>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-bold text-yellow-800">{stats.summary.mediumRiskIngredients}</p>
+                <p className="text-sm text-yellow-600">種中風險原料</p>
+              </div>
+            </div>
+          </div>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-green-50 to-green-100">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-green-500 rounded-lg">
+          <div className="liquid-glass-card liquid-glass-card-interactive">
+            <div className="liquid-glass-content">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="icon-container icon-container-green">
                   <Package className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-semibold text-green-700">低風險原料</CardTitle>
-                  <CardDescription className="text-green-600">容易處理</CardDescription>
+                  <h3 className="text-lg font-semibold text-green-700">低風險原料</h3>
+                  <p className="text-green-600">容易處理</p>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-bold text-green-800">{stats.summary.lowRiskIngredients}</p>
-              <p className="text-sm text-green-600">種低風險原料</p>
-            </CardContent>
-          </Card>
+              <div>
+                <p className="text-2xl font-bold text-green-800">{stats.summary.lowRiskIngredients}</p>
+                <p className="text-sm text-green-600">種低風險原料</p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

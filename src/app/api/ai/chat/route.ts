@@ -61,13 +61,9 @@ async function generateSuggestions(
 
   let suggestions: string[] = []
 
-  console.log('=== 開始生成動態建議 ===')
-  console.log('用戶問題:', userMessage)
-  console.log('AI 回應長度:', aiResponse.length)
-  console.log('AI 回應前100字符:', aiResponse.substring(0, 100))
+  // 動態建議生成 - 調試信息已移除
 
   try {
-    console.log('正在調用建議生成 API...')
     const suggestionsResponse = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
@@ -99,13 +95,9 @@ AI回答：${aiResponse}
       })
     })
 
-    console.log('建議 API 狀態:', suggestionsResponse.status)
-
     if (suggestionsResponse.ok) {
       const suggestionsData = await suggestionsResponse.json()
-      console.log('建議 API 回應:', JSON.stringify(suggestionsData, null, 2))
       const suggestionsText = suggestionsData.choices?.[0]?.message?.content || ''
-      console.log('原始建議文字:', suggestionsText)
 
       suggestions = suggestionsText.split('\n')
         .filter((s: string) => s.trim())
@@ -125,11 +117,10 @@ AI回答：${aiResponse}
         })
         .slice(0, 4)
 
-      console.log('過濾後的建議:', suggestions)
-      console.log('建議數量:', suggestions.length)
+        // 建議已過濾
 
       if (suggestions.length < 4) {
-        console.log('建議不足，使用更寬鬆的過濾條件')
+        // 使用更寬鬆的過濾條件
         suggestions = suggestionsText.split('\n')
           .filter((s: string) => s.trim())
           .map((s: string) => s.trim().replace(/^[1-4]\.\s*/, ''))
@@ -145,7 +136,7 @@ AI回答：${aiResponse}
               !s.includes('請用繁體中文')
           })
           .slice(0, 4)
-        console.log('寬鬆過濾後的建議:', suggestions)
+        // 寬鬆過濾完成
       }
     } else {
       const errorText = await suggestionsResponse.text()
@@ -157,12 +148,11 @@ AI回答：${aiResponse}
   }
 
   if (suggestions.length === 0) {
-    console.log('沒有生成建議，使用默認建議')
+    // 使用默認建議
     suggestions = [...DEFAULT_SUGGESTIONS]
   }
 
-  console.log('最終建議:', suggestions)
-  console.log('建議數量:', suggestions.length)
+  // 返回最終建議
 
   return suggestions
 }

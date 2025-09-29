@@ -50,6 +50,49 @@
   padding-bottom: 2rem; /* pb-8 */
 }
 
+/* 統一顏色變數 */
+:root {
+  --brand-primary: 42, 88, 140; /* #2a588c */
+  --brand-secondary: 68, 186, 198; /* #44bac6 */
+  --brand-accent: 132, 157, 188; /* #849dbc */
+  --glass-opacity: 0.08;
+  --glass-border-opacity: 0.15;
+  --glass-hover-opacity: 0.12;
+}
+
+/* 統一圖標容器樣式 */
+.icon-container {
+  @apply p-2 rounded-lg shadow-lg;
+}
+
+.icon-container-blue {
+  @apply bg-gradient-to-br from-blue-500 to-blue-600;
+}
+
+.icon-container-red {
+  @apply bg-gradient-to-br from-red-500 to-red-600;
+}
+
+.icon-container-yellow {
+  @apply bg-gradient-to-br from-yellow-500 to-yellow-600;
+}
+
+.icon-container-green {
+  @apply bg-gradient-to-br from-green-500 to-green-600;
+}
+
+.icon-container-purple {
+  @apply bg-gradient-to-br from-purple-500 to-purple-600;
+}
+
+.icon-container-emerald {
+  @apply bg-gradient-to-br from-emerald-500 to-emerald-600;
+}
+
+.icon-container-orange {
+  @apply bg-gradient-to-br from-orange-500 to-orange-600;
+}
+
 @media (min-width: 640px) {
   .page-content-spacing {
     padding-top: 6rem; /* pt-24 for sm and up */

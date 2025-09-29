@@ -174,17 +174,17 @@ export default function HistoryPage() {
         {/* Version History */}
         <div className="space-y-6">
           {versionHistory.map((version, index) => (
-            <Card key={version.version} className="border-0 shadow-lg liquid-glass-card">
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div key={version.version} className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive">
+              <div className="liquid-glass-content">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-500 rounded-lg">
+                    <div className="icon-container icon-container-blue">
                       <Tag className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <CardTitle className="text-xl font-semibold text-gray-800">
+                      <h3 className="text-xl font-semibold text-gray-800">
                         {version.version}
-                      </CardTitle>
+                      </h3>
                       <div className="flex items-center gap-2 mt-1">
                         <Calendar className="h-4 w-4 text-gray-500" />
                         <span className="text-sm text-gray-600">{version.date}</span>
@@ -195,8 +195,6 @@ export default function HistoryPage() {
                     {version.type}
                   </span>
                 </div>
-              </CardHeader>
-              <CardContent>
                 <div className="space-y-3">
                   <h4 className="font-medium text-gray-700">更新內容：</h4>
                   <ul className="space-y-2">
@@ -208,8 +206,8 @@ export default function HistoryPage() {
                     ))}
                   </ul>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
 

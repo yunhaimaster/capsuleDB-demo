@@ -5,13 +5,16 @@ export const ingredientSchema = z.object({
     .string()
     .min(1, '原料品名不能為空')
     .max(100, '原料品名不能超過100字')
-    .refine((val) => val.trim().length > 0, '原料品名不能為空白'),
+    .refine((val) => val.trim().length > 0, '原料品名不能為空白')
+    .refine((val) => !/^[\s]*$/.test(val), '原料品名不能只包含空格')
+    .refine((val) => val.length >= 2, '原料品名至少需要2個字符'),
   unitContentMg: z
     .number()
     .positive('單粒含量必須為正數')
     .min(0.00001, '單粒含量不能小於0.00001mg')
     .max(10000, '單粒含量不能超過10,000mg')
-    .refine((val) => Number(val.toFixed(5)) === val, '單粒含量精度不能超過小數點後5位'),
+    .refine((val) => Number(val.toFixed(5)) === val, '單粒含量精度不能超過小數點後5位')
+    .refine((val) => val > 0, '單粒含量必須大於0'),
   isCustomerProvided: z
     .boolean()
     .default(true)
