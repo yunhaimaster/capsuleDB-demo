@@ -149,7 +149,6 @@ export default function HistoryPage() {
           { href: '/orders/new', label: '新建' },
           { href: '/ai-recipe-generator', label: 'AI 配方' },
           { href: '/work-orders', label: '工作單' },
-          { href: '/history', label: '歷史', active: true },
           { href: '/login?logout=true', label: '登出' }
         ]}
       />

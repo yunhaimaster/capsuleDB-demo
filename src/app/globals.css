@@ -750,6 +750,25 @@
   }
 }
 
+/* Mobile Navigation Toggle */
+.liquid-glass-nav-mobile-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--liquid-glass-nav-text);
+  transition: all 0.3s ease;
+}
+
+.liquid-glass-nav-mobile-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
 /* Ensure links are visible on desktop */
 @media (min-width: 640px) {
   .liquid-glass-nav-links {
@@ -763,6 +782,18 @@
   .liquid-glass-nav-mobile {
     display: none !important;
   }
+}
+
+/* Mobile Navigation Menu */
+.liquid-glass-nav-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .liquid-glass-nav-link {

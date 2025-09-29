@@ -116,7 +116,7 @@ function Footer() {
                 <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
                 <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
                 <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
-                <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">返回首頁</Link></li>
               </ul>
             </div>
 
@@ -232,7 +232,6 @@ export default function HomePage() {
             { href: '/orders/new', label: '新建' },
             { href: '/ai-recipe-generator', label: 'AI 配方' },
             { href: '/work-orders', label: '工作單' },
-            { href: '/history', label: '歷史' },
             { href: '/login?logout=true', label: '登出' }
           ]}
         />
@@ -459,6 +458,22 @@ export default function HomePage() {
               </div>
             </div>
           </Link>
+
+          {/* 開發中功能 */}
+          <div className="liquid-glass-card liquid-glass-card-interactive opacity-60 cursor-not-allowed">
+            <div className="liquid-glass-content text-center">
+              <div className="icon-container icon-container-gray mx-auto mb-4">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">更多功能</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                更多 AI 驅動的功能正在開發中，敬請期待
+              </p>
+              <div className="inline-flex items-center text-gray-500 text-sm font-medium">
+                開發中...
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
