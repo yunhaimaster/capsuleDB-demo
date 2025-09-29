@@ -111,18 +111,39 @@ export async function POST(request: NextRequest) {
     const data = await response.json()
     const aiResponse = data.choices?.[0]?.message?.content || ''
 
+    // 使用AI提取產品信息
+    let extractedInfo = null
+    try {
+      const extractResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/ai/extract-product-info`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: aiResponse
+        })
+      })
+      
+      const extractData = await extractResponse.json()
+      if (extractData.success && extractData.extractedInfo) {
+        extractedInfo = extractData.extractedInfo
+      }
+    } catch (extractError) {
+      console.warn('AI產品信息提取失敗，使用默認值:', extractError)
+    }
+
     // 解析 AI 回應為結構化數據
     const parsedRecipe = {
-      name: `AI 生成的${targetEffect}配方`,
-      description: `針對${targetAudience || '一般成人'}的${targetEffect}配方`,
+      name: extractedInfo?.name || `AI 生成的${targetEffect}配方`,
+      description: extractedInfo?.description || `針對${targetAudience || '一般成人'}的${targetEffect}配方`,
       ingredients: [],
       dosage: {
         recommendation: '請遵循產品標籤指示',
         adultDosage: '每日1-2粒',
         timing: '餐後服用'
       },
-      efficacyScore: 8.5,
-      safetyScore: 8.0,
+      efficacyScore: extractedInfo?.efficacyScore || 8.5,
+      safetyScore: extractedInfo?.safetyScore || 8.0,
       costAnalysis: {
         unitCost: 2.5,
         currency: 'HKD',
