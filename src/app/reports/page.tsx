@@ -45,7 +45,8 @@ export default function ReportsPage() {
   const [sortField, setSortField] = useState<SortField>('totalUsageMg')
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
   const [aiAssessing, setAiAssessing] = useState(false)
-  const [showAIAssessment, setShowAIAssessment] = useState(true) // 默認顯示 AI 評估
+  const [showAIAssessment, setShowAIAssessment] = useState(false) // 只有 AI 評估完成後才顯示
+  const [hasAIAssessment, setHasAIAssessment] = useState(false) // 追蹤是否已完成 AI 評估
 
   useEffect(() => {
     fetchStats()
@@ -137,6 +138,7 @@ export default function ReportsPage() {
         }))
         
         setShowAIAssessment(true)
+        setHasAIAssessment(true)
       }
     } catch (error) {
       console.error('AI 風險評估錯誤:', error)
@@ -273,59 +275,87 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          <div className="liquid-glass-card liquid-glass-card-interactive">
-            <div className="liquid-glass-content">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="icon-container icon-container-red">
-                  <AlertTriangle className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-red-700">高風險原料</h3>
-                  <p className="text-red-600">需要特別注意</p>
+          {hasAIAssessment && (
+            <>
+              <div className="liquid-glass-card liquid-glass-card-interactive">
+                <div className="liquid-glass-content">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="icon-container icon-container-red">
+                      <AlertTriangle className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-red-700">高風險原料</h3>
+                      <p className="text-red-600">需要特別注意</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-red-800">{stats.summary.highRiskIngredients}</p>
+                    <p className="text-sm text-red-600">種高風險原料</p>
+                  </div>
                 </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-red-800">{stats.summary.highRiskIngredients}</p>
-                <p className="text-sm text-red-600">種高風險原料</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="liquid-glass-card liquid-glass-card-interactive">
-            <div className="liquid-glass-content">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="icon-container icon-container-yellow">
-                  <TrendingUp className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-yellow-700">中風險原料</h3>
-                  <p className="text-yellow-600">需要標準處理</p>
+              <div className="liquid-glass-card liquid-glass-card-interactive">
+                <div className="liquid-glass-content">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="icon-container icon-container-yellow">
+                      <TrendingUp className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-yellow-700">中風險原料</h3>
+                      <p className="text-yellow-600">需要標準處理</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-yellow-800">{stats.summary.mediumRiskIngredients}</p>
+                    <p className="text-sm text-yellow-600">種中風險原料</p>
+                  </div>
                 </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-yellow-800">{stats.summary.mediumRiskIngredients}</p>
-                <p className="text-sm text-yellow-600">種中風險原料</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="liquid-glass-card liquid-glass-card-interactive">
-            <div className="liquid-glass-content">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="icon-container icon-container-green">
-                  <Package className="h-4 w-4 text-white" />
+              <div className="liquid-glass-card liquid-glass-card-interactive">
+                <div className="liquid-glass-content">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <div className="icon-container icon-container-green">
+                      <Package className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-green-700">低風險原料</h3>
+                      <p className="text-green-600">容易處理</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-green-800">{stats.summary.lowRiskIngredients}</p>
+                    <p className="text-sm text-green-600">種低風險原料</p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {!hasAIAssessment && (
+            <div className="liquid-glass-card liquid-glass-card-interactive">
+              <div className="liquid-glass-content">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="icon-container icon-container-purple">
+                    <Bot className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-purple-700">AI 評估中</h3>
+                    <p className="text-purple-600">正在進行專業分析</p>
+                  </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-green-700">低風險原料</h3>
-                  <p className="text-green-600">容易處理</p>
+                  <p className="text-2xl font-bold text-purple-800">
+                    {aiAssessing ? '分析中...' : '等待中'}
+                  </p>
+                  <p className="text-sm text-purple-600">
+                    {aiAssessing ? 'AI 正在評估風險' : '即將開始 AI 評估'}
+                  </p>
                 </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-green-800">{stats.summary.lowRiskIngredients}</p>
-                <p className="text-sm text-green-600">種低風險原料</p>
-              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -340,7 +370,10 @@ export default function ReportsPage() {
                   原料使用詳情
                 </CardTitle>
                 <CardDescription className="text-gray-600">
-                  AI 專業風險評估結果 - 基於原料特性、法規要求和行業標準的智能分析
+                  {hasAIAssessment 
+                    ? 'AI 專業風險評估結果 - 基於原料特性、法規要求和行業標準的智能分析'
+                    : '正在進行 AI 專業風險評估，請稍候...'
+                  }
                 </CardDescription>
               </div>
               <button
@@ -394,9 +427,11 @@ export default function ReportsPage() {
                         {getSortIcon('totalUsageMg')}
                       </div>
                     </TableHead>
-                    <TableHead className="text-sm font-semibold">
-                      風險評估
-                    </TableHead>
+                    {hasAIAssessment && (
+                      <TableHead className="text-sm font-semibold">
+                        風險評估
+                      </TableHead>
+                    )}
                     {showAIAssessment && (
                       <TableHead className="text-sm font-semibold">
                         AI 分析詳情
@@ -416,22 +451,24 @@ export default function ReportsPage() {
                       <TableCell className="text-sm text-gray-600">
                         {formatWeight(ingredient.totalUsageMg)}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col space-y-1">
-                          <Badge className={`${getRiskBadgeColor(ingredient.riskScore)} text-xs`}>
-                            {getRiskLevelText(ingredient.riskScore)} ({ingredient.riskScore}/10)
-                          </Badge>
-                          {ingredient.isAIAssessed && (
-                            <span className="text-xs text-blue-600 flex items-center">
-                              <Bot className="h-3 w-3 mr-1" />
-                              AI 評估
-                            </span>
-                          )}
-                          <p className="text-xs text-gray-500 max-w-xs">
-                            {ingredient.riskDescription}
-                          </p>
-                        </div>
-                      </TableCell>
+                      {hasAIAssessment && (
+                        <TableCell>
+                          <div className="flex flex-col space-y-1">
+                            <Badge className={`${getRiskBadgeColor(ingredient.riskScore)} text-xs`}>
+                              {getRiskLevelText(ingredient.riskScore)} ({ingredient.riskScore}/10)
+                            </Badge>
+                            {ingredient.isAIAssessed && (
+                              <span className="text-xs text-blue-600 flex items-center">
+                                <Bot className="h-3 w-3 mr-1" />
+                                AI 評估
+                              </span>
+                            )}
+                            <p className="text-xs text-gray-500 max-w-xs">
+                              {ingredient.riskDescription}
+                            </p>
+                          </div>
+                        </TableCell>
+                      )}
                       {showAIAssessment && ingredient.isAIAssessed && (
                         <TableCell>
                           <div className="space-y-2 max-w-md">
