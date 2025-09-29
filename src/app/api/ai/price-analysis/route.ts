@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
       where: {
         materialName: {
           contains: materialName,
-          mode: 'insensitive'
         }
       },
       orderBy: {
@@ -137,7 +136,6 @@ export async function GET(request: NextRequest) {
       where: {
         materialName: {
           contains: materialName,
-          mode: 'insensitive'
         }
       },
       orderBy: {

@@ -8,7 +8,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card } from '@/components/ui/card'
 import { AIRecipeRequest, AIRecipeResponse } from '@/types/v2-types'
-import { Sparkles, Loader2, Copy, RefreshCw } from 'lucide-react'
+import { Sparkles, Loader2, Copy, RefreshCw, MessageCircle, Send } from 'lucide-react'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 export default function AIRecipeGeneratorPage() {
   const [formData, setFormData] = useState<AIRecipeRequest>({
@@ -21,6 +22,10 @@ export default function AIRecipeGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedRecipe, setGeneratedRecipe] = useState<AIRecipeResponse['recipe'] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isChatMode, setIsChatMode] = useState(false)
+  const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
+  const [chatInput, setChatInput] = useState('')
+  const [isChatLoading, setIsChatLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,6 +69,57 @@ export default function AIRecipeGeneratorPage() {
   const handleRegenerate = () => {
     setGeneratedRecipe(null)
     handleSubmit(new Event('submit') as any)
+  }
+
+  const handleStartChat = () => {
+    setIsChatMode(true)
+    setChatMessages([
+      {
+        role: 'assistant',
+        content: `您好！我是您的 AI 配方助手。我已經為您生成了「${formData.targetEffect}」的配方。\n\n請告訴我您希望如何修改這個配方，例如：\n- 調整某些原料的劑量\n- 添加或移除某些成分\n- 針對特定人群優化\n- 降低成本\n- 提高安全性\n\n請描述您的需求，我會為您優化配方！`
+      }
+    ])
+  }
+
+  const handleChatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!chatInput.trim() || isChatLoading) return
+
+    const userMessage = chatInput.trim()
+    setChatInput('')
+    setIsChatLoading(true)
+
+    // 添加用戶消息
+    const newMessages = [...chatMessages, { role: 'user' as const, content: userMessage }]
+    setChatMessages(newMessages)
+
+    try {
+      const response = await fetch('/api/ai/recipe-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: newMessages,
+          context: {
+            currentRecipe: generatedRecipe,
+            originalRequest: formData
+          }
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setChatMessages([...newMessages, { role: 'assistant', content: result.message }])
+      } else {
+        setChatMessages([...newMessages, { role: 'assistant', content: '抱歉，我暫時無法回應。請稍後再試。' }])
+      }
+    } catch (err) {
+      setChatMessages([...newMessages, { role: 'assistant', content: '抱歉，發生了網絡錯誤。請稍後再試。' }])
+    } finally {
+      setIsChatLoading(false)
+    }
   }
 
   return (
@@ -264,13 +320,20 @@ export default function AIRecipeGeneratorPage() {
                       <RefreshCw className="h-4 w-4" />
                       <span>重新生成</span>
                     </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleStartChat}
+                      className="flex items-center space-x-1"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>繼續對話</span>
+                    </Button>
                   </div>
                 </div>
 
                 <div className="prose max-w-none">
-                  <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                    {generatedRecipe.content}
-                  </div>
+                  <MarkdownRenderer content={generatedRecipe.content} />
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-200">
@@ -290,6 +353,77 @@ export default function AIRecipeGeneratorPage() {
                       <span className="ml-2 text-green-600">已保存</span>
                     </div>
                   </div>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* 聊天界面 */}
+          {isChatMode && (
+            <Card className="liquid-glass-card liquid-glass-card-elevated mt-6">
+              <div className="liquid-glass-content">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="icon-container icon-container-blue">
+                    <MessageCircle className="h-5 w-5 text-white" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-800">AI 配方助手</h2>
+                </div>
+
+                {/* 聊天消息 */}
+                <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                  {chatMessages.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-3xl p-4 rounded-lg ${
+                          message.role === 'user'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        <div className="prose prose-sm max-w-none">
+                          <MarkdownRenderer content={message.content} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {isChatLoading && (
+                    <div className="flex justify-start">
+                      <div className="bg-gray-100 text-gray-800 p-4 rounded-lg">
+                        <div className="flex items-center space-x-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>AI 正在思考...</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* 聊天輸入 */}
+                <form onSubmit={handleChatSubmit} className="flex space-x-2">
+                  <Input
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="請描述您希望如何修改配方..."
+                    className="flex-1"
+                    disabled={isChatLoading}
+                  />
+                  <Button type="submit" disabled={isChatLoading || !chatInput.trim()}>
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </form>
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsChatMode(false)}
+                    className="text-gray-600"
+                  >
+                    關閉對話
+                  </Button>
                 </div>
               </div>
             </Card>
