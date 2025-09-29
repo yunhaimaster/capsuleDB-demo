@@ -2117,3 +2117,46 @@
   background: rgba(0, 0, 0, 0.8) !important;
   backdrop-filter: blur(10px) !important;
 }
+
+/* Liquid Glass Footer Styles */
+.liquid-glass-footer {
+  @apply bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200/50;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.liquid-glass-footer-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12;
+}
+
+.liquid-glass-footer-brand {
+  @apply mb-8;
+}
+
+.liquid-glass-footer-links {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.liquid-glass-footer-section {
+  @apply space-y-4;
+}
+
+.liquid-glass-footer-title {
+  @apply text-sm font-semibold text-gray-900 uppercase tracking-wider;
+}
+
+.liquid-glass-footer-list {
+  @apply space-y-2;
+}
+
+.liquid-glass-footer-link {
+  @apply text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200;
+}
+
+.liquid-glass-footer-bottom {
+  @apply border-t border-gray-200/50 bg-white/50;
+}
+
+.liquid-glass-footer-bottom-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center;
+}
