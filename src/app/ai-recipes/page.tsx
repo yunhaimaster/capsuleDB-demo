@@ -245,9 +245,6 @@ export default function AIRecipesPage() {
                             </p>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Badge variant={recipe.isActive ? "default" : "secondary"}>
-                              {recipe.isActive ? '啟用' : '停用'}
-                            </Badge>
                             <Button
                               onClick={() => deleteRecipe(recipe.id)}
                               disabled={deleting === recipe.id}
