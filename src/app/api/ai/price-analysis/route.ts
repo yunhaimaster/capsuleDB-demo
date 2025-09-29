@@ -17,18 +17,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 獲取歷史價格數據
-    const priceData = await prisma.ingredientPrice.findMany({
-      where: {
-        materialName: {
-          contains: materialName,
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      take: 10
-    })
+    // 嘗試獲取歷史價格數據，如果表不存在則使用空數組
+    let priceData: any[] = []
+    try {
+      priceData = await prisma.ingredientPrice.findMany({
+        where: {
+          materialName: {
+            contains: materialName,
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 10
+      })
+    } catch (dbError) {
+      console.warn('價格數據表不存在，使用空數據:', dbError)
+      priceData = []
+    }
 
     const systemPrompt = `你是一個專業的原料價格分析專家，專門為保健品公司提供價格分析和採購建議。
 
@@ -132,17 +138,24 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const priceData = await prisma.ingredientPrice.findMany({
-      where: {
-        materialName: {
-          contains: materialName,
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      take: 20
-    })
+    // 嘗試獲取價格數據，如果表不存在則使用空數組
+    let priceData: any[] = []
+    try {
+      priceData = await prisma.ingredientPrice.findMany({
+        where: {
+          materialName: {
+            contains: materialName,
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 20
+      })
+    } catch (dbError) {
+      console.warn('價格數據表不存在，使用空數據:', dbError)
+      priceData = []
+    }
 
     return NextResponse.json({
       success: true,

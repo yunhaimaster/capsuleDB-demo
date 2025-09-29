@@ -14,13 +14,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 獲取訂單詳情
-    const order = await prisma.productionOrder.findUnique({
-      where: { id: orderId },
-      include: {
-        ingredients: true
-      }
-    })
+    // 嘗試獲取訂單詳情，如果表不存在則返回錯誤
+    let order: any = null
+    try {
+      order = await prisma.productionOrder.findUnique({
+        where: { id: orderId },
+        include: {
+          ingredients: true
+        }
+      })
+    } catch (dbError) {
+      console.warn('訂單表不存在:', dbError)
+      return NextResponse.json(
+        { success: false, error: '數據庫表不存在，請先設置數據庫' },
+        { status: 500 }
+      )
+    }
 
     if (!order) {
       return NextResponse.json(
@@ -50,7 +59,7 @@ export async function POST(request: NextRequest) {
 - 膠囊大小：${order.capsuleSize || '未指定'}
 
 原料配方：
-${order.ingredients.map(ing => `- ${ing.materialName}: ${ing.unitContentMg}mg`).join('\n')}
+${order.ingredients.map((ing: any) => `- ${ing.materialName}: ${ing.unitContentMg}mg`).join('\n')}
 
 ISO 標準：${isoStandard || 'ISO 9001:2015'}
 

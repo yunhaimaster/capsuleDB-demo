@@ -27,17 +27,26 @@ export async function GET(request: NextRequest) {
       where.category = category
     }
 
-    const [products, total] = await Promise.all([
-      prisma.productDatabase.findMany({
-        where,
-        skip,
-        take: limit,
-        orderBy: {
-          updatedAt: 'desc'
-        }
-      }),
-      prisma.productDatabase.count({ where })
-    ])
+    // 嘗試獲取產品數據，如果表不存在則使用空數組
+    let products: any[] = []
+    let total = 0
+    try {
+      [products, total] = await Promise.all([
+        prisma.productDatabase.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: {
+            updatedAt: 'desc'
+          }
+        }),
+        prisma.productDatabase.count({ where })
+      ])
+    } catch (dbError) {
+      console.warn('產品資料庫表不存在，使用空數據:', dbError)
+      products = []
+      total = 0
+    }
 
     return NextResponse.json({
       success: true,
@@ -87,21 +96,31 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const product = await prisma.productDatabase.create({
-      data: {
-        productName,
-        category,
-        formula: JSON.stringify(formula || {}),
-        efficacy: efficacy ? JSON.stringify(efficacy) : null,
-        safety: safety ? JSON.stringify(safety) : null,
-        regulatoryStatus: null,
-        version: '1.0',
-        isActive: true,
-        tags: tags ? JSON.stringify(tags) : null,
-        notes,
-        createdBy: '系統'
-      }
-    })
+    // 嘗試創建產品，如果表不存在則返回錯誤
+    let product: any = null
+    try {
+      product = await prisma.productDatabase.create({
+        data: {
+          productName,
+          category,
+          formula: JSON.stringify(formula || {}),
+          efficacy: efficacy ? JSON.stringify(efficacy) : null,
+          safety: safety ? JSON.stringify(safety) : null,
+          regulatoryStatus: null,
+          version: '1.0',
+          isActive: true,
+          tags: tags ? JSON.stringify(tags) : null,
+          notes,
+          createdBy: '系統'
+        }
+      })
+    } catch (dbError) {
+      console.warn('產品資料庫表不存在:', dbError)
+      return NextResponse.json(
+        { success: false, error: '數據庫表不存在，請先設置數據庫' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
