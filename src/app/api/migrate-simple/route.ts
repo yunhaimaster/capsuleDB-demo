@@ -142,8 +142,24 @@ export async function POST(request: NextRequest) {
         );
       `
 
-      // 執行 SQL
-      await prisma.$executeRawUnsafe(createTablesSQL)
+      // 執行 SQL - 分別執行每個 CREATE TABLE 語句
+      const sqlStatements = createTablesSQL
+        .split(';')
+        .map(stmt => stmt.trim())
+        .filter(stmt => stmt.length > 0)
+      
+      for (const statement of sqlStatements) {
+        if (statement.includes('CREATE TABLE')) {
+          try {
+            await prisma.$executeRawUnsafe(statement)
+          } catch (error) {
+            // 如果表已存在，忽略錯誤
+            if (!error.message.includes('already exists')) {
+              console.error(`創建表失敗: ${statement}`, error)
+            }
+          }
+        }
+      }
 
       // 檢查創建的表
       const tables = await prisma.$queryRaw<Array<{ table_name: string }>>`
