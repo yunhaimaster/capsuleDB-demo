@@ -31,16 +31,18 @@ export default function AIRecipeGeneratorPage() {
   const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
 
   // 檢查數據庫狀態
-  useEffect(() => {
-    const checkDbStatus = async () => {
-      try {
-        const response = await fetch('/api/ai/recipes?limit=1')
-        const data = await response.json()
-        setDbStatus(data.success && data.hasTable ? 'connected' : 'disconnected')
-      } catch (error) {
-        setDbStatus('disconnected')
-      }
+  const checkDbStatus = async () => {
+    setDbStatus('checking')
+    try {
+      const response = await fetch('/api/ai/recipes?limit=1')
+      const data = await response.json()
+      setDbStatus(data.success && data.hasTable ? 'connected' : 'disconnected')
+    } catch (error) {
+      setDbStatus('disconnected')
     }
+  }
+
+  useEffect(() => {
     checkDbStatus()
   }, [])
 
@@ -165,23 +167,32 @@ export default function AIRecipeGeneratorPage() {
               專為膠囊灌裝工廠代工生產設計，智能生成專業配方並提供代工成本分析
             </p>
             
-            {/* 數據庫狀態指示器 */}
-            <div className="mt-4 flex items-center justify-center">
-              <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
-                dbStatus === 'checking' ? 'bg-yellow-100 text-yellow-800' :
-                dbStatus === 'connected' ? 'bg-green-100 text-green-800' :
-                'bg-red-100 text-red-800'
-              }`}>
-                <div className={`w-2 h-2 rounded-full mr-2 ${
-                  dbStatus === 'checking' ? 'bg-yellow-500 animate-pulse' :
-                  dbStatus === 'connected' ? 'bg-green-500' :
-                  'bg-red-500'
-                }`}></div>
-                {dbStatus === 'checking' && '檢查數據庫狀態...'}
-                {dbStatus === 'connected' && '數據庫已連接，配方將被保存'}
-                {dbStatus === 'disconnected' && '數據庫未設置，配方僅臨時保存'}
-              </div>
-            </div>
+    {/* 數據庫狀態指示器 */}
+    <div className="mt-4 flex items-center justify-center">
+      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
+        dbStatus === 'checking' ? 'bg-yellow-100 text-yellow-800' :
+        dbStatus === 'connected' ? 'bg-green-100 text-green-800' :
+        'bg-red-100 text-red-800'
+      }`}>
+        <div className={`w-2 h-2 rounded-full mr-2 ${
+          dbStatus === 'checking' ? 'bg-yellow-500 animate-pulse' :
+          dbStatus === 'connected' ? 'bg-green-500' :
+          'bg-red-500'
+        }`}></div>
+        {dbStatus === 'checking' && '檢查數據庫狀態...'}
+        {dbStatus === 'connected' && '數據庫已連接，配方將被保存'}
+        {dbStatus === 'disconnected' && '數據庫未設置，配方僅臨時保存'}
+      </div>
+      
+      {/* 刷新按鈕 */}
+      <button
+        onClick={checkDbStatus}
+        className="ml-3 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+        disabled={dbStatus === 'checking'}
+      >
+        {dbStatus === 'checking' ? '檢查中...' : '刷新狀態'}
+      </button>
+    </div>
           </div>
 
           {/* 表單區域 */}

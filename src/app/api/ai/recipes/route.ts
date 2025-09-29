@@ -9,12 +9,18 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // 嘗試獲取保存的配方
+    // 檢查表是否存在
+    let hasTable = false
     let recipes: any[] = []
     let total = 0
     
     try {
-      [recipes, total] = await Promise.all([
+      // 先檢查表是否存在
+      await prisma.$queryRaw`SELECT 1 FROM "ai_recipes" LIMIT 1`
+      hasTable = true
+      
+      // 如果表存在，獲取數據
+      const [recipesData, totalCount] = await Promise.all([
         prisma.aIRecipe.findMany({
           skip: offset,
           take: limit,
@@ -24,8 +30,11 @@ export async function GET(request: NextRequest) {
         }),
         prisma.aIRecipe.count()
       ])
-    } catch (dbError) {
-      console.warn('AI配方表不存在，使用空數據:', dbError)
+      recipes = recipesData
+      total = totalCount
+    } catch (dbError: any) {
+      console.warn('AI配方表不存在或無法訪問:', dbError)
+      hasTable = false
       recipes = []
       total = 0
     }
@@ -46,7 +55,7 @@ export async function GET(request: NextRequest) {
         updatedAt: recipe.updatedAt
       })),
       total,
-      hasTable: recipes.length > 0 || total > 0
+      hasTable
     })
 
   } catch (error) {
