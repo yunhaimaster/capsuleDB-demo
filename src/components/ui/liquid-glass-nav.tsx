@@ -34,15 +34,14 @@ export function LiquidGlassNav({
     },
     { 
       href: '/ai-recipe-generator', 
-      label: 'v2.0 功能',
+      label: 'AI 配方',
       children: [
         { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/price-analyzer', label: '價格分析器' },
-        { href: '/work-orders', label: '工作單生成' },
-        { href: '/product-database', label: '配方資料庫' }
+        { href: '/work-orders', label: '工作單生成' }
       ]
     },
-    { href: '/reports', label: '報表' }
+    { href: '/reports', label: '原料報表' },
+    { href: '/history', label: '歷史記錄' }
   ],
   className = ''
 }: LiquidGlassNavProps) {

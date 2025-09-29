@@ -10,7 +10,7 @@ import { Logo } from '@/components/ui/logo'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
-import { Plus, FileText, Eye, Download } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, BarChart3, Calendar, Zap } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
@@ -81,6 +81,78 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
         </div>
       )}
     </div>
+  )
+}
+
+// Footer 組件
+function Footer() {
+  return (
+    <footer className="bg-gray-900 text-white py-12 mt-16">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* 公司信息 */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Easy Health</h3>
+            <p className="text-gray-400 text-sm mb-4">
+              專業的保健品膠囊生產管理解決方案
+            </p>
+            <div className="flex space-x-4">
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">💊</span>
+              </div>
+              <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">🏭</span>
+              </div>
+              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">🤖</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 主要功能 */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">主要功能</h3>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
+              <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
+              <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
+              <li><Link href="/reports" className="hover:text-white transition-colors">原料報表</Link></li>
+            </ul>
+          </div>
+
+          {/* 系統功能 */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">系統功能</h3>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
+              <li><Link href="/liquid-glass-demo" className="hover:text-white transition-colors">UI 演示</Link></li>
+              <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
+              <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
+            </ul>
+          </div>
+
+          {/* 技術支援 */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">技術支援</h3>
+            <div className="text-sm text-gray-400">
+              <p className="mb-2">系統管理員：Victor</p>
+              <p className="mb-2">版本：v2.0</p>
+              <p className="mb-4">最後更新：2025年9月29日</p>
+              <div className="flex space-x-2">
+                <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">在線</span>
+                <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">AI 驅動</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p className="text-gray-400 text-sm">
+            © 2025 Easy Health 膠囊管理系統. 保留所有權利.
+          </p>
+        </div>
+      </div>
+    </footer>
   )
 }
 
@@ -158,6 +230,10 @@ export default function HomePage() {
             { href: '/', label: '首頁', active: true },
             { href: '/orders', label: '訂單' },
             { href: '/orders/new', label: '新建' },
+            { href: '/ai-recipe-generator', label: 'AI 配方' },
+            { href: '/work-orders', label: '工作單' },
+            { href: '/reports', label: '原料報表' },
+            { href: '/history', label: '歷史' },
             { href: '/login?logout=true', label: '登出' }
           ]}
         />
@@ -348,13 +424,13 @@ export default function HomePage() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* AI 配方生成器 */}
           <Link href="/ai-recipe-generator">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-blue mx-auto mb-4">
-                  <span className="text-white text-2xl">🤖</span>
+                  <Brain className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
                 <p className="text-sm text-gray-600 mb-4">
@@ -367,30 +443,12 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 價格分析器 */}
-          <Link href="/price-analyzer">
-            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
-              <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-green mx-auto mb-4">
-                  <span className="text-white text-2xl">💰</span>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">價格分析器</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  智能分析原料價格趨勢，提供採購建議和成本預測
-                </p>
-                <div className="inline-flex items-center text-green-600 text-sm font-medium">
-                  立即分析 →
-                </div>
-              </div>
-            </div>
-          </Link>
-
           {/* 工作單生成 */}
           <Link href="/work-orders">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-purple mx-auto mb-4">
-                  <span className="text-white text-2xl">📋</span>
+                  <ClipboardList className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">工作單生成</h3>
                 <p className="text-sm text-gray-600 mb-4">
@@ -403,19 +461,19 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 配方資料庫 */}
-          <Link href="/product-database">
+          {/* 原料報表 */}
+          <Link href="/reports">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-orange mx-auto mb-4">
-                  <span className="text-white text-2xl">🗄️</span>
+                <div className="icon-container icon-container-green mx-auto mb-4">
+                  <BarChart3 className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">配方資料庫</h3>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">原料報表</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  集中管理所有配方，支持搜索、分類和版本控制
+                  查看原料使用統計和分析，了解生產趨勢
                 </p>
-                <div className="inline-flex items-center text-orange-600 text-sm font-medium">
-                  瀏覽資料庫 →
+                <div className="inline-flex items-center text-green-600 text-sm font-medium">
+                  查看報表 →
                 </div>
               </div>
             </div>
@@ -443,9 +501,9 @@ export default function HomePage() {
                   <h4 className="font-medium text-amber-800 mb-2">v2.0 新功能</h4>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                     <li>• 🤖 AI 配方生成器 - 智能生成專業配方</li>
-                    <li>• 💰 價格分析器 - 原料價格趨勢分析</li>
                     <li>• 📋 工作單生成 - ISO 標準生產文件</li>
-                    <li>• 🗄️ 配方資料庫 - 集中管理所有配方</li>
+                    <li>• 📊 原料報表 - 使用統計和分析</li>
+                    <li>• 📝 歷史記錄 - 完整操作追蹤</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
@@ -491,18 +549,18 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v1.0.8 - 2025年9月28日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.0.0 - 2025年9月29日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>AI 助手功能全面優化</li>
-                    <li>新增深度推理模式</li>
-                    <li>添加 AI 免責條款</li>
+                    <li>全新 AI 配方生成器</li>
+                    <li>智能工作單生成</li>
+                    <li>原料報表分析</li>
+                    <li>優化導航和頁面結構</li>
+                    <li>添加全站 Footer</li>
+                    <li>移除不需要的功能</li>
+                    <li>改善用戶體驗</li>
                     <li>統一界面設計</li>
-                    <li>優化參數配置</li>
-                    <li>新增參考資料下載</li>
-                    <li>修復訂單編輯功能</li>
-                    <li>整體體驗優化</li>
                   </ul>
                 </div>
                 <div className="text-center pt-2">
@@ -543,6 +601,9 @@ export default function HomePage() {
           {selectedOrder && <OrderDetailView order={selectedOrder} />}
         </LiquidGlassModal>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }
