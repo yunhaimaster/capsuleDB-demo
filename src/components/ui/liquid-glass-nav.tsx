@@ -23,7 +23,11 @@ export function LiquidGlassNav({
   links = [
     { href: '/', label: '首頁' },
     { href: '/orders', label: '訂單' },
-    { href: '/orders/new', label: '新建' }
+    { href: '/orders/new', label: '新建' },
+    { href: '/ai-recipe-generator', label: 'AI配方' },
+    { href: '/price-analyzer', label: '價格分析' },
+    { href: '/work-orders', label: '工作單' },
+    { href: '/product-database', label: '配方庫' }
   ],
   className = ''
 }: LiquidGlassNavProps) {
