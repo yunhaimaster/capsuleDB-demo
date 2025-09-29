@@ -5,11 +5,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
+import { NavDropdown } from '@/components/ui/nav-dropdown'
 
 interface NavLink {
   href: string
   label: string
   active?: boolean
+  children?: NavLink[]
 }
 
 interface LiquidGlassNavProps {
@@ -22,12 +24,25 @@ export function LiquidGlassNav({
   logo = <Logo />,
   links = [
     { href: '/', label: '首頁' },
-    { href: '/orders', label: '訂單' },
-    { href: '/orders/new', label: '新建' },
-    { href: '/ai-recipe-generator', label: 'AI配方' },
-    { href: '/price-analyzer', label: '價格分析' },
-    { href: '/work-orders', label: '工作單' },
-    { href: '/product-database', label: '配方庫' }
+    { 
+      href: '/orders', 
+      label: '訂單管理',
+      children: [
+        { href: '/orders', label: '訂單列表' },
+        { href: '/orders/new', label: '新建訂單' }
+      ]
+    },
+    { 
+      href: '/ai-recipe-generator', 
+      label: 'v2.0 功能',
+      children: [
+        { href: '/ai-recipe-generator', label: 'AI配方生成器' },
+        { href: '/price-analyzer', label: '價格分析器' },
+        { href: '/work-orders', label: '工作單生成' },
+        { href: '/product-database', label: '配方資料庫' }
+      ]
+    },
+    { href: '/reports', label: '報表' }
   ],
   className = ''
 }: LiquidGlassNavProps) {
@@ -90,19 +105,28 @@ export function LiquidGlassNav({
         {/* Desktop Navigation Links - Right side */}
         <div className="liquid-glass-nav-links">
           {processedLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
-              onClick={() => {
-                if (link.label === '登出') {
-                  localStorage.removeItem('isAuthenticated')
-                }
-              }}
-              aria-current={link.active ? 'page' : undefined}
-            >
-              {link.label}
-            </Link>
+            link.children ? (
+              <NavDropdown
+                key={link.href}
+                label={link.label}
+                children={link.children}
+                active={link.active}
+              />
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
+                onClick={() => {
+                  if (link.label === '登出') {
+                    localStorage.removeItem('isAuthenticated')
+                  }
+                }}
+                aria-current={link.active ? 'page' : undefined}
+              >
+                {link.label}
+              </Link>
+            )
           ))}
         </div>
 
@@ -128,20 +152,39 @@ export function LiquidGlassNav({
       {isMobileMenuOpen && (
         <div className="liquid-glass-nav-mobile">
           {processedLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
-              onClick={() => {
-                setIsMobileMenuOpen(false)
-                if (link.label === '登出') {
-                  localStorage.removeItem('isAuthenticated')
-                }
-              }}
-              aria-current={link.active ? 'page' : undefined}
-            >
-              {link.label}
-            </Link>
+            <div key={link.href}>
+              {link.children ? (
+                <div className="space-y-2">
+                  <div className="px-4 py-2 text-sm font-medium text-gray-500">
+                    {link.label}
+                  </div>
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      className="liquid-glass-nav-link block pl-8"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Link
+                  href={link.href}
+                  className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                    if (link.label === '登出') {
+                      localStorage.removeItem('isAuthenticated')
+                    }
+                  }}
+                  aria-current={link.active ? 'page' : undefined}
+                >
+                  {link.label}
+                </Link>
+              )}
+            </div>
           ))}
         </div>
       )}

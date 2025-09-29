@@ -337,6 +337,92 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* v2.0 新功能區塊 */}
+      <div className="mb-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+            🚀 v2.0 全新功能
+          </h2>
+          <p className="text-gray-600">
+            人工智能驅動的膠囊配方管理系統
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* AI 配方生成器 */}
+          <Link href="/ai-recipe-generator">
+            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+              <div className="liquid-glass-content text-center">
+                <div className="icon-container icon-container-blue mx-auto mb-4">
+                  <span className="text-white text-2xl">🤖</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  使用人工智能技術，根據目標功效自動生成專業膠囊配方
+                </p>
+                <div className="inline-flex items-center text-blue-600 text-sm font-medium">
+                  開始使用 →
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 價格分析器 */}
+          <Link href="/price-analyzer">
+            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+              <div className="liquid-glass-content text-center">
+                <div className="icon-container icon-container-green mx-auto mb-4">
+                  <span className="text-white text-2xl">💰</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">價格分析器</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  智能分析原料價格趨勢，提供採購建議和成本預測
+                </p>
+                <div className="inline-flex items-center text-green-600 text-sm font-medium">
+                  立即分析 →
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 工作單生成 */}
+          <Link href="/work-orders">
+            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+              <div className="liquid-glass-content text-center">
+                <div className="icon-container icon-container-purple mx-auto mb-4">
+                  <span className="text-white text-2xl">📋</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">工作單生成</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  自動生成符合 ISO 標準的生產工作單和質量控制文件
+                </p>
+                <div className="inline-flex items-center text-purple-600 text-sm font-medium">
+                  生成工作單 →
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 配方資料庫 */}
+          <Link href="/product-database">
+            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+              <div className="liquid-glass-content text-center">
+                <div className="icon-container icon-container-orange mx-auto mb-4">
+                  <span className="text-white text-2xl">🗄️</span>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">配方資料庫</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  集中管理所有配方，支持搜索、分類和版本控制
+                </p>
+                <div className="inline-flex items-center text-orange-600 text-sm font-medium">
+                  瀏覽資料庫 →
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       {/* 功能介紹和版本更新 - 並排布局 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 功能介紹 */}
@@ -354,7 +440,16 @@ export default function HomePage() {
               <div className="space-y-4 md:space-y-6">
               <div className="space-y-3 md:space-y-4">
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
-                  <h4 className="font-medium text-amber-800 mb-2">主要功能</h4>
+                  <h4 className="font-medium text-amber-800 mb-2">v2.0 新功能</h4>
+                  <ul className="space-y-1 text-xs md:text-sm text-amber-700">
+                    <li>• 🤖 AI 配方生成器 - 智能生成專業配方</li>
+                    <li>• 💰 價格分析器 - 原料價格趨勢分析</li>
+                    <li>• 📋 工作單生成 - ISO 標準生產文件</li>
+                    <li>• 🗄️ 配方資料庫 - 集中管理所有配方</li>
+                  </ul>
+                </div>
+                <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
+                  <h4 className="font-medium text-amber-800 mb-2">基礎功能</h4>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                     <li>• 膠囊配方管理與記錄追蹤</li>
                     <li>• 智能配方導入（支援文字格式）</li>
