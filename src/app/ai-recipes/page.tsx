@@ -313,10 +313,12 @@ export default function AIRecipesPage() {
                             <Calendar className="h-3 w-3" />
                             <span>創建於 {new Date(recipe.createdAt).toLocaleDateString('zh-TW')}</span>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Eye className="h-3 w-3" />
-                            <span>查看詳情</span>
-                          </div>
+                          <Link href={`/ai-recipes/${recipe.id}`}>
+                            <div className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 cursor-pointer">
+                              <Eye className="h-3 w-3" />
+                              <span>查看詳情</span>
+                            </div>
+                          </Link>
                         </div>
                       </div>
                     </Card>
