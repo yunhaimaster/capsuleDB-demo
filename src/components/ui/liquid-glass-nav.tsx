@@ -81,7 +81,7 @@ export function LiquidGlassNav({
     >
       <div className="liquid-glass-nav-content">
         {/* Logo and Brand Section - Left side */}
-        <div className="flex items-center space-x-2 sm:space-x-3 mr-auto">
+        <div className="flex items-center space-x-1 sm:space-x-2 mr-auto">
           <Link 
             href="/" 
             className="liquid-glass-nav-logo"
@@ -89,11 +89,11 @@ export function LiquidGlassNav({
           >
             {logo}
           </Link>
-          <div className="hidden sm:block">
-            <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">
+          <div className="block">
+            <h1 className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-gray-900">
               Easy Health
             </h1>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-gray-600 hidden sm:block">
               膠囊配方管理系統
             </p>
           </div>
