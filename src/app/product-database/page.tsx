@@ -27,25 +27,36 @@ export default function ProductDatabasePage() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
+        console.log('開始獲取數據...')
         
         // 獲取產品列表
         const productsResponse = await fetch('/api/database/recipes')
+        console.log('產品列表響應:', productsResponse.status)
         if (productsResponse.ok) {
           const productsData = await productsResponse.json()
+          console.log('產品數據:', productsData)
           setProducts(productsData.products || [])
+        } else {
+          console.error('產品列表獲取失敗:', productsResponse.status)
         }
         
         // 獲取原料數據
         const ingredientsResponse = await fetch('/api/ingredients/from-orders')
+        console.log('原料數據響應:', ingredientsResponse.status)
         if (ingredientsResponse.ok) {
           const ingredientsData = await ingredientsResponse.json()
+          console.log('原料數據:', ingredientsData)
           setIngredients(ingredientsData.ingredients || [])
+        } else {
+          console.error('原料數據獲取失敗:', ingredientsResponse.status)
         }
         
       } catch (err) {
+        console.error('數據獲取錯誤:', err)
         setError('網絡錯誤，請稍後再試')
       } finally {
         setIsLoading(false)
+        console.log('數據獲取完成')
       }
     }
     fetchData()
@@ -123,7 +134,7 @@ export default function ProductDatabasePage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-pattern-bg">
+    <div className="min-h-screen bg-gray-50">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">
@@ -136,6 +147,13 @@ export default function ProductDatabasePage() {
             <p className="text-lg text-gray-600 mb-6">
               集中管理所有配方，支持搜索、分類和版本控制
             </p>
+            
+            {/* 調試信息 */}
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700">
+                調試信息: 加載中={isLoading.toString()}, 錯誤={error || '無'}, 產品數={products.length}, 原料數={ingredients.length}
+              </p>
+            </div>
             
             {/* AI 分析按鈕 */}
             <div className="flex justify-center space-x-4">
