@@ -67,7 +67,7 @@ ${JSON.stringify(priceData, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請分析${materialName}的價格趨勢和採購建議` }
         ],
-        max_tokens: 4000,
+        max_tokens: 8000,
         temperature: 0.1,
         top_p: 0.95,
         frequency_penalty: 0.0,

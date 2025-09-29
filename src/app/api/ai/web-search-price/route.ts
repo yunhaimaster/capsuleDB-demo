@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請搜索${materialName}的最新價格信息，包括供應商、價格、質量等級等詳細信息` }
         ],
-        max_tokens: 4000,
+        max_tokens: 8000,
         temperature: 0.3,
         top_p: 0.95,
         frequency_penalty: 0.0,
@@ -143,7 +143,7 @@ export async function GET(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請快速搜索${materialName}的最新價格` }
         ],
-        max_tokens: 2000,
+        max_tokens: 8000,
         temperature: 0.3,
         top_p: 0.95
       })

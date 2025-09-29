@@ -137,7 +137,7 @@ ${JSON.stringify(analysisData.popularIngredients, null, 2)}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請分析我們的訂單數據，提供原料使用洞察和業務建議` }
         ],
-        max_tokens: 4000,
+        max_tokens: 8000,
         temperature: 0.3,
         top_p: 0.95,
         frequency_penalty: 0.0,
@@ -223,7 +223,7 @@ export async function GET(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請快速分析原料使用情況` }
         ],
-        max_tokens: 2000,
+        max_tokens: 8000,
         temperature: 0.3,
         top_p: 0.95
       })

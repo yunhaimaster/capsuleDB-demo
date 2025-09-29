@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `請為我生成一個${targetEffect}的${dosageForm || '膠囊'}配方` }
         ],
-        max_tokens: 4000,
+        max_tokens: 8000,
         temperature: 0.3,
         top_p: 0.95,
         frequency_penalty: 0.0,
