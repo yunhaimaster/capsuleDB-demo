@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { AlertTriangle, TrendingUp, Package, BarChart3, ArrowUpDown, ArrowUp, ArrowDown, Bot, RefreshCw } from 'lucide-react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import Link from 'next/link'
 
 interface IngredientStat {
   materialName: string
@@ -44,11 +45,18 @@ export default function ReportsPage() {
   const [sortField, setSortField] = useState<SortField>('totalUsageMg')
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc')
   const [aiAssessing, setAiAssessing] = useState(false)
-  const [showAIAssessment, setShowAIAssessment] = useState(false)
+  const [showAIAssessment, setShowAIAssessment] = useState(true) // 默認顯示 AI 評估
 
   useEffect(() => {
     fetchStats()
   }, [])
+
+  // 當數據加載完成後，自動執行 AI 評估
+  useEffect(() => {
+    if (stats?.ingredients && stats.ingredients.length > 0 && !showAIAssessment) {
+      assessRiskWithAI()
+    }
+  }, [stats])
 
   const fetchStats = async () => {
     try {
@@ -57,6 +65,13 @@ export default function ReportsPage() {
       if (!response.ok) throw new Error('Failed to fetch stats')
       const data = await response.json()
       setStats(data)
+      
+      // 數據加載完成後，自動執行 AI 評估
+      if (data.ingredients && data.ingredients.length > 0) {
+        setTimeout(() => {
+          assessRiskWithAI(data.ingredients)
+        }, 1000) // 延遲 1 秒後自動執行 AI 評估
+      }
     } catch (error) {
       console.error('Error fetching stats:', error)
       setError('載入統計數據失敗')
@@ -65,12 +80,13 @@ export default function ReportsPage() {
     }
   }
 
-  const assessRiskWithAI = async () => {
-    if (!stats?.ingredients) return
+  const assessRiskWithAI = async (ingredientsData?: IngredientStat[]) => {
+    const ingredients = ingredientsData || stats?.ingredients
+    if (!ingredients) return
 
     try {
       setAiAssessing(true)
-      const materials = stats.ingredients.map(ingredient => ingredient.materialName)
+      const materials = ingredients.map(ingredient => ingredient.materialName)
       
       const response = await fetch('/api/ai/assess-risk', {
         method: 'POST',
@@ -86,7 +102,7 @@ export default function ReportsPage() {
       
       if (aiData.assessments) {
         // 更新統計數據，合併 AI 評估結果
-        const updatedIngredients = stats.ingredients.map(ingredient => {
+        const updatedIngredients = ingredients.map(ingredient => {
           const aiAssessment = aiData.assessments.find((a: any) => 
             a.materialName === ingredient.materialName
           )
@@ -114,11 +130,11 @@ export default function ReportsPage() {
           lowRiskIngredients: updatedIngredients.filter(s => s.riskScore < 4).length
         }
 
-        setStats({
-          ...stats,
+        setStats(prevStats => ({
+          ...prevStats!,
           ingredients: updatedIngredients,
           summary: updatedSummary
-        })
+        }))
         
         setShowAIAssessment(true)
       }
@@ -324,11 +340,11 @@ export default function ReportsPage() {
                   原料使用詳情
                 </CardTitle>
                 <CardDescription className="text-gray-600">
-                  {showAIAssessment ? 'AI 專業風險評估結果' : '按使用量排序，顯示重量佔比和風險評估'}
+                  AI 專業風險評估結果 - 基於原料特性、法規要求和行業標準的智能分析
                 </CardDescription>
               </div>
               <button
-                onClick={assessRiskWithAI}
+                onClick={() => assessRiskWithAI()}
                 disabled={aiAssessing || !stats?.ingredients?.length}
                 className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white text-sm font-medium rounded-lg transition-colors"
               >
@@ -340,7 +356,7 @@ export default function ReportsPage() {
                 ) : (
                   <>
                     <Bot className="h-4 w-4 mr-2" />
-                    AI 專業評估
+                    重新評估
                   </>
                 )}
               </button>
@@ -467,6 +483,74 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 mt-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* 公司信息 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Easy Health</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                專業的保健品膠囊生產管理解決方案
+              </p>
+              <div className="flex space-x-4">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">💊</span>
+                </div>
+                <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">🏭</span>
+                </div>
+                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">🤖</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 主要功能 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">主要功能</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
+                <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
+                <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
+                <li><Link href="/reports" className="hover:text-white transition-colors">原料報表</Link></li>
+              </ul>
+            </div>
+
+            {/* 系統功能 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">系統功能</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
+                <li><Link href="/liquid-glass-demo" className="hover:text-white transition-colors">UI 演示</Link></li>
+                <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
+                <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
+              </ul>
+            </div>
+
+            {/* 技術支援 */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">技術支援</h3>
+              <div className="text-sm text-gray-400">
+                <p className="mb-2">系統管理員：Victor</p>
+                <p className="mb-2">版本：v2.0</p>
+                <p className="mb-4">最後更新：2025年9月29日</p>
+                <div className="flex space-x-2">
+                  <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">在線</span>
+                  <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">AI 驅動</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p className="text-gray-400 text-sm">
+              © 2025 Easy Health 膠囊管理系統. 保留所有權利.
+            </p>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   )
