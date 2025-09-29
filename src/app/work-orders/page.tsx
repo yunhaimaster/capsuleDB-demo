@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { WorkOrderRequest, WorkOrderResponse } from '@/types/v2-types'
 import { FileText, Loader2, Download, Eye, CheckCircle, Clock, AlertCircle } from 'lucide-react'
 import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 interface ProductionOrder {
   id: string
@@ -277,9 +278,7 @@ export default function WorkOrdersPage() {
                     </div>
 
                     <div className="prose max-w-none">
-                      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                        {generatedWorkOrder.content}
-                      </div>
+                      <MarkdownRenderer content={generatedWorkOrder.content} />
                     </div>
 
                     {/* 免責條款 */}

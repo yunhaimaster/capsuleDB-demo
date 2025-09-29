@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { PriceAnalysisRequest, PriceAnalysisResponse, PriceData } from '@/types/v2-types'
 import { TrendingUp, Loader2, Search, DollarSign, Calendar, Package, Globe, RefreshCw } from 'lucide-react'
 import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 export default function PriceAnalyzerPage() {
   const [formData, setFormData] = useState<PriceAnalysisRequest>({
@@ -321,9 +322,7 @@ export default function PriceAnalyzerPage() {
                     </div>
                     
                     <div className="prose max-w-none">
-                      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                        {webSearchResult.content}
-                      </div>
+                      <MarkdownRenderer content={webSearchResult.content} />
                     </div>
                     
                     <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -352,9 +351,7 @@ export default function PriceAnalyzerPage() {
                     </div>
 
                     <div className="prose max-w-none">
-                      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                        {analysisResult.content}
-                      </div>
+                      <MarkdownRenderer content={analysisResult.content} />
                     </div>
 
                     {/* 免責條款 */}

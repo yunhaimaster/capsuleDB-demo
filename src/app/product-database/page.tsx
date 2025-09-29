@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { ProductDatabaseItem } from '@/types/v2-types'
-import { Database, Search, Plus, Eye, Edit, Trash2, Filter, Download, Upload } from 'lucide-react'
+import { Database, Search, Plus, Eye, Edit, Trash2, Filter, Download, Upload, Brain, BarChart3, Loader2 } from 'lucide-react'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 export default function ProductDatabasePage() {
   const [products, setProducts] = useState<ProductDatabaseItem[]>([])
@@ -15,6 +17,8 @@ export default function ProductDatabasePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<ProductDatabaseItem | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState<any>(null)
 
   // 獲取產品列表
   useEffect(() => {
@@ -47,6 +51,36 @@ export default function ProductDatabasePage() {
 
   // 獲取所有分類
   const categories = Array.from(new Set(products.map(p => p.category).filter(Boolean)))
+
+  // AI 分析功能
+  const handleAIAnalysis = async () => {
+    setIsAnalyzing(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/ai/ingredient-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          analysisType: 'comprehensive'
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setAnalysisResult(result.analysis)
+      } else {
+        setError(result.error || 'AI 分析失敗')
+      }
+    } catch (err) {
+      setError('AI 分析錯誤，請稍後再試')
+    } finally {
+      setIsAnalyzing(false)
+    }
+  }
 
   const handleViewProduct = (product: ProductDatabaseItem) => {
     setSelectedProduct(product)
@@ -84,10 +118,86 @@ export default function ProductDatabasePage() {
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
               🗄️ 產品配方資料庫
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 mb-6">
               集中管理所有配方，支持搜索、分類和版本控制
             </p>
+            
+            {/* AI 分析按鈕 */}
+            <div className="flex justify-center space-x-4">
+              <Button
+                onClick={handleAIAnalysis}
+                disabled={isAnalyzing}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    分析中...
+                  </>
+                ) : (
+                  <>
+                    <Brain className="h-4 w-4 mr-2" />
+                    AI 原料分析
+                  </>
+                )}
+              </Button>
+              
+              <Button
+                onClick={() => setAnalysisResult(null)}
+                variant="outline"
+                className="flex items-center space-x-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                <span>清除分析</span>
+              </Button>
+            </div>
           </div>
+
+          {/* AI 分析結果 */}
+          {analysisResult && (
+            <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
+              <div className="liquid-glass-content">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="icon-container icon-container-purple">
+                    <Brain className="h-5 w-5 text-white" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-800">AI 原料分析結果</h2>
+                </div>
+                
+                <div className="prose max-w-none">
+                  <MarkdownRenderer content={analysisResult.content} />
+                </div>
+                
+                {analysisResult.dataSummary && (
+                  <div className="mt-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                    <h3 className="font-semibold text-purple-800 mb-3">數據摘要</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium text-purple-600">總訂單數:</span>
+                        <span className="ml-2 text-purple-800">{analysisResult.dataSummary.totalOrders}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-purple-600">總原料數:</span>
+                        <span className="ml-2 text-purple-800">{analysisResult.dataSummary.totalIngredients}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-purple-600">最近訂單:</span>
+                        <span className="ml-2 text-purple-800">{analysisResult.dataSummary.recentOrders}</span>
+                      </div>
+                      <div>
+                        <span className="font-medium text-purple-600">總價值:</span>
+                        <span className="ml-2 text-purple-800">HK${analysisResult.dataSummary.totalValue?.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="mt-6">
+                  <AIDisclaimer type="analysis" />
+                </div>
+              </div>
+            </Card>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* 左側：搜索和篩選 */}
