@@ -10,7 +10,7 @@ import { Logo } from '@/components/ui/logo'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, BarChart3, Calendar, Zap } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
@@ -460,23 +460,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 原料報表 */}
-          <Link href="/reports">
-            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
-              <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-green mx-auto mb-4">
-                  <BarChart3 className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">原料報表</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  查看原料使用統計和分析，了解生產趨勢
-                </p>
-                <div className="inline-flex items-center text-green-600 text-sm font-medium">
-                  查看報表 →
-                </div>
-              </div>
-            </div>
-          </Link>
         </div>
       </div>
 
@@ -501,8 +484,8 @@ export default function HomePage() {
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
                     <li>• 🤖 AI 配方生成器 - 智能生成專業配方</li>
                     <li>• 📋 工作單生成 - ISO 標準生產文件</li>
-                    <li>• 📊 原料報表 - 使用統計和分析</li>
                     <li>• 📝 歷史記錄 - 完整操作追蹤</li>
+                    <li>• 💊 訂單管理 - 生產記錄管理</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
