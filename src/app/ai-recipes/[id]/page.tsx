@@ -253,61 +253,18 @@ export default function AIRecipeDetailPage() {
             </div>
           </Card>
 
-          {/* 原料配方 */}
+          {/* AI生成的完整配方內容 */}
           <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
             <div className="liquid-glass-content">
               <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
                 <Pill className="h-5 w-5 mr-2" />
-                原料配方
+                AI生成的完整配方
               </h2>
               <div className="prose max-w-none">
                 <MarkdownRenderer content={recipe.ingredients} />
               </div>
             </div>
           </Card>
-
-          {/* 劑量信息 */}
-          <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
-            <div className="liquid-glass-content">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <CheckCircle className="h-5 w-5 mr-2" />
-                劑量信息
-              </h2>
-              <div className="prose max-w-none">
-                <MarkdownRenderer content={recipe.dosage} />
-              </div>
-            </div>
-          </Card>
-
-          {/* 成本分析 */}
-          {recipe.costAnalysis && (
-            <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
-              <div className="liquid-glass-content">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                  <DollarSign className="h-5 w-5 mr-2" />
-                  成本分析
-                </h2>
-                <div className="prose max-w-none">
-                  <MarkdownRenderer content={recipe.costAnalysis} />
-                </div>
-              </div>
-            </Card>
-          )}
-
-          {/* 法規合規 */}
-          {recipe.regulatoryStatus && (
-            <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
-              <div className="liquid-glass-content">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                  <AlertTriangle className="h-5 w-5 mr-2" />
-                  法規合規
-                </h2>
-                <div className="prose max-w-none">
-                  <MarkdownRenderer content={recipe.regulatoryStatus} />
-                </div>
-              </div>
-            </Card>
-          )}
 
           {/* AI免責聲明 */}
           <AIDisclaimer type="recipe" />
