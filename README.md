@@ -2,6 +2,21 @@
 
 一個專為保健品公司設計的內部生產管理系統，提供完整的膠囊配方建檔、生產記錄管理與智能分析功能。
 
+## 📚 文檔指南
+
+### 🔧 開發文檔
+- **[開發指南](DEVELOPMENT_GUIDE.md)** - 完整的開發指南和架構說明
+- **[組件使用指南](COMPONENT_USAGE_GUIDE.md)** - 組件使用方法和最佳實踐
+- **[API 文檔](API_DOCUMENTATION.md)** - 完整的 API 接口文檔
+- **[部署維護指南](DEPLOYMENT_MAINTENANCE.md)** - 部署和維護指南
+- **[快速參考](QUICK_REFERENCE.md)** - 常用命令和快速參考
+
+### 🎯 快速開始
+1. 查看 [開發指南](DEVELOPMENT_GUIDE.md) 了解項目架構
+2. 閱讀 [組件使用指南](COMPONENT_USAGE_GUIDE.md) 學習如何使用組件
+3. 參考 [快速參考](QUICK_REFERENCE.md) 獲取常用命令
+4. 查看 [API 文檔](API_DOCUMENTATION.md) 了解接口規範
+
 ## 🚀 最新功能 (v1.0.6 - 2024/09/25)
 
 ### 🚀 AI 模型升級
