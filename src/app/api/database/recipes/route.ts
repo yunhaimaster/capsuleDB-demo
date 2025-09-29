@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category')
-    const search = searchParams.get('search')
     const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    const search = searchParams.get('search') || ''
+    const category = searchParams.get('category') || ''
+
+    const skip = (page - 1) * limit
 
     // 構建查詢條件
     const where: any = {}
-    
-    if (category) {
-      where.category = category
-    }
     
     if (search) {
       where.OR = [
@@ -22,39 +22,55 @@ export async function GET(request: NextRequest) {
         { notes: { contains: search, mode: 'insensitive' } }
       ]
     }
+    
+    if (category) {
+      where.category = category
+    }
 
-    // 獲取產品列表
-    const products = await prisma.productDatabase.findMany({
-      where,
-      orderBy: {
-        updatedAt: 'desc'
-      },
-      skip: (page - 1) * limit,
-      take: limit
-    })
-
-    // 獲取總數
-    const total = await prisma.productDatabase.count({ where })
+    const [products, total] = await Promise.all([
+      prisma.productDatabase.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: {
+          updatedAt: 'desc'
+        }
+      }),
+      prisma.productDatabase.count({ where })
+    ])
 
     return NextResponse.json({
       success: true,
-      data: {
-        products,
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-          hasNext: page * limit < total,
-          hasPrev: page > 1
-        }
+      products: products.map(product => ({
+        id: product.id,
+        productName: product.productName,
+        category: product.category,
+        formula: product.formula,
+        efficacy: product.efficacy,
+        safety: product.safety,
+        regulatoryStatus: product.regulatoryStatus,
+        version: product.version,
+        isActive: product.isActive,
+        tags: product.tags ? JSON.parse(product.tags) : [],
+        notes: product.notes,
+        createdBy: product.createdBy,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt
+      })),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1
       }
     })
 
   } catch (error) {
     console.error('獲取產品列表錯誤:', error)
     return NextResponse.json(
-      { error: '獲取產品列表失敗' },
+      { success: false, error: '獲取產品列表失敗' },
       { status: 500 }
     )
   }
@@ -62,18 +78,15 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { productName, category, formula, efficacy, safety, tags, notes } = body
+    const { productName, category, formula, efficacy, safety, tags, notes } = await request.json()
 
-    // 驗證輸入
     if (!productName) {
       return NextResponse.json(
-        { error: '產品名稱不能為空' },
+        { success: false, error: '產品名稱不能為空' },
         { status: 400 }
       )
     }
 
-    // 創建產品
     const product = await prisma.productDatabase.create({
       data: {
         productName,
@@ -81,22 +94,39 @@ export async function POST(request: NextRequest) {
         formula: JSON.stringify(formula || {}),
         efficacy: efficacy ? JSON.stringify(efficacy) : null,
         safety: safety ? JSON.stringify(safety) : null,
+        regulatoryStatus: null,
+        version: '1.0',
+        isActive: true,
         tags: tags ? JSON.stringify(tags) : null,
         notes,
-        createdBy: 'system', // 可以從認證信息中獲取
-        isActive: true
+        createdBy: '系統'
       }
     })
 
     return NextResponse.json({
       success: true,
-      product
+      product: {
+        id: product.id,
+        productName: product.productName,
+        category: product.category,
+        formula: product.formula,
+        efficacy: product.efficacy,
+        safety: product.safety,
+        regulatoryStatus: product.regulatoryStatus,
+        version: product.version,
+        isActive: product.isActive,
+        tags: product.tags ? JSON.parse(product.tags) : [],
+        notes: product.notes,
+        createdBy: product.createdBy,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt
+      }
     })
 
   } catch (error) {
     console.error('創建產品錯誤:', error)
     return NextResponse.json(
-      { error: '創建產品失敗' },
+      { success: false, error: '創建產品失敗' },
       { status: 500 }
     )
   }

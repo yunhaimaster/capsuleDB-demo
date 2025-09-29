@@ -1978,6 +1978,21 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
+/* 警告卡片樣式 */
+.liquid-glass-card-warning {
+  background: rgba(255, 193, 7, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(255, 193, 7, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* 灰色圖標容器 */
+.icon-container-gray {
+  @apply bg-gradient-to-br from-gray-500 to-gray-600;
+}
+
 /* 白色主題標題樣式 */
 .liquid-glass-modal.white-theme .liquid-glass-modal-header,
 .liquid-glass-modal.ai-chat-modal .liquid-glass-modal-header {

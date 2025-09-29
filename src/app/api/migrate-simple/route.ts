@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
             await prisma.$executeRawUnsafe(statement)
           } catch (error) {
             // 如果表已存在，忽略錯誤
-            if (!error.message.includes('already exists')) {
+            if (error instanceof Error && !error.message.includes('already exists')) {
               console.error(`創建表失敗: ${statement}`, error)
             }
           }

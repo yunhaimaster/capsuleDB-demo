@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { materialName, analysisType, enableReasoning } = body
+    const { materialName, analysisType, enableReasoning } = await request.json()
 
-    // 驗證輸入
-    if (!materialName) {
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
+    const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
+
+    if (!OPENROUTER_API_KEY) {
       return NextResponse.json(
-        { error: '原料名稱不能為空' },
-        { status: 400 }
+        { success: false, error: 'AI 服務暫時無法使用，請稍後再試' },
+        { status: 500 }
       )
     }
 
-    // 查詢現有價格數據
+    // 獲取歷史價格數據
     const priceData = await prisma.ingredientPrice.findMany({
       where: {
         materialName: {
@@ -28,100 +31,83 @@ export async function POST(request: NextRequest) {
       take: 10
     })
 
-    // 構建 AI 提示詞
-    const systemPrompt = `你是一位專業的原料價格分析師，具有豐富的保健品原料市場經驗。請根據以下信息進行專業的價格分析：
+    const systemPrompt = `你是一個專業的原料價格分析專家，專門為保健品公司提供價格分析和採購建議。
 
-**分析對象：**
-- 原料名稱：${materialName}
-- 分析類型：${analysisType || '綜合分析'}
+分析對象：${materialName}
+分析類型：${analysisType || 'comprehensive'}
 
-**現有價格數據：**
-${priceData.length > 0 ? priceData.map(p => 
-  `- 供應商：${p.supplier}，價格：HK$${p.price}/${p.unit}，質量等級：${p.quality}，有效期：${p.validFrom.toISOString().split('T')[0]}`
-).join('\n') : '暫無歷史價格數據'}
+歷史價格數據：
+${JSON.stringify(priceData, null, 2)}
 
-**請以香港書面語繁體中文回答，並按照以下格式提供分析：**
+請提供：
+1. 價格趨勢分析
+2. 供應商比較
+3. 採購建議
+4. 成本優化建議
+5. 市場預測
 
-## 價格分析報告
+請使用香港書面語繁體中文回答，確保分析專業、準確且實用。`
 
-### 市場概況
-[分析當前市場狀況和價格趨勢]
-
-### 價格範圍分析
-| 價格等級 | 價格範圍 | 供應商類型 | 質量水平 |
-|---------|----------|------------|----------|
-| 高端 | HK$ X.XX - X.XX | [供應商類型] | [質量描述] |
-| 中端 | HK$ X.XX - X.XX | [供應商類型] | [質量描述] |
-| 低端 | HK$ X.XX - X.XX | [供應商類型] | [質量描述] |
-
-### 供應商建議
-[推薦供應商和選擇建議]
-
-### 採購建議
-- **最佳採購時機**：[建議]
-- **採購策略**：[策略建議]
-- **風險評估**：[風險分析]
-
-### 價格預測
-[基於市場趨勢的價格預測]
-
-請提供實用且專業的建議。`
-
-    // 調用 OpenRouter API
-    const openrouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-        'X-Title': 'EasyPack v2.0 Price Analysis'
+        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+        'X-Title': 'Easy Health AI Price Analyzer'
       },
       body: JSON.stringify({
         model: 'deepseek/deepseek-chat-v3.1',
         messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          {
-            role: 'user',
-            content: `請為我分析${materialName}的價格情況。`
-          }
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `請分析${materialName}的價格趨勢和採購建議` }
         ],
-        max_tokens: 3000,
-        temperature: 0.6,
-        top_p: 0.9,
-        frequency_penalty: 0.1,
-        presence_penalty: 0.1,
-        ...(enableReasoning && { reasoning: { effort: 'high' } })
+        max_tokens: 4000,
+        temperature: 0.3,
+        top_p: 0.95,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+        ...(enableReasoning && {
+          reasoning: {
+            effort: "high"
+          }
+        })
       })
     })
 
-    if (!openrouterResponse.ok) {
-      const errorData = await openrouterResponse.text()
-      console.error('OpenRouter API 錯誤:', errorData)
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('OpenRouter API 錯誤:', errorText)
       return NextResponse.json(
-        { error: 'AI 服務暫時無法使用，請稍後再試' },
+        { success: false, error: 'AI 服務暫時無法回應，請稍後再試' },
         { status: 500 }
       )
     }
 
-    const aiResponse = await openrouterResponse.json()
-    const analysisContent = aiResponse.choices[0]?.message?.content
-
-    if (!analysisContent) {
-      return NextResponse.json(
-        { error: 'AI 回應格式錯誤' },
-        { status: 500 }
-      )
-    }
+    const data = await response.json()
+    const aiResponse = data.choices?.[0]?.message?.content || ''
 
     return NextResponse.json({
       success: true,
       analysis: {
         materialName,
-        content: analysisContent,
-        priceData: priceData,
+        content: aiResponse,
+        priceData: priceData.map(price => ({
+          id: price.id,
+          materialName: price.materialName,
+          supplier: price.supplier,
+          price: price.price,
+          currency: price.currency,
+          unit: price.unit,
+          minimumOrder: price.minimumOrder,
+          leadTime: price.leadTime,
+          quality: price.quality,
+          source: price.source,
+          validFrom: price.validFrom,
+          validTo: price.validTo,
+          createdAt: price.createdAt,
+          updatedAt: price.updatedAt
+        })),
         generatedAt: new Date().toISOString()
       }
     })
@@ -129,7 +115,7 @@ ${priceData.length > 0 ? priceData.map(p =>
   } catch (error) {
     console.error('價格分析錯誤:', error)
     return NextResponse.json(
-      { error: '價格分析失敗，請稍後再試' },
+      { success: false, error: '價格分析失敗，請稍後再試' },
       { status: 500 }
     )
   }
@@ -142,12 +128,11 @@ export async function GET(request: NextRequest) {
 
     if (!materialName) {
       return NextResponse.json(
-        { error: '原料名稱參數不能為空' },
+        { success: false, error: '缺少原料名稱參數' },
         { status: 400 }
       )
     }
 
-    // 查詢價格數據
     const priceData = await prisma.ingredientPrice.findMany({
       where: {
         materialName: {
@@ -157,34 +142,36 @@ export async function GET(request: NextRequest) {
       },
       orderBy: {
         createdAt: 'desc'
-      }
+      },
+      take: 20
     })
-
-    // 計算統計數據
-    const prices = priceData.map(p => p.price)
-    const avgPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0
-    const minPrice = prices.length > 0 ? Math.min(...prices) : 0
-    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0
 
     return NextResponse.json({
       success: true,
       data: {
-        materialName,
-        priceData,
-        statistics: {
-          count: priceData.length,
-          averagePrice: avgPrice,
-          minPrice,
-          maxPrice,
-          priceRange: maxPrice - minPrice
-        }
+        priceData: priceData.map(price => ({
+          id: price.id,
+          materialName: price.materialName,
+          supplier: price.supplier,
+          price: price.price,
+          currency: price.currency,
+          unit: price.unit,
+          minimumOrder: price.minimumOrder,
+          leadTime: price.leadTime,
+          quality: price.quality,
+          source: price.source,
+          validFrom: price.validFrom,
+          validTo: price.validTo,
+          createdAt: price.createdAt,
+          updatedAt: price.updatedAt
+        }))
       }
     })
 
   } catch (error) {
     console.error('獲取價格數據錯誤:', error)
     return NextResponse.json(
-      { error: '獲取價格數據失敗' },
+      { success: false, error: '獲取價格數據失敗' },
       { status: 500 }
     )
   }
