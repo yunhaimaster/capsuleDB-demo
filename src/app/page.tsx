@@ -467,7 +467,7 @@ export default function HomePage() {
               </div>
               <h3 className="text-lg font-semibold text-gray-800 mb-2">更多功能</h3>
               <p className="text-sm text-gray-600 mb-4">
-                更多 AI 驅動的功能正在開發中，敬請期待
+                更多實用功能正在開發中，敬請期待
               </p>
               <div className="inline-flex items-center text-gray-500 text-sm font-medium">
                 開發中...

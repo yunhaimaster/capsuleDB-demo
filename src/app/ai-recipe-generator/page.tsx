@@ -475,7 +475,7 @@ export default function AIRecipeGeneratorPage() {
                 <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
                 <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
                 <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
-                <li><Link href="/reports" className="hover:text-white transition-colors">原料報表</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">返回首頁</Link></li>
               </ul>
             </div>
 
@@ -483,10 +483,10 @@ export default function AIRecipeGeneratorPage() {
             <div>
               <h3 className="text-lg font-semibold mb-4">系統功能</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
-                <li><Link href="/liquid-glass-demo" className="hover:text-white transition-colors">UI 演示</Link></li>
                 <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
                 <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">系統首頁</Link></li>
+                <li><Link href="/login?logout=true" className="hover:text-white transition-colors">安全登出</Link></li>
               </ul>
             </div>
 

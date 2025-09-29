@@ -160,10 +160,21 @@ export default function WorkOrdersPage() {
                         onChange={(e) => setIsoStandard(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
-                        <option value="ISO 9001">ISO 9001:2015</option>
-                        <option value="ISO 22000">ISO 22000:2018</option>
-                        <option value="ISO 13485">ISO 13485:2016</option>
+                        <option value="ISO 9001">ISO 9001:2015 - 質量管理體系</option>
+                        <option value="ISO 22000">ISO 22000:2018 - 食品安全管理</option>
+                        <option value="ISO 13485">ISO 13485:2016 - 醫療器械質量管理</option>
                       </select>
+                      <div className="mt-2 text-xs text-gray-500">
+                        {isoStandard === 'ISO 9001' && (
+                          <span>適用於一般保健品生產，注重質量管理體系和持續改進</span>
+                        )}
+                        {isoStandard === 'ISO 22000' && (
+                          <span>適用於食品級保健品，注重食品安全和危害分析</span>
+                        )}
+                        {isoStandard === 'ISO 13485' && (
+                          <span>適用於醫療器械級保健品，注重風險管理和法規合規</span>
+                        )}
+                      </div>
                     </div>
 
                     <Button
@@ -380,7 +391,7 @@ export default function WorkOrdersPage() {
                 <li><Link href="/orders" className="hover:text-white transition-colors">訂單管理</Link></li>
                 <li><Link href="/ai-recipe-generator" className="hover:text-white transition-colors">AI 配方生成</Link></li>
                 <li><Link href="/work-orders" className="hover:text-white transition-colors">工作單生成</Link></li>
-                <li><Link href="/reports" className="hover:text-white transition-colors">原料報表</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">返回首頁</Link></li>
               </ul>
             </div>
 
@@ -388,10 +399,10 @@ export default function WorkOrdersPage() {
             <div>
               <h3 className="text-lg font-semibold mb-4">系統功能</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/history" className="hover:text-white transition-colors">歷史記錄</Link></li>
-                <li><Link href="/liquid-glass-demo" className="hover:text-white transition-colors">UI 演示</Link></li>
                 <li><Link href="/orders/new" className="hover:text-white transition-colors">新建訂單</Link></li>
                 <li><Link href="/login" className="hover:text-white transition-colors">登入系統</Link></li>
+                <li><Link href="/" className="hover:text-white transition-colors">系統首頁</Link></li>
+                <li><Link href="/login?logout=true" className="hover:text-white transition-colors">安全登出</Link></li>
               </ul>
             </div>
 
