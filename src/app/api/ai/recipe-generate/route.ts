@@ -25,14 +25,20 @@ export async function POST(request: NextRequest) {
 - 劑型：膠囊（固定）
 - 代工成本目標：${budget || '無特定限制'}
 
-    請生成一個專業的膠囊配方，專門針對膠囊灌裝工廠的代工生產業務，包含：
+    請生成一個專業的膠囊配方，專門針對膠囊灌裝工廠的代工生產業務，按照以下順序組織內容：
 
     ## 1. 配方基本信息
     - 專業的產品名稱（請根據功效生成合適的產品名稱，不要直接使用用戶輸入的要求）
     - 產品描述和功效說明
     - 代工定位說明
 
-    ## 2. 膠囊規格建議
+    ## 2. 配方原料
+    - 詳細的原料列表（包含劑量和作用）
+    - 原料配比和混合順序
+    - 原料來源建議
+    - 代工級原料選擇
+
+    ## 3. 膠囊規格建議
     - 評估每個原料的堆積密度（bulk density）
     - 計算混合後的粉劑總密度
     - 根據總密度和劑量計算所需膠囊大小（0號、1號、2號、3號等）
@@ -40,35 +46,29 @@ export async function POST(request: NextRequest) {
     - 膠囊材料建議（如：明膠、植物膠囊等）
     - 填充重量和膠囊大小匹配性分析
 
-## 3. 原料配方
-- 詳細的原料列表（包含劑量和作用）
-- 原料配比和混合順序
-- 原料來源建議
-- 代工級原料選擇
+    ## 4. 功效和安全評分
+    - 功效評分（1-10分）：基於原料的科學證據和功效強度
+    - 安全評分（1-10分）：基於原料的安全性、相互作用和副作用風險
+    - 評分理由：詳細說明評分依據和考慮因素
 
-## 4. 代工成本分析（重點）
-- 每粒原料成本計算
-- 每粒總成本（含膠囊殼、人工、包裝等）
-- 建議代工報價（給委託方）
-- 代工利潤率分析
-- 代工生產成本優勢
+    ## 5. 代工成本分析（重點）
+    - 每粒原料成本計算
+    - 每粒總成本（含膠囊殼、人工、包裝等）
+    - 建議代工報價（給委託方）
+    - 代工利潤率分析
+    - 代工生產成本優勢
 
-## 5. 代工生產建議
-- 生產工藝要求
-- 質量控制要點
-- 代工包裝建議
-- 代工生產效率優化
+    ## 6. 代工生產建議
+    - 生產工藝要求
+    - 質量控制要點
+    - 代工包裝建議
+    - 代工生產效率優化
 
-    ## 6. 代工法規合規
+    ## 7. 代工法規合規
     - 香港保健品法規要求
     - 代工標籤標示建議
     - 安全注意事項
     - 代工許可要求
-
-    ## 7. 功效和安全評分
-    - 功效評分（1-10分）：基於原料的科學證據和功效強度
-    - 安全評分（1-10分）：基於原料的安全性、相互作用和副作用風險
-    - 評分理由：詳細說明評分依據和考慮因素
 
     請使用香港書面語繁體中文回答，確保內容專業、準確且符合膠囊工廠代工生產業務的實際需求。`
 
@@ -111,39 +111,21 @@ export async function POST(request: NextRequest) {
     const data = await response.json()
     const aiResponse = data.choices?.[0]?.message?.content || ''
 
-    // 使用AI提取產品信息
-    let extractedInfo = null
-    try {
-      const extractResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/ai/extract-product-info`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: aiResponse
-        })
-      })
-      
-      const extractData = await extractResponse.json()
-      if (extractData.success && extractData.extractedInfo) {
-        extractedInfo = extractData.extractedInfo
-      }
-    } catch (extractError) {
-      console.warn('AI產品信息提取失敗，使用默認值:', extractError)
-    }
-
+    // 生成臨時ID，不保存到數據庫
+    const tempId = `temp-${Date.now()}`
+    
     // 解析 AI 回應為結構化數據
     const parsedRecipe = {
-      name: extractedInfo?.name || `AI 生成的${targetEffect}配方`,
-      description: extractedInfo?.description || `針對${targetAudience || '一般成人'}的${targetEffect}配方`,
+      name: `AI 生成的${targetEffect}配方`,
+      description: `針對${targetAudience || '一般成人'}的${targetEffect}配方`,
       ingredients: [],
       dosage: {
         recommendation: '請遵循產品標籤指示',
         adultDosage: '每日1-2粒',
         timing: '餐後服用'
       },
-      efficacyScore: extractedInfo?.efficacyScore || 8.5,
-      safetyScore: extractedInfo?.safetyScore || 8.0,
+      efficacyScore: 8.5,
+      safetyScore: 8.0,
       costAnalysis: {
         unitCost: 2.5,
         currency: 'HKD',
@@ -151,40 +133,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 嘗試保存到數據庫，如果表不存在則跳過
-    let savedRecipe = null
-    try {
-      savedRecipe = await prisma.aIRecipe.create({
-        data: {
-          name: parsedRecipe.name,
-          description: parsedRecipe.description,
-          targetEffect,
-          targetAudience: targetAudience || '一般成人',
-          dosageForm: dosageForm || 'capsule',
-          ingredients: JSON.stringify(parsedRecipe.ingredients),
-          dosage: JSON.stringify(parsedRecipe.dosage),
-          efficacyScore: parsedRecipe.efficacyScore,
-          safetyScore: parsedRecipe.safetyScore,
-          costAnalysis: JSON.stringify(parsedRecipe.costAnalysis),
-          isActive: true
-        }
-      })
-    } catch (dbError) {
-      console.warn('數據庫保存失敗，但 AI 生成成功:', dbError)
-      // 生成一個臨時 ID
-      savedRecipe = {
-        id: `temp-${Date.now()}`,
-        createdAt: new Date()
-      }
-    }
-
     return NextResponse.json({
       success: true,
       recipe: {
-        id: savedRecipe.id,
+        id: tempId,
         content: aiResponse,
         structured: parsedRecipe,
-        createdAt: savedRecipe.createdAt.toISOString()
+        createdAt: new Date().toISOString()
       }
     })
 

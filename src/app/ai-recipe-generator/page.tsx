@@ -28,23 +28,7 @@ export default function AIRecipeGeneratorPage() {
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
   const [chatInput, setChatInput] = useState('')
   const [isChatLoading, setIsChatLoading] = useState(false)
-  const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking')
-
-  // 檢查數據庫狀態
-  const checkDbStatus = async () => {
-    setDbStatus('checking')
-    try {
-      const response = await fetch('/api/ai/recipes?limit=1')
-      const data = await response.json()
-      setDbStatus(data.success && data.hasTable ? 'connected' : 'disconnected')
-    } catch (error) {
-      setDbStatus('disconnected')
-    }
-  }
-
-  useEffect(() => {
-    checkDbStatus()
-  }, [])
+  // 移除數據庫狀態檢查，改為純前端顯示
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,39 +48,6 @@ export default function AIRecipeGeneratorPage() {
 
       if (result.success) {
         setGeneratedRecipe(result.recipe)
-        
-        // 使用AI提取和優化產品信息
-        try {
-          const extractResponse = await fetch('/api/ai/extract-product-info', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              content: result.recipe.content
-            })
-          })
-          
-          const extractData = await extractResponse.json()
-          if (extractData.success && extractData.extractedInfo) {
-            // 更新配方信息為AI提取的優化版本
-            setGeneratedRecipe(prev => {
-              if (!prev) return prev
-              return {
-                ...prev,
-                structured: {
-                  ...prev.structured,
-                  name: extractData.extractedInfo.name || prev.structured.name,
-                  description: extractData.extractedInfo.description || prev.structured.description,
-                  efficacyScore: extractData.extractedInfo.efficacyScore || prev.structured.efficacyScore,
-                  safetyScore: extractData.extractedInfo.safetyScore || prev.structured.safetyScore
-                }
-              }
-            })
-          }
-        } catch (extractError) {
-          console.warn('AI產品信息提取失敗，使用原始信息:', extractError)
-        }
       } else {
         setError(result.error || '配方生成失敗')
       }
@@ -200,41 +151,7 @@ export default function AIRecipeGeneratorPage() {
               專為膠囊灌裝工廠代工生產設計，智能生成專業配方並提供代工成本分析
             </p>
             
-    {/* 數據庫狀態指示器 */}
-    <div className="mt-4 flex items-center justify-center">
-      <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
-        dbStatus === 'checking' ? 'bg-yellow-100 text-yellow-800' :
-        dbStatus === 'connected' ? 'bg-green-100 text-green-800' :
-        'bg-red-100 text-red-800'
-      }`}>
-        <div className={`w-2 h-2 rounded-full mr-2 ${
-          dbStatus === 'checking' ? 'bg-yellow-500 animate-pulse' :
-          dbStatus === 'connected' ? 'bg-green-500' :
-          'bg-red-500'
-        }`}></div>
-        {dbStatus === 'checking' && '檢查數據庫狀態...'}
-        {dbStatus === 'connected' && '數據庫已連接，配方將被保存'}
-        {dbStatus === 'disconnected' && '數據庫未設置，配方僅臨時保存'}
-      </div>
-      
-      {/* 操作按鈕 */}
-      <div className="ml-3 flex space-x-2">
-        <button
-          onClick={checkDbStatus}
-          className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-          disabled={dbStatus === 'checking'}
-        >
-          {dbStatus === 'checking' ? '檢查中...' : '刷新狀態'}
-        </button>
-        {dbStatus === 'connected' && (
-          <Link href="/ai-recipes">
-            <button className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
-              查看已保存配方
-            </button>
-          </Link>
-        )}
-      </div>
-    </div>
+    {/* 移除數據庫狀態指示器，改為純前端顯示 */}
           </div>
 
           {/* 表單區域 */}
@@ -437,7 +354,7 @@ export default function AIRecipeGeneratorPage() {
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="font-medium text-gray-600">配方 ID:</span>
                       <span className="ml-2 text-gray-800">{generatedRecipe.id}</span>
@@ -446,12 +363,6 @@ export default function AIRecipeGeneratorPage() {
                       <span className="font-medium text-gray-600">生成時間:</span>
                       <span className="ml-2 text-gray-800">
                         {new Date(generatedRecipe.createdAt).toLocaleString('zh-TW')}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-600">狀態:</span>
-                      <span className={`ml-2 ${generatedRecipe.id?.startsWith('temp-') ? 'text-orange-600' : 'text-green-600'}`}>
-                        {generatedRecipe.id?.startsWith('temp-') ? '臨時保存（數據庫未設置）' : '已保存到數據庫'}
                       </span>
                     </div>
                   </div>
