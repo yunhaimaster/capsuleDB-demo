@@ -87,7 +87,9 @@ export default function AIRecipeGeneratorPage() {
                 structured: {
                   ...prev.structured,
                   name: extractData.extractedInfo.name || prev.structured.name,
-                  description: extractData.extractedInfo.description || prev.structured.description
+                  description: extractData.extractedInfo.description || prev.structured.description,
+                  efficacyScore: extractData.extractedInfo.efficacyScore || prev.structured.efficacyScore,
+                  safetyScore: extractData.extractedInfo.safetyScore || prev.structured.safetyScore
                 }
               }
             })

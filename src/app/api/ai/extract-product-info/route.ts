@@ -26,6 +26,9 @@ ${content}
 4. **目標受眾**：適合的目標受眾群體
 5. **膠囊規格**：根據原料密度分析建議的膠囊大小
 6. **堆積密度分析**：評估各原料的堆積密度和混合後的總密度
+7. **功效評分**：基於原料科學證據的功效評分（1-10分）
+8. **安全評分**：基於原料安全性的安全評分（1-10分）
+9. **評分理由**：詳細說明評分依據
 
 請以JSON格式返回結果：
 {
@@ -35,7 +38,11 @@ ${content}
   "targetAudience": "目標受眾",
   "capsuleSize": "建議膠囊大小",
   "densityAnalysis": "堆積密度分析",
-  "capsuleRecommendation": "膠囊規格建議"
+  "capsuleRecommendation": "膠囊規格建議",
+  "efficacyScore": 8.5,
+  "safetyScore": 8.0,
+  "efficacyReason": "功效評分理由",
+  "safetyReason": "安全評分理由"
 }
 
 請確保：
