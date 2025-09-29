@@ -216,8 +216,33 @@ export default function PriceAnalyzerPage() {
                 </Card>
               )}
 
+              {/* 分析中狀態 */}
+              {isAnalyzing && (
+                <Card className="liquid-glass-card liquid-glass-card-elevated">
+                  <div className="liquid-glass-content">
+                    <div className="text-center py-12">
+                      <div className="icon-container icon-container-green mx-auto mb-6">
+                        <Loader2 className="h-8 w-8 text-white animate-spin" />
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                        💰 AI 正在分析價格...
+                      </h3>
+                      <div className="space-y-3 text-gray-600">
+                        <p>正在收集市場數據...</p>
+                        <div className="flex justify-center space-x-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                        </div>
+                        <p className="text-sm">這可能需要 15-45 秒，請耐心等待...</p>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
               {/* 分析結果 */}
-              {analysisResult && (
+              {analysisResult && !isAnalyzing && (
                 <Card className="liquid-glass-card liquid-glass-card-elevated">
                   <div className="liquid-glass-content">
                     <div className="flex items-center space-x-3 mb-6">

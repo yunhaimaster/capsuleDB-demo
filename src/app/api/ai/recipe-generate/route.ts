@@ -93,22 +93,32 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 保存到數據庫
-    const savedRecipe = await prisma.aIRecipe.create({
-      data: {
-        name: parsedRecipe.name,
-        description: parsedRecipe.description,
-        targetEffect,
-        targetAudience: targetAudience || '一般成人',
-        dosageForm: dosageForm || 'capsule',
-        ingredients: JSON.stringify(parsedRecipe.ingredients),
-        dosage: JSON.stringify(parsedRecipe.dosage),
-        efficacyScore: parsedRecipe.efficacyScore,
-        safetyScore: parsedRecipe.safetyScore,
-        costAnalysis: JSON.stringify(parsedRecipe.costAnalysis),
-        isActive: true
+    // 嘗試保存到數據庫，如果表不存在則跳過
+    let savedRecipe = null
+    try {
+      savedRecipe = await prisma.aIRecipe.create({
+        data: {
+          name: parsedRecipe.name,
+          description: parsedRecipe.description,
+          targetEffect,
+          targetAudience: targetAudience || '一般成人',
+          dosageForm: dosageForm || 'capsule',
+          ingredients: JSON.stringify(parsedRecipe.ingredients),
+          dosage: JSON.stringify(parsedRecipe.dosage),
+          efficacyScore: parsedRecipe.efficacyScore,
+          safetyScore: parsedRecipe.safetyScore,
+          costAnalysis: JSON.stringify(parsedRecipe.costAnalysis),
+          isActive: true
+        }
+      })
+    } catch (dbError) {
+      console.warn('數據庫保存失敗，但 AI 生成成功:', dbError)
+      // 生成一個臨時 ID
+      savedRecipe = {
+        id: `temp-${Date.now()}`,
+        createdAt: new Date()
       }
-    })
+    }
 
     return NextResponse.json({
       success: true,
