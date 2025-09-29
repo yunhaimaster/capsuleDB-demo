@@ -92,7 +92,7 @@ ${materials.map((material: string) => `- ${material}`).join('\n')}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        max_tokens: 4000,
+        max_tokens: 2000,
         temperature: 0.1,
         top_p: 0.95,
         frequency_penalty: 0.0,
