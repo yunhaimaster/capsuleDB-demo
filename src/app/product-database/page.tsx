@@ -12,6 +12,7 @@ import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 export default function ProductDatabasePage() {
   const [products, setProducts] = useState<ProductDatabaseItem[]>([])
+  const [ingredients, setIngredients] = useState<any[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -19,34 +20,48 @@ export default function ProductDatabasePage() {
   const [selectedProduct, setSelectedProduct] = useState<ProductDatabaseItem | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState<any>(null)
+  const [showIngredients, setShowIngredients] = useState(false)
 
-  // 獲取產品列表
+  // 獲取產品列表和原料數據
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch('/api/database/recipes')
-        if (response.ok) {
-          const data = await response.json()
-          setProducts(data.products || [])
-        } else {
-          setError('獲取產品列表失敗')
+        
+        // 獲取產品列表
+        const productsResponse = await fetch('/api/database/recipes')
+        if (productsResponse.ok) {
+          const productsData = await productsResponse.json()
+          setProducts(productsData.products || [])
         }
+        
+        // 獲取原料數據
+        const ingredientsResponse = await fetch('/api/ingredients/from-orders')
+        if (ingredientsResponse.ok) {
+          const ingredientsData = await ingredientsResponse.json()
+          setIngredients(ingredientsData.ingredients || [])
+        }
+        
       } catch (err) {
         setError('網絡錯誤，請稍後再試')
       } finally {
         setIsLoading(false)
       }
     }
-    fetchProducts()
+    fetchData()
   }, [])
 
-  // 篩選產品
+  // 篩選產品和原料
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          (product.notes && product.notes.toLowerCase().includes(searchQuery.toLowerCase()))
     const matchesCategory = !selectedCategory || product.category === selectedCategory
     return matchesSearch && matchesCategory
+  })
+
+  const filteredIngredients = ingredients.filter(ingredient => {
+    const matchesSearch = ingredient.materialName.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesSearch
   })
 
   // 獲取所有分類
@@ -143,6 +158,15 @@ export default function ProductDatabasePage() {
               </Button>
               
               <Button
+                onClick={() => setShowIngredients(!showIngredients)}
+                variant="outline"
+                className="flex items-center space-x-2"
+              >
+                <Database className="h-4 w-4" />
+                <span>{showIngredients ? '隱藏原料' : '顯示原料'}</span>
+              </Button>
+              
+              <Button
                 onClick={() => setAnalysisResult(null)}
                 variant="outline"
                 className="flex items-center space-x-2"
@@ -195,6 +219,81 @@ export default function ProductDatabasePage() {
                 <div className="mt-6">
                   <AIDisclaimer type="analysis" />
                 </div>
+              </div>
+            </Card>
+          )}
+
+          {/* 原料數據顯示 */}
+          {showIngredients && (
+            <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
+              <div className="liquid-glass-content">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="icon-container icon-container-blue">
+                    <Database className="h-5 w-5 text-white" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-800">原料使用分析</h2>
+                  <span className="text-sm text-gray-500">({ingredients.length} 種原料)</span>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredIngredients.slice(0, 12).map((ingredient, index) => (
+                    <div key={index} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-gray-800">{ingredient.materialName}</h3>
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          #{index + 1}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">使用次數:</span>
+                          <span className="font-medium">{ingredient.totalUsage}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">客戶數:</span>
+                          <span className="font-medium">{ingredient.customerCount}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">產品數:</span>
+                          <span className="font-medium">{ingredient.productCount}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">平均用量:</span>
+                          <span className="font-medium">{ingredient.averageQuantity.toFixed(1)}mg</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">最後使用:</span>
+                          <span className="font-medium text-xs">
+                            {new Date(ingredient.lastUsed).toLocaleDateString('zh-HK')}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-3 pt-3 border-t border-gray-200">
+                        <div className="text-xs text-gray-500">
+                          <div className="font-medium mb-1">主要客戶:</div>
+                          <div className="space-y-1">
+                            {ingredient.customers.slice(0, 3).map((customer: string, idx: number) => (
+                              <div key={idx} className="truncate">{customer}</div>
+                            ))}
+                            {ingredient.customers.length > 3 && (
+                              <div className="text-gray-400">+{ingredient.customers.length - 3} 更多</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {filteredIngredients.length > 12 && (
+                  <div className="mt-4 text-center">
+                    <span className="text-sm text-gray-500">
+                      顯示前 12 個原料，共 {filteredIngredients.length} 個
+                    </span>
+                  </div>
+                )}
               </div>
             </Card>
           )}
