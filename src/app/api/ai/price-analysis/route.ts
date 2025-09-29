@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
     const priceData = await prisma.ingredientPrice.findMany({
       where: {
         materialName: {
-          contains: materialName
+          contains: materialName,
+          mode: 'insensitive'
         }
       },
       orderBy: {
@@ -150,7 +151,8 @@ export async function GET(request: NextRequest) {
     const priceData = await prisma.ingredientPrice.findMany({
       where: {
         materialName: {
-          contains: materialName
+          contains: materialName,
+          mode: 'insensitive'
         }
       },
       orderBy: {
