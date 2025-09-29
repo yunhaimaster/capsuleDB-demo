@@ -78,7 +78,7 @@ export default function AIRecipeGeneratorPage() {
     setChatMessages([
       {
         role: 'assistant',
-        content: `您好！我是您的 AI 批發配方助手。我已經為您生成了「${formData.targetEffect}」的批發配方。\n\n作為膠囊灌裝工廠，您可以告訴我如何優化這個批發配方，例如：\n- 調整膠囊規格（顏色、大小、材料）\n- 優化原料配比和劑量\n- 降低批發成本\n- 提高批量生產效率\n- 改善產品穩定性\n- 調整批發價格\n- 優化批發包裝方案\n- 批量採購原料建議\n\n請描述您的具體需求，我會為您提供專業的批發配方優化建議！`
+        content: `您好！我是您的 AI 代工配方助手。我已經為您生成了「${formData.targetEffect}」的代工配方。\n\n作為膠囊灌裝工廠，您可以告訴我如何優化這個代工配方，例如：\n- 調整膠囊規格（顏色、大小、材料）\n- 優化原料配比和劑量\n- 降低代工成本\n- 提高代工生產效率\n- 改善產品穩定性\n- 調整代工報價\n- 優化代工包裝方案\n- 批量採購原料建議\n- 代工工藝優化建議\n\n請描述您的具體需求，我會為您提供專業的代工配方優化建議！`
       }
     ])
     
@@ -144,10 +144,10 @@ export default function AIRecipeGeneratorPage() {
           {/* 頁面標題 */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              💊 AI 批發配方生成器
+              💊 AI 代工配方生成器
             </h1>
             <p className="text-lg text-gray-600">
-              專為膠囊灌裝工廠批發業務設計，智能生成專業配方並提供批發成本分析
+              專為膠囊灌裝工廠代工生產設計，智能生成專業配方並提供代工成本分析
             </p>
           </div>
 
@@ -158,7 +158,7 @@ export default function AIRecipeGeneratorPage() {
                 <div className="icon-container icon-container-blue">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-800">批發配方需求</h2>
+                <h2 className="text-xl font-semibold text-gray-800">代工配方需求</h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -213,15 +213,15 @@ export default function AIRecipeGeneratorPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    批發成本目標（可選）
+                    代工成本目標（可選）
                   </label>
                   <Input
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    placeholder="例如：每粒批發成本不超過 HK$1.50，建議批發價 HK$3.00"
+                    placeholder="例如：每粒代工成本不超過 HK$1.20，建議代工報價 HK$2.50"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    請輸入每粒批發成本目標，系統會據此優化配方並建議批發價格
+                    請輸入每粒代工成本目標，系統會據此優化配方並建議代工報價
                   </p>
                 </div>
 
