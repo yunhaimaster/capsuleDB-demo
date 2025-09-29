@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { PriceAnalysisRequest, PriceAnalysisResponse, PriceData } from '@/types/v2-types'
 import { TrendingUp, Loader2, Search, DollarSign, Calendar, Package } from 'lucide-react'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 export default function PriceAnalyzerPage() {
   const [formData, setFormData] = useState<PriceAnalysisRequest>({
@@ -256,6 +257,11 @@ export default function PriceAnalyzerPage() {
                       <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
                         {analysisResult.content}
                       </div>
+                    </div>
+
+                    {/* 免責條款 */}
+                    <div className="mt-6">
+                      <AIDisclaimer type="analysis" />
                     </div>
 
                     <div className="mt-6 pt-6 border-t border-gray-200">

@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card'
 import { AIRecipeRequest, AIRecipeResponse } from '@/types/v2-types'
 import { Sparkles, Loader2, Copy, RefreshCw, MessageCircle, Send } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 export default function AIRecipeGeneratorPage() {
   const [formData, setFormData] = useState<AIRecipeRequest>({
@@ -79,6 +80,17 @@ export default function AIRecipeGeneratorPage() {
         content: `您好！我是您的 AI 配方助手。我已經為您生成了「${formData.targetEffect}」的配方。\n\n請告訴我您希望如何修改這個配方，例如：\n- 調整某些原料的劑量\n- 添加或移除某些成分\n- 針對特定人群優化\n- 降低成本\n- 提高安全性\n\n請描述您的需求，我會為您優化配方！`
       }
     ])
+    
+    // 滾動到聊天框
+    setTimeout(() => {
+      const chatElement = document.getElementById('ai-chat-container')
+      if (chatElement) {
+        chatElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        })
+      }
+    }, 100)
   }
 
   const handleChatSubmit = async (e: React.FormEvent) => {
@@ -336,6 +348,11 @@ export default function AIRecipeGeneratorPage() {
                   <MarkdownRenderer content={generatedRecipe.content} />
                 </div>
 
+                {/* 免責條款 */}
+                <div className="mt-6">
+                  <AIDisclaimer type="recipe" />
+                </div>
+
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
@@ -360,7 +377,7 @@ export default function AIRecipeGeneratorPage() {
 
           {/* 聊天界面 */}
           {isChatMode && (
-            <Card className="liquid-glass-card liquid-glass-card-elevated mt-6">
+            <Card id="ai-chat-container" className="liquid-glass-card liquid-glass-card-elevated mt-6">
               <div className="liquid-glass-content">
                 <div className="flex items-center space-x-3 mb-6">
                   <div className="icon-container icon-container-blue">

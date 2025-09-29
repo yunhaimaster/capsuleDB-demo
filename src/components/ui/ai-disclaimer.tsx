@@ -1,38 +1,90 @@
-'use client'
+import { AlertTriangle, Shield, FileText } from 'lucide-react'
 
-import { AlertTriangle } from 'lucide-react'
+interface AIDisclaimerProps {
+  type?: 'recipe' | 'analysis' | 'general'
+  className?: string
+}
 
-export function AIDisclaimer() {
+export function AIDisclaimer({ type = 'recipe', className = '' }: AIDisclaimerProps) {
+  const getDisclaimerContent = () => {
+    switch (type) {
+      case 'recipe':
+        return {
+          title: 'AI 生成配方免責聲明',
+          content: [
+            '本配方由人工智能生成，僅供參考和研究用途。',
+            '配方未經臨床試驗驗證，不構成醫療建議或治療方案。',
+            '使用前請諮詢專業醫師或營養師，確保安全性和適用性。',
+            '生產商需自行承擔所有法律責任和合規義務。',
+            '建議進行完整的產品測試和法規審查。'
+          ]
+        }
+      case 'analysis':
+        return {
+          title: 'AI 分析結果免責聲明',
+          content: [
+            '本分析結果由人工智能生成，僅供參考。',
+            '數據來源和準確性未經獨立驗證。',
+            '投資和商業決策請基於專業評估。',
+            '建議諮詢相關專業人士獲取準確信息。'
+          ]
+        }
+      default:
+        return {
+          title: 'AI 生成內容免責聲明',
+          content: [
+            '本內容由人工智能生成，僅供參考。',
+            '請自行驗證信息的準確性和適用性。',
+            '重要決策請諮詢專業人士。'
+          ]
+        }
+    }
+  }
+
+  const { title, content } = getDisclaimerContent()
+
   return (
-    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
-      <div className="flex items-start space-x-2">
-        <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
-        <div className="text-xs text-amber-800">
-          <p className="font-medium mb-1">⚠️ AI 免責聲明</p>
-          <p className="leading-relaxed">
-            AI 助手提供的分析和建議僅供參考，不構成專業建議。請務必：
-          </p>
-          <ul className="list-disc list-inside mt-1 space-y-0.5">
-            <li>驗證所有技術數據和計算結果</li>
-            <li>諮詢專業人員進行最終確認</li>
-            <li>根據實際情況調整建議</li>
-            <li>AI 回應可能存在錯誤或不完整</li>
+    <div className={`bg-amber-50 border border-amber-200 rounded-lg p-4 ${className}`}>
+      <div className="flex items-start space-x-3">
+        <div className="flex-shrink-0">
+          <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+          </div>
+        </div>
+        <div className="flex-1">
+          <h4 className="text-sm font-semibold text-amber-800 mb-2 flex items-center">
+            <Shield className="h-4 w-4 mr-1" />
+            {title}
+          </h4>
+          <ul className="text-xs text-amber-700 space-y-1">
+            {content.map((item, index) => (
+              <li key={index} className="flex items-start">
+                <span className="text-amber-500 mr-2 mt-0.5">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
           </ul>
+          <div className="mt-3 pt-3 border-t border-amber-200">
+            <div className="flex items-center text-xs text-amber-600">
+              <FileText className="h-3 w-3 mr-1" />
+              <span>使用本系統即表示您已閱讀並同意上述免責聲明</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export function AIDisclaimerCompact() {
+// 緊湊版免責條款
+export function AIDisclaimerCompact({ className = '' }: { className?: string }) {
   return (
-    <div className="bg-amber-50/50 border border-amber-200/50 rounded-md p-2 mb-3">
-      <div className="flex items-center space-x-1.5">
-        <AlertTriangle className="h-3 w-3 text-amber-600 flex-shrink-0" />
-        <p className="text-xs text-amber-700">
-          <span className="font-medium">免責聲明：</span>
-          AI 分析僅供參考，請驗證後使用
-        </p>
+    <div className={`bg-amber-50 border border-amber-200 rounded-lg p-3 ${className}`}>
+      <div className="flex items-center space-x-2">
+        <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0" />
+        <span className="text-xs text-amber-700">
+          <strong>免責聲明：</strong>本內容由 AI 生成，僅供參考。請諮詢專業人士。
+        </span>
       </div>
     </div>
   )

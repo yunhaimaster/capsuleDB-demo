@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { WorkOrderRequest, WorkOrderResponse } from '@/types/v2-types'
 import { FileText, Loader2, Download, Eye, CheckCircle, Clock, AlertCircle } from 'lucide-react'
+import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 
 interface ProductionOrder {
   id: string
@@ -279,6 +280,11 @@ export default function WorkOrdersPage() {
                       <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
                         {generatedWorkOrder.content}
                       </div>
+                    </div>
+
+                    {/* 免責條款 */}
+                    <div className="mt-6">
+                      <AIDisclaimer type="general" />
                     </div>
 
                     <div className="mt-6 pt-6 border-t border-gray-200">
