@@ -20,6 +20,7 @@ interface IngredientStat {
   recommendations?: string[]
   technicalNotes?: string
   isAIAssessed?: boolean
+  materialType?: string
 }
 
 interface StatsSummary {
@@ -117,6 +118,7 @@ export default function ReportsPage() {
               riskReasons: aiAssessment.riskReasons,
               recommendations: aiAssessment.recommendations,
               technicalNotes: aiAssessment.technicalNotes,
+              materialType: aiAssessment.materialType,
               isAIAssessed: true
             }
           }
@@ -409,6 +411,11 @@ export default function ReportsPage() {
                         {getSortIcon('materialName')}
                       </div>
                     </TableHead>
+                    {hasAIAssessment && (
+                      <TableHead className="text-sm font-semibold">
+                        原料類型
+                      </TableHead>
+                    )}
                     <TableHead 
                       className="text-sm font-semibold cursor-pointer hover:bg-gray-100 select-none"
                       onClick={() => handleSort('usageCount')}
@@ -445,6 +452,19 @@ export default function ReportsPage() {
                       <TableCell className="font-medium text-gray-800">
                         {ingredient.materialName}
                       </TableCell>
+                      {hasAIAssessment && (
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              ingredient.materialType === '主原料' 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-gray-100 text-gray-800'
+                            }`}>
+                              {ingredient.materialType || '未知'}
+                            </span>
+                          </div>
+                        </TableCell>
+                      )}
                       <TableCell className="text-sm text-gray-600">
                         {ingredient.usageCount} 次
                       </TableCell>
