@@ -184,14 +184,23 @@ export default function AIRecipeGeneratorPage() {
         {dbStatus === 'disconnected' && '數據庫未設置，配方僅臨時保存'}
       </div>
       
-      {/* 刷新按鈕 */}
-      <button
-        onClick={checkDbStatus}
-        className="ml-3 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-        disabled={dbStatus === 'checking'}
-      >
-        {dbStatus === 'checking' ? '檢查中...' : '刷新狀態'}
-      </button>
+      {/* 操作按鈕 */}
+      <div className="ml-3 flex space-x-2">
+        <button
+          onClick={checkDbStatus}
+          className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+          disabled={dbStatus === 'checking'}
+        >
+          {dbStatus === 'checking' ? '檢查中...' : '刷新狀態'}
+        </button>
+        {dbStatus === 'connected' && (
+          <Link href="/ai-recipes">
+            <button className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
+              查看已保存配方
+            </button>
+          </Link>
+        )}
+      </div>
     </div>
           </div>
 
