@@ -24,8 +24,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
         { href: '/', label: '首頁' },
         { href: '/orders', label: '訂單管理' },
         { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/work-orders', label: '工作單生成' },
-        { href: '/setup', label: '數據庫設置' }
+        { href: '/work-orders', label: '工作單生成' }
       ]
     },
     {
@@ -46,7 +45,6 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
     {
       title: '系統設置',
       links: [
-        { href: '/setup', label: '數據庫設置' },
         { href: '/login', label: '登入' }
       ]
     }
@@ -57,15 +55,19 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
       <div className="liquid-glass-footer-content">
         {/* 公司信息 */}
         <div className="liquid-glass-footer-brand">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">EH</span>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">Easy Health</h3>
-              <p className="text-sm text-gray-600">膠囊配方管理系統</p>
-            </div>
+        <div className="flex items-center space-x-2 mb-4">
+          <div className="w-8 h-8">
+            <img 
+              src="/images/EasyHealth_Logo_only.svg" 
+              alt="Easy Health Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Easy Health</h3>
+            <p className="text-sm text-gray-600">膠囊配方管理系統</p>
+          </div>
+        </div>
           <p className="text-sm text-gray-600 max-w-xs">
             專業的膠囊灌裝工廠代工管理系統，提供AI驅動的配方生成和生產管理解決方案。
           </p>
