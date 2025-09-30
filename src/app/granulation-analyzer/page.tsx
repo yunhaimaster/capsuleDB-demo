@@ -330,12 +330,13 @@ export default function GranulationAnalyzerPage() {
                       {analysis.status === 'success' && (
                         <div className="space-y-3">
                           <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800 prose-table:text-sm prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:px-2 prose-th:py-1 prose-td:border prose-td:border-gray-300 prose-td:px-2 prose-td:py-1">
-                            <ReactMarkdown
-                              remarkPlugins={[remarkGfm]}
-                              className="text-sm leading-relaxed"
-                            >
-                              {analysis.content}
-                            </ReactMarkdown>
+                            <div className="text-sm leading-relaxed">
+                              <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                              >
+                                {analysis.content}
+                              </ReactMarkdown>
+                            </div>
                           </div>
                           <p className="text-xs text-gray-500">
                             分析時間: {new Date(analysis.timestamp).toLocaleString()}
