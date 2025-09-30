@@ -63,8 +63,17 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const handleSendMessage = async (retryMessage?: string) => {
-    const messageToSend = retryMessage || input.trim()
+    let messageToSend = retryMessage || input.trim()
     if (!messageToSend || isLoading) return
+
+    // 處理特殊建議的展開
+    if (messageToSend === '分析製粒必要性') {
+      messageToSend = `請分析原料的流動性、黏性及結塊風險，並給出【製粒必要性評分】，範圍 0–100 分（0 = 完全不需要製粒，100 = 極度需要製粒），同時簡要說明評分理由。
+
+在建議改善流動性的方法時，只能從以下四種輔料中選擇：麥芽糊精、硬脂酸鎂、二氧化硅、微晶纖維素。請根據實際分析決定是否需要推薦輔料，以及推薦哪些輔料，並說明每一種的建議添加比例（佔總配方百分比）及其作用機制。
+
+最後，假設依照上述輔料建議進行配方改善，請重新評估【改善後的製粒必要性評分】，同樣以 0–100 分表示，並解釋與改善前的差異。`
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
