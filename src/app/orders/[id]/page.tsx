@@ -231,40 +231,74 @@ export default function OrderDetailPage() {
             </CardTitle>
           </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>原料品名</TableHead>
-                <TableHead>單粒含量 (mg)</TableHead>
-                <TableHead>客戶指定</TableHead>
-                <TableHead>批次用量</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {order.ingredients.map((ingredient, index) => (
-                <TableRow key={index}>
-                  <TableCell>{ingredient.materialName}</TableCell>
-                  <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
-                  <TableCell>
-                    {ingredient.isCustomerProvided ? (
-                      <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
-                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                        客戶指定
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-blue-500 text-xs sm:text-sm">
-                        <span className="h-2 w-2 rounded-full bg-blue-400" />
-                        自行添加
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
-                  </TableCell>
+          <div className="hidden md:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>原料品名</TableHead>
+                  <TableHead>單粒含量 (mg)</TableHead>
+                  <TableHead>客戶指定</TableHead>
+                  <TableHead>批次用量</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {order.ingredients.map((ingredient, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{ingredient.materialName}</TableCell>
+                    <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
+                    <TableCell>
+                      {ingredient.isCustomerProvided ? (
+                        <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
+                          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                          客戶指定
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-blue-500 text-xs sm:text-sm">
+                          <span className="h-2 w-2 rounded-full bg-blue-400" />
+                          自行添加
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="grid grid-cols-1 gap-3 md:hidden">
+            {order.ingredients.map((ingredient, index) => (
+              <div
+                key={index}
+                className="p-4 rounded-2xl bg-white/70 backdrop-blur-lg border border-white/40 shadow-sm space-y-3"
+              >
+                <div className="flex items-center justify-between">
+                  <h4 className="text-base font-semibold text-slate-800 leading-tight">
+                    {ingredient.materialName}
+                  </h4>
+                  <div className="flex items-center text-xs font-medium text-emerald-600">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 mr-1" />
+                    {ingredient.isCustomerProvided ? '客戶指定' : '自行添加'}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm text-slate-700">
+                  <div className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wide text-slate-400">單粒含量</span>
+                    <span className="text-base font-semibold text-slate-900">
+                      {ingredient.unitContentMg.toFixed(3)} mg
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs uppercase tracking-wide text-slate-400">批次用量</span>
+                    <span className="text-base font-semibold text-slate-900">
+                      {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
       </div>
