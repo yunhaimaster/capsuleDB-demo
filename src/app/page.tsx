@@ -171,7 +171,7 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 xl:gap-12 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 xl:gap-12 items-stretch">
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
@@ -200,7 +200,7 @@ export default function HomePage() {
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
-                <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
+                <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
                 <h3 className="text-sm sm:text-base md:text-lg font-semibold text-emerald-700">生產記錄</h3>
@@ -362,16 +362,16 @@ export default function HomePage() {
 
       {/* v2.0 新功能區塊 */}
       <div className="mb-8">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-            🚀 v2.0 全新功能
+        <div className="text-center mb-6 space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            🚀 近期更新重點
           </h2>
-          <p className="text-gray-600">
-            人工智能驅動的膠囊配方管理系統
+          <p className="text-gray-600 text-sm md:text-base">
+            最新功能改進與即將推出的體驗預告
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* AI 配方生成器 */}
           <Link href="/ai-recipe-generator">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
@@ -407,22 +407,6 @@ export default function HomePage() {
               </div>
             </div>
           </Link>
-
-          {/* 開發中功能 */}
-          <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction opacity-60 cursor-not-allowed">
-            <div className="liquid-glass-content text-center">
-              <div className="icon-container icon-container-gray mx-auto mb-4">
-                <Zap className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">更多功能</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                更多實用功能正在開發中，敬請期待
-              </p>
-              <div className="inline-flex items-center text-gray-500 text-sm font-medium">
-                開發中...
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>

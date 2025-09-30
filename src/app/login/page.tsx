@@ -44,28 +44,41 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation">
-      {/* Liquid Glass Navigation - 登陸頁面只顯示導航欄，無導航連結 */}
-      <LiquidGlassNav 
-        links={[]}
-      />
-      
-      {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4">
-        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction max-w-xl mx-auto">
-          <div className="liquid-glass-content">
-            <div className="mb-6 space-y-2 text-center">
-              <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-white/70 border border-white/60 text-[--brand-neutral] text-xs">
-                <span className="font-medium tracking-wide">品牌登入</span>
-                <span className="text-[11px] text-gray-500">Easy Health Capsule Management</span>
-              </div>
-              <h1 className="text-2xl font-semibold text-[--brand-neutral]">登入膠囊配方管理系統</h1>
-              <p className="text-sm text-gray-600">使用授權登入碼存取專屬的 Liquid Glass 控制台</p>
+    <div className="min-h-screen brand-logo-bg-animation relative overflow-hidden">
+      <LiquidGlassNav links={[]} className="backdrop-blur-none bg-transparent border-transparent" />
+      <div className="absolute inset-x-0 top-0 h-[28rem] bg-gradient-to-b from-white/70 via-white/40 to-transparent pointer-events-none" aria-hidden="true" />
+      <main className="relative px-6 md:px-10 pt-24 sm:pt-28 pb-16 flex items-center justify-center min-h-[calc(100vh-5rem)]">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-8 md:gap-12 items-center">
+          <section className="space-y-6 text-center md:text-left">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white/70 text-xs text-[--brand-neutral] shadow-sm">
+              <span className="font-medium tracking-wide">品牌登入</span>
+              <span className="text-[11px] text-gray-500">Easy Health Capsule Management</span>
             </div>
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[--brand-neutral]">
+                登入膠囊配方管理系統
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-md md:pr-10">
+                使用授權登入碼存取專屬控制台，集中管理配方、訂單與資料庫。請保持登入資訊安全並遵守操作指南。
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 text-xs text-gray-500">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/40 border border-white/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                SSL 加密登入
+              </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/40 border border-white/60">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                內部授權使用
+              </span>
+            </div>
+          </section>
+
+          <section>
             <LoginForm onLogin={handleLogin} />
-          </div>
+          </section>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
