@@ -86,6 +86,108 @@ ${recipe}
       ? allModels.filter(model => model.id === singleModel)
       : allModels
 
+    // 如果請求單個模型，使用流式輸出
+    if (singleModel) {
+      const model = allModels.find(m => m.id === singleModel)
+      if (!model) {
+        return NextResponse.json(
+          { error: '指定的模型不存在' },
+          { status: 400 }
+        )
+      }
+
+      try {
+        const response = await fetch(OPENROUTER_API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+            'X-Title': `Granulation Analyzer - ${model.name}`
+          },
+          body: JSON.stringify({
+            model: model.id,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+            max_tokens: 9999,
+            temperature: 0.2,
+            top_p: 0.9,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0,
+            stream: true
+          })
+        })
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error(`OpenRouter API 錯誤 (${model.name}):`, errorText)
+          return NextResponse.json(
+            { error: `API 請求失敗: ${errorText}` },
+            { status: response.status }
+          )
+        }
+
+        // 設置流式響應
+        const stream = new ReadableStream({
+          async start(controller) {
+            const reader = response.body?.getReader()
+            const decoder = new TextDecoder()
+
+            try {
+              while (true) {
+                const { done, value } = await reader!.read()
+                if (done) break
+
+                const chunk = decoder.decode(value)
+                const lines = chunk.split('\n')
+
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    const data = line.slice(6)
+                    if (data === '[DONE]') {
+                      controller.close()
+                      return
+                    }
+
+                    try {
+                      const parsed = JSON.parse(data)
+                      const content = parsed.choices?.[0]?.delta?.content
+                      if (content) {
+                        controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ model: model.name, content })}\n\n`))
+                      }
+                    } catch (e) {
+                      // 忽略解析錯誤
+                    }
+                  }
+                }
+              }
+            } catch (error) {
+              controller.error(error)
+            } finally {
+              reader?.releaseLock()
+            }
+          }
+        })
+
+        return new Response(stream, {
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+          },
+        })
+      } catch (err) {
+        console.error(`製粒分析錯誤 (${model.name}):`, err)
+        return NextResponse.json(
+          { error: err instanceof Error ? err.message : '分析過程中發生未知錯誤' },
+          { status: 500 }
+        )
+      }
+    }
+
+    // 原有的並行調用邏輯（非流式）
     const fetchPromises = models.map(async (model) => {
       try {
         const response = await fetch(OPENROUTER_API_URL, {

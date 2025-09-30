@@ -13,7 +13,6 @@ import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-reac
 import { formatNumber } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { TypeAnimation } from 'react-type-animation'
 
 interface GranulationAnalysis {
   model: string
@@ -166,24 +165,68 @@ export default function GranulationAnalyzerPage() {
         throw new Error(`API 請求失敗 (${response.status})`)
       }
 
-      const data = await response.json()
-      
-      if (data.success && data.results && data.results.length > 0) {
-        const result = data.results[0]
-        // 更新該模型的結果
-        setAnalyses(prev => prev.map((analysis, i) => 
-          i === modelIndex 
-            ? {
-                ...analysis,
-                content: result.response || '',
-                status: result.error ? 'error' : 'success',
-                error: result.error || undefined,
-                timestamp: new Date().toISOString()
+      // 檢查是否是流式響應
+      const contentType = response.headers.get('content-type')
+      if (contentType?.includes('text/plain')) {
+        // 流式響應處理
+        const reader = response.body?.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
+
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
+            buffer = lines.pop() || ''
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(line.slice(6))
+                  if (data.content) {
+                    // 逐步更新內容，實現打字機效果
+                    setAnalyses(prev => prev.map((analysis, i) => 
+                      i === modelIndex 
+                        ? {
+                            ...analysis,
+                            content: analysis.content + data.content,
+                            status: 'success' as const,
+                            timestamp: new Date().toISOString()
+                          }
+                        : analysis
+                    ))
+                  }
+                } catch (e) {
+                  // 忽略解析錯誤
+                }
               }
-            : analysis
-        ))
+            }
+          }
+        }
       } else {
-        throw new Error(data.error || '分析失敗')
+        // 非流式響應處理（原有的邏輯）
+        const data = await response.json()
+        
+        if (data.success && data.results && data.results.length > 0) {
+          const result = data.results[0]
+          // 更新該模型的結果
+          setAnalyses(prev => prev.map((analysis, i) => 
+            i === modelIndex 
+              ? {
+                  ...analysis,
+                  content: result.response || '',
+                  status: result.error ? 'error' : 'success',
+                  error: result.error || undefined,
+                  timestamp: new Date().toISOString()
+                }
+              : analysis
+          ))
+        } else {
+          throw new Error(data.error || '分析失敗')
+        }
       }
 
     } catch (error) {
@@ -392,24 +435,7 @@ export default function GranulationAnalyzerPage() {
                             <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
                             <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                           </div>
-                          <div className="text-sm text-gray-600">
-                            <TypeAnimation
-                              sequence={[
-                                '正在分析原料性質...',
-                                1000,
-                                '評估製粒必要性...',
-                                1000,
-                                '制定改善方案...',
-                                1000,
-                                '生成最終建議...',
-                                1000,
-                              ]}
-                              wrapper="span"
-                              speed={50}
-                              style={{ display: 'inline-block' }}
-                              repeat={Infinity}
-                            />
-                          </div>
+                          <p className="text-sm text-gray-500">AI 正在分析中...</p>
                         </div>
                       )}
                       
@@ -422,6 +448,9 @@ export default function GranulationAnalyzerPage() {
                               >
                                 {analysis.content}
                               </ReactMarkdown>
+                              {analysis.content && analysis.content.length > 0 && (
+                                <span className="inline-block w-2 h-4 bg-blue-500 ml-1 animate-pulse"></span>
+                              )}
                             </div>
                           </div>
                           <p className="text-xs text-gray-500">
