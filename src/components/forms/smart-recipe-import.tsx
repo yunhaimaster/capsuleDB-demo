@@ -40,13 +40,49 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        setImportImage(result)
-        setImportMode('image')
-      }
-      reader.readAsDataURL(file)
+      processImageFile(file)
+    }
+  }
+
+  const processImageFile = (file: File) => {
+    // 檢查文件類型
+    if (!file.type.startsWith('image/')) {
+      alert('請選擇圖片文件')
+      return
+    }
+
+    // 檢查文件大小 (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('圖片文件大小不能超過 10MB')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const result = e.target?.result as string
+      setImportImage(result)
+      setImportMode('image')
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    
+    const files = event.dataTransfer.files
+    if (files && files.length > 0) {
+      processImageFile(files[0])
     }
   }
 
@@ -256,7 +292,12 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="import-image">配方圖片</Label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <div 
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors hover:border-blue-400 hover:bg-blue-50"
+                    onDragOver={handleDragOver}
+                    onDragEnter={handleDragEnter}
+                    onDrop={handleDrop}
+                  >
                     {importImage ? (
                       <div className="space-y-4">
                         <img 
