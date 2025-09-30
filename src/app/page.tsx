@@ -11,7 +11,7 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
@@ -371,7 +371,7 @@ export default function HomePage() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* AI 配方生成器 */}
           <Link href="/ai-recipe-generator">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
@@ -385,6 +385,24 @@ export default function HomePage() {
                 </p>
                 <div className="inline-flex items-center text-blue-600 text-sm font-medium">
                   開始使用 →
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* 製粒分析工具 */}
+          <Link href="/granulation-analyzer">
+            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
+              <div className="liquid-glass-content text-center">
+                <div className="icon-container icon-container-emerald mx-auto mb-4">
+                  <FlaskConical className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">製粒分析工具</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  智能評估膠囊配方是否需要製粒，多模型專業建議
+                </p>
+                <div className="inline-flex items-center text-emerald-600 text-sm font-medium">
+                  開始分析 →
                 </div>
               </div>
             </div>
