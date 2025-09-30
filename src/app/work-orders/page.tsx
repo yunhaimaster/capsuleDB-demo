@@ -81,8 +81,19 @@ export default function WorkOrdersPage() {
       // 初始化工作單對象
       setGeneratedWorkOrder({
         id: workOrderId,
+        orderNumber: `WO-${Date.now()}`,
         content: '',
-        createdAt: new Date().toISOString()
+        structured: {
+          productionSteps: [],
+          qualityControlPoints: [],
+          riskAssessment: {
+            risks: [],
+            mitigationMeasures: [],
+            overallRiskLevel: 'Low'
+          },
+          isoCompliant: false
+        },
+        generatedAt: new Date().toISOString()
       })
 
       while (true) {

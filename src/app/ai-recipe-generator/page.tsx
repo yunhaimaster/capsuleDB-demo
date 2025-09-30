@@ -64,7 +64,20 @@ export default function AIRecipeGeneratorPage() {
       setGeneratedRecipe({
         id: recipeId,
         content: '',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        structured: {
+          name: '',
+          description: '',
+          ingredients: [],
+          dosage: {
+            recommendation: '',
+            adultDosage: '',
+            timing: ''
+          },
+          efficacyScore: null,
+          safetyScore: null,
+          costAnalysis: null
+        }
       })
 
       while (true) {
