@@ -24,6 +24,7 @@ interface SmartAIAssistantProps {
 
 export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
   const pathname = usePathname()
   
@@ -97,11 +98,18 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         onClose={handleClose}
         title="Smart AI 助手"
         className="ai-chat-modal"
-        size="full"
+        size={isFullscreen ? 'full' : 'xl'}
         animateFrom="button"
-        fullscreen
         headerButtons={
           <div className="flex items-center space-x-2">
+            <button
+              className="liquid-glass-modal-close"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              title={isFullscreen ? '還原視窗' : '全屏顯示'}
+              type="button"
+            >
+              {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+            </button>
             <AISettings 
               enableReasoning={enableReasoning}
               onToggleReasoning={setEnableReasoning}
@@ -120,8 +128,8 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         
         <AIDisclaimerCompact />
         
-        <div className="space-y-4">
-          <div className="max-h-96 overflow-y-auto space-y-3" ref={messagesContainerRef}>
+        <div className="flex flex-col space-y-4 max-h-[70vh]">
+          <div className="flex-1 overflow-y-auto space-y-3" ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] p-3 rounded-lg ${
