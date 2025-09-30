@@ -67,8 +67,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         isCustomerProvided: ingredient.isCustomerProvided ?? true
       })) || [
         { materialName: '', unitContentMg: 0, isCustomerProvided: true }
-      ],
-      status: initialData?.status || 'in_progress'
+      ]
     }
   })
 
