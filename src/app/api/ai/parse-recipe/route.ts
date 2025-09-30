@@ -26,15 +26,33 @@ export async function POST(request: NextRequest) {
     }
 
     // 構建解析提示詞
-    const systemPrompt = `你是一個專業的膠囊配方解析助手。請解析用戶提供的配方文字或圖片，提取出所有原料及其含量。
+    const systemPrompt = image 
+      ? `你是一個專業的膠囊配方圖片識別助手。請仔細分析用戶上傳的配方圖片，提取出所有原料及其含量。
 
-要求：
+圖片識別要求：
+1. 仔細識別圖片中的所有文字內容
+2. 識別所有原料名稱（中文或英文）
+3. 提取每個原料的含量（支援 mg、g、kg、IU 等單位）
+4. 將所有含量統一轉換為 mg
+5. 如果沒有指定單位，默認為 mg（例如：25 = 25mg，不是 25000mg）
+6. 忽略非原料內容（如膠囊殼、包裝材料等）
+7. 如果含量不明確或圖片模糊，請標記為需要確認
+8. 特別注意圖片中的表格、列表或標籤格式
+
+圖片識別技巧：
+- 識別圖片中的文字內容（包括手寫和印刷）
+- 注意配方表格或列表格式
+- 識別產品標籤上的成分信息
+- 處理可能的圖片模糊或角度問題`
+      : `你是一個專業的膠囊配方解析助手。請解析用戶提供的配方文字，提取出所有原料及其含量。
+
+文字解析要求：
 1. 識別所有原料名稱（中文或英文）
 2. 提取每個原料的含量（支援 mg、g、kg 等單位）
 3. 將所有含量統一轉換為 mg
 4. 如果沒有指定單位，默認為 mg（例如：25 = 25mg，不是 25000mg）
 5. 忽略非原料內容（如膠囊殼、包裝材料等）
-6. 如果含量不明確，請標記為需要確認
+6. 如果含量不明確，請標記為需要確認`
 
 語言要求：請使用香港書面語繁體中文，包括：
 - 使用繁體中文字符
@@ -73,9 +91,18 @@ export async function POST(request: NextRequest) {
 - 確保所有數值都是合理的 mg 單位`
 
     const userPrompt = image 
-      ? `請解析這張圖片中的配方信息：${image}`
+      ? `請仔細分析這張配方圖片，識別其中的所有原料和含量信息。圖片可能包含：
+- 產品標籤或說明書
+- 手寫配方單據
+- 印刷配方文件
+- 配方表格或列表
+
+請提取圖片中的所有原料信息，包括原料名稱和含量。`
       : `請解析以下配方文字：\n\n${text}`
 
+    // 根據輸入類型選擇不同的模型
+    const model = image ? 'google/gemini-2.0-flash-exp' : 'deepseek/deepseek-chat-v3.1'
+    
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
       headers: {
@@ -85,11 +112,22 @@ export async function POST(request: NextRequest) {
         'X-Title': 'Easy Health Recipe Parser'
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3.1',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
+        model: model,
+        messages: image 
+          ? [
+              { role: 'system', content: systemPrompt },
+              { 
+                role: 'user', 
+                content: [
+                  { type: 'text', text: userPrompt },
+                  { type: 'image_url', image_url: { url: image } }
+                ]
+              }
+            ]
+          : [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
         max_tokens: 32000,       // 設置到極限，確保複雜配方完整解析
         temperature: 0.05,       // 極低溫度，確保解析精確度
         top_p: 0.95,            // 提高 top_p
