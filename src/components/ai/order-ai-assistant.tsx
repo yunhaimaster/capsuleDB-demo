@@ -98,6 +98,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         className="ai-chat-modal"
         size="full"
         animateFrom="button"
+        fullscreen
         headerButtons={
           <div className="flex items-center space-x-2">
             <AISettings 
