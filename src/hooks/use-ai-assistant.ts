@@ -262,6 +262,7 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
 - 區分客戶提供 vs 工廠提供的原料
 - 分析原料使用趨勢
 - 識別常用原料和特殊原料
+- **排除常見輔料**：微晶纖維素(MCC)、麥芽糊精、二氧化矽、硬脂酸鎂
 
 **輸出格式：**
 - 原料統計表格（原料名稱 | 使用次數 | 客戶提供/工廠提供 | 使用頻率）
@@ -269,10 +270,15 @@ export function useAIAssistant({ orders = [], currentOrder, context, initialAssi
 - 採購和庫存建議
 
 **分析重點：**
-- 原料使用頻率統計
+- 原料使用頻率統計（排除輔料）
 - 客戶 vs 工廠原料比例
 - 原料採購策略建議
 - 庫存管理優化
+
+**注意：**
+- 專注於功能性原料，排除常見的填充劑和流動性改善劑
+- 分析真正有功效價值的原料使用趨勢
+- 識別客戶偏好的功能性成分
 
 請提供快速摘要和詳細原料分析。`
     } else if (messageToSend === '你有什麼提議和方法？') {
