@@ -42,6 +42,25 @@ export default function OrdersPage() {
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+        <section className="liquid-glass-card liquid-glass-card-refraction liquid-glass-card-interactive p-6 md:p-8">
+          <div className="liquid-glass-content flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="icon-container icon-container-blue shadow-[0_12px_30px_rgba(42,150,209,0.25)]">
+                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 0h6m-6 0a2 2 0 01-2-2v-2a2 2 0 012-2h6a2 2 0 012 2v2a2 2 0 01-2 2m-1-12a3 3 0 01-6 0m6 0a3 3 0 10-6 0m6 0h3m-9 0H6" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-lg md:text-xl font-semibold text-[--brand-neutral] tracking-tight">生產訂單管理</h1>
+                <p className="text-xs md:text-sm text-gray-600">掌握所有客戶訂單狀態、搜尋篩選與匯出報表</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3 text-xs font-medium">
+              <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700">即時更新</span>
+              <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">資料匯出</span>
+            </div>
+          </div>
+        </section>
 
 
       <ResponsiveOrdersList />
