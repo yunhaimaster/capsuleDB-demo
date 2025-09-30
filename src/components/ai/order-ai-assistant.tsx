@@ -65,7 +65,7 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
         '分析填充可行性',
         '分析製粒必要性',
         '分析成分顏色與膠囊染色風險',
-        '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
+        '分析文件與標籤合規性'
       ]
     }
   })
