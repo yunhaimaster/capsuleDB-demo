@@ -31,7 +31,6 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
       title: 'AI 配方',
       links: [
         { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/ai-recipes', label: 'AI配方庫' },
         { href: '/work-orders', label: '工作單生成' }
       ]
     },
