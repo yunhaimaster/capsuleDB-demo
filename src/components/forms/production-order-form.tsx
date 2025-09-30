@@ -55,7 +55,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       productName: initialData?.productName || '未命名產品',
       productionQuantity: initialData?.productionQuantity || 1,
       completionDate: initialData?.completionDate || '',
-      status: initialData?.status || 'in_progress',
       processIssues: initialData?.processIssues || '',
       qualityNotes: initialData?.qualityNotes || '',
       capsuleColor: initialData?.capsuleColor || '',
@@ -306,50 +305,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               )}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="status">生產狀態</Label>
-              <Select
-                value={watch('status') || 'in_progress'}
-                onValueChange={(value) => {
-                  setValue('status', value as 'in_progress' | 'completed' | 'failed')
-                  if (value === 'failed') {
-                    setValue('completionDate', '')
-                  }
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="選擇狀態" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="in_progress">進行中</SelectItem>
-                  <SelectItem value="completed">已完成</SelectItem>
-                  <SelectItem value="failed">生產失敗</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="completionDate">完工日期</Label>
-              <Controller
-                name="completionDate"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    id="completionDate"
-                    type="date"
-                    {...field}
-                    disabled={watch('status') === 'in_progress' || watch('status') === 'failed'}
-                    placeholder="請選擇完成日期"
-                  />
-                )}
-              />
-              {errors.completionDate && (
-                <p className="text-sm text-destructive">{errors.completionDate.message}</p>
-              )}
-            </div>
-          </div>
           </div>
         </div>
 
@@ -434,6 +389,22 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             </CardTitle>
           </CardHeader>
         <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="completionDate">完工日期</Label>
+            <Controller
+              name="completionDate"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  id="completionDate"
+                  type="date"
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(e.target.value || '')}
+                />
+              )}
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="processIssues">製程問題記錄</Label>
             <textarea

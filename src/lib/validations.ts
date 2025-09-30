@@ -37,7 +37,6 @@ export const productionOrderSchema = z.object({
     .min(1, '生產數量不能小於1')
     .max(5000000, '生產數量不能超過5,000,000粒'),
   completionDate: z.string().optional(),
-  status: z.enum(['in_progress', 'completed', 'failed']).default('in_progress'),
   processIssues: z
     .string()
     .max(1000, '製程問題記錄不能超過1000字')

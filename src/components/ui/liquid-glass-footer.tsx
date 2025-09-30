@@ -64,8 +64,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
 
   return (
     <footer className={`liquid-glass-footer ${className}`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="liquid-glass-footer-content">
+      <div className="liquid-glass-footer-content">
         {/* 公司信息 */}
         <div className="liquid-glass-footer-brand">
         <div className="flex items-center space-x-2 mb-4">
@@ -106,7 +105,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
             </div>
           ))}
         </div>
-        </div>
+      </div>
 
       {/* 版權信息 */}
       <div className="liquid-glass-footer-bottom">
@@ -123,7 +122,6 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
             </Link>
           </div>
         </div>
-      </div>
       </div>
     </footer>
   )

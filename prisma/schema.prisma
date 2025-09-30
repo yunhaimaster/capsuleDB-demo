@@ -18,7 +18,6 @@ model ProductionOrder {
   unitWeightMg       Float        // 單粒總重量（計算）
   batchTotalWeightMg Float        // 批次總重量（計算）
   completionDate     DateTime?    // 完工日期
-  status             String       @default("in_progress") // 生產狀態 (draft, approved, in_progress, completed, failed)
   processIssues      String?      // 製程問題記錄
   qualityNotes       String?      // 品管備註
   capsuleColor       String?      // 膠囊顏色

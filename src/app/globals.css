@@ -636,21 +636,12 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(120% 120% at 0% 0%, rgba(110, 199, 218, 0.45) 0%, rgba(110, 199, 218, 0) 55%),
-    radial-gradient(140% 140% at 100% 0%, rgba(142, 169, 232, 0.45) 0%, rgba(142, 169, 232, 0) 50%),
-    radial-gradient(180% 180% at 50% 100%, rgba(46, 138, 193, 0.38) 0%, rgba(46, 138, 193, 0) 65%),
+    radial-gradient(120% 120% at 0% 0%, rgba(110, 199, 218, 0.3) 0%, rgba(110, 199, 218, 0) 60%),
+    radial-gradient(140% 140% at 100% 0%, rgba(142, 169, 232, 0.3) 0%, rgba(142, 169, 232, 0) 55%),
+    radial-gradient(180% 180% at 50% 100%, rgba(46, 138, 193, 0.28) 0%, rgba(46, 138, 193, 0) 70%),
     linear-gradient(180deg, rgba(245, 250, 255, 1) 0%, rgba(231, 241, 252, 1) 100%);
-  background-size: 180% 180%, 180% 180%, 220% 220%, 100% 100%;
-  animation: brandWave 12s ease-in-out infinite;
-}
-
-@keyframes brandWave {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 100% 100%;
-  }
+  background-size: 160% 160%, 160% 160%, 200% 200%, 100% 100%;
+  animation: brandWave 18s ease-in-out infinite;
 }
 
 @keyframes brandLogoFloat {
