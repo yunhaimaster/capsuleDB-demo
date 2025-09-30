@@ -31,13 +31,14 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
           { href: '/orders/new', label: '新建訂單' }
         ]
       },
-      {
-        title: '工具',
-        links: [
-          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-          { href: '/work-orders', label: '工作單生成' }
-        ]
-      },
+          {
+            title: '工具',
+            links: [
+              { href: '/ai-recipe-generator', label: 'AI配方生成器' },
+              { href: '/granulation-analyzer', label: '製粒分析工具' },
+              { href: '/work-orders', label: '工作單生成' }
+            ]
+          },
       {
         title: '系統',
         links: [

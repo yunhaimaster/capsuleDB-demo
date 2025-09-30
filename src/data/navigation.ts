@@ -23,6 +23,7 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
     label: '工具',
     children: [
       { href: '/ai-recipe-generator', label: 'AI 配方生成器' },
+      { href: '/granulation-analyzer', label: '製粒分析工具' },
       { href: '/work-orders', label: '工作單生成' },
     ],
   },
