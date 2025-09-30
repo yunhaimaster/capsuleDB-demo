@@ -10,10 +10,38 @@ import Link from 'next/link'
 export default function HistoryPage() {
   const versionHistory = [
     {
-      version: 'v1.0.8',
-      date: '2025年9月28日',
+      version: 'v2.1.0',
+      date: '2025年9月30日',
       type: '最新版本',
       typeColor: 'bg-green-100 text-green-800 border-green-200',
+      features: [
+        'AI 助手 Modal 玻璃化改版，新增手機折疊資訊晶片',
+        'PDF 下載區改用 Liquid Glass 卡片，桌面排列一致',
+        '導航列最大寬度調整，超寬螢幕仍保持左右留白',
+        '登入頁整合 Liquid Glass 風格與品牌提示',
+        'Footer 帳戶連結改為動態顯示登入/登出狀態',
+        '新增品牌設計 Token 表與文檔版本同步到 v2.1.0'
+      ]
+    },
+    {
+      version: 'v2.0.0',
+      date: '2025年9月29日',
+      type: '功能更新',
+      typeColor: 'bg-blue-100 text-blue-800 border-blue-200',
+      features: [
+        '全站換上品牌背景動畫與 Liquid Glass 卡片',
+        'AI 助手布局統一，新增建議提問及複製操作',
+        'PDF 參考資料中心上線，提供風險清單及培訓手冊',
+        '導航與 Footer 導入共用設定檔，移除舊頁面連結',
+        '修復 iOS Safari 字體縮放造成畫面放大的問題',
+        '調整訂單列表 hover 動畫與桌/手機排版'
+      ]
+    },
+    {
+      version: 'v1.0.8',
+      date: '2025年9月28日',
+      type: '穩定版本',
+      typeColor: 'bg-blue-100 text-blue-800 border-blue-200',
       features: [
         'AI 助手功能全面優化，移除 reasoning 參數提升性能',
         '新增用戶可選的深度推理模式，平衡速度與質量',

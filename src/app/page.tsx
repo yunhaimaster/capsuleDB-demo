@@ -171,7 +171,7 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 xl:gap-12">
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group">
           <div className="liquid-glass-content">
             <div className="flex items-center justify-between mb-4">
@@ -388,7 +388,7 @@ export default function HomePage() {
 
           {/* 工作單生成 */}
           <Link href="/work-orders">
-            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-purple mx-auto mb-4">
                   <ClipboardList className="h-6 w-6 text-white" />
@@ -405,7 +405,7 @@ export default function HomePage() {
           </Link>
 
           {/* 開發中功能 */}
-          <div className="liquid-glass-card liquid-glass-card-interactive opacity-60 cursor-not-allowed">
+          <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction opacity-60 cursor-not-allowed">
             <div className="liquid-glass-content text-center">
               <div className="icon-container icon-container-gray mx-auto mb-4">
                 <Zap className="h-6 w-6 text-white" />
