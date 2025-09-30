@@ -43,11 +43,11 @@ export function LiquidGlassHero({
                   </div>
                 )}
                 <div>
-                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold" style={{ color: '#2a588c' }}>
+                  <h1 className="text-xl md:text-2xl lg:text-[28px] font-semibold" style={{ color: '#2a588c' }}>
                     {title}
                   </h1>
                   {subtitle && (
-                    <p className="text-lg md:text-xl text-gray-600 mt-1">
+                    <p className="text-sm md:text-base text-gray-600 max-w-2xl">
                       {subtitle}
                     </p>
                   )}
