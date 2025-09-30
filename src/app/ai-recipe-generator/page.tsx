@@ -144,15 +144,17 @@ export default function AIRecipeGeneratorPage() {
       <div className="container mx-auto px-4 pt-28 pb-8">
         <div className="max-w-4xl mx-auto">
           {/* 頁面標題 */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              💊 AI 代工配方生成器
+          <div className="text-center mb-6 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-300/40 text-xs font-medium text-blue-700">
+              <span className="h-2 w-2 rounded-full bg-blue-500" />
+              AI 配方工具
+            </div>
+            <h1 className="text-2xl md:text-[28px] font-semibold text-gray-800">
+              AI 配方生成器
             </h1>
-            <p className="text-lg text-gray-600">
-              專為膠囊灌裝工廠代工生產設計，智能生成專業配方並提供代工成本分析
+            <p className="text-sm md:text-[15px] text-gray-600 max-w-3xl mx-auto">
+              輸入產品目標即可獲得原料建議、功效描述與製程提示，快速建立符合客戶需求的配方草稿。
             </p>
-            
-    {/* 移除數據庫狀態指示器，改為純前端顯示 */}
           </div>
 
           {/* 表單區域 */}

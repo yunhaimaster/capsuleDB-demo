@@ -100,12 +100,16 @@ export default function WorkOrdersPage() {
       <div className="container mx-auto px-4 pt-28 pb-8">
         <div className="max-w-6xl mx-auto">
           {/* 頁面標題 */}
-          <div className="text-center mb-8 space-y-3">
-            <h1 className="text-4xl font-bold text-gray-800">
-              📋 ISO 工作單生成器
+          <div className="text-center mb-6 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-300/40 text-xs font-medium text-purple-700">
+              <span className="h-2 w-2 rounded-full bg-purple-500" />
+              工作單專區
+            </div>
+            <h1 className="text-2xl md:text-[28px] font-semibold text-gray-800">
+              工作單生成
             </h1>
-            <p className="text-lg text-gray-600">
-              自動生成符合 ISO 標準的生產工作單和質量控制文件
+            <p className="text-sm md:text-[15px] text-gray-600">
+              一鍵生成符合品質要求的工作單、包裝與批次文件
             </p>
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-medium border border-amber-200">
               <Clock className="h-4 w-4 mr-2" />

@@ -676,19 +676,19 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-600 font-medium">單粒總重量</p>
-              <p className="text-xl sm:text-2xl font-bold text-blue-800">
+              <p className="text-lg sm:text-xl font-semibold text-blue-800">
                 {unitTotalWeight.toFixed(3)} mg
               </p>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg border border-emerald-200">
               <p className="text-sm text-emerald-600 font-medium">批次總重量</p>
-              <p className="text-xl sm:text-2xl font-bold text-emerald-800">
+              <p className="text-lg sm:text-xl font-semibold text-emerald-800">
                 {convertWeight(batchTotalWeight).display}
               </p>
             </div>
             <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border border-purple-200">
               <p className="text-sm text-purple-600 font-medium">生產數量</p>
-              <p className="text-xl sm:text-2xl font-bold text-purple-800">
+              <p className="text-lg sm:text-xl font-semibold text-purple-800">
                 {formatNumber(watchedQuantity || 0)} 粒
               </p>
             </div>

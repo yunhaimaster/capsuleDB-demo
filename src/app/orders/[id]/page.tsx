@@ -150,14 +150,14 @@ export default function OrderDetailPage() {
                   <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                 </svg>
               </div>
-              <span style={{ color: '#2a588c' }}>基本資訊</span>
+              <span className="text-[--brand-neutral]">基本資訊</span>
             </CardTitle>
           </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-500 text-sm font-semibold">客</span>
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-500 text-[11px] font-semibold">客</span>
                 客戶資訊
               </h4>
               <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
@@ -169,8 +169,8 @@ export default function OrderDetailPage() {
             </div>
             
             <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 text-sm font-semibold">狀</span>
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 text-[11px] font-semibold">狀</span>
                 生產狀態
               </h4>
               <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
@@ -183,8 +183,8 @@ export default function OrderDetailPage() {
 
           {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
             <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-purple-500 text-sm font-semibold">膠</span>
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-500 text-[11px] font-semibold">膠</span>
                 膠囊規格
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs md:text-sm text-slate-700">
@@ -203,8 +203,8 @@ export default function OrderDetailPage() {
 
           {(order.processIssues || order.qualityNotes) && (
             <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-500 text-sm font-semibold">備</span>
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-500 text-[11px] font-semibold">備</span>
                 備註資訊
               </h4>
               <div className="space-y-3 text-xs md:text-sm text-slate-700">

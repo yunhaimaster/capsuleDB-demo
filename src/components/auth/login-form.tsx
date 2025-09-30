@@ -33,7 +33,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           <div className="mx-auto mb-2 p-3 bg-blue-500/10 rounded-full w-fit">
             <Logo size="lg" variant="icon" />
           </div>
-          <h2 className="text-2xl font-semibold text-blue-600">Easy Health 系統登入</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold text-blue-600">Easy Health 系統登入</h2>
           <p className="text-sm text-gray-600">請輸入登入碼以訪問系統</p>
         </div>
 
