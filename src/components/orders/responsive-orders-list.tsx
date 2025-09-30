@@ -5,7 +5,8 @@ import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
-import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck } from 'lucide-react'
+import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
+import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
@@ -24,6 +25,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null)
+  const [selectedOrderForAI, setSelectedOrderForAI] = useState<ProductionOrder | null>(null)
   
   // Modal hooks
   const deleteConfirmModal = useLiquidGlassModal()
@@ -123,6 +125,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const handleDeleteClick = (orderId: string) => {
     setOrderToDelete(orderId)
     deleteConfirmModal.openModal()
+  }
+
+  const handleOrderAIClick = (order: ProductionOrder) => {
+    setSelectedOrderForAI(order)
   }
 
   const handleDeleteConfirm = async () => {
@@ -359,6 +365,16 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
+                              handleOrderAIClick(order)
+                            }}
+                            className="text-purple-600 hover:text-purple-800 transition-colors"
+                            title="Order AI 分析"
+                          >
+                            <Bot className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
                               handleDeleteClick(order.id)
                             }}
                             className="text-red-600 hover:text-red-800 transition-colors"
@@ -431,6 +447,16 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       title="編輯訂單"
                     >
                       <Edit className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleOrderAIClick(order)
+                      }}
+                      className="text-purple-600 hover:text-purple-800 transition-colors p-1"
+                      title="Order AI 分析"
+                    >
+                      <Bot className="h-4 w-4" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -544,6 +570,14 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
         cancelText="取消"
         variant="danger"
       />
+
+      {/* Order AI Assistant */}
+      {selectedOrderForAI && (
+        <OrderAIAssistant
+          order={selectedOrderForAI}
+          onClose={() => setSelectedOrderForAI(null)}
+        />
+      )}
     </div>
   )
 }

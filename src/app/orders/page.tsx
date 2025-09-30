@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { ResponsiveOrdersList } from '@/components/orders/responsive-orders-list'
 import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
@@ -55,9 +56,16 @@ export default function OrdersPage() {
                 <p className="text-xs md:text-sm text-gray-600">掌握所有客戶訂單狀態、搜尋篩選與匯出報表</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 text-xs font-medium">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700">即時更新</span>
-              <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">資料匯出</span>
+            <div className="flex flex-wrap gap-3 items-center">
+              <div className="flex flex-wrap gap-2 text-xs font-medium">
+                <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700">即時更新</span>
+                <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">資料匯出</span>
+              </div>
+              <Link href="/orders/new">
+                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                  + 新建訂單
+                </button>
+              </Link>
             </div>
           </div>
         </section>
