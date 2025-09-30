@@ -35,9 +35,10 @@ export default function AIRecipeGeneratorPage() {
     e.preventDefault()
     setIsGenerating(true)
     setError(null)
+    setGeneratedRecipe(null)
 
     try {
-      const response = await fetch('/api/ai/recipe-generate', {
+      const response = await fetch('/api/ai/recipe-generate-stream', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,12 +46,71 @@ export default function AIRecipeGeneratorPage() {
         body: JSON.stringify(formData),
       })
 
-      const result = await response.json()
+      if (!response.ok) {
+        throw new Error('網絡錯誤')
+      }
 
-      if (result.success) {
-        setGeneratedRecipe(result.recipe)
-      } else {
-        setError(result.error || '配方生成失敗')
+      const reader = response.body?.getReader()
+      if (!reader) {
+        throw new Error('無法讀取響應流')
+      }
+
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let fullContent = ''
+      let recipeId = `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+      // 初始化配方對象
+      setGeneratedRecipe({
+        id: recipeId,
+        content: '',
+        createdAt: new Date().toISOString()
+      })
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          if (line.startsWith('event: ')) {
+            const eventType = line.slice(7)
+            const nextLine = lines[lines.indexOf(line) + 1]
+            
+            if (nextLine && nextLine.startsWith('data: ')) {
+              const data = nextLine.slice(6)
+              
+              if (eventType === 'delta') {
+                try {
+                  const content = JSON.parse(data)
+                  if (typeof content === 'string') {
+                    fullContent += content
+                    setGeneratedRecipe(prev => prev ? {
+                      ...prev,
+                      content: fullContent
+                    } : null)
+                  }
+                } catch (err) {
+                  console.error('解析 delta 數據失敗:', err)
+                }
+              } else if (eventType === 'done') {
+                // 生成完成
+                break
+              } else if (eventType === 'error') {
+                try {
+                  const errorData = JSON.parse(data)
+                  setError(errorData.error || '生成失敗')
+                } catch (err) {
+                  setError('生成失敗')
+                }
+                break
+              }
+            }
+          }
+        }
       }
     } catch (err) {
       setError('網絡錯誤，請稍後再試')
@@ -281,7 +341,7 @@ export default function AIRecipeGeneratorPage() {
           )}
 
           {/* 生成中狀態 */}
-          {isGenerating && (
+          {isGenerating && !generatedRecipe && (
             <Card className="liquid-glass-card liquid-glass-card-elevated">
               <div className="liquid-glass-content">
                 <div className="text-center py-12">
@@ -306,7 +366,7 @@ export default function AIRecipeGeneratorPage() {
           )}
 
           {/* 生成結果 */}
-          {generatedRecipe && !isGenerating && (
+          {generatedRecipe && (
             <Card className="liquid-glass-card liquid-glass-card-elevated">
               <div className="liquid-glass-content">
                 <div className="flex items-center justify-between mb-6">
