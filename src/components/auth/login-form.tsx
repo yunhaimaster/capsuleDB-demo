@@ -27,8 +27,9 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <Card className="liquid-glass-card liquid-glass-card-elevated w-full max-w-md mx-auto shadow-xl">
-      <CardContent className="pt-10 pb-8 px-8 space-y-8">
+    <div className="w-full flex justify-center mt-10">
+      <Card className="liquid-glass-card liquid-glass-card-elevated w-full max-w-md mx-auto shadow-xl">
+        <CardContent className="pt-10 pb-8 px-8 space-y-8">
         <div className="text-center space-y-3">
           <div className="mx-auto mb-2 p-3 bg-blue-500/10 rounded-full w-fit">
             <Logo size="lg" variant="icon" />
@@ -85,7 +86,8 @@ export function LoginForm({ onLogin }: LoginFormProps) {
             如有登入問題，請聯繫 Victor
           </p>
         </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

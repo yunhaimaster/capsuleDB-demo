@@ -10,7 +10,11 @@
 
 ```bash
 # PostgreSQL Database Configuration
-DATABASE_URL="postgresql://postgres:password@localhost:5432/capsuledb"
+POSTGRES_URL="postgresql://postgres:password@localhost:5432/capsuledb"
+DATABASE_URL="${POSTGRES_URL}"
+
+# （選用）Prisma Accelerate
+# PRISMA_DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key"
 
 # App Configuration
 NEXT_PUBLIC_APP_NAME="EasyPack 膠囊配方管理系統"
@@ -84,7 +88,12 @@ npx prisma migrate reset
 在 Vercel 項目設置中添加環境變量：
 
 ```
-DATABASE_URL=postgresql://username:password@host:port/database
+POSTGRES_URL=postgresql://username:password@host:5432/database?sslmode=require
+DATABASE_URL=${POSTGRES_URL}
+
+# （選用）Prisma Accelerate
+# PRISMA_DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key
+
 OPENROUTER_API_KEY=your_openrouter_api_key
 NEXT_PUBLIC_APP_URL=https://your-domain.vercel.app
 ```

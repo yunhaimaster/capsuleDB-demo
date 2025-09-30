@@ -61,7 +61,11 @@ GitHub Repository
 
 ```bash
 # 數據庫
-DATABASE_URL=postgresql://username:password@host:port/database
+POSTGRES_URL=postgresql://username:password@host:5432/database?sslmode=require
+DATABASE_URL=${POSTGRES_URL}
+
+# （選用）Prisma Accelerate
+# PRISMA_DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key
 
 # AI 服務
 OPENROUTER_API_KEY=your-openrouter-api-key
@@ -101,8 +105,15 @@ vercel ls
 
 ### 開發環境 (.env.local)
 ```bash
-# 數據庫 (SQLite)
+# 數據庫 (SQLite 預設)
 DATABASE_URL="file:./prisma/dev.db"
+
+# 如果要連接遠端 Postgres，可引用 POSTGRES_URL
+# POSTGRES_URL="postgresql://username:password@host:5432/database?sslmode=require"
+# DATABASE_URL="${POSTGRES_URL}"
+
+# （選用）Prisma Accelerate
+# PRISMA_DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key"
 
 # AI 服務
 OPENROUTER_API_KEY=your-development-api-key
@@ -116,7 +127,11 @@ NODE_ENV=development
 ### 生產環境 (Vercel)
 ```bash
 # 數據庫 (PostgreSQL)
-DATABASE_URL=postgresql://username:password@host:port/database
+POSTGRES_URL=postgresql://username:password@host:5432/database?sslmode=require
+DATABASE_URL=${POSTGRES_URL}
+
+# （選用）Prisma Accelerate
+# PRISMA_DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key
 
 # AI 服務
 OPENROUTER_API_KEY=your-production-api-key
