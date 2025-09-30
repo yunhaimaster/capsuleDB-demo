@@ -66,9 +66,9 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
       suggestions: [
         '目前訂單的整體情況如何？',
         '最近最常下單的客戶是誰？',
+        '哪些原料在訂單中最常出現？',
         '膠囊規格使用分布如何？',
         '近期常見的製程或品管問題有哪些？',
-        '哪些原料在訂單中最常出現？',
         '分析生產效率和品質指標'
       ]
     }
