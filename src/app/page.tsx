@@ -171,9 +171,9 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 xl:gap-12">
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group">
-          <div className="liquid-glass-content">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 xl:gap-12 items-stretch">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
+          <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
@@ -186,16 +186,18 @@ export default function HomePage() {
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
               建立新的膠囊配方記錄，包含原料配置與生產參數
             </p>
-            <Link href="/orders/new">
-              <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
-                開始建立
-              </Button>
-            </Link>
+            <div className="mt-auto">
+              <Link href="/orders/new">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+                  開始建立
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group">
-          <div className="liquid-glass-content">
+        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full">
+          <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <FileText className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
@@ -208,11 +210,13 @@ export default function HomePage() {
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
               檢視與管理所有生產記錄，支援搜尋、篩選與編輯
             </p>
-            <Link href="/orders">
-              <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
-                查看記錄
-              </Button>
-            </Link>
+            <div className="mt-auto">
+              <Link href="/orders">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+                  查看記錄
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

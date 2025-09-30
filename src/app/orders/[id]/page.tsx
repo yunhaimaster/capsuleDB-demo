@@ -155,61 +155,69 @@ export default function OrderDetailPage() {
           </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-medium mb-2">客戶資訊</h4>
-              <div className="space-y-2 text-sm">
-                <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
-                <p><span className="font-medium">產品名字：</span>{order.productName}</p>
-                <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-                <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
+            <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-500 text-sm font-semibold">客</span>
+                客戶資訊
+              </h4>
+              <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
+                <p><span className="font-medium text-slate-900">客戶名稱：</span>{order.customerName}</p>
+                <p><span className="font-medium text-slate-900">產品名字：</span>{order.productName}</p>
+                <p><span className="font-medium text-slate-900">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+                <p><span className="font-medium text-slate-900">建檔人員：</span>{order.createdBy || '系統'}</p>
               </div>
             </div>
             
-            <div>
-              <h4 className="font-medium mb-2">生產狀態</h4>
-              <div className="space-y-2 text-sm">
-                <p><span className="font-medium">完工日期：</span>
-                  {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
-                </p>
-                <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
-                <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+            <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 text-sm font-semibold">狀</span>
+                生產狀態
+              </h4>
+              <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
+                <p><span className="font-medium text-slate-900">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
+                <p><span className="font-medium text-slate-900">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+                <p><span className="font-medium text-slate-900">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
               </div>
             </div>
           </div>
 
-          {/* 膠囊規格 */}
           {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
-            <div className="mt-4 pt-4 border-t">
-              <h4 className="font-medium mb-2">膠囊規格</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 text-purple-500 text-sm font-semibold">膠</span>
+                膠囊規格
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs md:text-sm text-slate-700">
                 {order.capsuleColor && (
-                  <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>
+                  <p><span className="font-medium text-slate-900">顏色：</span>{order.capsuleColor}</p>
                 )}
                 {order.capsuleSize && (
-                  <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>
+                  <p><span className="font-medium text-slate-900">大小：</span>{order.capsuleSize}</p>
                 )}
                 {order.capsuleType && (
-                  <p><span className="font-medium">成份：</span>{order.capsuleType}</p>
+                  <p><span className="font-medium text-slate-900">成份：</span>{order.capsuleType}</p>
                 )}
               </div>
             </div>
           )}
 
-          {/* 製程問題和品管備註 */}
           {(order.processIssues || order.qualityNotes) && (
-            <div className="mt-4 pt-4 border-t">
-              <h4 className="font-medium mb-2">備註資訊</h4>
-              <div className="space-y-2 text-sm">
+            <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
+              <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-sm md:text-base">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-500 text-sm font-semibold">備</span>
+                備註資訊
+              </h4>
+              <div className="space-y-3 text-xs md:text-sm text-slate-700">
                 {order.processIssues && (
-                  <div>
-                    <span className="font-medium">製程問題：</span>
-                    <p className="text-red-700 bg-red-50 p-2 rounded mt-1">{order.processIssues}</p>
+                  <div className="rounded-xl border border-red-100 bg-red-50/70 p-3">
+                    <span className="font-medium text-red-700 block mb-1">製程問題</span>
+                    <p className="leading-relaxed text-red-600 text-sm">{order.processIssues}</p>
                   </div>
                 )}
                 {order.qualityNotes && (
-                  <div>
-                    <span className="font-medium">品管備註：</span>
-                    <p className="text-green-700 bg-green-50 p-2 rounded mt-1">{order.qualityNotes}</p>
+                  <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 p-3">
+                    <span className="font-medium text-emerald-700 block mb-1">品管備註</span>
+                    <p className="leading-relaxed text-emerald-600 text-sm">{order.qualityNotes}</p>
                   </div>
                 )}
               </div>

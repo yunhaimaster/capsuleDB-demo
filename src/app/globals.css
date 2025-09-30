@@ -851,23 +851,6 @@
   }
 }
 
-.liquid-glass-nav-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.1);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: inherit;
-}
-
-.liquid-glass-nav-link:hover::before {
-  opacity: 1;
-}
-
 .liquid-glass-nav-link:hover,
 .liquid-glass-nav-link.active {
   color: var(--liquid-glass-nav-text);
@@ -935,15 +918,13 @@
   .liquid-glass-nav-link {
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+  background: transparent;
     text-align: center;
     transition: all 0.3s ease;
   }
   
   .liquid-glass-nav-link:hover {
-    background: rgba(255, 255, 255, 0.2);
+  background: transparent;
   }
 }
 
@@ -1933,46 +1914,7 @@
 }
 
 /* Combined Floating Effects */
-.floating-combined {
-  position: relative;
-  overflow: hidden;
-}
-
-.floating-combined::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
-    linear-gradient(45deg, rgba(68, 186, 198, 0.06) 0%, transparent 50%),
-    conic-gradient(from 0deg at 50% 50%, rgba(68, 186, 198, 0.04) 0deg, transparent 60deg);
-  animation: floating-combined 60s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes floating-combined {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
-    opacity: 0.2;
-  }
-  25% {
-    transform: translateY(-15px) rotate(90deg) scale(1.05);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateY(-10px) rotate(180deg) scale(0.95);
-    opacity: 0.3;
-  }
-  75% {
-    transform: translateY(-25px) rotate(270deg) scale(1.1);
-    opacity: 0.6;
-  }
-}
+/* floating-combined background removed for consistent footer stacking */
 
 .card-hover {
   transition: all 0.3s ease;

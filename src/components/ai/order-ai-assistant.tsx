@@ -1,14 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
-import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw, ChevronDown } from 'lucide-react'
+import { Bot, Send, Loader2, X, RotateCcw, ArrowUp, Copy, Download, MessageSquare, History, Trash2, Minimize2, Maximize2, RefreshCw } from 'lucide-react'
 import { ProductionOrder } from '@/types'
 import { useAIAssistant } from '@/hooks/use-ai-assistant'
-import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 import { AIDisclaimer, AIDisclaimerCompact } from '@/components/ui/ai-disclaimer'
 import { AISettings } from '@/components/ui/ai-settings'
 import { AIThinkingIndicator, AIThinkingSteps } from '@/components/ui/ai-thinking-indicator'
@@ -22,8 +21,6 @@ interface OrderAIAssistantProps {
 export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
-  const [isMobileMeta, setIsMobileMeta] = useState(false)
-  const [isMetaExpanded, setIsMetaExpanded] = useState(false)
   
   const {
     messages,
@@ -74,30 +71,6 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
     setIsOpen(false)
   }
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === 'undefined') return
-      setIsMobileMeta(window.innerWidth <= 768)
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    if (!isOpen) {
-      setIsMetaExpanded(false)
-    }
-  }, [isOpen])
-
-  useEffect(() => {
-    if (!isMobileMeta) {
-      setIsMetaExpanded(false)
-    }
-  }, [isMobileMeta])
-
-  const metaClassName = `ai-modal-meta ${isMobileMeta ? 'mobile-condensed' : ''} ${isMobileMeta && isMetaExpanded ? 'expanded' : ''}`
 
   return (
     <div>
@@ -144,48 +117,6 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
       >
         
         <div className="ai-modal-shell" style={{ height: '60vh' }}>
-          <div className={metaClassName}>
-            {isMobileMeta ? (
-              <>
-                <button
-                  type="button"
-                  className="mobile-chip-toggle"
-                  onClick={() => setIsMetaExpanded(prev => !prev)}
-                >
-                  <div className="flex flex-col text-left">
-                    <span className="text-sm font-semibold text-[rgba(18,42,64,0.9)]">AI 助手資訊</span>
-                    <span className="text-[11px] text-[rgba(18,42,64,0.6)]">{messages.length} 條訊息</span>
-                  </div>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isMetaExpanded ? 'rotate-180' : ''}`} />
-                </button>
-                <div className="mobile-chip-details">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AIPoweredBadge />
-                    <span className="text-xs text-[rgba(18,42,64,0.7)]">訂單分析助手 · 專業建議</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[11px] text-[rgba(18,42,64,0.6)]">
-                    <span className="px-2 py-1 rounded-full bg-white/80 border border-white/60">{messages.length} 條訊息</span>
-                    {isLoading && (
-                      <div className="flex items-center gap-1">
-                        <AIThinkingIndicator isThinking={true} enableReasoning={enableReasoning} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center gap-2">
-                  <AIPoweredBadge />
-                  <span className="text-sm text-[rgba(18,42,64,0.75)]">訂單分析助手 · 專業建議</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-[rgba(18,42,64,0.6)]">
-                  <span className="px-2 py-1 rounded-full bg-white/70 border border-white/50 shadow-sm">{messages.length} 條訊息</span>
-                  {isLoading && <AIThinkingIndicator isThinking={true} enableReasoning={enableReasoning} />}
-                </div>
-              </>
-            )}
-          </div>
 
           <div className="ai-modal-stream" ref={messagesContainerRef}>
             {messages.map((message, index) => (
