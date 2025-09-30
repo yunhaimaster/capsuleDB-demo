@@ -29,15 +29,35 @@ interface SmartRecipeImportProps {
 export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [importText, setImportText] = useState('')
+  const [importImage, setImportImage] = useState<string | null>(null)
   const [isParsing, setIsParsing] = useState(false)
   const [parsedIngredients, setParsedIngredients] = useState<ParsedIngredient[]>([])
   const [parseError, setParseError] = useState('')
   const [parseSummary, setParseSummary] = useState('')
   const [confidence, setConfidence] = useState<'高' | '中' | '低'>('中')
+  const [importMode, setImportMode] = useState<'text' | 'image'>('text')
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const result = e.target?.result as string
+        setImportImage(result)
+        setImportMode('image')
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleParse = async () => {
-    if (!importText.trim()) {
+    if (importMode === 'text' && !importText.trim()) {
       setParseError('請輸入要解析的配方文字')
+      return
+    }
+    
+    if (importMode === 'image' && !importImage) {
+      setParseError('請上傳要解析的配方圖片')
       return
     }
 
@@ -46,7 +66,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     setParsedIngredients([])
 
     try {
-      console.log('開始解析配方:', importText.trim())
+      console.log('開始解析配方:', importMode === 'text' ? importText.trim() : '圖片模式')
       
       const response = await fetch('/api/ai/parse-recipe', {
         method: 'POST',
@@ -54,7 +74,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          text: importText.trim()
+          text: importMode === 'text' ? importText.trim() : undefined,
+          image: importMode === 'image' ? importImage : undefined
         }),
       })
 
@@ -118,6 +139,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
   const handleCancel = () => {
     setIsOpen(false)
     setImportText('')
+    setImportImage(null)
+    setImportMode('text')
     setParsedIngredients([])
     setParseError('')
     setParseSummary('')
@@ -155,45 +178,155 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
         </DialogHeader>
         
         <div className="space-y-6">
-          {/* 輸入區域 */}
+          {/* 模式選擇 */}
           <Card className="card-subtle-3d glass-card-subtle">
             <CardHeader>
-              <CardTitle className="text-lg">輸入配方文字</CardTitle>
+              <CardTitle className="text-lg">選擇導入方式</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="import-text">配方內容</Label>
-                <Textarea
-                  id="import-text"
-                  placeholder="請貼上配方文字，例如：&#10;維生素C: 500mg&#10;維生素D3: 1000IU&#10;鈣: 200mg&#10;鎂: 100mg&#10;鋅: 15mg"
-                  value={importText}
-                  onChange={(e) => setImportText(e.target.value)}
-                  className="min-h-[120px]"
-                  disabled={isParsing}
-                />
-              </div>
-              
-              <div className="flex gap-2">
-                <Button 
-                  onClick={handleParse} 
-                  disabled={isParsing || !importText.trim()}
-                  className="ripple-effect btn-micro-hover micro-brand-glow flex-1"
+            <CardContent>
+              <div className="flex gap-2 mb-4">
+                <Button
+                  variant={importMode === 'text' ? 'default' : 'outline'}
+                  onClick={() => setImportMode('text')}
+                  className="flex-1"
                 >
-                  {isParsing ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 micro-loading" />
-                      解析中...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="w-4 h-4 mr-2 icon-micro-bounce" />
-                      解析配方
-                    </>
-                  )}
+                  <FileText className="w-4 h-4 mr-2" />
+                  文字輸入
+                </Button>
+                <Button
+                  variant={importMode === 'image' ? 'default' : 'outline'}
+                  onClick={() => setImportMode('image')}
+                  className="flex-1"
+                >
+                  <Image className="w-4 h-4 mr-2" />
+                  圖片上傳
                 </Button>
               </div>
             </CardContent>
           </Card>
+
+          {/* 文字輸入區域 */}
+          {importMode === 'text' && (
+            <Card className="card-subtle-3d glass-card-subtle">
+              <CardHeader>
+                <CardTitle className="text-lg">輸入配方文字</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="import-text">配方內容</Label>
+                  <Textarea
+                    id="import-text"
+                    placeholder="請貼上配方文字，例如：&#10;維生素C: 500mg&#10;維生素D3: 1000IU&#10;鈣: 200mg&#10;鎂: 100mg&#10;鋅: 15mg"
+                    value={importText}
+                    onChange={(e) => setImportText(e.target.value)}
+                    className="min-h-[120px]"
+                    disabled={isParsing}
+                  />
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={handleParse} 
+                    disabled={isParsing || !importText.trim()}
+                    className="ripple-effect btn-micro-hover micro-brand-glow flex-1"
+                  >
+                    {isParsing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 micro-loading" />
+                        解析中...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-4 h-4 mr-2 icon-micro-bounce" />
+                        解析配方
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* 圖片上傳區域 */}
+          {importMode === 'image' && (
+            <Card className="card-subtle-3d glass-card-subtle">
+              <CardHeader>
+                <CardTitle className="text-lg">上傳配方圖片</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="import-image">配方圖片</Label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    {importImage ? (
+                      <div className="space-y-4">
+                        <img 
+                          src={importImage} 
+                          alt="配方圖片預覽" 
+                          className="max-w-full max-h-64 mx-auto rounded-lg shadow-sm"
+                        />
+                        <div className="flex gap-2 justify-center">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setImportImage(null)}
+                          >
+                            <X className="w-4 h-4 mr-2" />
+                            重新選擇
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <Upload className="w-12 h-12 mx-auto text-gray-400" />
+                        <div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            點擊選擇圖片或拖拽到此處
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            支援 JPG、PNG、GIF 格式，最大 10MB
+                          </p>
+                        </div>
+                        <input
+                          id="import-image"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <Button
+                          variant="outline"
+                          onClick={() => document.getElementById('import-image')?.click()}
+                        >
+                          <Image className="w-4 h-4 mr-2" />
+                          選擇圖片
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={handleParse} 
+                    disabled={isParsing || !importImage}
+                    className="ripple-effect btn-micro-hover micro-brand-glow flex-1"
+                  >
+                    {isParsing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 micro-loading" />
+                        解析中...
+                      </>
+                    ) : (
+                      <>
+                        <Image className="w-4 h-4 mr-2 icon-micro-bounce" />
+                        解析圖片
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* 錯誤提示 */}
           {parseError && (
