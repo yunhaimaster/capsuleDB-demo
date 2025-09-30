@@ -71,6 +71,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
 
   const handleClose = () => {
     setIsOpen(false)
+    setIsFullscreen(false)
   }
 
   return (
@@ -99,6 +100,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         className="ai-chat-modal"
         size={isFullscreen ? 'full' : 'xl'}
         animateFrom="button"
+        fullscreen={isFullscreen}
         headerButtons={
           <div className="flex items-center space-x-2">
             <button
@@ -127,7 +129,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         
         <AIDisclaimerCompact />
         
-        <div className="flex flex-col space-y-4 max-h-[70vh]">
+        <div className={`flex flex-col gap-4 ${isFullscreen ? 'h-[70vh]' : 'max-h-[70vh]'}`}>
           <div className="flex-1 overflow-y-auto space-y-3" ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
