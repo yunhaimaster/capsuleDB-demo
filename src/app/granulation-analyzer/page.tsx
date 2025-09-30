@@ -34,8 +34,8 @@ export default function GranulationAnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const models = [
-    { name: 'Google Gemini 2.5 Flash', id: 'google/gemini-2.5-flash' },
-    { name: 'OpenAI GPT-4o Mini', id: 'openai/gpt-4o-mini' },
+    { name: 'xAI Grok 4 Fast', id: 'x-ai/grok-4-fast' },
+    { name: 'OpenAI GPT-4.1 Mini', id: 'openai/gpt-4.1-mini' },
     { name: 'DeepSeek v3.1', id: 'deepseek/deepseek-chat-v3.1' }
   ]
 
