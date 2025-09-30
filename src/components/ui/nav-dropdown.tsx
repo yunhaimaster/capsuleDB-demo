@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 
+import { type NavigationLink } from '@/data/navigation'
+
 interface NavDropdownProps {
   label: string
-  children: Array<{ href: string; label: string }>
+  children: NavigationLink[]
   active?: boolean
 }
 

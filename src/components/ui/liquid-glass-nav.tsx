@@ -3,15 +3,12 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/logo'
 import { NavDropdown } from '@/components/ui/nav-dropdown'
+import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
 
-interface NavLink {
-  href: string
-  label: string
+type NavLink = NavigationLink & {
   active?: boolean
-  children?: NavLink[]
 }
 
 interface LiquidGlassNavProps {
@@ -22,27 +19,7 @@ interface LiquidGlassNavProps {
 
 export function LiquidGlassNav({
   logo = <Logo />,
-  links = [
-    { href: '/', label: '首頁' },
-    { 
-      href: '/orders', 
-      label: '訂單管理',
-      children: [
-        { href: '/orders', label: '訂單列表' },
-        { href: '/orders/new', label: '新建訂單' }
-      ]
-    },
-    { 
-      href: '/ai-recipe-generator', 
-      label: 'AI 配方',
-      children: [
-        { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/ai-recipes', label: 'AI配方庫' },
-        { href: '/work-orders', label: '工作單生成' }
-      ]
-    },
-    { href: '/setup', label: '設置' }
-  ],
+  links = getMainNavigationLinks(),
   className = ''
 }: LiquidGlassNavProps) {
   const [isScrolled, setIsScrolled] = useState(false)

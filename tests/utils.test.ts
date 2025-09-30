@@ -28,8 +28,9 @@ describe('Utils', () => {
   describe('calculateBatchWeight', () => {
     it('should calculate batch weight correctly', () => {
       const result = calculateBatchWeight(500, 1000)
-      expect(result.value).toBe(500000)
+      expect(result.value).toBe(500)
       expect(result.unit).toBe('g')
+      expect(result.display).toBe('500.000 g')
     })
   })
 })

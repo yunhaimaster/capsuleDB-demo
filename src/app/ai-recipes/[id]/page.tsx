@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -281,6 +282,7 @@ export default function AIRecipeDetailPage() {
           </div>
         </div>
       </div>
+      <LiquidGlassFooter />
     </div>
   )
 }

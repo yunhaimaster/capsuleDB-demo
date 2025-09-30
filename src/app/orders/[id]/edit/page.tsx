@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { ProductionOrderForm } from '@/components/forms/production-order-form'
 import { ProductionOrder } from '@/types'
+import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 
 export default function EditOrderPage() {
@@ -48,42 +49,34 @@ export default function EditOrderPage() {
 
   return (
     <div className="min-h-screen brand-logo-pattern-bg">
-      {/* Liquid Glass Navigation */}
-        <LiquidGlassNav 
-          links={[
-            { href: '/', label: '首頁' },
-            { href: '/orders', label: '訂單' },
-            { href: '/orders/new', label: '新建' }
-          ]}
-        />
+      <LiquidGlassNav />
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
-
-
-      {/* Form Card */}
-      <div className="max-w-4xl mx-auto px-4 md:px-0">
-        <ProductionOrderForm 
-          initialData={{
-            customerName: order.customerName,
-            productName: order.productName,
-            productionQuantity: order.productionQuantity,
-            completionDate: order.completionDate ? 
-              (order.completionDate instanceof Date ? 
-                order.completionDate.toISOString().split('T')[0] : 
-                order.completionDate) : '',
-            processIssues: order.processIssues,
-            qualityNotes: order.qualityNotes,
-            capsuleColor: order.capsuleColor,
-            capsuleSize: order.capsuleSize as "#1" | "#0" | "#00" | null,
-            capsuleType: order.capsuleType as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶" | null,
-            createdBy: order.createdBy,
-            ingredients: order.ingredients
-          }}
-          orderId={order.id}
-        />
+        {/* Form Card */}
+        <div className="max-w-4xl mx-auto px-4 md:px-0">
+          <ProductionOrderForm 
+            initialData={{
+              customerName: order.customerName,
+              productName: order.productName,
+              productionQuantity: order.productionQuantity,
+              completionDate: order.completionDate ? 
+                (order.completionDate instanceof Date ? 
+                  order.completionDate.toISOString().split('T')[0] : 
+                  order.completionDate) : '',
+              processIssues: order.processIssues,
+              qualityNotes: order.qualityNotes,
+              capsuleColor: order.capsuleColor,
+              capsuleSize: order.capsuleSize as "#1" | "#0" | "#00" | null,
+              capsuleType: order.capsuleType as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶" | null,
+              createdBy: order.createdBy,
+              ingredients: order.ingredients
+            }}
+            orderId={order.id}
+          />
+        </div>
       </div>
-      </div>
+      <LiquidGlassFooter />
     </div>
   )
 }

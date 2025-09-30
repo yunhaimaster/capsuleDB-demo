@@ -9,6 +9,7 @@ import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
+import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
 
@@ -115,15 +116,9 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="brand-logo-pattern-bg min-h-screen">
+    <div className="min-h-screen brand-logo-pattern-bg">
       {/* Liquid Glass Navigation */}
-        <LiquidGlassNav 
-          links={[
-            { href: '/', label: '首頁' },
-            { href: '/orders', label: '訂單' },
-            { href: '/orders/new', label: '新建' }
-          ]}
-        />
+      <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
@@ -272,8 +267,8 @@ export default function OrderDetailPage() {
           </Table>
         </CardContent>
       </Card>
-
       </div>
+      <LiquidGlassFooter />
     </div>
   )
 }
