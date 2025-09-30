@@ -429,28 +429,23 @@ export default function HomePage() {
               <div className="space-y-3 md:space-y-4">
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-amber-800">v2.1 功能導覽</h4>
+                    <h4 className="font-medium text-amber-800">最新上線重點</h4>
                     <span className="text-[11px] text-amber-600">更新：2025/09/30</span>
                   </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 🤖 AI 助手全新對話介面與閱讀體驗</li>
-                    <li>• 🧠 智能回覆建議與批次操作更直覺</li>
-                    <li>• 📊 下載中心玻璃卡片改版、排版更工整</li>
-                    <li>• 🔐 導航及登入狀態顯示一致化</li>
+                    <li>• 對話式 AI 助手閱讀區重整，長篇回覆更易閱讀</li>
+                    <li>• 首頁下載中心與訂單清單排版優化，資訊更聚焦</li>
+                    <li>• 導航與登入體驗統一，登入／登出狀態一目了然</li>
+                    <li>• 版本頁整合更新紀錄，快速掌握最新改動</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
-                  <h4 className="font-medium text-amber-800 mb-2">基礎功能</h4>
+                  <h4 className="font-medium text-amber-800 mb-2">日常可用功能</h4>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 膠囊配方管理與記錄追蹤</li>
-                    <li>• 智能配方導入（支援文字格式）</li>
-                    <li>• AI 助手提供專業分析和建議</li>
-                    <li>• 支援手機、平板和電腦使用</li>
-                    <li>• 現代化玻璃質感介面設計</li>
-                    <li>• 流暢的動畫效果</li>
-                    <li>• 直觀易用的操作介面</li>
-                    <li>• 品牌形象動態背景</li>
-                    <li>• 優化的用戶操作體驗</li>
+                    <li>• 建立、複製或匯入膠囊配方，保留完整批次資料</li>
+                    <li>• 追蹤訂單進度與原料明細，支援搜尋與匯出報表</li>
+                    <li>• 下載常用培訓與風險文件，快速交付給團隊</li>
+                    <li>• 桌面與手機皆可操作，維持品牌一致的操作體驗</li>
                   </ul>
                 </div>
                 <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
@@ -486,13 +481,10 @@ export default function HomePage() {
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>AI 助手 Modal 全面升級，閱讀體驗與操作一致</li>
-                    <li>PDF 下載卡片玻璃化改版，桌面/手機排版調整</li>
-                    <li>導航列品牌名稱全裝置顯示，強化辨識</li>
-                    <li>Footer 帳戶連結自動顯示登入/登出狀態</li>
-                    <li>登入頁、編輯頁布局微調，與全站統一</li>
-                    <li>新增品牌設計 Token 表，利於跨團隊協作</li>
-                    <li>整合 confirm modal 視覺，打造 iOS Liquid Glass 效果</li>
+                    <li>更舒適的 AI 對話體驗，可快速複製與重試回答</li>
+                    <li>首頁下載中心重整，常用文件更容易找到</li>
+                    <li>登入與導覽提示一致，切換帳號不迷路</li>
+                    <li>訂單頁資訊卡色彩更新，狀態一眼辨識</li>
                   </ul>
                 </div>
                 <div className="text-center pt-2">
