@@ -158,11 +158,9 @@ export default function AIRecipesPage() {
                 <p className="text-orange-700 mb-4">
                   數據庫尚未設置，無法顯示已保存的配方。請先設置數據庫。
                 </p>
-                <Link href="/setup">
-                  <Button className="bg-orange-600 hover:bg-orange-700">
-                    前往設置數據庫
-                  </Button>
-                </Link>
+                <Button className="bg-orange-600 hover:bg-orange-700" disabled>
+                  請聯絡管理員以啟用資料庫
+                </Button>
               </div>
             </Card>
           )}

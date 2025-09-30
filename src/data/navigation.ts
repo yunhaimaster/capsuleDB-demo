@@ -25,13 +25,9 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
       { href: '/ai-recipe-generator', label: 'AI 配方生成器' },
       { href: '/ai-recipes', label: 'AI 配方庫' },
       { href: '/work-orders', label: '工作單生成' },
-      { href: '/price-analyzer', label: '成本分析' },
-      { href: '/product-database', label: '產品資料庫' },
     ],
   },
-  { href: '/reports', label: '報表' },
   { href: '/history', label: '更新歷史' },
-  { href: '/setup', label: '設置' },
 ]
 
 const LOGOUT_LINK: NavigationLink = { href: '/login?logout=true', label: '登出' }
