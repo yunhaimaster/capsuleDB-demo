@@ -1,6 +1,9 @@
-'use client'
+"use client"
 
 import Link from 'next/link'
+import { useMemo } from 'react'
+
+import { useAuth } from '@/components/auth/auth-provider'
 
 interface FooterLink {
   href: string
@@ -17,37 +20,47 @@ interface LiquidGlassFooterProps {
 }
 
 export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
-  const footerSections: FooterSection[] = [
-    {
-      title: '系統功能',
-      links: [
-        { href: '/', label: '首頁' },
-        { href: '/orders', label: '訂單管理' },
-        { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/work-orders', label: '工作單生成' }
-      ]
-    },
-    {
-      title: 'AI 配方',
-      links: [
-        { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-        { href: '/work-orders', label: '工作單生成' }
-      ]
-    },
-    {
-      title: '訂單管理',
-      links: [
-        { href: '/orders', label: '訂單列表' },
-        { href: '/orders/new', label: '新建訂單' }
-      ]
-    },
-    {
-      title: '系統設置',
-      links: [
-        { href: '/login', label: '登入' }
-      ]
-    }
-  ]
+  const { isAuthenticated } = useAuth()
+
+  const footerSections: FooterSection[] = useMemo(() => {
+    const sharedSections: FooterSection[] = [
+      {
+        title: '系統功能',
+        links: [
+          { href: '/', label: '首頁' },
+          { href: '/orders', label: '訂單管理' },
+          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
+          { href: '/work-orders', label: '工作單生成' }
+        ]
+      },
+      {
+        title: 'AI 配方',
+        links: [
+          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
+          { href: '/work-orders', label: '工作單生成' }
+        ]
+      },
+      {
+        title: '訂單管理',
+        links: [
+          { href: '/orders', label: '訂單列表' },
+          { href: '/orders/new', label: '新建訂單' }
+        ]
+      }
+    ]
+
+    const accountSection: FooterSection = isAuthenticated
+      ? {
+          title: '帳戶',
+          links: [{ href: '/login?logout=true', label: '登出' }]
+        }
+      : {
+          title: '帳戶',
+          links: [{ href: '/login', label: '登入' }]
+        }
+
+    return [...sharedSections, accountSection]
+  }, [isAuthenticated])
 
   return (
     <footer className={`liquid-glass-footer ${className}`}>
@@ -101,10 +114,10 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
             © 2024 Easy Health. 保留所有權利。
           </p>
           <div className="flex space-x-4">
-            <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               隱私政策
             </Link>
-            <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               服務條款
             </Link>
           </div>

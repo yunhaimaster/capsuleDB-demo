@@ -283,58 +283,72 @@ export default function HomePage() {
                 行業相關培訓資料和風險管控指南
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* 風險原料清單 */}
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-                <div className="flex items-start space-x-4 flex-1">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+              <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
+                <div className="liquid-glass-content flex h-full flex-col">
+                  <div className="flex items-start gap-4">
+                    <div className="icon-container icon-container-blue">
                       <FileText className="w-6 h-6 text-white" />
                     </div>
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <h4 className="text-lg font-semibold text-[--brand-neutral] leading-tight">
+                        保健品行業常見生產風險原料清單
+                      </h4>
+                      <p className="text-sm md:text-base text-blue-600/90">
+                        行業風險管控參考資料
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col">
-                    <h4 className="font-semibold text-blue-900 text-base leading-tight mb-2">
-                      保健品行業常見生產風險原料清單
-                    </h4>
-                    <p className="text-sm text-blue-600 mb-4 flex-1">行業風險管控參考資料</p>
+                  <div className="mt-auto pt-6">
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full text-white shadow-[0_18px_38px_rgba(41,102,146,0.18)] border-none"
+                      style={{ background: 'var(--brand-gradient-primary)' }}
+                    >
+                      <a href="/pdf/保健品行業常見生產風險原料清單.pdf" download>
+                        <span className="flex items-center justify-center gap-2 text-base">
+                          <Download className="w-4 h-4" />
+                          下載 PDF
+                        </span>
+                      </a>
+                    </Button>
                   </div>
-                </div>
-                <div className="mt-4">
-                  <a 
-                    href="/pdf/保健品行業常見生產風險原料清單.pdf"
-                    download
-                    className="inline-flex items-center px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    下載 PDF
-                  </a>
                 </div>
               </div>
 
               {/* 培訓手冊 */}
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-                <div className="flex items-start space-x-4 flex-1">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
+                <div className="liquid-glass-content flex h-full flex-col">
+                  <div className="flex items-start gap-4">
+                    <div className="icon-container icon-container-green">
                       <FileText className="w-6 h-6 text-white" />
                     </div>
+                    <div className="flex-1 min-w-0 space-y-2">
+                      <h4 className="text-lg font-semibold text-[--brand-neutral] leading-tight">
+                        膠囊生產培訓手冊
+                      </h4>
+                      <p className="text-sm md:text-base text-emerald-600/90">
+                        香港版修訂版
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col">
-                    <h4 className="font-semibold text-green-900 text-base leading-tight mb-2">
-                      膠囊生產培訓手冊
-                    </h4>
-                    <p className="text-sm text-green-600 mb-4 flex-1">香港版修訂版</p>
+                  <div className="mt-auto pt-6">
+                    <Button
+                      asChild
+                      size="lg"
+                      variant="secondary"
+                      className="w-full bg-green-500 hover:bg-green-600 text-white shadow-[0_18px_38px_rgba(34,197,94,0.18)] border-none"
+                    >
+                      <a href="/pdf/膠囊生產培訓手冊（香港版-修訂版）.pdf" download>
+                        <span className="flex items-center justify-center gap-2 text-base">
+                          <Download className="w-4 h-4" />
+                          下載 PDF
+                        </span>
+                      </a>
+                    </Button>
                   </div>
-                </div>
-                <div className="mt-4">
-                  <a 
-                    href="/pdf/膠囊生產培訓手冊（香港版-修訂版）.pdf"
-                    download
-                    className="inline-flex items-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    下載 PDF
-                  </a>
                 </div>
               </div>
             </div>
