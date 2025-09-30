@@ -47,7 +47,7 @@ export default function LoginPage() {
     <div className="min-h-screen brand-logo-bg-animation relative overflow-hidden">
       <LiquidGlassNav links={[]} className="backdrop-blur-none bg-transparent border-transparent" />
       <div className="absolute inset-x-0 top-0 h-[28rem] bg-gradient-to-b from-white/70 via-white/40 to-transparent pointer-events-none" aria-hidden="true" />
-      <main className="relative px-6 md:px-10 pt-24 sm:pt-28 pb-16 flex items-center justify-center min-h-[calc(100vh-5rem)]">
+      <main className="relative px-6 md:px-10 pt-32 sm:pt-36 pb-24 flex items-center justify-center min-h-[calc(100vh-5rem)]">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-[1.1fr_1fr] gap-8 md:gap-12 items-center">
           <section className="space-y-6 text-center md:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-white/70 text-xs text-[--brand-neutral] shadow-sm">

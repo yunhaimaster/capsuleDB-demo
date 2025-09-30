@@ -168,12 +168,12 @@ export default function HomePage() {
         />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+      <div className="pt-36 sm:pt-32 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 xl:gap-12 items-stretch">
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
-          <div className="liquid-glass-content flex h-full flex-col">
+          <div className="liquid-glass-content flex h-full flex-col min-h-[280px]">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
@@ -197,7 +197,7 @@ export default function HomePage() {
         </div>
 
         <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full">
-          <div className="liquid-glass-content flex h-full flex-col">
+          <div className="liquid-glass-content flex h-full flex-col min-h-[280px]">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />

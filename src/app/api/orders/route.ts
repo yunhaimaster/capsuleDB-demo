@@ -95,9 +95,11 @@ export async function GET(request: NextRequest) {
     
     if (validatedFilters.isCompleted !== undefined) {
       if (validatedFilters.isCompleted) {
-        where.completionDate = { not: null }
-      } else {
-        where.completionDate = null
+        where.status = 'completed'
+      } else if (validatedFilters.isCompleted === false) {
+        where.status = {
+          in: ['in_progress', 'failed']
+        }
       }
     }
 
@@ -118,11 +120,11 @@ export async function GET(request: NextRequest) {
     const sortedOrders = allOrders.sort((a, b) => {
       // 如果是按完工日期排序，使用默認邏輯（未完工在前）
       if (validatedFilters.sortBy === 'completionDate') {
-        const aCompleted = a.completionDate !== null
-        const bCompleted = b.completionDate !== null
+        const aCompleted = a.status === 'completed'
+        const bCompleted = b.status === 'completed'
         
         if (aCompleted !== bCompleted) {
-          return aCompleted ? 1 : -1 // 未完工的在前
+          return aCompleted ? -1 : 1 // 未完工的在前
         }
         
         // 都是未完工或都是已完工時，按日期排序
@@ -220,7 +222,11 @@ export async function POST(request: NextRequest) {
         productionQuantity: validatedData.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate && validatedData.completionDate !== '' ? new Date(validatedData.completionDate) : null,
+        status: validatedData.status,
+        completionDate:
+          validatedData.status === 'completed' && validatedData.completionDate && validatedData.completionDate !== ''
+            ? new Date(validatedData.completionDate)
+            : null,
         processIssues: validatedData.processIssues,
         qualityNotes: validatedData.qualityNotes,
         capsuleColor: validatedData.capsuleColor,

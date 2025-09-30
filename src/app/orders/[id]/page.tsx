@@ -121,7 +121,7 @@ export default function OrderDetailPage() {
       <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+      <div className="pt-36 sm:pt-32 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
 
       {/* 操作按鈕 */}
@@ -174,6 +174,14 @@ export default function OrderDetailPage() {
                 生產狀態
               </h4>
               <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-slate-900">狀態：</span>
+                  <span className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium ${order.status === 'completed' ? 'bg-emerald-100 text-emerald-600' : order.status === 'failed' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
+                    {order.status === 'completed' && '已完成'}
+                    {order.status === 'failed' && '生產失敗'}
+                    {order.status === 'in_progress' && '進行中'}
+                  </span>
+                </div>
                 <p><span className="font-medium text-slate-900">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
                 <p><span className="font-medium text-slate-900">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
                 <p><span className="font-medium text-slate-900">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
@@ -276,6 +284,14 @@ export default function OrderDetailPage() {
             </Table>
           </div>
           <div className="grid grid-cols-1 gap-3 md:hidden">
+            <div className="rounded-2xl border border-white/50 bg-white/70 p-4 flex items-center justify-between text-xs font-medium text-slate-600">
+              <span>狀態</span>
+              <span className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium ${order.status === 'completed' ? 'bg-emerald-100 text-emerald-600' : order.status === 'failed' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
+                {order.status === 'completed' && '已完成'}
+                {order.status === 'failed' && '生產失敗'}
+                {order.status === 'in_progress' && '進行中'}
+              </span>
+            </div>
             {order.ingredients.map((ingredient, index) => (
               <div
                 key={index}
