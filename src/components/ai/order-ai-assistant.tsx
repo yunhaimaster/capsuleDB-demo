@@ -64,7 +64,7 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
       suggestions: [
         '分析填充可行性',
         '分析製粒必要性',
-        '分析成分顏色混合效果，預測粉劑顏色，評估膠囊染色風險（0-100分）及預防措施。',
+        '分析成分顏色與膠囊染色風險',
         '分析配方在港陸歐美的法規合規性，提供申報要求、標籤規範、成分限量清單。'
       ]
     }
