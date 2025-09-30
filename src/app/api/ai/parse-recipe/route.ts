@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       : `請解析以下配方文字：\n\n${text}`
 
     // 根據輸入類型選擇不同的模型
-    const model = image ? 'google/gemini-1.5-flash' : 'deepseek/deepseek-chat-v3.1'
+    const model = image ? 'google/gemini-2.5-flash' : 'deepseek/deepseek-chat-v3.1'
     
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
