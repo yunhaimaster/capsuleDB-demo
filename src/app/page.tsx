@@ -156,16 +156,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen brand-logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
-        <LiquidGlassNav 
-          links={[
-            { href: '/', label: '首頁', active: true },
-            { href: '/orders', label: '訂單' },
-            { href: '/orders/new', label: '新建' },
-            { href: '/ai-recipe-generator', label: 'AI 配方' },
-            { href: '/work-orders', label: '工作單' },
-            { href: '/login?logout=true', label: '登出' }
-          ]}
-        />
+        <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
