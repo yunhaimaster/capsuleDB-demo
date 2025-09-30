@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-TW">
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', MozTextSizeAdjust: '100%' }}>
         <ErrorBoundary>
           <AuthProvider>
             <ProtectedLayout>
