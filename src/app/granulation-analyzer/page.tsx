@@ -211,7 +211,7 @@ export default function GranulationAnalyzerPage() {
                   productionQuantity: 0,
                   unitWeightMg: 0,
                   batchTotalWeightMg: 0,
-                  capsuleSize: '0',
+                  capsuleSize: '#0',
                   capsuleMaterial: 'gelatin',
                   capsuleColor: '',
                   remarks: '',
