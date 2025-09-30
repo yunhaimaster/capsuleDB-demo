@@ -6,6 +6,7 @@ export interface ProductionOrder {
   unitWeightMg: number
   batchTotalWeightMg: number
   completionDate?: Date | null
+  status: 'in_progress' | 'completed' | 'failed'
   processIssues?: string | null
   qualityNotes?: string | null
   capsuleColor?: string | null
@@ -30,6 +31,7 @@ export interface CreateProductionOrderData {
   productName: string
   productionQuantity: number
   completionDate?: Date | null
+  status?: 'in_progress' | 'completed' | 'failed'
   processIssues?: string | null
   qualityNotes?: string | null
   capsuleColor?: string | null
