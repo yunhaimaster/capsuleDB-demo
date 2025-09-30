@@ -76,7 +76,7 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
     <div>
       <Button 
         variant="default"
-        className={`bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-500 relative z-10 liquid-glass-card-interactive h-10 px-4 ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-500 relative z-10 liquid-glass-card-interactive h-10 px-4 ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100 hover:scale-[1.02]'}`}
         onClick={() => {
           setIsOpen(true)
           if (onModalReplace) {
