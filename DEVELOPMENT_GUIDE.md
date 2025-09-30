@@ -18,7 +18,7 @@
 
 ### 項目信息
 - **名稱**: Easy Health 膠囊配方管理系統
-- **版本**: v1.0.8
+- **版本**: v2.1.0
 - **技術棧**: Next.js 14, React 18, TypeScript, Prisma, Tailwind CSS
 - **部署**: Vercel
 - **數據庫**: PostgreSQL (生產), SQLite (開發)
@@ -26,10 +26,11 @@
 ### 核心功能
 - 膠囊配方建檔與管理
 - 生產訂單記錄
-- AI 智能分析助手
+- AI 智能分析助手（Smart AI / Order AI）
 - 原料風險評估
-- 統計報表生成
-- 數據導出功能
+- 統計報表、工作單生成
+- PDF 參考資料下載中心
+- Liquid Glass 品牌化 UI 與動畫
 
 ---
 
@@ -69,34 +70,59 @@ src/app/api/
 3. **響應式設計優先**
 4. **無障礙功能支持**
 
-### 顏色系統
+### 品牌設計 Token 摘要
+
+> 完整 token 請參考 `BRAND_TOKEN_TABLE.md`
+
 ```css
 :root {
-  --brand-primary: 42, 88, 140;    /* #2a588c - 主品牌色 */
-  --brand-secondary: 68, 186, 198; /* #44bac6 - 次品牌色 */
-  --brand-accent: 132, 157, 188;   /* #849dbc - 強調色 */
-  --glass-opacity: 0.08;           /* 玻璃透明度 */
-  --glass-border-opacity: 0.15;    /* 玻璃邊框透明度 */
-  --glass-hover-opacity: 0.12;     /* 懸停透明度 */
+  /* 色彩 */
+  --brand-primary: 202 88% 42%;
+  --brand-secondary: 187 60% 70%;
+  --brand-accent: 224 35% 65%;
+  --brand-neutral: 215 48% 18%;
+
+  /* 字體 */
+  --font-brand-display: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-brand-text: "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+
+  /* 玻璃效果 */
+  --glass-opacity: 0.12;
+  --glass-border-opacity: 0.20;
+  --glass-hover-opacity: 0.16;
+  --brand-blur-strong: 28px;
+  --brand-blur-medium: 18px;
+  --brand-blur-soft: 12px;
+
+  /* 陰影與漸層 */
+  --brand-shadow-soft: 0 18px 46px rgba(34, 86, 122, 0.18);
+  --brand-shadow-medium: 0 12px 32px rgba(31, 78, 112, 0.16);
+  --brand-shadow-inner: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --brand-gradient-primary: linear-gradient(135deg, rgba(42, 150, 209, 0.9), rgba(32, 105, 157, 0.85));
 }
 ```
 
-### 卡片系統
+### 卡片與 Modal 系統
 ```css
-/* 基礎卡片 */
+/* Liquid Glass Card 家族 */
 .liquid-glass-card
-
-/* 品牌色卡片 */
 .liquid-glass-card-brand
-
-/* 高級卡片 */
 .liquid-glass-card-elevated
-
-/* 互動卡片 */
 .liquid-glass-card-interactive
-
-/* 折射效果 */
 .liquid-glass-card-refraction
+
+/* AI Modal 佈局與訊息泡泡 */
+.liquid-glass-modal.ai-chat-modal
+.ai-modal-shell
+.ai-modal-stream
+.ai-message-assistant
+.ai-message-user
+.ai-modal-input-row
+
+/* 確認 Modal */
+.liquid-glass-modal.confirm-modal
+.confirm-modal-icon
+.confirm-modal-actions
 ```
 
 ### 圖標容器系統
@@ -592,5 +618,5 @@ A:
 
 ---
 
-*最後更新: 2025年9月29日*
-*版本: v1.0.8*
+*最後更新: 2025年9月30日*
+*版本: v2.1.0*

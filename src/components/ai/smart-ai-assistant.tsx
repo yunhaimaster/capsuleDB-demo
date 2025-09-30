@@ -117,121 +117,115 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         }
       >
         
-        <AIDisclaimerCompact />
-        
-        <div className="flex flex-col h-[60vh]">
-          <div className="flex-1 overflow-y-auto space-y-3 pr-1" ref={messagesContainerRef}>
+        <div className="ai-modal-shell" style={{ height: '60vh' }}>
+          <div className="ai-modal-meta">
+            <div className="flex items-center gap-2">
+              <AIPoweredBadge />
+              <span className="text-sm text-[rgba(18,42,64,0.75)]">Smart AI 助手 · 實時分析</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-[rgba(18,42,64,0.6)]">
+              <span className="px-2 py-1 rounded-full bg-white/70 border border-white/50 shadow-sm">{messages.length} 條訊息</span>
+              {isLoading && <AIThinkingIndicator isThinking={true} enableReasoning={enableReasoning} />}
+            </div>
+          </div>
+
+          <div className="ai-modal-stream" ref={messagesContainerRef}>
             {messages.map((message, index) => (
-              <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-3 rounded-lg ${
-                  message.role === 'user' 
-                    ? 'bg-gray-50 border border-gray-200 text-gray-700' 
-                    : 'bg-gray-50 border border-gray-200 text-gray-700'
-                }`}>
-                  {message.role === 'assistant' ? (
-                    <div>
-                      {/* 真實思考過程 */}
-                      <AIRealReasoning 
-                        reasoning={message.reasoning} 
-                        enableReasoning={enableReasoning} 
-                      />
-                      
-                      <MarkdownRenderer content={message.content} whiteText={false} />
-                      {message.suggestions && message.suggestions.length > 0 && (
-                        <div className="mt-3 space-y-2">
-                          <p className="text-sm font-medium text-gray-700">建議問題：</p>
-                          {message.suggestions.map((suggestion, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => {
-                                if (suggestion === '重試') {
-                                  retryLastMessage()
-                                } else {
-                                  setInput(suggestion)
-                                }
-                              }}
-                              className="block w-full text-left p-2 text-sm bg-gray-50 hover:bg-gray-100 rounded border border-gray-200 text-gray-700 hover:text-gray-900 transition-colors"
-                            >
-                              {suggestion}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                      {message.content && (
-                        <div className="mt-3 flex space-x-2">
-                          <button
-                            onClick={() => copyMessage(message.content)}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 hover:text-gray-900 transition-colors"
-                          >
-                            <Copy className="w-3 h-3" />
-                            <span>複製</span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              // 找到對應的用戶問題
-                              const messageIndex = messages.findIndex(msg => msg.id === message.id)
-                              if (messageIndex > 0) {
-                                const userMessage = messages[messageIndex - 1]
-                                if (userMessage && userMessage.role === 'user') {
-                                  setInput(userMessage.content)
-                                } else {
-                                  setInput('請重新回答這個問題')
-                                }
-                              } else {
-                                setInput('請重新回答這個問題')
-                              }
-                            }}
-                            className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 text-gray-700 hover:text-gray-900 transition-colors"
-                          >
-                            <RotateCcw className="w-3 h-3" />
-                            <span>重新回答</span>
-                          </button>
-                        </div>
-                      )}
+              <div
+                key={index}
+                className={`ai-message ${message.role === 'user' ? 'ai-message-user' : 'ai-message-assistant'}`}
+              >
+                <div className="ai-message-content">
+                  {message.role === 'assistant' && (
+                    <AIRealReasoning reasoning={message.reasoning} enableReasoning={enableReasoning} />
+                  )}
+                  <MarkdownRenderer content={message.content} whiteText={message.role === 'user'} />
+
+                  {message.suggestions && message.suggestions.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-medium text-[rgba(18,42,64,0.65)]">建議問題</p>
+                      {message.suggestions.map((suggestion, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            if (suggestion === '重試') {
+                              retryLastMessage()
+                            } else {
+                              setInput(suggestion)
+                            }
+                          }}
+                          className="ai-suggestion-button"
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
                     </div>
-                  ) : (
-                    <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+                  )}
+
+                  {message.content && (
+                    <div className="ai-message-actions">
+                      <button
+                        onClick={() => copyMessage(message.content)}
+                        className="ai-message-action-btn"
+                      >
+                        <Copy className="w-3 h-3" />
+                        <span>複製</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          const messageIndex = messages.findIndex(msg => msg.id === message.id)
+                          if (messageIndex > 0) {
+                            const userMessage = messages[messageIndex - 1]
+                            if (userMessage && userMessage.role === 'user') {
+                              setInput(userMessage.content)
+                            } else {
+                              setInput('請重新回答這個問題')
+                            }
+                          } else {
+                            setInput('請重新回答這個問題')
+                          }
+                        }}
+                        className="ai-message-action-btn"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>重新回答</span>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
             ))}
             {isLoading && isThinking && enableReasoning && (
-              <div className="flex justify-start">
-                <div className="max-w-[85%]">
-                  <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
-                </div>
+              <div className="ai-message ai-message-assistant">
+                <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
               </div>
             )}
             {isLoading && isThinking && !enableReasoning && (
-              <div className="flex justify-start">
-                <div className="max-w-[85%]">
-                  <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
-                </div>
+              <div className="ai-message ai-message-assistant">
+                <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
               </div>
             )}
             {isLoading && !isThinking && (
-              <div className="flex justify-start">
-                <div className="max-w-[85%]">
-                  <AIThinkingIndicator isThinking={isLoading} enableReasoning={false} />
-                </div>
+              <div className="ai-message ai-message-assistant">
+                <AIThinkingIndicator isThinking={isLoading} enableReasoning={false} />
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
-          
-          <div className="mt-3 flex space-x-2">
+
+          <div className="ai-modal-input-row">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="輸入您的問題..."
-              className="flex-1 bg-white/50 border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-blue-500 focus:bg-white/80"
+              placeholder="輸入您的問題，或選擇建議問題快速開始"
+              className="ai-modal-input"
               disabled={isLoading}
             />
-            <Button 
-              onClick={() => handleSendMessage()} 
+            <Button
+              onClick={() => handleSendMessage()}
               disabled={!input.trim() || isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="ai-modal-send"
             >
               <Send className="h-4 w-4" />
             </Button>

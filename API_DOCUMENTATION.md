@@ -686,4 +686,4 @@ const handleAIResponse = async (message: string) => {
 
 ---
 
-*最後更新: 2025年9月29日*
+*最後更新: 2025年9月30日*

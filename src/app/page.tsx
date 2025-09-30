@@ -440,12 +440,15 @@ export default function HomePage() {
               <div className="space-y-4 md:space-y-6">
               <div className="space-y-3 md:space-y-4">
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
-                  <h4 className="font-medium text-amber-800 mb-2">v2.0 新功能</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-amber-800">v2.1 功能導覽</h4>
+                    <span className="text-[11px] text-amber-600">更新：2025/09/30</span>
+                  </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 🤖 AI 配方生成器 - 智能生成專業配方</li>
-                    <li>• 📋 工作單生成 - ISO 標準生產文件</li>
-                    <li>• 📝 歷史記錄 - 完整操作追蹤</li>
-                    <li>• 💊 訂單管理 - 生產記錄管理</li>
+                    <li>• 🤖 AI 助手全新對話介面與閱讀體驗</li>
+                    <li>• 🧠 智能回覆建議與批次操作更直覺</li>
+                    <li>• 📊 下載中心玻璃卡片改版、排版更工整</li>
+                    <li>• 🔐 導航及登入狀態顯示一致化</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
@@ -491,18 +494,17 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.0.0 - 2025年9月29日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.1.0 - 2025年9月30日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>全新 AI 配方生成器</li>
-                    <li>智能工作單生成</li>
-                    <li>原料報表分析</li>
-                    <li>優化導航和頁面結構</li>
-                    <li>添加全站 Footer</li>
-                    <li>移除不需要的功能</li>
-                    <li>改善用戶體驗</li>
-                    <li>統一界面設計</li>
+                    <li>AI 助手 Modal 全面升級，閱讀體驗與操作一致</li>
+                    <li>PDF 下載卡片玻璃化改版，桌面/手機排版調整</li>
+                    <li>導航列品牌名稱全裝置顯示，強化辨識</li>
+                    <li>Footer 帳戶連結自動顯示登入/登出狀態</li>
+                    <li>登入頁、編輯頁布局微調，與全站統一</li>
+                    <li>新增品牌設計 Token 表，利於跨團隊協作</li>
+                    <li>整合 confirm modal 視覺，打造 iOS Liquid Glass 效果</li>
                   </ul>
                 </div>
                 <div className="text-center pt-2">

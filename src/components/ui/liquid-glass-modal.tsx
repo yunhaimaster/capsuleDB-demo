@@ -226,30 +226,34 @@ export function LiquidGlassConfirmModal({
     onClose()
   }
 
-  const confirmButtonClass = variant === "danger" 
-    ? "bg-red-600 hover:bg-red-700" 
-    : "liquid-glass-modal-button"
-
   return (
     <LiquidGlassModal
       isOpen={isOpen}
       onClose={onClose}
       title={title}
       size="sm"
-      className="white-theme"
+      className={`confirm-modal ${variant === 'danger' ? 'confirm-danger' : ''}`}
     >
-      <p className="mb-6 text-gray-900">{message}</p>
-      <div className="liquid-glass-modal-footer">
+      <div className="confirm-modal-body">
+        <div className="confirm-modal-icon">
+          <X className="h-5 w-5" />
+        </div>
+        <div className="confirm-modal-text">
+          <div className="confirm-modal-title">{title}</div>
+          <p className="confirm-modal-message">{message}</p>
+        </div>
+      </div>
+      <div className="confirm-modal-actions">
         <Button
           variant="outline"
           onClick={onClose}
-          className="mr-2"
+          className="confirm-cancel"
         >
           {cancelText}
         </Button>
         <Button
           onClick={handleConfirm}
-          className={confirmButtonClass}
+          className={`confirm-primary ${variant === 'danger' ? 'confirm-danger' : ''}`}
         >
           {confirmText}
         </Button>
