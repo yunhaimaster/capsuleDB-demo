@@ -27,7 +27,6 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
       { href: '/work-orders', label: '工作單生成' },
     ],
   },
-  { href: '/history', label: '更新歷史' },
 ]
 
 const LOGOUT_LINK: NavigationLink = { href: '/login?logout=true', label: '登出' }
