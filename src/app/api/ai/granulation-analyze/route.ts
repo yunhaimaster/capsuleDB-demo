@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
-    const { ingredients } = await request.json()
+    const { ingredients, singleModel } = await request.json()
 
     if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
       return NextResponse.json(
@@ -75,11 +75,16 @@ ${recipe}
 
 請提供詳細的製粒必要性分析。`
 
-    const models = [
+    const allModels = [
       { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast' },
       { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini' },
       { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1' },
     ]
+
+    // 如果指定了單個模型，只使用該模型；否則使用所有模型
+    const models = singleModel 
+      ? allModels.filter(model => model.id === singleModel)
+      : allModels
 
     const fetchPromises = models.map(async (model) => {
       try {

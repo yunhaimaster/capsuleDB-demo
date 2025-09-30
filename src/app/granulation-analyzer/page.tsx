@@ -13,9 +13,11 @@ import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-reac
 import { formatNumber } from '@/lib/utils'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { TypeAnimation } from 'react-type-animation'
 
 interface GranulationAnalysis {
   model: string
+  modelId: string
   content: string
   timestamp: string
   status: 'loading' | 'success' | 'error'
@@ -72,6 +74,7 @@ export default function GranulationAnalyzerPage() {
     // 初始化三個分析
     const initialAnalyses: GranulationAnalysis[] = models.map(model => ({
       model: model.name,
+      modelId: model.id,
       content: '',
       timestamp: new Date().toISOString(),
       status: 'loading'
@@ -106,6 +109,7 @@ export default function GranulationAnalyzerPage() {
         // 更新所有分析結果
         setAnalyses(data.results.map((result: any, index: number) => ({
           model: result.model,
+          modelId: models[index].id,
           content: result.response || '',
           status: result.error ? 'error' : 'success',
           error: result.error || undefined,
@@ -133,6 +137,71 @@ export default function GranulationAnalyzerPage() {
 
   const clearAnalysis = () => {
     setAnalyses([])
+  }
+
+  const retryAnalysis = async (modelIndex: number) => {
+    const model = models[modelIndex]
+    if (!model) return
+
+    // 更新該模型的狀態為加載中
+    setAnalyses(prev => prev.map((analysis, i) => 
+      i === modelIndex 
+        ? { ...analysis, status: 'loading', content: '', error: undefined }
+        : analysis
+    ))
+
+    try {
+      const response = await fetch('/api/ai/granulation-analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ingredients: ingredients.filter(ing => ing.materialName && ing.unitContentMg > 0),
+          singleModel: model.id // 只調用單個模型
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`API 請求失敗 (${response.status})`)
+      }
+
+      const data = await response.json()
+      
+      if (data.success && data.results && data.results.length > 0) {
+        const result = data.results[0]
+        // 更新該模型的結果
+        setAnalyses(prev => prev.map((analysis, i) => 
+          i === modelIndex 
+            ? {
+                ...analysis,
+                content: result.response || '',
+                status: result.error ? 'error' : 'success',
+                error: result.error || undefined,
+                timestamp: new Date().toISOString()
+              }
+            : analysis
+        ))
+      } else {
+        throw new Error(data.error || '分析失敗')
+      }
+
+    } catch (error) {
+      console.error(`${model.name} 重試錯誤:`, error)
+      
+      // 設置錯誤狀態
+      setAnalyses(prev => prev.map((analysis, i) => 
+        i === modelIndex 
+          ? {
+              ...analysis,
+              content: '',
+              status: 'error' as const,
+              error: error instanceof Error ? error.message : '分析失敗',
+              timestamp: new Date().toISOString()
+            }
+          : analysis
+      ))
+    }
   }
 
   const getStatusIcon = (status: string) => {
@@ -323,7 +392,24 @@ export default function GranulationAnalyzerPage() {
                             <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
                             <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                           </div>
-                          <p className="text-sm text-gray-500">AI 正在分析中...</p>
+                          <div className="text-sm text-gray-600">
+                            <TypeAnimation
+                              sequence={[
+                                '正在分析原料性質...',
+                                1000,
+                                '評估製粒必要性...',
+                                1000,
+                                '制定改善方案...',
+                                1000,
+                                '生成最終建議...',
+                                1000,
+                              ]}
+                              wrapper="span"
+                              speed={50}
+                              style={{ display: 'inline-block' }}
+                              repeat={Infinity}
+                            />
+                          </div>
                         </div>
                       )}
                       
@@ -345,12 +431,25 @@ export default function GranulationAnalyzerPage() {
                       )}
                       
                       {analysis.status === 'error' && (
-                        <Alert variant="destructive">
-                          <AlertCircle className="h-4 w-4" />
-                          <AlertDescription>
-                            {analysis.error || '分析過程中發生錯誤'}
-                          </AlertDescription>
-                        </Alert>
+                        <div className="space-y-3">
+                          <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertDescription>
+                              {analysis.error || '分析過程中發生錯誤'}
+                            </AlertDescription>
+                          </Alert>
+                          <div className="text-center">
+                            <Button
+                              onClick={() => retryAnalysis(index)}
+                              variant="outline"
+                              size="sm"
+                              className="text-red-600 border-red-300 hover:bg-red-50"
+                            >
+                              <RefreshCw className="h-4 w-4 mr-2" />
+                              重試分析
+                            </Button>
+                          </div>
+                        </div>
                       )}
                     </CardContent>
                   </Card>
