@@ -46,17 +46,19 @@ export async function POST(request: NextRequest) {
 **Step 3. 結構化輸出**
 將整理後資料轉換為標準 JSON 格式：
 
-```json
-[
-  {
-    "materialName": "原料名稱",
-    "unitContentMg": 123.0,
-    "originalText": "原始文字",
-    "needsConfirmation": false,
-    "isCustomerProvided": true
-  }
-]
-```
+{
+  "ingredients": [
+    {
+      "materialName": "原料名稱",
+      "unitContentMg": 123.0,
+      "originalText": "原始文字",
+      "needsConfirmation": false,
+      "isCustomerProvided": true
+    }
+  ],
+  "summary": "解析摘要",
+  "confidence": "高/中/低"
+}
 
 **Step 4. 摘要報告**
 最後提供人類可讀的摘要：
