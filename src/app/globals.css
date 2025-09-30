@@ -2058,6 +2058,7 @@
 .liquid-glass-modal.white-theme .liquid-glass-modal-title,
 .liquid-glass-modal.ai-chat-modal .liquid-glass-modal-title {
   color: rgba(0, 0, 0, 0.9);
+  font-size: 1.25rem;
 }
 
 /* 白色主題關閉按鈕樣式 */
