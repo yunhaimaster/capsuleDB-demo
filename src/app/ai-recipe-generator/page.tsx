@@ -138,7 +138,7 @@ export default function AIRecipeGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-pattern-bg">
+    <div className="min-h-screen brand-logo-bg-animation">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">
