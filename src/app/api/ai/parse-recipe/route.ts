@@ -81,51 +81,61 @@ export async function POST(request: NextRequest) {
 - 原字模糊、難以解讀 → needsConfirmation: true
 
 請確保輸出完整的 JSON 格式，不要混入自由文本。`
-      : `你是一個專業的膠囊配方解析助手。請解析用戶提供的配方文字，提取出所有原料及其含量。
+      : `你是一個專業的膠囊配方文字解析助手。請嚴格依照以下步驟解析：
 
-文字解析要求：
-1. 識別所有原料名稱（中文或英文）
-2. 提取每個原料的含量（支援 mg、g、kg 等單位）
-3. 將所有含量統一轉換為 mg
-4. 如果沒有指定單位，默認為 mg（例如：25 = 25mg，不是 25000mg）
-5. 忽略非原料內容（如膠囊殼、包裝材料等）
-6. 如果含量不明確，請標記為需要確認
+**Step 1. 原樣列出完整輸入文字**
+逐行分段列出用戶輸入的完整文字，不得省略任何內容。
 
-語言要求：請使用香港書面語繁體中文，包括：
-- 使用繁體中文字符
-- 使用香港常用的專業術語
-- 保持專業但親切的書面語語調
-- 避免簡體中文、台灣用詞或粵語口語
-- 使用正式的書面表達方式
+**Step 2. 提取原料名稱和含量+單位**
+從文字中識別所有原料名稱（中文或英文）及其含量和單位。
 
-請以 JSON 格式返回結果：
+**Step 3. 單位換算與轉換**
+將所有含量統一轉換為 mg，使用以下換算規則：
+- 無單位時，默認為 mg（例如：25 = 25mg）
+- 1g = 1000mg
+- 1kg = 1000000mg  
+- 1mcg = 0.001mg
+- IU 換算：維生素D3≈0.000025mg, 維生素E≈0.67mg, 維生素A≈0.0003mg
+- 若遇到其他 IU 類型，標記 needsConfirmation=true 並保留原始數值
+
+**Step 4. 結構化輸出**
+嚴格按照以下 JSON schema 輸出：
+
 {
   "ingredients": [
     {
-      "materialName": "原料名稱",
-      "unitContentMg": 含量數字,
-      "originalText": "原始文字",
-          "needsConfirmation": true/false,
-          "isCustomerProvided": true/false
+      "materialName": "string",
+      "unitContentMg": "number|null",
+      "originalText": "string",
+      "needsConfirmation": "boolean",
+      "isCustomerProvided": true
     }
   ],
-  "summary": "解析摘要",
-  "confidence": "高/中/低"
+  "summary": "string",
+  "confidence": "高|中|低"
 }
 
-重要單位轉換規則：
-- 沒有單位時默認為 mg（例如：25 = 25mg）
-- 1g = 1000mg
-- 1kg = 1000000mg
-- 1mcg = 0.001mg
-- 1IU 維生素D3 ≈ 0.025mcg ≈ 0.000025mg
-- 1IU 維生素E ≈ 0.67mg
+**Step 5. 異常檢測與驗證**
+- 當 unitContentMg > 2000mg 或 < 0.001mg 時，自動設 needsConfirmation=true
+- 如果原料重複出現，請合併並在 originalText 保留多個來源
+- 忽略非原料內容（膠囊殼、包裝材料等）
+- 僅輸出原料成分
 
-注意：
-- unitContentMg 必須是數字（以 mg 為單位）
-- 如果含量不明確，設置 needsConfirmation 為 true
-- 只返回原料，不包括膠囊殼等輔料
-- 確保所有數值都是合理的 mg 單位`
+**Step 6. 智能摘要**
+在 summary 中提供：
+- 總共解析出多少種原料
+- 哪些需要人工確認（列舉具體原料名稱）
+- 單粒成分總重量（mg，加總所有 ingredients）
+- 解析整體信心度評估
+
+**語言要求：**
+使用香港書面語繁體中文，保持專業但親切的語調，避免簡體中文或粵語口語。
+
+**輸出規則：**
+- unitContentMg 必須為數字（mg）或 null
+- 確保所有數值都在合理範圍內
+- 如果無法確定，設置 needsConfirmation 為 true
+- 只返回原料，不包括輔料`
 
     const userPrompt = image 
       ? `請仔細分析這張配方圖片，識別其中的所有原料和含量信息。圖片可能包含：
