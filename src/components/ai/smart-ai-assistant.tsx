@@ -24,7 +24,6 @@ interface SmartAIAssistantProps {
 
 export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
   const pathname = usePathname()
   
@@ -76,7 +75,6 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
 
   const handleClose = () => {
     setIsOpen(false)
-    setIsFullscreen(false)
   }
 
   return (
@@ -99,19 +97,10 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         onClose={handleClose}
         title="Smart AI 助手"
         className="ai-chat-modal"
-        size={isFullscreen ? 'full' : 'xl'}
+        size="xl"
         animateFrom="button"
-        fullscreen={isFullscreen}
         headerButtons={
           <div className="flex items-center space-x-2">
-            <button
-              className="liquid-glass-modal-close"
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              title={isFullscreen ? '還原視窗' : '全屏顯示'}
-              type="button"
-            >
-              {isFullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-            </button>
             <AISettings 
               enableReasoning={enableReasoning}
               onToggleReasoning={setEnableReasoning}
@@ -130,7 +119,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         
         <AIDisclaimerCompact />
         
-        <div className={`flex flex-col ${isFullscreen ? 'h-[calc(100vh-14rem)]' : 'h-[60vh]'}`}>
+        <div className="flex flex-col h-[60vh]">
           <div className="flex-1 overflow-y-auto space-y-3 pr-1" ref={messagesContainerRef}>
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
