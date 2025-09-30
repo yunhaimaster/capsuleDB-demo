@@ -218,7 +218,7 @@ export default function GranulationAnalyzerPage() {
                   processIssues: '',
                   qualityNotes: '',
                   createdBy: '',
-                  completionDate: null,
+                  completionDate: undefined,
                   isCustomerProvided: true
                 }}
                 orderId={null}
