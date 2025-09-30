@@ -16,10 +16,13 @@ import { AIRealReasoning, AIReasoningIndicator } from '@/components/ui/ai-real-r
 interface OrderAIAssistantProps {
   order: ProductionOrder
   onModalReplace?: () => void
+  onClose?: () => void
+  isOpen?: boolean
 }
 
-export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: externalIsOpen }: OrderAIAssistantProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false)
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
   const [enableReasoning, setEnableReasoning] = useState(false)
   
   const {
@@ -68,7 +71,11 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
   })
 
   const handleClose = () => {
-    setIsOpen(false)
+    if (onClose) {
+      onClose()
+    } else {
+      setInternalIsOpen(false)
+    }
   }
 
 
@@ -78,7 +85,9 @@ export function OrderAIAssistant({ order, onModalReplace }: OrderAIAssistantProp
         variant="default"
         className={`bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-500 relative z-10 liquid-glass-card-interactive h-10 px-4 ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100 hover:scale-[1.02]'}`}
         onClick={() => {
-          setIsOpen(true)
+          if (externalIsOpen === undefined) {
+            setInternalIsOpen(true)
+          }
           if (onModalReplace) {
             // 使用 setTimeout 確保 Order AI 模態框先打開
             setTimeout(() => {

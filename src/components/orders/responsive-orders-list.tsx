@@ -575,6 +575,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       {selectedOrderForAI && (
         <OrderAIAssistant
           order={selectedOrderForAI}
+          isOpen={true}
           onClose={() => setSelectedOrderForAI(null)}
         />
       )}
