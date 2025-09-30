@@ -69,7 +69,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         '膠囊規格使用分布如何？',
         '近期常見的製程或品管問題有哪些？',
         '哪些原料在訂單中最常出現？',
-        '你有什麼提議和方法？'
+        '分析生產效率和品質指標'
       ]
     }
   })
