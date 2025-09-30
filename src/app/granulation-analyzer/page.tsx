@@ -203,26 +203,69 @@ export default function GranulationAnalyzerPage() {
                 </Badge>
               </div>
               
-              <ProductionOrderForm 
-                initialData={{
-                  ingredients: ingredients,
-                  customerName: '',
-                  productName: '',
-                  productionQuantity: 0,
-                  unitWeightMg: 0,
-                  batchTotalWeightMg: 0,
-                  capsuleSize: '#0',
-                  capsuleMaterial: 'gelatin',
-                  capsuleColor: '',
-                  remarks: '',
-                  processIssues: '',
-                  qualityNotes: '',
-                  createdBy: '',
-                  completionDate: undefined,
-                  isCustomerProvided: true
-                }}
-                orderId={null}
-              />
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 gap-4">
+                  {ingredients.map((ingredient, index) => (
+                    <div key={index} className="flex gap-3 items-center p-3 bg-gray-50 rounded-lg">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          原料名稱
+                        </label>
+                        <input
+                          type="text"
+                          value={ingredient.materialName}
+                          onChange={(e) => {
+                            const newIngredients = [...ingredients]
+                            newIngredients[index] = { ...ingredient, materialName: e.target.value }
+                            setIngredients(newIngredients)
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="輸入原料名稱"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          單粒重量 (mg)
+                        </label>
+                        <input
+                          type="number"
+                          value={ingredient.unitContentMg || ''}
+                          onChange={(e) => {
+                            const newIngredients = [...ingredients]
+                            newIngredients[index] = { ...ingredient, unitContentMg: Number(e.target.value) || 0 }
+                            setIngredients(newIngredients)
+                          }}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="輸入重量"
+                        />
+                      </div>
+                      <div className="flex-shrink-0">
+                        <button
+                          onClick={() => {
+                            if (ingredients.length > 1) {
+                              const newIngredients = ingredients.filter((_, i) => i !== index)
+                              setIngredients(newIngredients)
+                            }
+                          }}
+                          className="px-3 py-2 text-red-600 hover:text-red-800 text-sm"
+                          disabled={ingredients.length === 1}
+                        >
+                          刪除
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="text-center">
+                  <button
+                    onClick={() => setIngredients([...ingredients, { materialName: '', unitContentMg: 0, isCustomerProvided: true }])}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+                  >
+                    + 添加原料
+                  </button>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
