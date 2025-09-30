@@ -2,10 +2,11 @@
 
 import { ProductionOrderForm } from '@/components/forms/production-order-form'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 
 export default function NewOrderPage() {
   return (
-    <div className="min-h-screen brand-logo-pattern-bg">
+    <div className="min-h-screen brand-logo-bg-animation">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[
@@ -33,9 +34,10 @@ export default function NewOrderPage() {
 
         {/* Form Card */}
         <ProductionOrderForm />
- 
- 
       </div>
+
+      {/* Footer */}
+      <LiquidGlassFooter />
     </div>
   )
 }

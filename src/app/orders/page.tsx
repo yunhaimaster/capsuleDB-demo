@@ -78,9 +78,10 @@ export default function OrdersPage() {
           recentOrders: orders.slice(0, 5)
         }}
       />
-
-      <LiquidGlassFooter />
       </div>
+
+      {/* Footer */}
+      <LiquidGlassFooter />
     </div>
   )
 }
