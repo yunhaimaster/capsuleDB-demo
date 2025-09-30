@@ -318,7 +318,11 @@ export default function OrderDetailPage() {
         isOpen={showOrderDetails}
         onClose={() => setShowOrderDetails(false)}
         title="訂單詳情"
-      />
+      >
+        {showOrderDetails && order && (
+          <OrderDetailView order={order} />
+        )}
+      </LiquidGlassModal>
     </div>
   )
 }
