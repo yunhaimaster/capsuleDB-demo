@@ -11,6 +11,8 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface GranulationAnalysis {
   model: string
@@ -327,20 +329,13 @@ export default function GranulationAnalyzerPage() {
                       
                       {analysis.status === 'success' && (
                         <div className="space-y-3">
-                          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800 prose-table:text-sm">
-                            <div 
+                          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800 prose-table:text-sm prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:px-2 prose-th:py-1 prose-td:border prose-td:border-gray-300 prose-td:px-2 prose-td:py-1">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
                               className="text-sm leading-relaxed"
-                              dangerouslySetInnerHTML={{ 
-                                __html: analysis.content
-                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                  .replace(/\n\n/g, '</p><p>')
-                                  .replace(/\n/g, '<br>')
-                                  .replace(/^/, '<p>')
-                                  .replace(/$/, '</p>')
-                                  .replace(/<p><\/p>/g, '')
-                              }}
-                            />
+                            >
+                              {analysis.content}
+                            </ReactMarkdown>
                           </div>
                           <p className="text-xs text-gray-500">
                             分析時間: {new Date(analysis.timestamp).toLocaleString()}
