@@ -12,7 +12,7 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
   { href: '/', label: '首頁' },
   {
     href: '/orders',
-    label: '訂單',
+    label: '訂單管理',
     children: [
       { href: '/orders', label: '訂單列表' },
       { href: '/orders/new', label: '新建訂單' },
@@ -20,7 +20,7 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
   },
   {
     href: '/ai-recipe-generator',
-    label: 'AI 配方',
+    label: '工具',
     children: [
       { href: '/ai-recipe-generator', label: 'AI 配方生成器' },
       { href: '/work-orders', label: '工作單生成' },

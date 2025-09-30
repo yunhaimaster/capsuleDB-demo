@@ -360,14 +360,14 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* v2.0 新功能區塊 */}
+      {/* 輔助工具區塊 */}
       <div className="mb-8">
         <div className="text-center mb-6 space-y-2">
           <h2 className="text-xl md:text-[28px] font-semibold text-gray-800">
-            🚀 近期更新重點
+            🛠️ 輔助工具
           </h2>
           <p className="text-gray-600 text-sm md:text-[15px]">
-            最新功能改進與即將推出的體驗預告
+            提升工作效率的智能工具集
           </p>
         </div>
         

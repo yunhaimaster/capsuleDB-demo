@@ -25,26 +25,24 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
   const footerSections: FooterSection[] = useMemo(() => {
     const sharedSections: FooterSection[] = [
       {
-        title: '系統功能',
-        links: [
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單管理' },
-          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-          { href: '/work-orders', label: '工作單生成' }
-        ]
-      },
-      {
-        title: 'AI 配方',
-        links: [
-          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
-          { href: '/work-orders', label: '工作單生成' }
-        ]
-      },
-      {
         title: '訂單管理',
         links: [
           { href: '/orders', label: '訂單列表' },
           { href: '/orders/new', label: '新建訂單' }
+        ]
+      },
+      {
+        title: '工具',
+        links: [
+          { href: '/ai-recipe-generator', label: 'AI配方生成器' },
+          { href: '/work-orders', label: '工作單生成' }
+        ]
+      },
+      {
+        title: '系統',
+        links: [
+          { href: '/', label: '首頁' },
+          { href: '/history', label: '版本歷史' }
         ]
       }
     ]
