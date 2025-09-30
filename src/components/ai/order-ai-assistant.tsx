@@ -65,7 +65,8 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
         '分析填充可行性',
         '分析製粒必要性',
         '分析成分顏色與膠囊染色風險',
-        '分析文件與標籤合規性'
+        '分析文件與標籤合規性',
+        '分析配方功效與廣告用語合規建議'
       ]
     }
   })
