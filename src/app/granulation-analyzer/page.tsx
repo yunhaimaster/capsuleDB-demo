@@ -82,58 +82,50 @@ export default function GranulationAnalyzerPage() {
       .map(ing => `${ing.materialName}: ${formatNumber(ing.unitContentMg)}mg`)
       .join('\n')
 
-    // 同時調用三個模型
-    const promises = models.map(async (model, index) => {
-      try {
-        const response = await fetch('/api/ai/granulation-analyze', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            recipe: recipeText,
-            model: model.id
-          }),
-        })
+    // 調用 API 進行三模型分析
+    try {
+      const response = await fetch('/api/ai/granulation-analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ingredients: ingredients.filter(ing => ing.materialName && ing.unitContentMg > 0)
+        }),
+      })
 
-        if (!response.ok) {
-          throw new Error(`API 請求失敗 (${response.status})`)
-        }
-
-        const data = await response.json()
-        
-        // 更新對應的分析結果
-        setAnalyses(prev => prev.map((analysis, i) => 
-          i === index 
-            ? {
-                ...analysis,
-                content: data.content || data.message || '分析完成',
-                status: 'success' as const,
-                timestamp: new Date().toISOString()
-              }
-            : analysis
-        ))
-
-      } catch (error) {
-        console.error(`${model.name} 分析錯誤:`, error)
-        
-        // 更新錯誤狀態
-        setAnalyses(prev => prev.map((analysis, i) => 
-          i === index 
-            ? {
-                ...analysis,
-                content: '',
-                status: 'error' as const,
-                error: error instanceof Error ? error.message : '分析失敗',
-                timestamp: new Date().toISOString()
-              }
-            : analysis
-        ))
+      if (!response.ok) {
+        throw new Error(`API 請求失敗 (${response.status})`)
       }
-    })
 
-    // 等待所有分析完成
-    await Promise.allSettled(promises)
+      const data = await response.json()
+      
+      if (data.success && data.results) {
+        // 更新所有分析結果
+        setAnalyses(data.results.map((result: any, index: number) => ({
+          model: result.model,
+          content: result.response || '',
+          status: result.error ? 'error' : 'success',
+          error: result.error || undefined,
+          timestamp: new Date().toISOString()
+        })))
+      } else {
+        throw new Error(data.error || '分析失敗')
+      }
+
+    } catch (error) {
+      console.error('製粒分析錯誤:', error)
+      
+      // 設置錯誤狀態
+      setAnalyses(prev => prev.map(analysis => ({
+        ...analysis,
+        content: '',
+        status: 'error' as const,
+        error: error instanceof Error ? error.message : '分析失敗',
+        timestamp: new Date().toISOString()
+      })))
+    }
+
     setIsAnalyzing(false)
   }
 
@@ -335,10 +327,20 @@ export default function GranulationAnalyzerPage() {
                       
                       {analysis.status === 'success' && (
                         <div className="space-y-3">
-                          <div className="prose prose-sm max-w-none">
-                            <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                              {analysis.content}
-                            </div>
+                          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800 prose-table:text-sm">
+                            <div 
+                              className="text-sm leading-relaxed"
+                              dangerouslySetInnerHTML={{ 
+                                __html: analysis.content
+                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                  .replace(/\n\n/g, '</p><p>')
+                                  .replace(/\n/g, '<br>')
+                                  .replace(/^/, '<p>')
+                                  .replace(/$/, '</p>')
+                                  .replace(/<p><\/p>/g, '')
+                              }}
+                            />
                           </div>
                           <p className="text-xs text-gray-500">
                             分析時間: {new Date(analysis.timestamp).toLocaleString()}

@@ -4,16 +4,15 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
-    const { recipe, model } = await request.json()
+    const { ingredients } = await request.json()
 
-    if (!recipe) {
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
       return NextResponse.json(
-        { error: '請提供要分析的配方' },
+        { error: '請提供要分析的配方原料' },
         { status: 400 }
       )
     }
 
-    // 從環境變數獲取 API 配置
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
@@ -30,10 +29,12 @@ export async function POST(request: NextRequest) {
 
 請在輸出之前，內部先逐步推理每個原料的性質與影響，再彙總為結果。最終只顯示結論，推理過程隱藏。
 
+**請使用 Markdown 格式輸出，包含表格、粗體標題和清晰的結構化內容。**
+
 步驟 1. 原料性質分析
 - 請逐一列出配方原料，評估流動性、黏性、結塊風險。
 - 若資料欠缺，請填入常見文獻範圍並標註為「假設值」。
-- 請用表格，欄位 = 原料 | 特性 | 假設值/文獻參考 | 風險說明。
+- 請用 Markdown 表格，欄位 = 原料 | 特性 | 假設值/文獻參考 | 風險說明。
 
 步驟 2. 製粒必要性初評分
 - 請綜合上述信息，給出 0–100 分製粒必要性分數。
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
 - 只能從以下輔料中選擇：麥芽糊精、硬脂酸鎂、二氧化硅、微晶纖維素。
 - 列出建議添加的品項、比例範圍（例如 0.2%–2%）、作用機制。
 - 若不建議加任何輔料，解釋原因。
-- 提供表格列出：輔料 | 建議比例% | 作用機制。
+- 提供 Markdown 表格列出：輔料 | 建議比例% | 作用機制。
 
 步驟 4. 改善後再評估
 - 假設按照建議配方改善後，給出【改善後的製粒必要性評分】（0–100 分）。
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
 
 ⚠️ 特殊要求：
 - 嚴格依照以上結構輸出，不得省略。
+- **必須使用 Markdown 格式，包括粗體標題、表格和列表。**
 - 如資料不足，請標明「假設值」而不是憑空臆測。
 - 請勿省略任何分析部分，即使部分數據是假設，也要完整交代。
 
@@ -66,73 +68,74 @@ export async function POST(request: NextRequest) {
 - 避免簡體中文、台灣用詞或粵語口語
 - 使用正式的書面表達方式`
 
+    const recipe = ingredients.map(ing => `${ing.materialName}: ${ing.unitContentMg}mg`).join('\n')
     const userPrompt = `請分析以下配方是否需要製粒：
 
 ${recipe}
 
 請提供詳細的製粒必要性分析。`
 
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-        'X-Title': 'Easy Health Granulation Analyzer'
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 9999,
-        temperature: 0.2,
-        top_p: 0.9,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.0
-      })
+    const models = [
+      { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast' },
+      { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini' },
+      { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1' },
+    ]
+
+    const fetchPromises = models.map(async (model) => {
+      try {
+        const response = await fetch(OPENROUTER_API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+            'X-Title': `Granulation Analyzer - ${model.name}`
+          },
+          body: JSON.stringify({
+            model: model.id,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+            max_tokens: 9999,
+            temperature: 0.2,
+            top_p: 0.9,
+            frequency_penalty: 0.0,
+            presence_penalty: 0.0
+          })
+        })
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error(`OpenRouter API 錯誤 (${model.name}):`, errorText)
+          return { model: model.name, error: `API 請求失敗: ${errorText}` }
+        }
+
+        const data = await response.json()
+        let aiResponse = data.choices?.[0]?.message?.content || '未能獲取分析結果。'
+
+        // 清理 AI 回答中的異常文字
+        aiResponse = aiResponse
+          .replace(/<\|begin_of_sentence\s*\|>/g, '')
+          .replace(/<\|end_of_sentence\s*\|>/g, '')
+          .replace(/\|>/g, '')
+          .trim()
+
+        return { model: model.name, response: aiResponse }
+      } catch (err) {
+        console.error(`製粒分析錯誤 (${model.name}):`, err)
+        return { model: model.name, error: err instanceof Error ? err.message : '分析過程中發生未知錯誤' }
+      }
     })
 
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('OpenRouter API 錯誤:', errorText)
-      throw new Error('OpenRouter API 請求失敗')
-    }
+    const results = await Promise.all(fetchPromises)
 
-    const data = await response.json()
-    console.log('製粒分析 API 回應:', JSON.stringify(data, null, 2))
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('API 回應結構無效:', data)
-      throw new Error('API 回應結構無效')
-    }
-    
-    let aiResponse = data.choices[0].message.content
-    
-    if (!aiResponse || aiResponse.trim() === '') {
-      console.error('AI 回應為空')
-      throw new Error('AI 回應為空')
-    }
-
-    // 清理 AI 回答中的異常文字
-    aiResponse = aiResponse
-      .replace(/<\|begin_of_sentence\s*\|>/g, '')
-      .replace(/<\|end_of_sentence\s*\|>/g, '')
-      .replace(/\|>/g, '')
-      .trim()
-
-    return NextResponse.json({
-      success: true,
-      content: aiResponse,
-      model: model,
-      timestamp: new Date().toISOString()
-    })
+    return NextResponse.json({ success: true, results })
 
   } catch (error) {
-    console.error('製粒分析錯誤:', error)
+    console.error('製粒分析總體錯誤:', error)
     return NextResponse.json(
-      { error: '製粒分析失敗，請檢查輸入格式或稍後再試' },
+      { error: '製粒分析失敗，請稍後再試' },
       { status: 500 }
     )
   }
