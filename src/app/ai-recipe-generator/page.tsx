@@ -77,12 +77,12 @@ export default function AIRecipeGeneratorPage() {
 
   const handleStartChat = () => {
     setIsChatMode(true)
-    setChatMessages([
-      {
-        role: 'assistant',
-        content: `您好！我是您的 AI 代工配方助手。我已經為您生成了「${formData.targetEffect}」的代工配方。\n\n作為膠囊灌裝工廠，您可以告訴我如何優化這個代工配方，例如：\n- 調整膠囊規格（顏色、大小、材料）\n- 優化原料配比和劑量\n- 降低代工成本\n- 提高代工生產效率\n- 改善產品穩定性\n- 調整代工報價\n- 優化代工包裝方案\n- 批量採購原料建議\n- 代工工藝優化建議\n\n請描述您的具體需求，我會為您提供專業的代工配方優化建議！`
-      }
-    ])
+        setChatMessages([
+          {
+            role: 'assistant',
+            content: `您好！我是您的 AI 配方助手。我已經為您生成了「${formData.targetEffect}」的配方。\n\n您可以告訴我如何優化這個配方，例如：\n- 調整膠囊規格（顏色、大小、材料）\n- 優化原料配比和劑量\n- 提高生產效率\n- 改善產品穩定性\n- 優化包裝方案\n- 批量採購原料建議\n- 生產工藝優化建議\n- 符合特定認證要求\n- 滿足特殊客戶需求\n\n請描述您的具體需求，我會為您提供專業的配方優化建議！`
+          }
+        ])
     
     // 滾動到聊天框
     setTimeout(() => {
@@ -219,15 +219,16 @@ export default function AIRecipeGeneratorPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    代工成本目標（可選）
+                    特別要求（可選）
                   </label>
-                  <Input
+                  <Textarea
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    placeholder="例如：每粒代工成本不超過 HK$1.20，建議代工報價 HK$2.50"
+                    placeholder="例如：需要素食膠囊、無麩質、有機認證、特定顏色、特殊包裝要求、生產工藝限制等"
+                    rows={3}
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    請輸入每粒代工成本目標，系統會據此優化配方並建議代工報價
+                    請描述任何特殊要求或限制，AI 會據此調整配方建議
                   </p>
                 </div>
 
