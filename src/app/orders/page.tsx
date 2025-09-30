@@ -27,7 +27,7 @@ export default function OrdersPage() {
   }, [])
 
   return (
-    <div className="min-h-screen brand-logo-pattern-bg">
+    <div className="min-h-screen brand-logo-bg-animation">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[

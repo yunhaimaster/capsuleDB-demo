@@ -141,7 +141,7 @@ export default function HistoryPage() {
   ]
 
   return (
-    <div className="min-h-screen brand-logo-pattern-bg">
+    <div className="min-h-screen brand-logo-bg-animation">
       <LiquidGlassNav />
       
       {/* Main Content with padding for fixed nav */}
