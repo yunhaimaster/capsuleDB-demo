@@ -116,7 +116,7 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation">
+    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav />
 

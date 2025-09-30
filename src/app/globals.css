@@ -743,8 +743,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  max-width: min(1440px, 92vw);
-  margin: 0 auto;
+  width: 100%;
   padding: 0.75rem 1.25rem;
   min-height: 3.5rem;
 }
@@ -2473,6 +2472,7 @@
   @apply bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200/50;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  margin-top: auto;
 }
 
 .liquid-glass-footer-content {

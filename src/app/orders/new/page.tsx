@@ -6,7 +6,7 @@ import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 
 export default function NewOrderPage() {
   return (
-    <div className="min-h-screen brand-logo-bg-animation">
+    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav 
         links={[

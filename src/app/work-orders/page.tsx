@@ -49,10 +49,9 @@ export default function WorkOrdersPage() {
 
     setIsGenerating(true)
     setError(null)
-    setGeneratedWorkOrder(null)
 
     try {
-      const response = await fetch('/api/work-orders/generate-stream', {
+      const response = await fetch('/api/work-orders/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,82 +63,12 @@ export default function WorkOrdersPage() {
         }),
       })
 
-      if (!response.ok) {
-        throw new Error('網絡錯誤')
-      }
+      const result = await response.json()
 
-      const reader = response.body?.getReader()
-      if (!reader) {
-        throw new Error('無法讀取響應流')
-      }
-
-      const decoder = new TextDecoder()
-      let buffer = ''
-      let fullContent = ''
-      let workOrderId = `workorder_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-      // 初始化工作單對象
-      setGeneratedWorkOrder({
-        id: workOrderId,
-        orderNumber: `WO-${Date.now()}`,
-        content: '',
-        structured: {
-          productionSteps: [],
-          qualityControlPoints: [],
-          riskAssessment: {
-            risks: [],
-            mitigationMeasures: [],
-            overallRiskLevel: 'Low'
-          },
-          isoCompliant: false
-        },
-        generatedAt: new Date().toISOString()
-      })
-
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
-
-        buffer += decoder.decode(value, { stream: true })
-        const lines = buffer.split('\n')
-        buffer = lines.pop() || ''
-
-        for (const line of lines) {
-          if (line.startsWith('event: ')) {
-            const eventType = line.slice(7)
-            const nextLine = lines[lines.indexOf(line) + 1]
-            
-            if (nextLine && nextLine.startsWith('data: ')) {
-              const data = nextLine.slice(6)
-              
-              if (eventType === 'delta') {
-                try {
-                  const content = JSON.parse(data)
-                  if (typeof content === 'string') {
-                    fullContent += content
-                    setGeneratedWorkOrder(prev => prev ? {
-                      ...prev,
-                      content: fullContent
-                    } : null)
-                  }
-                } catch (err) {
-                  console.error('解析 delta 數據失敗:', err)
-                }
-              } else if (eventType === 'done') {
-                // 生成完成
-                break
-              } else if (eventType === 'error') {
-                try {
-                  const errorData = JSON.parse(data)
-                  setError(errorData.error || '生成失敗')
-                } catch (err) {
-                  setError('生成失敗')
-                }
-                break
-              }
-            }
-          }
-        }
+      if (result.success) {
+        setGeneratedWorkOrder(result.workOrder)
+      } else {
+        setError(result.error || '工作單生成失敗')
       }
     } catch (err) {
       setError('網絡錯誤，請稍後再試')
@@ -165,7 +94,7 @@ export default function WorkOrdersPage() {
   const selectedOrder = orders.find(order => order.id === selectedOrderId)
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation">
+    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">
@@ -321,7 +250,7 @@ export default function WorkOrdersPage() {
               )}
 
               {/* 生成中狀態 */}
-              {isGenerating && !generatedWorkOrder && (
+              {isGenerating && (
                 <Card className="liquid-glass-card liquid-glass-card-elevated">
                   <div className="liquid-glass-content">
                     <div className="text-center py-12">
@@ -346,7 +275,7 @@ export default function WorkOrdersPage() {
               )}
 
               {/* 生成結果 */}
-              {generatedWorkOrder && (
+              {generatedWorkOrder && !isGenerating && (
                 <Card className="liquid-glass-card liquid-glass-card-elevated">
                   <div className="liquid-glass-content">
                     <div className="flex items-center justify-between mb-6">
