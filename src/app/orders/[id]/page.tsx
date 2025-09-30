@@ -12,14 +12,12 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
-import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 
 export default function OrderDetailPage() {
   const params = useParams()
   const [order, setOrder] = useState<ProductionOrder | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showOrderDetails, setShowOrderDetails] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -313,16 +311,6 @@ export default function OrderDetailPage() {
       </Card>
       </div>
       <LiquidGlassFooter />
-
-      <LiquidGlassModal
-        isOpen={showOrderDetails}
-        onClose={() => setShowOrderDetails(false)}
-        title="訂單詳情"
-      >
-        {showOrderDetails && order && (
-          <OrderDetailView order={order} />
-        )}
-      </LiquidGlassModal>
     </div>
   )
 }
