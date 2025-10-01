@@ -543,7 +543,7 @@
 /* Base Liquid Glass Card */
 .liquid-glass-card {
   position: relative;
-  background: linear-gradient(160deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.55) 100%);
+  background: linear-gradient(160deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.62) 100%);
   backdrop-filter: blur(28px) saturate(185%);
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: 22px;
@@ -557,22 +557,22 @@
 }
 
 .liquid-glass-card[data-glass-tone="light"] {
-  background: linear-gradient(150deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.68) 100%);
-  border-color: rgba(180, 199, 214, 0.32);
+  background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,252,255,0.78) 100%);
+  border-color: rgba(196, 212, 228, 0.36);
   box-shadow:
-    0 18px 48px rgba(45, 105, 135, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(45, 105, 135, 0.1);
+    0 20px 54px rgba(45, 105, 135, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -1px 0 rgba(45, 105, 135, 0.08);
 }
 
 .liquid-glass-card[data-glass-tone="dark"] {
-  background: linear-gradient(160deg, rgba(22, 38, 58, 0.55) 0%, rgba(35, 58, 84, 0.48) 100%);
-  border-color: rgba(86, 126, 162, 0.4);
-  color: rgba(236, 244, 250, 0.92);
+  background: linear-gradient(165deg, rgba(34, 58, 90, 0.32) 0%, rgba(54, 90, 130, 0.26) 100%);
+  border-color: rgba(102, 140, 176, 0.42);
+  color: rgba(230, 240, 252, 0.96);
   box-shadow:
-    0 24px 64px rgba(12, 26, 38, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    0 26px 66px rgba(12, 30, 44, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.16);
 }
 
 .liquid-glass-card[data-glass-tone="dark"] .liquid-glass-caustic {
@@ -631,9 +631,9 @@
 /* Hover Effects */
 .liquid-glass-card:hover {
   transform: translateY(-4px) scale(1.02);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(28px) saturate(200%);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(244,249,255,0.85) 100%);
+  backdrop-filter: blur(30px) saturate(220%);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.12),
     0 8px 24px rgba(0, 0, 0, 0.08),
