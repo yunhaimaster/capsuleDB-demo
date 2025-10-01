@@ -168,7 +168,8 @@ ${recipe}
               }
             } catch (error) {
               // 發送錯誤事件
-              controller.enqueue(new TextEncoder().encode(`event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`))
+              const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+              controller.enqueue(new TextEncoder().encode(`event: error\ndata: ${JSON.stringify({ error: errorMessage })}\n\n`))
               controller.error(error)
             } finally {
               reader?.releaseLock()
