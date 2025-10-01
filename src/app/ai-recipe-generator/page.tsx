@@ -43,6 +43,13 @@ const MODEL_CONFIG = [
   }
 ]
 
+const formatDuration = (startedAt?: number, finishedAt?: number) => {
+  if (!startedAt) return null
+  const end = finishedAt || Date.now()
+  const seconds = Math.max(0, Math.round((end - startedAt) / 100) / 10)
+  return `${seconds.toFixed(1)} 秒`
+}
+
 const STATUS_BADGE_CLASS: Record<AnalysisStatus, string> = {
   idle: 'bg-slate-500/15 border border-slate-300/40 text-slate-600',
   loading: 'bg-blue-500/15 border border-blue-300/40 text-blue-700',
