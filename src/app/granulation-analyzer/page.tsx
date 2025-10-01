@@ -37,27 +37,27 @@ interface ModelConfig {
   description: string
 }
 
-const MODEL_CONFIG: ModelConfig[] = [
+const MODEL_CONFIG = [
   {
     id: 'x-ai/grok-4-fast',
     name: 'xAI Grok 4 Fast',
-    badgeClass: 'badge-grok',
-    iconClass: 'icon-container-emerald',
-    description: '優先提供整體風險概觀與敏感原料提示'
+    description: '優先提供整體風險概觀與敏感原料提示',
+    iconClass: 'icon-container-blue',
+    supportsReasoning: false
   },
   {
     id: 'openai/gpt-4.1-mini',
     name: 'OpenAI GPT-4.1 Mini',
-    badgeClass: 'badge-gpt',
+    description: '擅長結構化評分與合規審視',
     iconClass: 'icon-container-violet',
-    description: '擅長結構化評分與合規審視'
+    supportsReasoning: false
   },
   {
     id: 'deepseek/deepseek-chat-v3.1',
     name: 'DeepSeek v3.1',
-    badgeClass: 'badge-deepseek',
-    iconClass: 'icon-container-blue',
-    description: '深入分析流動性參數與改善方案'
+    description: '深入分析流動性參數與改善方案',
+    iconClass: 'icon-container-emerald',
+    supportsReasoning: true
   }
 ]
 
@@ -90,6 +90,9 @@ export default function GranulationAnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [hasRequested, setHasRequested] = useState(false)
   const [globalError, setGlobalError] = useState<string | null>(null)
+  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({
+    'deepseek/deepseek-chat-v3.1': true
+  })
 
   const controllerRef = useRef<AbortController | null>(null)
 
@@ -145,7 +148,10 @@ export default function GranulationAnalyzerPage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          ingredients: ingredients.filter((ing) => ing.materialName && ing.unitContentMg > 0)
+          ingredients: ingredients.filter((ing) => ing.materialName && ing.unitContentMg > 0),
+          reasoningMap: Object.fromEntries(
+            MODEL_CONFIG.filter(model => model.supportsReasoning).map(model => [model.id, !!reasoningEnabled[model.id]])
+          )
         }),
         signal: controller.signal
       })
@@ -271,7 +277,10 @@ export default function GranulationAnalyzerPage() {
         },
         body: JSON.stringify({
           ingredients: ingredients.filter((ing) => ing.materialName && ing.unitContentMg > 0),
-          singleModel: modelId
+          singleModel: modelId,
+          reasoningMap: Object.fromEntries(
+            MODEL_CONFIG.filter(cfg => cfg.supportsReasoning).map(cfg => [cfg.id, !!reasoningEnabled[cfg.id]])
+          )
         })
       })
 
@@ -589,6 +598,22 @@ export default function GranulationAnalyzerPage() {
                                 <Repeat2 className="h-4 w-4" />
                                 重試
                               </Button>
+                              {config.supportsReasoning && (
+                                <label className="flex items-center gap-1 text-xs text-gray-500">
+                                  <input
+                                    type="checkbox"
+                                    className="rounded border-gray-300"
+                                    checked={!!reasoningEnabled[config.id]}
+                                    onChange={(event) =>
+                                      setReasoningEnabled(prev => ({
+                                        ...prev,
+                                        [config.id]: event.target.checked
+                                      }))
+                                    }
+                                  />
+                                  深度思考
+                                </label>
+                              )}
                             </div>
                           </div>
                           {analysis.status === 'error' ? (
