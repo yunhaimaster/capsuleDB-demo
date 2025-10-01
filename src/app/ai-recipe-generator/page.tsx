@@ -619,21 +619,22 @@ export default function AIRecipeGeneratorPage() {
                           <Repeat2 className="h-4 w-4" />
                           重試
                         </Button>
-                        <label className="flex items-center gap-1 text-xs text-gray-500">
-                          <input
-                            type="checkbox"
-                            className="rounded border-gray-300"
-                            checked={!!reasoningEnabled[model.config.id]}
-                            onChange={(event) =>
-                              setReasoningEnabled(prev => ({
-                                ...prev,
-                                [model.config.id]: event.target.checked
-                              }))
-                            }
-                            disabled={!MODEL_CONFIG.find(m => m.id === model.config.id)?.supportsReasoning}
-                          />
-                          深度思考
-                        </label>
+                        {model.config.supportsReasoning && (
+                          <label className="flex items-center gap-1 text-xs text-gray-500">
+                            <input
+                              type="checkbox"
+                              className="rounded border-gray-300"
+                              checked={!!reasoningEnabled[model.config.id]}
+                              onChange={(event) =>
+                                setReasoningEnabled(prev => ({
+                                  ...prev,
+                                  [model.config.id]: event.target.checked
+                                }))
+                              }
+                            />
+                            深度思考
+                          </label>
+                        )}
                       </div>
                     </div>
 
