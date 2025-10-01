@@ -395,7 +395,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
           {/* 解析結果 */}
           {parsedIngredients.length > 0 && !isParsing && (
-            <Card className="liquid-glass-card liquid-glass-card-elevated">
+            <Card tone="positive" className="liquid-glass-card liquid-glass-card-elevated">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -415,8 +415,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                   <p className="text-sm text-muted-foreground">{parseSummary}</p>
                 )}
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3 max-h-[300px] overflow-y-auto">
+              <CardContent className="space-y-3">
+                <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                   {parsedIngredients.map((ingredient, index) => (
                     <div
                       key={index}

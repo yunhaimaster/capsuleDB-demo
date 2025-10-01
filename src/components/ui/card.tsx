@@ -3,10 +3,14 @@ import { useCallback, useEffect, useRef } from "react"
 
 import { cn } from "@/lib/utils"
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, onMouseMove, onMouseLeave, onTouchMove, onTouchEnd, children, ...props }, ref) => {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  tone?: 'default' | 'positive' | 'caution' | 'negative' | 'neutral'
+}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>((
+  { className, tone = 'default', onMouseMove, onMouseLeave, onTouchMove, onTouchEnd, children, ...props },
+  ref
+) => {
   const localRef = useRef<HTMLDivElement | null>(null)
 
   const setRefs = (node: HTMLDivElement | null) => {
@@ -183,6 +187,7 @@ const Card = React.forwardRef<
       className={cn(
         "rounded-2xl border border-white/50 bg-white/60 text-[--brand-neutral] shadow-[0_24px_48px_rgba(24,66,96,0.08)] backdrop-blur-xl",
         "relative overflow-hidden touch-glow-surface",
+        tone !== 'default' && `liquid-glass-tone-${tone}`,
         className
       )}
       {...props}

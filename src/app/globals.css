@@ -572,6 +572,30 @@
   will-change: transform, box-shadow, filter, opacity;
 }
 
+.liquid-glass-tone-positive {
+  background: linear-gradient(160deg, rgba(16,185,129,0.16) 0%, rgba(217,249,236,0.4) 100%);
+  border-color: rgba(16,185,129,0.35);
+  box-shadow: 0 18px 48px rgba(16,185,129,0.18), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.liquid-glass-tone-caution {
+  background: linear-gradient(160deg, rgba(251,191,36,0.18) 0%, rgba(254,243,199,0.45) 100%);
+  border-color: rgba(251,191,36,0.45);
+  box-shadow: 0 18px 48px rgba(251,191,36,0.18), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.liquid-glass-tone-negative {
+  background: linear-gradient(160deg, rgba(248,113,113,0.14) 0%, rgba(254,226,226,0.4) 100%);
+  border-color: rgba(248,113,113,0.4);
+  box-shadow: 0 18px 48px rgba(248,113,113,0.16), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+.liquid-glass-tone-neutral {
+  background: linear-gradient(160deg, rgba(148,163,184,0.12) 0%, rgba(226,232,240,0.36) 100%);
+  border-color: rgba(148,163,184,0.35);
+  box-shadow: 0 18px 48px rgba(148,163,184,0.16), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
 .liquid-glass-card[data-glass-tone="light"] {
   background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,252,255,0.78) 100%);
   border-color: rgba(196, 212, 228, 0.36);
