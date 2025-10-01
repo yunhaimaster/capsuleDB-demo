@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, TriangleAlert } from 'lucide-react'
+import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, AlertTriangle } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 interface Ingredient {
