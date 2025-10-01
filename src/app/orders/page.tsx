@@ -50,11 +50,6 @@ export default function OrdersPage() {
             <div className="flex flex-wrap gap-3 items-center">
               <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700 text-sm font-medium leading-none">即時更新</span>
               <span className="px-3.5 py-1.5 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700 text-sm font-medium leading-none">資料匯出</span>
-              <Link href="/orders/new">
-                <button className="px-3.5 py-1.5 rounded-full bg-purple-500/15 border border-purple-300/40 text-purple-700 text-sm font-medium leading-none hover:bg-purple-500/20 transition-colors duration-200">
-                  + 新建訂單
-                </button>
-              </Link>
             </div>
           </div>
         </section>

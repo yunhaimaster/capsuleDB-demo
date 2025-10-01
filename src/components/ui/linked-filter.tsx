@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { X, Download } from 'lucide-react'
+import Link from 'next/link'
 
 interface FilterOption {
   value: string
@@ -411,20 +412,38 @@ export function LinkedFilter({
         <Button
           variant="outline"
           onClick={clearFilters}
-          className="flex items-center gap-2"
+          disabled={loading}
+          className="flex items-center justify-center gap-2"
         >
           <X className="h-4 w-4" />
           清除篩選
         </Button>
+        <Button
+          onClick={handleSearch}
+          disabled={loading}
+          className="flex items-center justify-center gap-2"
+        >
+          {loading ? '搜尋中...' : '重新搜尋'}
+        </Button>
         {onExport && (
           <Button
             onClick={onExport}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+            variant="outline"
+            className="flex items-center justify-center gap-2"
+            disabled={loading}
           >
             <Download className="h-4 w-4" />
             匯出 CSV
           </Button>
         )}
+        <Link href="/orders/new" className="sm:ml-auto">
+          <Button
+            className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+            disabled={loading}
+          >
+            + 新建訂單
+          </Button>
+        </Link>
       </div>
 
       {/* 點擊外部關閉下拉菜單 */}
