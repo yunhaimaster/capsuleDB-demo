@@ -7,6 +7,7 @@ const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter
 const MODEL_CATALOG = [
   { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast', supportsReasoning: false },
   { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini', supportsReasoning: false },
+  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', supportsReasoning: false },
   { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1', supportsReasoning: true }
 ]
 
@@ -78,7 +79,7 @@ const formatIngredients = (ingredients: Array<{ materialName: string; unitConten
 
 export async function POST(request: NextRequest) {
   try {
-    const { ingredients, singleModel } = await request.json()
+    const { ingredients, singleModel, reasoningMap } = await request.json()
 
     if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
       return NextResponse.json({ error: '請提供要分析的配方原料' }, { status: 400 })
@@ -147,7 +148,9 @@ export async function POST(request: NextRequest) {
                 body: JSON.stringify({
                   ...basePayload,
                   model: model.id,
-                  ...(model.supportsReasoning ? { reasoning: { effort: 'medium' } } : {})
+                  ...((model.supportsReasoning && (reasoningMap?.[model.id] ?? false))
+                    ? { reasoning: { enabled: true } }
+                    : {})
                 })
               })
 

@@ -53,6 +53,13 @@ const MODEL_CONFIG = [
     supportsReasoning: false
   },
   {
+    id: 'google/gemini-2.5-flash',
+    name: 'Google Gemini 2.5 Flash',
+    description: '快速生成視覺化與重點摘要建議',
+    iconClass: 'icon-container-cyan',
+    supportsReasoning: false
+  },
+  {
     id: 'deepseek/deepseek-chat-v3.1',
     name: 'DeepSeek v3.1',
     description: '深入分析流動性參數與改善方案',
