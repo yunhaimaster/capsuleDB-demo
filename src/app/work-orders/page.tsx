@@ -94,7 +94,7 @@ export default function WorkOrdersPage() {
   const selectedOrder = orders.find(order => order.id === selectedOrderId)
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
+    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">
@@ -123,7 +123,7 @@ export default function WorkOrdersPage() {
               <Card className="liquid-glass-card liquid-glass-card-elevated mb-6">
                 <div className="liquid-glass-content">
                   <div className="flex items-center space-x-3 mb-6">
-                    <div className="icon-container icon-container-purple">
+                    <div className="icon-container icon-container-rose">
                       <FileText className="h-5 w-5 text-white" />
                     </div>
                     <h2 className="text-lg font-semibold text-gray-800">選擇訂單</h2>

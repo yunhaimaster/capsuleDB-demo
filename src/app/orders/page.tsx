@@ -28,7 +28,7 @@ export default function OrdersPage() {
   }, [])
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
+    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav />
       
@@ -37,7 +37,7 @@ export default function OrdersPage() {
         <section className="liquid-glass-card liquid-glass-card-refraction liquid-glass-card-interactive p-6 md:p-8">
           <div className="liquid-glass-content flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="icon-container icon-container-blue shadow-[0_12px_30px_rgba(42,150,209,0.25)]">
+              <div className="icon-container icon-container-cyan shadow-[0_12px_30px_rgba(34,211,238,0.25)]">
                 <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 0h6m-6 0a2 2 0 01-2-2v-2a2 2 0 012-2h6a2 2 0 012 2v2a2 2 0 01-2 2m-1-12a3 3 0 01-6 0m6 0a3 3 0 10-6 0m6 0h3m-9 0H6" />
                 </svg>

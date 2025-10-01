@@ -154,7 +154,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
+    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
       {/* Liquid Glass Navigation */}
         <LiquidGlassNav />
 
@@ -218,7 +218,7 @@ export default function HomePage() {
           <div className="liquid-glass-content">
             <div className="mb-4">
               <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center mb-2">
-                <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
+                <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-cyan-600" />
                 最近生產紀錄
               </h3>
               <p className="text-xs sm:text-sm md:text-sm opacity-80">
@@ -270,11 +270,11 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
-              <h3 className="text-lg md:text-lg font-semibold text-blue-800 flex items-center mb-2">
+              <h3 className="text-lg md:text-lg font-semibold text-emerald-800 flex items-center mb-2">
                 <span className="mr-2">📚</span>
                 參考資料下載
               </h3>
-              <p className="text-sm md:text-sm text-blue-600 opacity-80">
+              <p className="text-sm md:text-sm text-emerald-600 opacity-80">
                 行業相關培訓資料和風險管控指南
               </p>
             </div>
@@ -283,14 +283,14 @@ export default function HomePage() {
               <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
                 <div className="liquid-glass-content flex h-full flex-col">
                   <div className="flex items-start gap-4">
-                    <div className="icon-container icon-container-blue">
+                    <div className="icon-container icon-container-indigo">
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2">
                       <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
                         保健品行業常見生產風險原料清單
                       </h4>
-                      <p className="text-sm md:text-sm text-blue-600/90">
+                      <p className="text-sm md:text-sm text-indigo-600/90">
                         行業風險管控參考資料
                       </p>
                     </div>
@@ -317,14 +317,14 @@ export default function HomePage() {
               <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
                 <div className="liquid-glass-content flex h-full flex-col">
                   <div className="flex items-start gap-4">
-                    <div className="icon-container icon-container-green">
+                    <div className="icon-container icon-container-teal">
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2">
                       <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
                         膠囊生產培訓手冊
                       </h4>
-                      <p className="text-sm md:text-sm text-emerald-600/90">
+                      <p className="text-sm md:text-sm text-teal-600/90">
                         香港版修訂版
                       </p>
                     </div>
@@ -367,14 +367,14 @@ export default function HomePage() {
           <Link href="/ai-recipe-generator">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-blue mx-auto mb-4">
+                <div className="icon-container icon-container-violet mx-auto mb-4">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   使用人工智能技術，根據目標功效自動生成專業膠囊配方
                 </p>
-                <div className="inline-flex items-center text-blue-600 text-sm font-medium">
+                <div className="inline-flex items-center text-violet-600 text-sm font-medium">
                   開始使用 →
                 </div>
               </div>
@@ -403,14 +403,14 @@ export default function HomePage() {
           <Link href="/work-orders">
             <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-purple mx-auto mb-4">
+                <div className="icon-container icon-container-rose mx-auto mb-4">
                   <ClipboardList className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">工作單生成</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   自動生成符合 ISO 標準的生產工作單和質量控制文件
                 </p>
-                <div className="inline-flex items-center text-purple-600 text-sm font-medium">
+                <div className="inline-flex items-center text-rose-600 text-sm font-medium">
                   生成工作單 →
                 </div>
               </div>

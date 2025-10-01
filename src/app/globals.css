@@ -110,6 +110,34 @@
   background: linear-gradient(145deg, rgba(244, 162, 97, 0.9), rgba(224, 118, 54, 0.85));
 }
 
+.icon-container-pink {
+  background: linear-gradient(145deg, rgba(236, 72, 153, 0.9), rgba(219, 39, 119, 0.85));
+}
+
+.icon-container-indigo {
+  background: linear-gradient(145deg, rgba(99, 102, 241, 0.9), rgba(79, 70, 229, 0.85));
+}
+
+.icon-container-teal {
+  background: linear-gradient(145deg, rgba(20, 184, 166, 0.9), rgba(13, 148, 136, 0.85));
+}
+
+.icon-container-cyan {
+  background: linear-gradient(145deg, rgba(34, 211, 238, 0.9), rgba(6, 182, 212, 0.85));
+}
+
+.icon-container-rose {
+  background: linear-gradient(145deg, rgba(251, 113, 133, 0.9), rgba(244, 63, 94, 0.85));
+}
+
+.icon-container-lime {
+  background: linear-gradient(145deg, rgba(163, 230, 53, 0.9), rgba(132, 204, 22, 0.85));
+}
+
+.icon-container-violet {
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.9), rgba(124, 58, 237, 0.85));
+}
+
 @media (min-width: 640px) {
   .page-content-spacing {
     padding-top: 6rem; /* pt-24 for sm and up */
@@ -171,14 +199,14 @@
 .animated-gradient-bg-visible {
   background: linear-gradient(
     45deg,
-    rgba(42, 88, 140, 0.3) 0%,
-    rgba(68, 186, 198, 0.3) 25%,
-    rgba(132, 157, 188, 0.3) 50%,
-    rgba(68, 186, 198, 0.3) 75%,
-    rgba(42, 88, 140, 0.3) 100%
+    rgba(42, 88, 140, 0.6) 0%,
+    rgba(68, 186, 198, 0.6) 25%,
+    rgba(132, 157, 188, 0.6) 50%,
+    rgba(68, 186, 198, 0.6) 75%,
+    rgba(42, 88, 140, 0.6) 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 8s ease-in-out infinite;
+  animation: gradientShift 6s ease-in-out infinite;
 }
 
 .animated-gradient-bg-subtle {

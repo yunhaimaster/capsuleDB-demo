@@ -138,7 +138,7 @@ export default function AIRecipeGeneratorPage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
+    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">
@@ -161,7 +161,7 @@ export default function AIRecipeGeneratorPage() {
           <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
             <div className="liquid-glass-content">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="icon-container icon-container-blue">
+                <div className="icon-container icon-container-violet">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
                 <h2 className="text-lg font-semibold text-gray-800">代工配方需求</h2>

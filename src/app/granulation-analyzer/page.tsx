@@ -292,7 +292,7 @@ export default function GranulationAnalyzerPage() {
   }
 
   return (
-    <div className="min-h-screen brand-logo-bg-animation flex flex-col">
+    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
       <LiquidGlassNav />
       
       <main className="flex-1 px-4 md:px-6 lg:px-8 py-6 md:py-8">
@@ -300,7 +300,7 @@ export default function GranulationAnalyzerPage() {
           {/* 頁面標題 */}
           <div className="text-center space-y-4">
             <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-white/70 border border-white/60 text-[--brand-neutral] text-sm">
-              <Brain className="h-5 w-5 text-purple-600" />
+              <Brain className="h-5 w-5 text-emerald-600" />
               <span className="font-medium tracking-wide">製粒必要性分析工具</span>
             </div>
             <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
