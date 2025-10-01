@@ -181,13 +181,14 @@ const Card = React.forwardRef<
         onTouchEnd?.(event)
       }}
       className={cn(
-        "rounded-2xl border border-white/50 bg-white/60 text-[--brand-neutral] shadow-[0_24px_48px_rgba(24,66,96,0.08)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_32px_60px_rgba(24,66,96,0.12)]",
+        "rounded-2xl border border-white/50 bg-white/60 text-[--brand-neutral] shadow-[0_24px_48px_rgba(24,66,96,0.08)] backdrop-blur-xl",
         "relative overflow-hidden touch-glow-surface",
         className
       )}
       {...props}
     >
       <span className="liquid-glass-caustic" aria-hidden="true" />
+      <span className="liquid-glass-ripple" aria-hidden="true" />
       {children}
     </div>
   )

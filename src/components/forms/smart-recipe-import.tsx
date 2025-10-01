@@ -215,7 +215,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
         
         <div className="space-y-6">
           {/* 模式選擇 */}
-          <Card className="card-subtle-3d glass-card-subtle">
+          <Card className="liquid-glass-card card-subtle-3d glass-card-subtle">
             <CardHeader>
               <CardTitle className="text-lg">選擇導入方式</CardTitle>
             </CardHeader>
@@ -243,7 +243,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
           {/* 文字輸入區域 */}
           {importMode === 'text' && (
-            <Card className="card-subtle-3d glass-card-subtle">
+            <Card className="liquid-glass-card card-subtle-3d glass-card-subtle">
               <CardHeader>
                 <CardTitle className="text-lg">輸入配方文字</CardTitle>
               </CardHeader>
@@ -285,7 +285,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
           {/* 圖片上傳區域 */}
           {importMode === 'image' && (
-            <Card className="card-subtle-3d glass-card-subtle">
+            <Card className="liquid-glass-card card-subtle-3d glass-card-subtle">
               <CardHeader>
                 <CardTitle className="text-lg">上傳配方圖片</CardTitle>
               </CardHeader>
@@ -379,7 +379,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
           {/* 解析中狀態 */}
           {isParsing && (
-            <Card className="glass-card-subtle">
+            <Card className="liquid-glass-card glass-card-subtle">
               <CardHeader>
                 <div className="skeleton skeleton-title"></div>
               </CardHeader>
@@ -396,11 +396,11 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
           {/* 解析結果 */}
           {parsedIngredients.length > 0 && !isParsing && (
-            <Card>
+            <Card className="liquid-glass-card">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <CardTitle className="text-lg">解析結果</CardTitle>
+                    <CardTitle className="text-lg">導入結果</CardTitle>
                     <AIPoweredBadge variant="minimal" />
                   </div>
                   <div className="flex items-center gap-2">
