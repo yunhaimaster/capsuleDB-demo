@@ -1,16 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
-import { ProductionOrderForm } from '@/components/forms/production-order-form'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
-import { formatNumber } from '@/lib/utils'
+import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw, CircleOff, StopCircle, Clock, TimerReset } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 interface GranulationAnalysis {
@@ -18,8 +16,10 @@ interface GranulationAnalysis {
   modelId: string
   content: string
   timestamp: string
-  status: 'loading' | 'success' | 'error'
+  status: 'loading' | 'success' | 'error' | 'cancelled'
   error?: string
+  startedAt?: number
+  finishedAt?: number
 }
 
 interface Ingredient {
@@ -34,11 +34,19 @@ export default function GranulationAnalyzerPage() {
   ])
   const [analyses, setAnalyses] = useState<GranulationAnalysis[]>([])
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisStartTime, setAnalysisStartTime] = useState<number | null>(null)
+  const [shouldCancelPending, setShouldCancelPending] = useState(false)
+  const [activeStreamingModels, setActiveStreamingModels] = useState<string[]>([])
+  const [progressMap, setProgressMap] = useState<Record<string, { tokens: number; lastUpdated: number }>>({})
+
+  // 儲存進行中請求的 AbortController
+  const abortControllersRef = useRef<Record<string, AbortController>>({})
+  const streamingBuffersRef = useRef<Record<string, string>>({})
 
   const models = [
-    { name: 'xAI Grok 4 Fast', id: 'x-ai/grok-4-fast' },
-    { name: 'OpenAI GPT-4.1 Mini', id: 'openai/gpt-4.1-mini' },
-    { name: 'DeepSeek v3.1', id: 'deepseek/deepseek-chat-v3.1' }
+    { name: 'xAI Grok 4 Fast', id: 'x-ai/grok-4-fast', accentClass: 'badge-grok', symbol: '⚡' },
+    { name: 'OpenAI GPT-4.1 Mini', id: 'openai/gpt-4.1-mini', accentClass: 'badge-gpt', symbol: '◎' },
+    { name: 'DeepSeek v3.1', id: 'deepseek/deepseek-chat-v3.1', accentClass: 'badge-deepseek', symbol: '∆' }
   ]
 
   const handleSmartImport = (importedIngredients: any[]) => {
@@ -68,6 +76,10 @@ export default function GranulationAnalyzerPage() {
 
     setIsAnalyzing(true)
     setAnalyses([])
+    setShouldCancelPending(false)
+    setActiveStreamingModels([])
+    setProgressMap({})
+    setAnalysisStartTime(Date.now())
 
     // 初始化三個分析
     const initialAnalyses: GranulationAnalysis[] = models.map(model => ({
@@ -75,15 +87,10 @@ export default function GranulationAnalyzerPage() {
       modelId: model.id,
       content: '',
       timestamp: new Date().toISOString(),
-      status: 'loading'
+      status: 'loading',
+      startedAt: Date.now(),
     }))
     setAnalyses(initialAnalyses)
-
-    // 構建配方文字
-    const recipeText = ingredients
-      .filter(ing => ing.materialName)
-      .map(ing => `${ing.materialName}: ${formatNumber(ing.unitContentMg)}mg`)
-      .join('\n')
 
     // 調用 API 進行三模型分析
     try {
@@ -111,7 +118,9 @@ export default function GranulationAnalyzerPage() {
           content: result.response || '',
           status: result.error ? 'error' : 'success',
           error: result.error || undefined,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          startedAt: initialAnalyses[index].startedAt,
+          finishedAt: Date.now()
         })))
       } else {
         throw new Error(data.error || '分析失敗')
@@ -135,6 +144,10 @@ export default function GranulationAnalyzerPage() {
 
   const clearAnalysis = () => {
     setAnalyses([])
+    setAnalysisStartTime(null)
+    setActiveStreamingModels([])
+    setProgressMap({})
+    abortAllRequests()
   }
 
   const retryAnalysis = async (modelIndex: number) => {
@@ -295,23 +308,24 @@ export default function GranulationAnalyzerPage() {
     <div className="min-h-screen logo-bg-animation flex flex-col">
       <LiquidGlassNav />
       
-      <main className="flex-1 pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
+      <main className="flex-1">
+        <div className="pt-24 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined pb-8">
           {/* 頁面標題 */}
-          <div className="text-center space-y-4 mt-16">
-            <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700 text-sm">
-              <Brain className="h-4 w-4" />
-              <span className="font-medium tracking-wide">AI 輔助工具</span>
+          <div className="text-center mb-6 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-300/40 text-xs font-medium text-blue-700">
+              <span className="h-2 w-2 rounded-full bg-blue-500" />
+              AI 製粒工具
             </div>
             <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
               多模型製粒分析
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto text-sm">
+            <p className="text-sm md:text-sm text-gray-600 max-w-2xl mx-auto">
               使用三個不同的 AI 模型同時分析配方是否需要製粒，提供多角度專業見解
             </p>
           </div>
-
+          
           {/* 配方輸入區域 */}
-          <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
+          <Card className="liquid-glass-card liquid-glass-card-elevated">
             <div className="liquid-glass-content">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="icon-container icon-container-emerald">
@@ -504,7 +518,8 @@ export default function GranulationAnalyzerPage() {
                 </div>
               </div>
             </Card>
-          )}
+        )}
+        </div>
       </main>
 
       <LiquidGlassFooter />
