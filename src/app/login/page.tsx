@@ -53,10 +53,10 @@ export default function LoginPage() {
               <span className="text-[11px] text-gray-500">Easy Health Capsule Management</span>
             </div>
             <div className="space-y-3">
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[--brand-neutral]">
+              <h1 className="text-2xl sm:text-2xl font-semibold tracking-tight text-[--brand-neutral]">
                 登入膠囊配方管理系統
               </h1>
-              <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed max-w-md md:pr-10">
+              <p className="text-sm sm:text-sm text-gray-600 leading-relaxed max-w-md md:pr-10">
                 使用授權登入碼存取專屬控制台，集中管理配方、訂單與資料庫。請保持登入資訊安全並遵守操作指南。
               </p>
             </div>

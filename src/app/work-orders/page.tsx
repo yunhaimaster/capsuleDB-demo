@@ -105,10 +105,10 @@ export default function WorkOrdersPage() {
               <span className="h-2 w-2 rounded-full bg-purple-500" />
               工作單專區
             </div>
-            <h1 className="text-2xl md:text-[28px] font-semibold text-gray-800">
+            <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
               工作單生成
             </h1>
-            <p className="text-sm md:text-[15px] text-gray-600">
+            <p className="text-sm md:text-sm text-gray-600">
               一鍵生成符合品質要求的工作單、包裝與批次文件
             </p>
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-medium border border-amber-200">
@@ -126,7 +126,7 @@ export default function WorkOrdersPage() {
                     <div className="icon-container icon-container-purple">
                       <FileText className="h-5 w-5 text-white" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800">選擇訂單</h2>
+                    <h2 className="text-lg font-semibold text-gray-800">選擇訂單</h2>
                   </div>
 
                   <div className="space-y-4">
@@ -210,7 +210,7 @@ export default function WorkOrdersPage() {
               {/* 功能說明 */}
               <Card className="liquid-glass-card liquid-glass-card-elevated">
                 <div className="liquid-glass-content">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">功能說明</h3>
+                  <h3 className="text-base font-semibold text-gray-800 mb-4">功能說明</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex items-start space-x-2">
                       <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
@@ -283,7 +283,7 @@ export default function WorkOrdersPage() {
                         <div className="icon-container icon-container-green">
                           <FileText className="h-5 w-5 text-white" />
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-800">生成的工作單</h2>
+                        <h2 className="text-lg font-semibold text-gray-800">生成的工作單</h2>
                       </div>
                       <div className="flex space-x-2">
                         <Button
@@ -341,7 +341,7 @@ export default function WorkOrdersPage() {
                       <div className="icon-container icon-container-gray mx-auto mb-4">
                         <FileText className="h-8 w-8 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      <h3 className="text-base font-semibold text-gray-800 mb-2">
                         生成 ISO 工作單
                       </h3>
                       <p className="text-gray-600 mb-6">

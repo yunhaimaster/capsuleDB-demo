@@ -10,10 +10,24 @@ import Link from 'next/link'
 export default function HistoryPage() {
   const versionHistory = [
     {
-      version: 'v2.1.0',
-      date: '2025年9月30日',
+      version: 'v2.2.0',
+      date: '2025年10月1日',
       type: '最新版本',
       typeColor: 'bg-green-100 text-green-800 border-green-200',
+      features: [
+        '全站字體大小優化，桌面端閱讀體驗更舒適',
+        '新增製粒分析工具，支援三模型對比分析',
+        '智能配方導入功能增強，支援圖片識別',
+        '訂單 AI 助手功能優化，專業分析更精準',
+        '各頁面字體響應式調整，移動端保持良好體驗',
+        '用戶界面細節優化，提升整體使用感受'
+      ]
+    },
+    {
+      version: 'v2.1.0',
+      date: '2025年9月30日',
+      type: '功能更新',
+      typeColor: 'bg-blue-100 text-blue-800 border-blue-200',
       features: [
         'AI 助手 Modal 玻璃化改版，新增手機折疊資訊晶片',
         'PDF 下載區改用 Liquid Glass 卡片，桌面排列一致',
@@ -184,11 +198,11 @@ export default function HistoryPage() {
                 返回首頁
               </Button>
             </Link>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">
+            <h1 className="text-2xl sm:text-3xl md:text-2xl font-bold text-gray-800">
               版本更新歷史
             </h1>
           </div>
-          <p className="text-gray-600 text-sm sm:text-base">
+          <p className="text-gray-600 text-sm sm:text-sm">
             Easy Health 膠囊管理系統的完整更新記錄
           </p>
         </div>
@@ -204,7 +218,7 @@ export default function HistoryPage() {
                       <Tag className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-800">
+                      <h3 className="text-lg font-semibold text-gray-800">
                         {version.version}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">

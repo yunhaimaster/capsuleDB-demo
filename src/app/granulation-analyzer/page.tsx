@@ -303,10 +303,10 @@ export default function GranulationAnalyzerPage() {
               <Brain className="h-5 w-5 text-purple-600" />
               <span className="font-medium tracking-wide">製粒必要性分析工具</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-semibold text-gray-800">
+            <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
               多模型製粒分析
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto text-sm">
               使用三個不同的 AI 模型同時分析配方是否需要製粒，提供多角度專業見解
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function GranulationAnalyzerPage() {
           {/* 配方輸入區域 */}
           <Card className="liquid-glass-card liquid-glass-card-elevated">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
                 <Brain className="h-5 w-5 text-purple-600" />
                 配方輸入
               </CardTitle>
@@ -418,7 +418,7 @@ export default function GranulationAnalyzerPage() {
           {analyses.length > 0 && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-800">分析結果</h2>
+                <h2 className="text-lg font-semibold text-gray-800">分析結果</h2>
                 <Button
                   variant="outline"
                   size="sm"
@@ -435,7 +435,7 @@ export default function GranulationAnalyzerPage() {
                   <Card key={index} className="liquid-glass-card liquid-glass-card-elevated">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">{analysis.model}</CardTitle>
+                        <CardTitle className="text-base">{analysis.model}</CardTitle>
                         <div className="flex items-center gap-2">
                           {getStatusIcon(analysis.status)}
                           <Badge className={getStatusColor(analysis.status)}>

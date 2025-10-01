@@ -43,8 +43,8 @@ export default function OrdersPage() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg md:text-xl font-semibold text-[--brand-neutral] tracking-tight">生產訂單管理</h1>
-                <p className="text-xs md:text-sm text-gray-600">掌握所有客戶訂單狀態、搜尋篩選與匯出報表</p>
+                <h1 className="text-lg md:text-lg font-semibold text-[--brand-neutral] tracking-tight">生產訂單管理</h1>
+                <p className="text-xs md:text-xs text-gray-600">掌握所有客戶訂單狀態、搜尋篩選與匯出報表</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-3 items-center">
@@ -53,7 +53,7 @@ export default function OrdersPage() {
                 <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">資料匯出</span>
               </div>
               <Link href="/orders/new">
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
                   + 新建訂單
                 </button>
               </Link>

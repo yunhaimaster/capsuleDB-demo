@@ -439,22 +439,22 @@ export default function HomePage() {
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-amber-800">最新上線重點</h4>
-                    <span className="text-[11px] text-amber-600">更新：2025/09/30</span>
+                    <span className="text-[11px] text-amber-600">更新：2025/10/01</span>
                   </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 對話式 AI 助手閱讀區重整，長篇回覆更易閱讀</li>
-                    <li>• 首頁下載中心與訂單清單排版優化，資訊更聚焦</li>
-                    <li>• 導航與登入體驗統一，登入／登出狀態一目了然</li>
-                    <li>• 版本頁整合更新紀錄，快速掌握最新改動</li>
+                    <li>• 全站字體大小優化，桌面端閱讀更舒適</li>
+                    <li>• 製粒分析工具新增，三模型對比專業建議</li>
+                    <li>• 智能配方導入支援圖片識別，操作更便捷</li>
+                    <li>• 訂單 AI 助手功能增強，專業分析更精準</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                   <h4 className="font-medium text-amber-800 mb-2">日常可用功能</h4>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 建立、複製或匯入膠囊配方，保留完整批次資料</li>
-                    <li>• 追蹤訂單進度與原料明細，支援搜尋與匯出報表</li>
-                    <li>• 下載常用培訓與風險文件，快速交付給團隊</li>
-                    <li>• 桌面與手機皆可操作，維持品牌一致的操作體驗</li>
+                    <li>• 訂單管理：建立、編輯、追蹤生產訂單，查看詳細配方資訊</li>
+                    <li>• 智能配方：AI 自動推薦原料配比，支援文字和圖片導入</li>
+                    <li>• 專業分析：製粒必要性、填充可行性、合規性檢查等工具</li>
+                    <li>• 資料下載：培訓手冊、風險清單等常用文件隨時取用</li>
                   </ul>
                 </div>
                 <div className="bg-yellow-50 p-3 md:p-4 rounded-xl border border-yellow-200">
@@ -486,11 +486,23 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.1.0 - 2025年9月30日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.0 - 2025年10月1日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>更舒適的 AI 對話體驗，可快速複製與重試回答</li>
+                    <li>全站字體大小優化，桌面端閱讀體驗更舒適</li>
+                    <li>新增製粒分析工具，三模型對比提供專業建議</li>
+                    <li>智能配方導入支援圖片識別，操作更便捷</li>
+                    <li>訂單 AI 助手功能增強，分析更精準專業</li>
+                  </ul>
+                </div>
+                <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                    <h4 className="font-medium text-blue-800 text-sm sm:text-base">v2.1.0 - 2025年9月30日</h4>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full self-start sm:self-auto">功能更新</span>
+                  </div>
+                  <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
+                    <li>AI 對話體驗優化，可快速複製與重試回答</li>
                     <li>首頁下載中心重整，常用文件更容易找到</li>
                     <li>登入與導覽提示一致，切換帳號不迷路</li>
                     <li>訂單頁資訊卡色彩更新，狀態一眼辨識</li>

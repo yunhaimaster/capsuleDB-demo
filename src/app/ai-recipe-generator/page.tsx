@@ -149,10 +149,10 @@ export default function AIRecipeGeneratorPage() {
               <span className="h-2 w-2 rounded-full bg-blue-500" />
               AI 配方工具
             </div>
-            <h1 className="text-2xl md:text-[28px] font-semibold text-gray-800">
+            <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
               AI 配方生成器
             </h1>
-            <p className="text-sm md:text-[15px] text-gray-600 max-w-3xl mx-auto">
+            <p className="text-sm md:text-sm text-gray-600 max-w-3xl mx-auto">
               輸入產品目標即可獲得原料建議、功效描述與製程提示，快速建立符合客戶需求的配方草稿。
             </p>
           </div>
@@ -164,7 +164,7 @@ export default function AIRecipeGeneratorPage() {
                 <div className="icon-container icon-container-blue">
                   <Sparkles className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-800">代工配方需求</h2>
+                <h2 className="text-lg font-semibold text-gray-800">代工配方需求</h2>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -314,7 +314,7 @@ export default function AIRecipeGeneratorPage() {
                     <div className="icon-container icon-container-green">
                       <Sparkles className="h-5 w-5 text-white" />
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-800">生成的配方</h2>
+                    <h2 className="text-lg font-semibold text-gray-800">生成的配方</h2>
                   </div>
                   <div className="flex space-x-2">
                     <Button
@@ -383,7 +383,7 @@ export default function AIRecipeGeneratorPage() {
                   <div className="icon-container icon-container-blue">
                     <MessageCircle className="h-5 w-5 text-white" />
                   </div>
-                  <h2 className="text-xl font-semibold text-gray-800">AI 配方助手</h2>
+                  <h2 className="text-lg font-semibold text-gray-800">AI 配方助手</h2>
                 </div>
 
                 {/* 聊天消息 */}

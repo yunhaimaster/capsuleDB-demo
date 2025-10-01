@@ -20,8 +20,8 @@ export default function NewOrderPage() {
               </svg>
             </div>
             <div>
-              <h1 className="text-lg md:text-xl font-semibold text-[--brand-neutral]">建立新配方</h1>
-              <p className="text-xs md:text-sm text-gray-600">輸入客戶、配方與原料資料以建立批次紀錄</p>
+              <h1 className="text-lg md:text-lg font-semibold text-[--brand-neutral]">建立新配方</h1>
+              <p className="text-xs md:text-xs text-gray-600">輸入客戶、配方與原料資料以建立批次紀錄</p>
             </div>
           </div>
         </section>
