@@ -94,7 +94,7 @@ export default function WorkOrdersPage() {
   const selectedOrder = orders.find(order => order.id === selectedOrderId)
 
   return (
-    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
+    <div className="min-h-screen logo-bg-animation flex flex-col">
       <LiquidGlassNav />
       
       <div className="container mx-auto px-4 pt-28 pb-8">

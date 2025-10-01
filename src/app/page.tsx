@@ -154,7 +154,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
+    <div className="min-h-screen logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
         <LiquidGlassNav />
 

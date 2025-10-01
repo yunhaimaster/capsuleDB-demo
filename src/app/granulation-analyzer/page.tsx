@@ -292,7 +292,7 @@ export default function GranulationAnalyzerPage() {
   }
 
   return (
-    <div className="min-h-screen animated-gradient-bg-visible flex flex-col">
+    <div className="min-h-screen logo-bg-animation flex flex-col">
       <LiquidGlassNav />
       
       <main className="flex-1 px-4 md:px-6 lg:px-8 py-6 md:py-8">
