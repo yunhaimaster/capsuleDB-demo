@@ -129,7 +129,7 @@ ${recipe}
           )
         }
 
-        // 設置流式響應
+        // 設置流式響應 - 使用 SSE 格式
         const stream = new ReadableStream({
           async start(controller) {
             const reader = response.body?.getReader()
@@ -147,6 +147,8 @@ ${recipe}
                   if (line.startsWith('data: ')) {
                     const data = line.slice(6)
                     if (data === '[DONE]') {
+                      // 發送完成事件
+                      controller.enqueue(new TextEncoder().encode('event: done\ndata: {}\n\n'))
                       controller.close()
                       return
                     }
@@ -155,7 +157,8 @@ ${recipe}
                       const parsed = JSON.parse(data)
                       const content = parsed.choices?.[0]?.delta?.content
                       if (content) {
-                        controller.enqueue(new TextEncoder().encode(`data: ${JSON.stringify({ model: model.name, content })}\n\n`))
+                        // 使用 SSE 格式發送 delta 事件
+                        controller.enqueue(new TextEncoder().encode(`event: delta\ndata: ${JSON.stringify(content)}\n\n`))
                       }
                     } catch (e) {
                       // 忽略解析錯誤
@@ -164,6 +167,8 @@ ${recipe}
                 }
               }
             } catch (error) {
+              // 發送錯誤事件
+              controller.enqueue(new TextEncoder().encode(`event: error\ndata: ${JSON.stringify({ error: error.message })}\n\n`))
               controller.error(error)
             } finally {
               reader?.releaseLock()
@@ -173,7 +178,7 @@ ${recipe}
 
         return new Response(stream, {
           headers: {
-            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
           },

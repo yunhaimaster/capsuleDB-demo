@@ -11,8 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 interface GranulationAnalysis {
   model: string
@@ -167,8 +166,8 @@ export default function GranulationAnalyzerPage() {
 
       // 檢查是否是流式響應
       const contentType = response.headers.get('content-type')
-      if (contentType?.includes('text/plain')) {
-        // 流式響應處理
+      if (contentType?.includes('text/event-stream')) {
+        // 流式響應處理 - 使用與 Smart AI 相同的方法
         const reader = response.body?.getReader()
         const decoder = new TextDecoder()
         let buffer = ''
@@ -183,25 +182,44 @@ export default function GranulationAnalyzerPage() {
             buffer = lines.pop() || ''
 
             for (const line of lines) {
-              if (line.startsWith('data: ')) {
+              if (line.startsWith('event: delta') || line.startsWith('data: ')) {
                 try {
-                  const data = JSON.parse(line.slice(6))
-                  if (data.content) {
-                    // 逐步更新內容，實現打字機效果
-                    setAnalyses(prev => prev.map((analysis, i) => 
-                      i === modelIndex 
-                        ? {
-                            ...analysis,
-                            content: analysis.content + data.content,
-                            status: 'success' as const,
-                            timestamp: new Date().toISOString()
-                          }
-                        : analysis
-                    ))
+                  let data = ''
+                  if (line.startsWith('event: delta')) {
+                    // 找到對應的 data 行
+                    const dataIndex = lines.indexOf(line) + 1
+                    if (dataIndex < lines.length && lines[dataIndex].startsWith('data: ')) {
+                      data = lines[dataIndex].slice(6)
+                    }
+                  } else if (line.startsWith('data: ')) {
+                    data = line.slice(6)
+                  }
+
+                  if (data && data !== '{}') {
+                    const content = JSON.parse(data)
+                    if (typeof content === 'string') {
+                      // 逐步更新內容，實現打字機效果
+                      setAnalyses(prev => prev.map((analysis, i) => 
+                        i === modelIndex 
+                          ? {
+                              ...analysis,
+                              content: analysis.content + content,
+                              status: 'success' as const,
+                              timestamp: new Date().toISOString()
+                            }
+                          : analysis
+                      ))
+                    }
                   }
                 } catch (e) {
                   // 忽略解析錯誤
                 }
+              } else if (line.startsWith('event: done')) {
+                // 流式輸出完成
+                break
+              } else if (line.startsWith('event: error')) {
+                // 處理錯誤
+                throw new Error('流式輸出過程中發生錯誤')
               }
             }
           }
@@ -441,17 +459,11 @@ export default function GranulationAnalyzerPage() {
                       
                       {analysis.status === 'success' && (
                         <div className="space-y-3">
-                          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800 prose-table:text-sm prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:px-2 prose-th:py-1 prose-td:border prose-td:border-gray-300 prose-td:px-2 prose-td:py-1">
-                            <div className="text-sm leading-relaxed">
-                              <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                              >
-                                {analysis.content}
-                              </ReactMarkdown>
-                              {analysis.content && analysis.content.length > 0 && (
-                                <span className="inline-block w-2 h-4 bg-blue-500 ml-1 animate-pulse"></span>
-                              )}
-                            </div>
+                          <div className="text-sm leading-relaxed">
+                            <MarkdownRenderer content={analysis.content} />
+                            {analysis.content && analysis.content.length > 0 && (
+                              <span className="inline-block w-2 h-4 bg-blue-500 ml-1 animate-pulse"></span>
+                            )}
                           </div>
                           <p className="text-xs text-gray-500">
                             分析時間: {new Date(analysis.timestamp).toLocaleString()}
