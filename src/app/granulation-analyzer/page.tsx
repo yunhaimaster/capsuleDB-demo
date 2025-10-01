@@ -298,7 +298,7 @@ export default function GranulationAnalyzerPage() {
       <main className="flex-1 px-4 md:px-6 lg:px-8 py-6 md:py-8">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* 頁面標題 */}
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 mt-8">
             <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700 text-sm">
               <Brain className="h-4 w-4" />
               <span className="font-medium tracking-wide">AI 輔助工具</span>
