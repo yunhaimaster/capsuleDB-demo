@@ -329,7 +329,6 @@ export default function GranulationAnalyzerPage() {
                   </Badge>
                 </div>
                 
-                <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   {ingredients.map((ingredient, index) => (
                     <div key={index} className="flex gap-3 items-center p-4 bg-white rounded-lg border border-gray-200">
@@ -392,6 +391,7 @@ export default function GranulationAnalyzerPage() {
                   </button>
                 </div>
               </div>
+            </div>
           </Card>
 
           {/* 分析按鈕 */}
