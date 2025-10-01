@@ -43,6 +43,31 @@ export default function GranulationAnalyzerPage() {
   const abortControllersRef = useRef<Record<string, AbortController>>({})
   const streamingBuffersRef = useRef<Record<string, string>>({})
 
+  const registerAbortController = (key: string) => {
+    const controller = new AbortController()
+    abortControllersRef.current[key] = controller
+    return controller
+  }
+
+  const removeAbortController = (key: string) => {
+    const controller = abortControllersRef.current[key]
+    if (controller) {
+      delete abortControllersRef.current[key]
+    }
+  }
+
+  const abortAllRequests = () => {
+    Object.values(abortControllersRef.current).forEach((controller) => {
+      try {
+        controller.abort()
+      } catch (_err) {
+        // ignore abort errors
+      }
+    })
+    abortControllersRef.current = {}
+    streamingBuffersRef.current = {}
+  }
+
   const models = [
     { name: 'xAI Grok 4 Fast', id: 'x-ai/grok-4-fast', accentClass: 'badge-grok', symbol: '⚡' },
     { name: 'OpenAI GPT-4.1 Mini', id: 'openai/gpt-4.1-mini', accentClass: 'badge-gpt', symbol: '◎' },
@@ -161,6 +186,8 @@ export default function GranulationAnalyzerPage() {
         : analysis
     ))
 
+    const controller = registerAbortController(model.id)
+
     try {
       const response = await fetch('/api/ai/granulation-analyze', {
         method: 'POST',
@@ -171,6 +198,7 @@ export default function GranulationAnalyzerPage() {
           ingredients: ingredients.filter(ing => ing.materialName && ing.unitContentMg > 0),
           singleModel: model.id // 只調用單個模型
         }),
+        signal: controller.signal,
       })
 
       if (!response.ok) {
@@ -276,6 +304,8 @@ export default function GranulationAnalyzerPage() {
           : analysis
       ))
     }
+
+    removeAbortController(model.id)
   }
 
   const getStatusIcon = (status: string) => {
