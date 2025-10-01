@@ -821,7 +821,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 9999;
   background: var(--liquid-glass-nav-bg);
   backdrop-filter: blur(var(--liquid-glass-nav-blur)) saturate(var(--liquid-glass-nav-saturate));
   -webkit-backdrop-filter: blur(var(--liquid-glass-nav-blur)) saturate(var(--liquid-glass-nav-saturate));
@@ -937,6 +937,8 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 10000;
 }
 
 .liquid-glass-nav-link {
@@ -989,7 +991,7 @@
 }
 
 .liquid-glass-nav-mobile-toggle {
-  display: none;
+  display: flex;
   background: none;
   border: none;
   color: var(--liquid-glass-nav-text);
