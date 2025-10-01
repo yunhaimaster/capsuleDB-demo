@@ -170,8 +170,8 @@ export default function HomePage() {
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-indigo-700">新增配方</h3>
-                <p className="text-xs sm:text-sm md:text-base text-indigo-600">建立新記錄</p>
+                <h3 className="text-sm sm:text-base md:text-base font-semibold text-indigo-700">新增配方</h3>
+                <p className="text-xs sm:text-sm md:text-sm text-indigo-600">建立新記錄</p>
               </div>
             </div>
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
@@ -179,7 +179,7 @@ export default function HomePage() {
             </p>
             <div className="mt-auto">
               <Link href="/orders/new">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
                   開始建立
                 </Button>
               </Link>
@@ -194,8 +194,8 @@ export default function HomePage() {
                 <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-emerald-700">生產記錄</h3>
-                <p className="text-xs sm:text-sm md:text-base text-emerald-600">檢視管理</p>
+                <h3 className="text-sm sm:text-base md:text-base font-semibold text-emerald-700">生產記錄</h3>
+                <p className="text-xs sm:text-sm md:text-sm text-emerald-600">檢視管理</p>
               </div>
             </div>
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
@@ -203,7 +203,7 @@ export default function HomePage() {
             </p>
             <div className="mt-auto">
               <Link href="/orders">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base py-2 sm:py-2 md:py-3">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
                   查看記錄
                 </Button>
               </Link>
@@ -217,11 +217,11 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
-              <h3 className="text-base sm:text-lg md:text-xl font-semibold flex items-center mb-2">
+              <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center mb-2">
                 <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-blue-600" />
                 最近生產紀錄
               </h3>
-              <p className="text-xs sm:text-sm md:text-base opacity-80">
+              <p className="text-xs sm:text-sm md:text-sm opacity-80">
                 最新的生產訂單狀態
               </p>
             </div>
@@ -270,11 +270,11 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="mb-4">
-              <h3 className="text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
+              <h3 className="text-lg md:text-lg font-semibold text-blue-800 flex items-center mb-2">
                 <span className="mr-2">📚</span>
                 參考資料下載
               </h3>
-              <p className="text-sm md:text-base text-blue-600 opacity-80">
+              <p className="text-sm md:text-sm text-blue-600 opacity-80">
                 行業相關培訓資料和風險管控指南
               </p>
             </div>
@@ -287,10 +287,10 @@ export default function HomePage() {
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2">
-                      <h4 className="text-lg font-semibold text-[--brand-neutral] leading-tight">
+                      <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
                         保健品行業常見生產風險原料清單
                       </h4>
-                      <p className="text-sm md:text-base text-blue-600/90">
+                      <p className="text-sm md:text-sm text-blue-600/90">
                         行業風險管控參考資料
                       </p>
                     </div>
@@ -321,10 +321,10 @@ export default function HomePage() {
                       <FileText className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-2">
-                      <h4 className="text-lg font-semibold text-[--brand-neutral] leading-tight">
+                      <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
                         膠囊生產培訓手冊
                       </h4>
-                      <p className="text-sm md:text-base text-emerald-600/90">
+                      <p className="text-sm md:text-sm text-emerald-600/90">
                         香港版修訂版
                       </p>
                     </div>
@@ -354,10 +354,10 @@ export default function HomePage() {
       {/* 輔助工具區塊 */}
       <div className="mb-8">
         <div className="text-center mb-6 space-y-2">
-          <h2 className="text-xl md:text-[28px] font-semibold text-gray-800">
+          <h2 className="text-xl md:text-xl font-semibold text-gray-800">
             🛠️ 輔助工具
           </h2>
-          <p className="text-gray-600 text-sm md:text-[15px]">
+          <p className="text-gray-600 text-sm md:text-sm">
             提升工作效率的智能工具集
           </p>
         </div>
@@ -370,7 +370,7 @@ export default function HomePage() {
                 <div className="icon-container icon-container-blue mx-auto mb-4">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
+                <h3 className="text-base font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   使用人工智能技術，根據目標功效自動生成專業膠囊配方
                 </p>
@@ -388,7 +388,7 @@ export default function HomePage() {
                 <div className="icon-container icon-container-emerald mx-auto mb-4">
                   <FlaskConical className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">製粒分析工具</h3>
+                <h3 className="text-base font-semibold text-gray-800 mb-2">製粒分析工具</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   智能評估膠囊配方是否需要製粒，多模型專業建議
                 </p>
@@ -406,7 +406,7 @@ export default function HomePage() {
                 <div className="icon-container icon-container-purple mx-auto mb-4">
                   <ClipboardList className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">工作單生成</h3>
+                <h3 className="text-base font-semibold text-gray-800 mb-2">工作單生成</h3>
                 <p className="text-sm text-gray-600 mb-4">
                   自動生成符合 ISO 標準的生產工作單和質量控制文件
                 </p>
@@ -426,11 +426,11 @@ export default function HomePage() {
           <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
             <div className="liquid-glass-content">
               <div className="mb-4">
-                <h3 className="text-lg md:text-xl font-semibold text-amber-800 flex items-center mb-2">
+                <h3 className="text-lg md:text-lg font-semibold text-amber-800 flex items-center mb-2">
                   <span className="mr-2">📋</span>
                   功能介紹
                 </h3>
-                <p className="text-sm md:text-base text-amber-600 opacity-80">
+                <p className="text-sm md:text-sm text-amber-600 opacity-80">
                   系統功能說明與使用指南
                 </p>
               </div>
@@ -474,11 +474,11 @@ export default function HomePage() {
           <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
             <div className="liquid-glass-content">
               <div className="mb-4">
-                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-800 flex items-center mb-2">
+                <h3 className="text-base sm:text-lg md:text-lg font-semibold text-blue-800 flex items-center mb-2">
                   <span className="mr-2 text-sm sm:text-base">📝</span>
                   最新版本更新
                 </h3>
-                <p className="text-xs sm:text-sm md:text-base text-blue-600 opacity-80">
+                <p className="text-xs sm:text-sm md:text-sm text-blue-600 opacity-80">
                   系統功能更新與改進記錄
                 </p>
               </div>
