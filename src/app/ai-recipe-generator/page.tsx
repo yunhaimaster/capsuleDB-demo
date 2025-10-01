@@ -517,19 +517,6 @@ export default function AIRecipeGeneratorPage() {
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="enableReasoning"
-                    checked={formData.enableReasoning}
-                    onChange={(e) => setFormData({ ...formData, enableReasoning: e.target.checked })}
-                    className="rounded border-gray-300"
-                  />
-                  <label htmlFor="enableReasoning" className="text-sm text-gray-700">
-                    啟用深度思考模式（回應時間較長但質量更高）
-                  </label>
-                </div>
-
                 <Button
                   type="submit"
                   disabled={isGenerating || !formData.targetEffect}

@@ -211,6 +211,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
         "rounded-2xl border border-white/50 bg-white/60 text-[--brand-neutral] shadow-[0_24px_48px_rgba(24,66,96,0.08)] backdrop-blur-xl",
         "relative overflow-hidden touch-glow-surface",
         tone !== "default" && `liquid-glass-tone-${tone}`,
+        tone === "default" && !interactive && "liquid-glass-tone-neutral",
         interactive ? "liquid-glass-interactive" : "liquid-glass-static",
         className
       )}
