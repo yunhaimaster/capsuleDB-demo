@@ -98,9 +98,9 @@ const Card = React.forwardRef<
       return
     }
 
-    if (luminance >= 0.75) {
+    if (luminance >= 0.82) {
       target.dataset.glassTone = "light"
-    } else if (luminance <= 0.35) {
+    } else if (luminance <= 0.28) {
       target.dataset.glassTone = "dark"
     } else {
       target.dataset.glassTone = "neutral"
@@ -109,6 +109,9 @@ const Card = React.forwardRef<
 
   useEffect(() => {
     resetPointer()
+    if (localRef.current) {
+      localRef.current.dataset.glassTone = "neutral"
+    }
     detectBackgroundTone()
 
     const handleResize = () => detectBackgroundTone()
