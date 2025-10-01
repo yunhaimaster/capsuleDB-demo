@@ -170,17 +170,17 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
     }
   }, [detectBackgroundTone])
 
-  const handleMouseMove = (event: React.MouseEvent) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactive) updatePointer(event)
     onMouseMove?.(event)
   }
 
-  const handleMouseLeave = (event: React.MouseEvent) => {
+  const handleMouseLeave = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactive) resetPointer()
     onMouseLeave?.(event)
   }
 
-  const handleTouchMove = (event: React.TouchEvent) => {
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
     if (interactive) {
       updatePointer(event)
       if (localRef.current) {
@@ -190,7 +190,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
     onTouchMove?.(event)
   }
 
-  const handleTouchEnd = (event: React.TouchEvent) => {
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
     if (interactive) {
       resetPointer()
       if (localRef.current) {
