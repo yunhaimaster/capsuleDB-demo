@@ -705,28 +705,27 @@
 /* Hover Effects */
 .liquid-glass-card:hover,
 .liquid-glass-card.is-touching {
-  transform: translateY(-6px) scale(1.018);
-  background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(244,249,255,0.9) 100%);
-  backdrop-filter: blur(30px) saturate(220%);
-  border-color: rgba(255, 255, 255, 0.32);
-  filter: brightness(1.05);
+  transform: translateY(-4px) scale(1.01);
+  background: linear-gradient(160deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.68) 100%);
+  backdrop-filter: blur(30px) saturate(210%);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow: 
-    0 26px 72px rgba(18, 42, 64, 0.18),
-    0 10px 28px rgba(18, 42, 64, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+    0 18px 48px rgba(18, 42, 64, 0.12),
+    0 8px 20px rgba(18, 42, 64, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
+.liquid-glass-card:hover .liquid-glass-ripple::before,
+.liquid-glass-card.is-touching .liquid-glass-ripple::before,
+.liquid-glass-card:hover .liquid-glass-ripple::after,
+.liquid-glass-card.is-touching .liquid-glass-ripple::after,
+.liquid-glass-card:hover::after,
+.liquid-glass-card.is-touching::after,
 .liquid-glass-card:hover::before,
 .liquid-glass-card.is-touching::before {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.6) 20%,
-    rgba(255, 255, 255, 0.82) 50%,
-    rgba(255, 255, 255, 0.6) 80%,
-    transparent 100%
-  );
+  opacity: 0;
+  transform: none;
 }
 
 
@@ -753,13 +752,13 @@
 }
 
 .liquid-glass-card-brand:hover {
-  background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(244,249,255,0.9) 100%);
-  border-color: rgba(255, 255, 255, 0.32);
+  background: linear-gradient(160deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.68) 100%);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow: 
-    0 26px 72px rgba(18, 42, 64, 0.18),
-    0 10px 28px rgba(18, 42, 64, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+    0 18px 48px rgba(18, 42, 64, 0.12),
+    0 8px 20px rgba(18, 42, 64, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* Elevated Liquid Glass Card */
@@ -775,13 +774,13 @@
 }
 
 .liquid-glass-card-elevated:hover {
-  transform: translateY(-6px) scale(1.018);
-  background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(244,249,255,0.9) 100%);
+  transform: translateY(-4px) scale(1.01);
+  background: linear-gradient(160deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
   box-shadow:
-    0 26px 72px rgba(18, 42, 64, 0.18),
-    0 10px 28px rgba(18, 42, 64, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+    0 24px 68px rgba(24, 66, 96, 0.18),
+    0 12px 32px rgba(24, 66, 96, 0.12),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(24, 66, 96, 0.1);
 }
 
 
