@@ -55,6 +55,7 @@ export function LinkedFilter({
   const [linkedProductOptions, setLinkedProductOptions] = useState<FilterOption[]>([])
   const [linkedIngredientOptions, setLinkedIngredientOptions] = useState<FilterOption[]>([])
   const [linkedCapsuleOptions, setLinkedCapsuleOptions] = useState<FilterOption[]>([])
+  const [linkedCustomerOptions, setLinkedCustomerOptions] = useState<FilterOption[]>([])
 
   // 獲取聯動選項
   const fetchLinkedOptions = useCallback(async () => {
@@ -63,10 +64,12 @@ export function LinkedFilter({
       if (filters.customerName) params.append('customerName', filters.customerName)
       if (filters.productName) params.append('productName', filters.productName)
       if (filters.ingredientName) params.append('ingredientName', filters.ingredientName)
+      if (filters.capsuleType) params.append('capsuleType', filters.capsuleType)
 
       const response = await fetch(`/api/orders/options?${params}`)
       if (response.ok) {
         const data = await response.json()
+        setLinkedCustomerOptions(data.customers.map((item: string) => ({ value: item, label: item })))
         setLinkedProductOptions(data.products.map((item: string) => ({ value: item, label: item })))
         setLinkedIngredientOptions(data.ingredients.map((item: string) => ({ value: item, label: item })))
         setLinkedCapsuleOptions(data.capsuleTypes.map((item: string) => ({ value: item, label: item })))
@@ -74,26 +77,32 @@ export function LinkedFilter({
     } catch (error) {
       console.error('Error fetching linked options:', error)
     }
-  }, [filters.customerName, filters.productName, filters.ingredientName])
+  }, [filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType])
 
   // 當篩選條件改變時，獲取聯動選項
   useEffect(() => {
     fetchLinkedOptions()
   }, [fetchLinkedOptions])
 
-  // 根據客戶篩選產品選項
+  // 根據現有條件篩選客戶選項
+  const filteredCustomerOptions = useMemo(() => {
+    if (!filters.productName && !filters.ingredientName && !filters.capsuleType) return customerOptions
+    return linkedCustomerOptions.length > 0 ? linkedCustomerOptions : customerOptions
+  }, [filters.productName, filters.ingredientName, filters.capsuleType, customerOptions, linkedCustomerOptions])
+
+  // 根據客戶等條件篩選產品選項
   const filteredProductOptions = useMemo(() => {
-    if (!filters.customerName) return productOptions
+    if (!filters.customerName && !filters.ingredientName && !filters.capsuleType) return productOptions
     return linkedProductOptions.length > 0 ? linkedProductOptions : productOptions
-  }, [filters.customerName, productOptions, linkedProductOptions])
+  }, [filters.customerName, filters.ingredientName, filters.capsuleType, productOptions, linkedProductOptions])
 
-  // 根據客戶和產品篩選原料選項
+  // 根據當前條件篩選原料選項
   const filteredIngredientOptions = useMemo(() => {
-    if (!filters.customerName && !filters.productName) return ingredientOptions
+    if (!filters.customerName && !filters.productName && !filters.capsuleType) return ingredientOptions
     return linkedIngredientOptions.length > 0 ? linkedIngredientOptions : ingredientOptions
-  }, [filters.customerName, filters.productName, ingredientOptions, linkedIngredientOptions])
+  }, [filters.customerName, filters.productName, filters.capsuleType, ingredientOptions, linkedIngredientOptions])
 
-  // 根據客戶、產品和原料篩選膠囊選項
+  // 根據當前條件篩選膠囊選項
   const filteredCapsuleOptions = useMemo(() => {
     if (!filters.customerName && !filters.productName && !filters.ingredientName) return capsuleOptions
     return linkedCapsuleOptions.length > 0 ? linkedCapsuleOptions : capsuleOptions
@@ -172,10 +181,12 @@ export function LinkedFilter({
       if (newFilters.customerName) params.append('customerName', newFilters.customerName)
       if (newFilters.productName) params.append('productName', newFilters.productName)
       if (newFilters.ingredientName) params.append('ingredientName', newFilters.ingredientName)
+      if (newFilters.capsuleType) params.append('capsuleType', newFilters.capsuleType)
 
       const response = await fetch(`/api/orders/options?${params}`)
       if (response.ok) {
         const data = await response.json()
+        setLinkedCustomerOptions(data.customers.map((item: string) => ({ value: item, label: item })))
         setLinkedProductOptions(data.products.map((item: string) => ({ value: item, label: item })))
         setLinkedIngredientOptions(data.ingredients.map((item: string) => ({ value: item, label: item })))
         setLinkedCapsuleOptions(data.capsuleTypes.map((item: string) => ({ value: item, label: item })))
@@ -301,7 +312,7 @@ export function LinkedFilter({
             </button>
             <DropdownPortal
               field="customer"
-              options={customerOptions}
+              options={filteredCustomerOptions}
               onSelect={(value, label) => handleOptionSelect('customerName', value, label)}
             />
           </div>
