@@ -8,13 +8,7 @@ export default function NewOrderPage() {
   return (
     <div className="min-h-screen brand-logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
-      <LiquidGlassNav 
-        links={[
-          { href: '/', label: '首頁' },
-          { href: '/orders', label: '訂單' },
-          { href: '/orders/new', label: '新建' }
-        ]}
-      />
+      <LiquidGlassNav />
       
       {/* Main Content with padding for fixed nav */}
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
