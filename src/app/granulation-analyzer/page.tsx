@@ -68,6 +68,20 @@ const formatDuration = (startedAt?: number, finishedAt?: number) => {
   return `${seconds.toFixed(1)} 秒`
 }
 
+const STATUS_BADGE_CLASS: Record<AnalysisStatus, string> = {
+  idle: 'bg-slate-500/10 border border-slate-300/40 text-slate-600',
+  loading: 'bg-blue-500/15 border border-blue-300/40 text-blue-700',
+  success: 'bg-emerald-500/15 border border-emerald-300/40 text-emerald-700',
+  error: 'bg-red-500/15 border border-red-300/40 text-red-700'
+}
+
+const STATUS_LABEL: Record<AnalysisStatus, string> = {
+  idle: '待開始',
+  loading: '分析中',
+  success: '完成',
+  error: '錯誤'
+}
+
 export default function GranulationAnalyzerPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     { materialName: '', unitContentMg: 0, isCustomerProvided: true }
@@ -482,120 +496,129 @@ export default function GranulationAnalyzerPage() {
           {sortedAnalyses.length > 0 && (
             <Card className="liquid-glass-card liquid-glass-card-elevated">
               <div className="liquid-glass-content">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="icon-container icon-container-emerald">
-                    <Brain className="h-5 w-5 text-white" />
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="icon-container icon-container-emerald">
+                      <Brain className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold text-gray-800">多模型分析結果</h2>
+                      <p className="text-sm text-gray-500">對照三個模型的分析輸出，擷取最合適的建議。</p>
+                    </div>
                   </div>
-                  <h2 className="text-lg font-semibold text-gray-800">分析結果</h2>
-                </div>
-                <div className="space-y-6">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={clearAnalysis}
-                    className="flex items-center gap-2"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                    清除結果
-                  </Button>
+                  <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={clearAnalysis}
+                      className="flex items-center gap-2"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      清除結果
+                    </Button>
+                    {isAnyLoading && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          controllerRef.current?.abort()
+                          controllerRef.current = null
+                          setIsAnalyzing(false)
+                        }}
+                        className="flex items-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50"
+                      >
+                        <PauseCircle className="w-4 h-4" />
+                        停止等待
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                {sortedAnalyses.map((item) => (
-                  <Card key={item.config.id} className="liquid-glass-card liquid-glass-card-elevated h-full flex flex-col">
-                    <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                      <div className="flex items-center gap-2">
-                        <Badge className={`text-xs ${item.config.badgeClass}`}>
-                          {item.config.name}
-                        </Badge>
-                        <p className="text-sm text-gray-600">{item.config.description}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {item.analysis.status === 'loading' && (
-                          <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                        )}
-                        {item.analysis.status === 'success' && (
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                        )}
-                        {item.analysis.status === 'error' && (
-                          <AlertCircle className="h-4 w-4 text-red-500" />
-                        )}
-                        <Badge className={getStatusColor(item.analysis.status)}>
-                          {item.analysis.status === 'loading' ? '分析中' : 
-                           item.analysis.status === 'success' ? '完成' : '錯誤'}
-                        </Badge>
-                      </div>
-                    </div>
-                    <CardContent className="flex-1 p-4">
-                      {item.analysis.status === 'loading' && (
-                        <div className="space-y-3">
-                          <div className="animate-pulse">
-                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                            <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                {globalError && (
+                  <Alert variant="destructive" className="mb-6">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertDescription>{globalError}</AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="space-y-6">
+                  {sortedAnalyses.map(({ config, analysis }) => {
+                    const duration = formatDuration(analysis.startedAt, analysis.finishedAt)
+                    return (
+                      <Card key={config.id} className="liquid-glass-card liquid-glass-card-elevated">
+                        <div className="liquid-glass-content">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                            <div className="flex items-start sm:items-center gap-3">
+                              <div className={`icon-container ${config.iconClass}`}>
+                                <Sparkles className="h-5 w-5 text-white" />
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-3 mb-1">
+                                  <h3 className="text-base font-semibold text-gray-800">{config.name}</h3>
+                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_BADGE_CLASS[analysis.status]}`}>
+                                    {STATUS_LABEL[analysis.status]}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-500">{config.description}</p>
+                              </div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                              {duration && (
+                                <span className="inline-flex items-center gap-1 text-xs text-gray-500 bg-white/70 px-2.5 py-1 rounded-full">
+                                  <Clock className="h-3.5 w-3.5" />
+                                  {duration}
+                                </span>
+                              )}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleCopy(config.id)}
+                                disabled={!analysis.content}
+                                className="flex items-center gap-1"
+                              >
+                                <Copy className="h-4 w-4" />
+                                複製
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleModelRetry(config.id)}
+                                disabled={analysis.status === 'loading'}
+                                className="flex items-center gap-1"
+                              >
+                                <Repeat2 className="h-4 w-4" />
+                                重試
+                              </Button>
+                            </div>
                           </div>
-                          <p className="text-sm text-gray-500">AI 正在分析中...</p>
+                          {analysis.status === 'error' ? (
+                            <div className="flex items-start gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-700">
+                              <AlertCircle className="h-5 w-5" />
+                              <div className="text-sm">
+                                <p className="font-medium">分析失敗</p>
+                                <p className="text-xs text-red-600">{analysis.error || '請稍後再試。'}</p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="relative">
+                              <div className="prose max-w-none">
+                                {analysis.content ? (
+                                  <MarkdownRenderer content={analysis.content} />
+                                ) : hasRequested ? (
+                                  <p className="text-sm text-gray-500">模型已啟動，正在生成分析內容...</p>
+                                ) : (
+                                  <p className="text-sm text-gray-400">按「開始製粒分析」後，此處會顯示模型的詳細結果。</p>
+                                )}
+                              </div>
+                              {analysis.status === 'loading' && (
+                                <span className="absolute bottom-0 left-0 w-2 h-5 bg-blue-500/70 animate-pulse"></span>
+                              )}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      
-                      {item.analysis.status === 'success' && (
-                        <div className="space-y-3">
-                          <div className="text-sm leading-relaxed">
-                            <MarkdownRenderer content={item.analysis.content} />
-                            {item.analysis.content && item.analysis.content.length > 0 && (
-                              <span className="inline-block w-2 h-4 bg-blue-500 ml-1 animate-pulse"></span>
-                            )}
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            分析時間: {new Date(item.analysis.timestamp || item.analysis.startedAt!).toLocaleString()}
-                          </p>
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleCopy(item.config.id)}
-                              className="text-gray-600 hover:text-gray-800 border-gray-300 hover:bg-gray-100"
-                            >
-                              <Copy className="h-4 w-4 mr-1" />
-                              複製結果
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleModelRetry(item.config.id)}
-                              className="text-red-600 border-red-300 hover:bg-red-50"
-                            >
-                              <Repeat2 className="h-4 w-4 mr-1" />
-                              重試分析
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {item.analysis.status === 'error' && (
-                        <div className="space-y-3">
-                          <Alert variant="destructive">
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>
-                              {item.analysis.error || '分析過程中發生錯誤'}
-                            </AlertDescription>
-                          </Alert>
-                          <div className="text-center">
-                            <Button
-                              onClick={() => handleModelRetry(item.config.id)}
-                              variant="outline"
-                              size="sm"
-                              className="text-red-600 border-red-300 hover:bg-red-50"
-                            >
-                              <Repeat2 className="h-4 w-4 mr-2" />
-                              重試分析
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
+                      </Card>
+                    )
+                  })}
                 </div>
               </div>
             </Card>
