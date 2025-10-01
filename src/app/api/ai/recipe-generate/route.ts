@@ -169,8 +169,7 @@ export async function POST(request: NextRequest) {
 
                   try {
                     const parsed = JSON.parse(dataPayload)
-                    const deltaRaw = parsed.choices?.[0]?.delta?.content
-                    const delta = typeof deltaRaw === 'string' ? deltaRaw.replace(/<br\s*\/?\s*>/gi, '\n') : undefined
+                    const delta = parsed.choices?.[0]?.delta?.content
                     if (delta) {
                       sendEvent('delta', { modelId: model.id, delta })
                     }

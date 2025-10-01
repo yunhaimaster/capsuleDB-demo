@@ -581,29 +581,37 @@ export default function AIRecipeGeneratorPage() {
 
           {/* 生成結果 */}
           <div className="space-y-6">
-            {sortedModelResponses.map(({ config, response }) => {
-              const timeText = formatDuration(response.startedAt, response.finishedAt)
-              const showCursor = response.status === 'loading'
+            {sortedModelResponses.map((model) => {
+              const timeText = formatDuration(model.response.startedAt, model.response.finishedAt)
+              const showCursor = model.response.status === 'loading'
 
               return (
-                <Card key={config.id} className="liquid-glass-card liquid-glass-card-elevated">
+                <Card
+                  key={model.config.id}
+                  interactive={false}
+                  tone={
+                    model.response.status === 'error'
+                      ? 'negative'
+                      : model.response.status === 'success'
+                        ? 'positive'
+                        : 'neutral'
+                  }
+                  className="liquid-glass-card liquid-glass-card-elevated"
+                >
                   <div className="liquid-glass-content">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-5 gap-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
                       <div className="flex items-start sm:items-center gap-3">
-                        <div className={`icon-container ${config.iconClass}`}>
+                        <div className={`icon-container ${model.config.iconClass}`}>
                           <Sparkles className="h-5 w-5 text-white" />
                         </div>
                         <div>
                           <div className="flex items-center gap-3 mb-1">
-                            <h2 className="text-lg font-semibold text-gray-800">{config.name}</h2>
-                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${config.badgeClass}`}>
-                              {response.status === 'loading' && '生成中'}
-                              {response.status === 'success' && '已完成'}
-                              {response.status === 'error' && '失敗'}
-                              {response.status === 'idle' && '等待啟動'}
+                            <h2 className="text-lg font-semibold text-gray-800">{model.config.name}</h2>
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_BADGE_CLASS[model.response.status]}`}>
+                              {STATUS_LABEL[model.response.status]}
                             </span>
                           </div>
-                          <p className="text-sm text-gray-500">{config.description}</p>
+                          <p className="text-sm text-gray-500">{model.config.description}</p>
                         </div>
                       </div>
 
@@ -617,8 +625,8 @@ export default function AIRecipeGeneratorPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleCopy(config.id)}
-                          disabled={!response.content}
+                          onClick={() => handleCopy(model.config.id)}
+                          disabled={!model.response.content}
                           className="flex items-center gap-1"
                         >
                           <Copy className="h-4 w-4" />
@@ -627,8 +635,8 @@ export default function AIRecipeGeneratorPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleModelRetry(config.id)}
-                          disabled={response.status === 'loading'}
+                          onClick={() => handleModelRetry(model.config.id)}
+                          disabled={model.response.status === 'loading'}
                           className="flex items-center gap-1"
                         >
                           <Repeat2 className="h-4 w-4" />
@@ -638,36 +646,37 @@ export default function AIRecipeGeneratorPage() {
                           <input
                             type="checkbox"
                             className="rounded border-gray-300"
-                            checked={!!reasoningEnabled[config.id]}
+                            checked={!!reasoningEnabled[model.config.id]}
                             onChange={(event) =>
                               setReasoningEnabled(prev => ({
                                 ...prev,
-                                [config.id]: event.target.checked
+                                [model.config.id]: event.target.checked
                               }))
                             }
+                            disabled={!MODEL_CONFIG.find(m => m.id === model.config.id)?.supportsReasoning}
                           />
                           深度思考
                         </label>
                       </div>
                     </div>
 
-                    {response.status === 'error' ? (
+                    {model.response.status === 'error' ? (
                       <div className="flex items-center gap-3 p-4 rounded-lg border border-red-200 bg-red-50 text-red-700">
                         <AlertCircle className="h-5 w-5" />
                         <div className="text-sm">
                           <p className="font-medium">生成失敗</p>
-                          <p className="text-xs text-red-600">{response.error || '請稍後重試。'}</p>
+                          <p className="text-xs text-red-600">{model.response.error || '請稍後再試。'}</p>
                         </div>
                       </div>
                     ) : (
                       <div className="relative">
                         <div className="prose max-w-none">
-                          {response.content ? (
-                            <MarkdownRenderer content={response.content} />
+                          {model.response.content ? (
+                            <MarkdownRenderer content={model.response.content} />
                           ) : hasRequested ? (
                             <p className="text-sm text-gray-500">模型已排隊，等待開始輸出...</p>
                           ) : (
-                            <p className="text-sm text-gray-400">按下「生成配方」後，此處會顯示 AI 回應。</p>
+                            <p className="text-sm text-gray-400">按「生成配方」後，此處會顯示 AI 回應。</p>
                           )}
                         </div>
                         {showCursor && (
@@ -676,7 +685,7 @@ export default function AIRecipeGeneratorPage() {
                       </div>
                     )}
 
-                    {response.status === 'success' && (
+                    {model.response.status === 'success' && (
                       <div className="mt-6">
                         <AIDisclaimer type="recipe" />
                       </div>

@@ -11,8 +11,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, AlertTriangle, CheckCircle } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
-const sanitizeModelContent = (content: string) => content.replace(/<br\s*\/?\s*>/gi, '\n')
-
 interface Ingredient {
   materialName: string
   unitContentMg: number
@@ -547,7 +545,7 @@ export default function GranulationAnalyzerPage() {
                   {sortedAnalyses.map(({ config, analysis }) => {
                     const duration = formatDuration(analysis.startedAt, analysis.finishedAt)
                     return (
-                      <Card key={config.id} className="liquid-glass-card liquid-glass-card-elevated">
+                      <Card key={config.id} interactive={false} tone="neutral" className="liquid-glass-card liquid-glass-card-elevated">
                         <div className="liquid-glass-content">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                             <div className="flex items-start sm:items-center gap-3">
@@ -605,7 +603,7 @@ export default function GranulationAnalyzerPage() {
                             <div className="relative">
                               <div className="prose max-w-none">
                                 {analysis.content ? (
-                                  <MarkdownRenderer content={sanitizeModelContent(analysis.content)} />
+                                  <MarkdownRenderer content={analysis.content} />
                                 ) : hasRequested ? (
                                   <p className="text-sm text-gray-500">模型已啟動，正在生成分析內容...</p>
                                 ) : (
