@@ -392,7 +392,6 @@ export default function GranulationAnalyzerPage() {
                   </button>
                 </div>
               </div>
-            </div>
           </Card>
 
           {/* 分析按鈕 */}
