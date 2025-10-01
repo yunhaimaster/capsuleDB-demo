@@ -53,6 +53,20 @@ const MODEL_CONFIG: ModelConfig[] = [
   }
 ]
 
+const STATUS_BADGE_CLASS: Record<AnalysisStatus, string> = {
+  idle: 'bg-slate-500/15 border border-slate-300/40 text-slate-600',
+  loading: 'bg-blue-500/15 border border-blue-300/40 text-blue-700',
+  success: 'bg-emerald-500/15 border border-emerald-300/40 text-emerald-700',
+  error: 'bg-red-500/15 border border-red-300/40 text-red-700'
+}
+
+const STATUS_LABEL: Record<AnalysisStatus, string> = {
+  idle: '等待啟動',
+  loading: '分析中',
+  success: '完成',
+  error: '錯誤'
+}
+
 export default function AIRecipeGeneratorPage() {
   const [formData, setFormData] = useState<AIRecipeRequest>({
     targetEffect: '',
