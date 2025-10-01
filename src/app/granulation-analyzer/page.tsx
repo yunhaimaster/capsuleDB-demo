@@ -436,10 +436,10 @@ export default function GranulationAnalyzerPage() {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 {analyses.map((analysis, index) => (
-                  <Card key={index} className="liquid-glass-card liquid-glass-card-elevated">
-                    <CardHeader>
+                  <Card key={index} className="liquid-glass-card liquid-glass-card-elevated h-full flex flex-col">
+                    <CardHeader className="flex-shrink-0">
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-base">{analysis.model}</CardTitle>
                         <div className="flex items-center gap-2">
@@ -451,7 +451,7 @@ export default function GranulationAnalyzerPage() {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1">
                       {analysis.status === 'loading' && (
                         <div className="space-y-3">
                           <div className="animate-pulse">
