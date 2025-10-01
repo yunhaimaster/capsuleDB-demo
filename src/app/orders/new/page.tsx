@@ -11,7 +11,7 @@ export default function NewOrderPage() {
       <LiquidGlassNav />
       
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
+      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined pb-20">
         <section className="liquid-glass-card liquid-glass-card-refraction p-6 md:p-8">
           <div className="liquid-glass-content flex items-center gap-4">
             <div className="icon-container icon-container-pink shadow-[0_12px_30px_rgba(236,72,153,0.25)]">
