@@ -11,6 +11,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, AlertTriangle, CheckCircle } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
+const sanitizeModelContent = (content: string) => content.replace(/<br\s*\/?\s*>/gi, '\n')
+
 interface Ingredient {
   materialName: string
   unitContentMg: number
@@ -603,7 +605,7 @@ export default function GranulationAnalyzerPage() {
                             <div className="relative">
                               <div className="prose max-w-none">
                                 {analysis.content ? (
-                                  <MarkdownRenderer content={analysis.content} />
+                                  <MarkdownRenderer content={sanitizeModelContent(analysis.content)} />
                                 ) : hasRequested ? (
                                   <p className="text-sm text-gray-500">模型已啟動，正在生成分析內容...</p>
                                 ) : (

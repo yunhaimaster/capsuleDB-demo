@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
       dosageForm,
       budget,
       enableReasoning,
+      reasoningMap,
       singleModel
     } = await request.json()
 
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
                 body: JSON.stringify({
                   ...basePayload,
                   model: model.id,
-                  ...(enableReasoning && model.supportsReasoning
+                  ...(((reasoningMap?.[model.id] ?? enableReasoning) && model.supportsReasoning)
                     ? { reasoning: { effort: 'high' } }
                     : {})
                 })
@@ -168,11 +169,12 @@ export async function POST(request: NextRequest) {
 
                   try {
                     const parsed = JSON.parse(dataPayload)
-                    const delta = parsed.choices?.[0]?.delta?.content
+                    const deltaRaw = parsed.choices?.[0]?.delta?.content
+                    const delta = typeof deltaRaw === 'string' ? deltaRaw.replace(/<br\s*\/?\s*>/gi, '\n') : undefined
                     if (delta) {
                       sendEvent('delta', { modelId: model.id, delta })
                     }
-                  } catch (err) {
+                  } catch (_err) {
                     // 忽略解析錯誤
                   }
                 }

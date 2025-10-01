@@ -76,6 +76,9 @@ export default function AIRecipeGeneratorPage() {
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
   const [chatInput, setChatInput] = useState('')
   const [isChatLoading, setIsChatLoading] = useState(false)
+  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({
+    'deepseek/deepseek-chat-v3.1': true
+  })
   const [hasRequested, setHasRequested] = useState(false)
   // 移除數據庫狀態檢查，改為純前端顯示
 
@@ -107,7 +110,10 @@ export default function AIRecipeGeneratorPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          reasoningMap: reasoningEnabled
+        }),
       })
 
       if (!response.ok || !response.body) {
@@ -260,7 +266,11 @@ export default function AIRecipeGeneratorPage() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ ...formData, singleModel: modelId })
+        body: JSON.stringify({
+          ...formData,
+          singleModel: modelId,
+          reasoningMap: reasoningEnabled
+        })
       })
 
       if (!response.ok || !response.body) {
@@ -624,6 +634,20 @@ export default function AIRecipeGeneratorPage() {
                           <Repeat2 className="h-4 w-4" />
                           重試
                         </Button>
+                        <label className="flex items-center gap-1 text-xs text-gray-500">
+                          <input
+                            type="checkbox"
+                            className="rounded border-gray-300"
+                            checked={!!reasoningEnabled[config.id]}
+                            onChange={(event) =>
+                              setReasoningEnabled(prev => ({
+                                ...prev,
+                                [config.id]: event.target.checked
+                              }))
+                            }
+                          />
+                          深度思考
+                        </label>
                       </div>
                     </div>
 
