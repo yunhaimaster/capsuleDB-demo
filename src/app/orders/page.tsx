@@ -11,6 +11,9 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState([])
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+    }
     // 獲取訂單數據供 AI 助手使用
     const fetchOrders = async () => {
       try {
