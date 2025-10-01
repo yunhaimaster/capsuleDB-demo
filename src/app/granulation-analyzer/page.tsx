@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useEffect } from 'react'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
@@ -41,6 +41,7 @@ const MODEL_CONFIG = [
   {
     id: 'x-ai/grok-4-fast',
     name: 'xAI Grok 4 Fast',
+    badgeClass: 'badge-grok',
     description: '優先提供整體風險概觀與敏感原料提示',
     iconClass: 'icon-container-blue',
     supportsReasoning: false
@@ -48,6 +49,7 @@ const MODEL_CONFIG = [
   {
     id: 'openai/gpt-4.1-mini',
     name: 'OpenAI GPT-4.1 Mini',
+    badgeClass: 'badge-gpt',
     description: '擅長結構化評分與合規審視',
     iconClass: 'icon-container-violet',
     supportsReasoning: false
@@ -55,13 +57,15 @@ const MODEL_CONFIG = [
   {
     id: 'google/gemini-2.5-flash',
     name: 'Google Gemini 2.5 Flash',
+    badgeClass: 'badge-gemini',
     description: '快速生成視覺化與重點摘要建議',
     iconClass: 'icon-container-cyan',
-    supportsReasoning: false
+    supportsReasoning: true
   },
   {
     id: 'deepseek/deepseek-chat-v3.1',
     name: 'DeepSeek v3.1',
+    badgeClass: 'badge-deepseek',
     description: '深入分析流動性參數與改善方案',
     iconClass: 'icon-container-emerald',
     supportsReasoning: true
@@ -97,11 +101,26 @@ export default function GranulationAnalyzerPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [hasRequested, setHasRequested] = useState(false)
   const [globalError, setGlobalError] = useState<string | null>(null)
-  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({
-    'deepseek/deepseek-chat-v3.1': true
-  })
+  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({})
 
   const controllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    const stored = localStorage.getItem('granulation-reasoning-pref')
+    if (stored) {
+      try {
+        setReasoningEnabled(JSON.parse(stored) as Record<string, boolean>)
+        return
+      } catch (error) {
+        console.warn('無法解析製粒深度思考偏好，將重置。', error)
+      }
+    }
+    setReasoningEnabled({})
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('granulation-reasoning-pref', JSON.stringify(reasoningEnabled))
+  }, [reasoningEnabled])
 
   const handleSmartImport = (importedIngredients: any[]) => {
     try {

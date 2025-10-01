@@ -34,6 +34,14 @@ const MODEL_CONFIG = [
     supportsReasoning: false
   },
   {
+    id: 'google/gemini-2.5-flash',
+    name: 'Google Gemini 2.5 Flash',
+    badgeClass: 'badge-gemini',
+    iconClass: 'icon-container-cyan',
+    description: '擅長視覺化重點摘要與快速推理',
+    supportsReasoning: true
+  },
+  {
     id: 'deepseek/deepseek-chat-v3.1',
     name: 'DeepSeek v3.1',
     badgeClass: 'badge-deepseek',
@@ -87,11 +95,27 @@ export default function AIRecipeGeneratorPage() {
   const [chatMessages, setChatMessages] = useState<Array<{role: 'user' | 'assistant', content: string}>>([])
   const [chatInput, setChatInput] = useState('')
   const [isChatLoading, setIsChatLoading] = useState(false)
-  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({
-    'deepseek/deepseek-chat-v3.1': true
-  })
+  const [reasoningEnabled, setReasoningEnabled] = useState<Record<string, boolean>>({})
   const [hasRequested, setHasRequested] = useState(false)
   // 移除數據庫狀態檢查，改為純前端顯示
+
+  useEffect(() => {
+    const stored = localStorage.getItem('ai-reasoning-pref')
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as Record<string, boolean>
+        setReasoningEnabled(parsed)
+        return
+      } catch (error) {
+        console.warn('無法解析深度思考偏好，將重置。', error)
+      }
+    }
+    setReasoningEnabled({})
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('ai-reasoning-pref', JSON.stringify(reasoningEnabled))
+  }, [reasoningEnabled])
 
   const sortedModelResponses = useMemo(() => {
     return MODEL_CONFIG.map(model => {

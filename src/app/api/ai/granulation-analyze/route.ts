@@ -7,7 +7,7 @@ const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter
 const MODEL_CATALOG = [
   { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast', supportsReasoning: false },
   { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini', supportsReasoning: false },
-  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', supportsReasoning: false },
+  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', supportsReasoning: true },
   { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1', supportsReasoning: true }
 ]
 
