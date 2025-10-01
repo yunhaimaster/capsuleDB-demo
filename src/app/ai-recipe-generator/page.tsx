@@ -14,44 +14,7 @@ import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 import Link from 'next/link'
 
-const formatDuration = (startedAt?: number, finishedAt?: number) => {
-  if (!startedAt) return null
-  const end = finishedAt || Date.now()
-  const seconds = Math.max(0, Math.round((end - startedAt) / 100) / 10)
-  return `${seconds.toFixed(1)} 秒`
-}
-
-type ModelConfig = {
-  id: string
-  name: string
-  badgeClass: string
-  iconClass: string
-  description: string
-}
-
-const MODEL_CONFIG: ModelConfig[] = [
-  {
-    id: 'x-ai/grok-4-fast',
-    name: 'xAI Grok 4 Fast',
-    badgeClass: 'badge-grok',
-    iconClass: 'icon-container-blue',
-    description: '快速生成創意與整體框架'
-  },
-  {
-    id: 'openai/gpt-4.1-mini',
-    name: 'OpenAI GPT-4.1 Mini',
-    badgeClass: 'badge-gpt',
-    iconClass: 'icon-container-violet',
-    description: '結構化內容與安全審核'
-  },
-  {
-    id: 'deepseek/deepseek-chat-v3.1',
-    name: 'DeepSeek v3.1',
-    badgeClass: 'badge-deepseek',
-    iconClass: 'icon-container-emerald',
-    description: '深入分析與專業建議'
-  }
-]
+type AnalysisStatus = 'idle' | 'loading' | 'success' | 'error'
 
 const STATUS_BADGE_CLASS: Record<AnalysisStatus, string> = {
   idle: 'bg-slate-500/15 border border-slate-300/40 text-slate-600',
