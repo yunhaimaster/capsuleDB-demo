@@ -184,12 +184,17 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
 
   const getConfidenceColor = (level: string) => {
     switch (level) {
-      case '高': return 'bg-green-100 text-green-800 border-green-200'
-      case '中': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case '低': return 'bg-red-100 text-red-800 border-red-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      case '高': return 'bg-emerald-500/15 border border-emerald-300/40 text-emerald-700'
+      case '中': return 'bg-amber-500/15 border border-amber-300/40 text-amber-700'
+      case '低': return 'bg-red-500/15 border border-red-300/40 text-red-700'
+      default: return 'bg-slate-500/15 border border-slate-300/40 text-slate-600'
     }
   }
+
+  const getIngredientTone = (needsConfirmation: boolean) =>
+    needsConfirmation
+      ? 'bg-amber-500/10 border border-amber-300/40 shadow-sm'
+      : 'bg-emerald-500/10 border border-emerald-300/40 shadow-sm'
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -419,13 +424,9 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
               <CardContent>
                 <div className="space-y-3 max-h-[300px] overflow-y-auto">
                   {parsedIngredients.map((ingredient, index) => (
-                    <div 
+                    <div
                       key={index}
-                      className={`p-3 rounded-lg border ${
-                        ingredient.needsConfirmation 
-                          ? 'bg-yellow-50 border-yellow-200' 
-                          : 'bg-green-50 border-green-200'
-                      }`}
+                      className={`rounded-xl px-4 py-3 transition-colors backdrop-blur-sm ${getIngredientTone(ingredient.needsConfirmation)}`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
