@@ -74,24 +74,47 @@ const Card = React.forwardRef<
     const target = localRef.current
     if (!target) return
 
-    const rect = target.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
+    const attemptColors: string[] = []
+    const elementStack: Element[] = []
 
-    // Temporarily disable pointer events to sample underlying element
+    // Collect candidate elements beneath the card
+    const centerX = window.innerWidth / 2
+    const centerY = window.innerHeight / 2
+
     const previousPointerEvents = target.style.pointerEvents
     target.style.pointerEvents = "none"
-    const elementBelow = document.elementFromPoint(centerX, centerY)
+
+    let elementBelow = document.elementFromPoint(centerX, centerY)
+    while (elementBelow && elementBelow !== document.body && elementStack.length < 4) {
+      elementStack.push(elementBelow)
+      elementBelow = elementBelow.parentElement
+    }
+
     target.style.pointerEvents = previousPointerEvents
 
-    if (!elementBelow) {
+    for (const element of elementStack) {
+      const styles = window.getComputedStyle(element)
+      const bg = styles.backgroundColor || ""
+      if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
+        attemptColors.push(bg)
+      }
+    }
+
+    if (!attemptColors.length) {
       target.dataset.glassTone = "neutral"
       return
     }
 
-    const styles = window.getComputedStyle(elementBelow)
-    const backgroundColor = styles.backgroundColor || "rgba(255,255,255,1)"
-    const luminance = computeLuminance(backgroundColor)
+    const validLuminances = attemptColors
+      .map((color) => computeLuminance(color))
+      .filter((value): value is number => value !== null)
+
+    if (!validLuminances.length) {
+      target.dataset.glassTone = "neutral"
+      return
+    }
+
+    const luminance = validLuminances[validLuminances.length - 1]
 
     if (luminance === null) {
       target.dataset.glassTone = "neutral"

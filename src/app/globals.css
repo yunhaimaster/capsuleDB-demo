@@ -3,10 +3,11 @@
   transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
-.liquid-glass-card[data-glass-tone="neutral"] {
-  background: linear-gradient(158deg, rgba(255,255,255,0.88) 0%, rgba(247,251,255,0.76) 100%);
-  border-color: rgba(204, 218, 232, 0.34);
-  color: rgba(32, 56, 78, 0.95);
+.liquid-glass-card[data-glass-tone="neutral"],
+.liquid-glass-card:not([data-glass-tone]) {
+  background: linear-gradient(152deg, rgba(255,255,255,0.94) 0%, rgba(244,249,255,0.82) 100%);
+  border-color: rgba(210, 222, 236, 0.38);
+  color: rgba(32, 56, 78, 0.96);
 }
 .liquid-glass-card.is-interactive .liquid-glass-caustic {
   opacity: 0.35;
