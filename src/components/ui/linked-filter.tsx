@@ -408,42 +408,46 @@ export function LinkedFilter({
       </div>
 
       {/* 操作按鈕 */}
-      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-        <Button
-          variant="outline"
-          onClick={clearFilters}
-          disabled={loading}
-          className="flex items-center justify-center gap-2"
-        >
-          <X className="h-4 w-4" />
-          清除篩選
-        </Button>
-        {onExport && (
+      <div className="flex flex-col sm:flex-row justify-between gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Button
-            onClick={onExport}
             variant="outline"
+            onClick={clearFilters}
+            disabled={loading}
             className="flex items-center justify-center gap-2"
-            disabled={loading}
           >
-            <Download className="h-4 w-4" />
-            匯出 CSV
+            <X className="h-4 w-4" />
+            清除篩選
           </Button>
-        )}
-        <Button
-          onClick={handleSearch}
-          disabled={loading}
-          className="flex items-center justify-center gap-2"
-        >
-          {loading ? '搜尋中...' : '重新搜尋'}
-        </Button>
-        <Link href="/orders/new" className="sm:ml-auto">
+          {onExport && (
+            <Button
+              onClick={onExport}
+              variant="outline"
+              className="flex items-center justify-center gap-2"
+              disabled={loading}
+            >
+              <Download className="h-4 w-4" />
+              匯出 CSV
+            </Button>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3">
           <Button
-            className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+            onClick={handleSearch}
             disabled={loading}
+            className="flex items-center justify-center gap-2"
           >
-            + 新建訂單
+            {loading ? '搜尋中...' : '重新搜尋'}
           </Button>
-        </Link>
+          <Link href="/orders/new">
+            <Button
+              className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              disabled={loading}
+            >
+              + 新建訂單
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* 點擊外部關閉下拉菜單 */}
