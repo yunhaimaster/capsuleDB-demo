@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { getGlassBadgeTone, getGlassCardTone } from '@/lib/ui/glass-tones'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Upload, FileText, Image, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react'
 import { formatNumber } from '@/lib/utils'
@@ -182,19 +183,12 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     setParseSummary('')
   }
 
-  const getConfidenceColor = (level: string) => {
-    switch (level) {
-      case '高': return 'bg-emerald-500/15 border border-emerald-300/40 text-emerald-700'
-      case '中': return 'bg-amber-500/15 border border-amber-300/40 text-amber-700'
-      case '低': return 'bg-red-500/15 border border-red-300/40 text-red-700'
-      default: return 'bg-slate-500/15 border border-slate-300/40 text-slate-600'
-    }
+  const resolveConfidenceBadge = (confidence: '低' | '中' | '高' | '未知') => {
+    if (confidence === '高') return getGlassBadgeTone('positive')
+    if (confidence === '中') return getGlassBadgeTone('caution')
+    if (confidence === '低') return getGlassBadgeTone('negative')
+    return getGlassBadgeTone('neutral')
   }
-
-  const getIngredientTone = (needsConfirmation: boolean) =>
-    needsConfirmation
-      ? 'bg-amber-500/10 border border-amber-300/40 shadow-sm'
-      : 'bg-emerald-500/10 border border-emerald-300/40 shadow-sm'
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -409,7 +403,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                     <AIPoweredBadge variant="minimal" />
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge className={getConfidenceColor(confidence)}>
+                    <Badge className={resolveConfidenceBadge(confidence)}>
                       信心度: {confidence}
                     </Badge>
                     <Badge variant="outline">
@@ -426,7 +420,9 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                   {parsedIngredients.map((ingredient, index) => (
                     <div
                       key={index}
-                      className={`rounded-xl px-4 py-3 transition-colors backdrop-blur-sm ${getIngredientTone(ingredient.needsConfirmation)}`}
+                      className={`rounded-xl px-4 py-3 transition-colors ${getGlassCardTone(
+                        ingredient.needsConfirmation ? 'caution' : 'positive'
+                      )}`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
