@@ -18,14 +18,6 @@ type AnalysisStatus = 'idle' | 'loading' | 'success' | 'error'
 
 const MODEL_CONFIG = [
   {
-    id: 'x-ai/grok-4-fast',
-    name: 'xAI Grok 4 Fast',
-    badgeClass: 'badge-grok',
-    iconClass: 'icon-container-blue',
-    description: '快速生成創意結構框架',
-    supportsReasoning: false
-  },
-  {
     id: 'openai/gpt-4.1-mini',
     name: 'OpenAI GPT-4.1 Mini',
     badgeClass: 'badge-gpt',

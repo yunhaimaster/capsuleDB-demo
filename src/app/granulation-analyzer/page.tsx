@@ -39,14 +39,6 @@ interface ModelConfig {
 
 const MODEL_CONFIG = [
   {
-    id: 'x-ai/grok-4-fast',
-    name: 'xAI Grok 4 Fast',
-    badgeClass: 'badge-grok',
-    description: '優先提供整體風險概觀與敏感原料提示',
-    iconClass: 'icon-container-blue',
-    supportsReasoning: false
-  },
-  {
     id: 'openai/gpt-4.1-mini',
     name: 'OpenAI GPT-4.1 Mini',
     badgeClass: 'badge-gpt',
