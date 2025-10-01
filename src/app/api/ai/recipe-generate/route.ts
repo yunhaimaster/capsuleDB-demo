@@ -1,19 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
+const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
+
+const MODEL_CATALOG = [
+  { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast', supportsReasoning: false },
+  { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini', supportsReasoning: false },
+  { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1', supportsReasoning: true }
+]
+
 export async function POST(request: NextRequest) {
   try {
-    const { targetEffect, targetAudience, dosageForm, budget, enableReasoning } = await request.json()
+    const {
+      targetEffect,
+      targetAudience,
+      dosageForm,
+      budget,
+      enableReasoning,
+      singleModel
+    } = await request.json()
 
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
-    const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
-
     if (!OPENROUTER_API_KEY) {
       return NextResponse.json(
         { success: false, error: 'AI 服務暫時無法使用，請稍後再試' },
         { status: 500 }
+      )
+    }
+
+    const selectedModels = singleModel
+      ? MODEL_CATALOG.filter(model => model.id === singleModel)
+      : MODEL_CATALOG
+
+    if (selectedModels.length === 0) {
+      return NextResponse.json(
+        { success: false, error: '未指定有效的模型' },
+        { status: 400 }
       )
     }
 
@@ -60,77 +83,123 @@ export async function POST(request: NextRequest) {
 
 ⚠️ 注意：生成的配方僅供理論參考，不能視為醫療建議，最終需結合法規與實驗驗證。`
 
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: 'POST',
+    const basePayload = {
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `請為我生成一個${targetEffect}的${dosageForm || '膠囊'}配方` }
+      ],
+      max_tokens: 8000,
+      temperature: 0.3,
+      top_p: 0.95,
+      frequency_penalty: 0.0,
+      presence_penalty: 0.0,
+      stream: true
+    }
+
+    const encoder = new TextEncoder()
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        const sendEvent = (event: string, data: Record<string, unknown>) => {
+          controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`))
+        }
+
+        await Promise.all(
+          selectedModels.map(async (model) => {
+            sendEvent('start', { modelId: model.id, modelName: model.name })
+
+            try {
+              const response = await fetch(OPENROUTER_API_URL, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                  'Content-Type': 'application/json',
+                  'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
+                  'X-Title': `Easy Health AI Recipe Generator (${model.name})`
+                },
+                body: JSON.stringify({
+                  ...basePayload,
+                  model: model.id,
+                  ...(enableReasoning && model.supportsReasoning
+                    ? { reasoning: { effort: 'high' } }
+                    : {})
+                })
+              })
+
+              if (!response.ok) {
+                const errorText = await response.text()
+                throw new Error(errorText || '模型請求失敗')
+              }
+
+              if (!response.body) {
+                throw new Error('模型沒有返回任何資料')
+              }
+
+              const reader = response.body.getReader()
+              const decoder = new TextDecoder()
+              let buffer = ''
+              let modelCompleted = false
+
+              while (true) {
+                const { done, value } = await reader.read()
+                if (done) break
+                buffer += decoder.decode(value, { stream: true })
+
+                const events = buffer.split('\n\n')
+                buffer = events.pop() || ''
+
+                for (const eventBlock of events) {
+                  const lines = eventBlock.split('\n')
+                  let dataPayload = ''
+
+                  for (const line of lines) {
+                    if (line.startsWith('data:')) {
+                      dataPayload += line.replace('data:', '').trim()
+                    }
+                  }
+
+                  if (!dataPayload) continue
+
+                  if (dataPayload === '[DONE]') {
+                    modelCompleted = true
+                    sendEvent('done', { modelId: model.id })
+                    continue
+                  }
+
+                  try {
+                    const parsed = JSON.parse(dataPayload)
+                    const delta = parsed.choices?.[0]?.delta?.content
+                    if (delta) {
+                      sendEvent('delta', { modelId: model.id, delta })
+                    }
+                  } catch (err) {
+                    // 忽略解析錯誤
+                  }
+                }
+              }
+
+              if (!modelCompleted) {
+                sendEvent('done', { modelId: model.id })
+              }
+            } catch (error) {
+              const message = error instanceof Error ? error.message : '未知錯誤'
+              sendEvent('error', { modelId: model.id, error: message })
+            }
+          })
+        )
+
+        sendEvent('close', { completed: true })
+        controller.close()
+      }
+    })
+
+    return new Response(stream, {
       headers: {
-        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://easypack-capsule-management.vercel.app',
-        'X-Title': 'Easy Health AI Recipe Generator'
-      },
-      body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3.1',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `請為我生成一個${targetEffect}的${dosageForm || '膠囊'}配方` }
-        ],
-        max_tokens: 8000,
-        temperature: 0.3,
-        top_p: 0.95,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.0,
-        ...(enableReasoning && {
-          reasoning: {
-            effort: "high"
-          }
-        })
-      })
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('OpenRouter API 錯誤:', errorText)
-      return NextResponse.json(
-        { success: false, error: 'AI 服務暫時無法回應，請稍後再試' },
-        { status: 500 }
-      )
-    }
-
-    const data = await response.json()
-    const aiResponse = data.choices?.[0]?.message?.content || ''
-
-    // 生成臨時ID，不保存到數據庫
-    const tempId = `temp-${Date.now()}`
-    
-    // 解析 AI 回應為結構化數據
-    const parsedRecipe = {
-      name: `AI 生成的${targetEffect}配方`,
-      description: `針對${targetAudience || '一般成人'}的${targetEffect}配方`,
-      ingredients: [],
-      dosage: {
-        recommendation: '請遵循產品標籤指示',
-        adultDosage: '每日1-2粒',
-        timing: '餐後服用'
-      },
-      efficacyScore: 8.5,
-      safetyScore: 8.0,
-      costAnalysis: {
-        unitCost: 2.5,
-        currency: 'HKD',
-        breakdown: '基於市場價格估算'
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      recipe: {
-        id: tempId,
-        content: aiResponse,
-        structured: parsedRecipe,
-        createdAt: new Date().toISOString()
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive'
       }
     })
-
   } catch (error) {
     console.error('AI 配方生成錯誤:', error)
     return NextResponse.json(
