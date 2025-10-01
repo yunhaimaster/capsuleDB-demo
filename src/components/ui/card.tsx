@@ -4,11 +4,22 @@ import { useCallback, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  tone?: 'default' | 'positive' | 'caution' | 'negative' | 'neutral'
+  tone?: "default" | "positive" | "caution" | "negative" | "neutral"
+  interactive?: boolean
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>((
-  { className, tone = 'default', onMouseMove, onMouseLeave, onTouchMove, onTouchEnd, children, ...props },
+  {
+    className,
+    tone = "default",
+    interactive = true,
+    onMouseMove,
+    onMouseLeave,
+    onTouchMove,
+    onTouchEnd,
+    children,
+    ...props
+  },
   ref
 ) => {
   const localRef = useRef<HTMLDivElement | null>(null)
@@ -23,6 +34,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
   }
 
   const updatePointer = (event: React.MouseEvent | React.TouchEvent) => {
+    if (!interactive) return
     const target = localRef.current
     if (!target) return
 
@@ -81,7 +93,6 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
     const attemptColors: string[] = []
     const elementStack: Element[] = []
 
-    // Collect candidate elements beneath the card
     const centerX = window.innerWidth / 2
     const centerY = window.innerHeight / 2
 
@@ -157,74 +168,82 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
       window.removeEventListener("scroll", handleScroll)
       observer.disconnect()
     }
-  }, [])
+  }, [detectBackgroundTone])
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    if (interactive) updatePointer(event)
+    onMouseMove?.(event)
+  }
+
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    if (interactive) resetPointer()
+    onMouseLeave?.(event)
+  }
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    if (interactive) {
+      updatePointer(event)
+      if (localRef.current) {
+        localRef.current.classList.add("is-touching")
+      }
+    }
+    onTouchMove?.(event)
+  }
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    if (interactive) {
+      resetPointer()
+      if (localRef.current) {
+        localRef.current.classList.remove("is-touching")
+      }
+    }
+    onTouchEnd?.(event)
+  }
 
   return (
     <div
       ref={setRefs}
-      onMouseMove={(event) => {
-        updatePointer(event)
-        onMouseMove?.(event)
-      }}
-      onMouseLeave={(event) => {
-        resetPointer()
-        onMouseLeave?.(event)
-      }}
-      onTouchMove={(event) => {
-        updatePointer(event)
-        if (localRef.current) {
-          localRef.current.classList.add("is-touching")
-        }
-        onTouchMove?.(event)
-      }}
-      onTouchEnd={(event) => {
-        resetPointer()
-        if (localRef.current) {
-          localRef.current.classList.remove("is-touching")
-        }
-        onTouchEnd?.(event)
-      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       className={cn(
         "rounded-2xl border border-white/50 bg-white/60 text-[--brand-neutral] shadow-[0_24px_48px_rgba(24,66,96,0.08)] backdrop-blur-xl",
         "relative overflow-hidden touch-glow-surface",
-        tone !== 'default' && `liquid-glass-tone-${tone}`,
+        tone !== "default" && `liquid-glass-tone-${tone}`,
+        interactive ? "liquid-glass-interactive" : "liquid-glass-static",
         className
       )}
       {...props}
     >
-      <span className="liquid-glass-caustic" aria-hidden="true" />
-      <span className="liquid-glass-ripple" aria-hidden="true" />
+      {interactive && <span className="liquid-glass-caustic" aria-hidden="true" />}
+      {interactive && <span className="liquid-glass-ripple" aria-hidden="true" />}
       {children}
     </div>
   )
 })
 Card.displayName = "Card"
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "flex flex-col space-y-2 p-6 pb-4 text-[--brand-neutral]",
-      className
-    )}
-    {...props}
-  />
-))
+type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>
+
+const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("flex flex-col space-y-1.5 p-6", className)}
+      {...props}
+    />
+  )
+)
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
+  React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn(
-      "text-lg md:text-xl font-semibold leading-tight tracking-tight",
-      className
-    )}
+    className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
     {...props}
   />
 ))
@@ -236,7 +255,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-gray-600", className)}
+    className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ))
@@ -246,7 +265,11 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0 space-y-4", className)} {...props} />
+  <div
+    ref={ref}
+    className={cn("p-6 pt-0", className)}
+    {...props}
+  />
 ))
 CardContent.displayName = "CardContent"
 

@@ -572,6 +572,25 @@
   will-change: transform, box-shadow, filter, opacity;
 }
 
+.liquid-glass-static::before,
+.liquid-glass-static::after,
+.liquid-glass-static .liquid-glass-ripple,
+.liquid-glass-static .liquid-glass-ripple::before,
+.liquid-glass-static .liquid-glass-ripple::after,
+.liquid-glass-static .liquid-glass-caustic {
+  display: none;
+}
+
+.liquid-glass-static {
+  transition: none;
+  transform: none !important;
+  filter: none !important;
+  box-shadow:
+    0 18px 42px rgba(42, 88, 140, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.45),
+    inset 0 -1px 0 rgba(45,105,135,0.08);
+}
+
 .liquid-glass-tone-positive {
   background: linear-gradient(160deg, rgba(16,185,129,0.16) 0%, rgba(217,249,236,0.4) 100%);
   border-color: rgba(16,185,129,0.35);
