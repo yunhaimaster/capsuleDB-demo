@@ -69,7 +69,7 @@ export default function GranulationAnalyzerPage() {
   }
 
   const models = [
-    { name: 'Google Gemini 2.5 Flash', id: 'google/gemini-2.5-flash', accentClass: 'badge-gemini', symbol: '💎' },
+    { name: 'xAI Grok 4 Fast', id: 'x-ai/grok-4-fast', accentClass: 'badge-grok', symbol: '⚡' },
     { name: 'OpenAI GPT-4.1 Mini', id: 'openai/gpt-4.1-mini', accentClass: 'badge-gpt', symbol: '◎' },
     { name: 'DeepSeek v3.1', id: 'deepseek/deepseek-chat-v3.1', accentClass: 'badge-deepseek', symbol: '∆' }
   ]
