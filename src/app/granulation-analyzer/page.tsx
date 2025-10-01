@@ -295,7 +295,7 @@ export default function GranulationAnalyzerPage() {
     <div className="min-h-screen logo-bg-animation flex flex-col">
       <LiquidGlassNav />
       
-      <main className="flex-1 px-4 md:px-6 lg:px-8 py-6 md:py-8 space-y-6">
+      <main className="flex-1 pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 py-6 md:py-8 space-y-6">
           {/* 頁面標題 */}
           <div className="text-center space-y-4 mt-16">
             <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700 text-sm">
