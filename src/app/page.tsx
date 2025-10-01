@@ -11,7 +11,7 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder } from '@/types'
 import Link from 'next/link'
@@ -166,12 +166,12 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 sm:p-2 md:p-3 bg-indigo-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
+              <div className="icon-container icon-container-gradient-sunrise group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-base font-semibold text-indigo-700">新增配方</h3>
-                <p className="text-xs sm:text-sm md:text-sm text-indigo-600">建立新記錄</p>
+                <h3 className="text-sm sm:text-base md:text-base font-semibold text-[rgb(99,102,241)]">新增配方</h3>
+                <p className="text-xs sm:text-sm md:text-sm text-[rgb(99,102,241)]/80">建立新記錄</p>
               </div>
             </div>
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
@@ -179,7 +179,7 @@ export default function HomePage() {
             </p>
             <div className="mt-auto">
               <Link href="/orders/new">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
                   開始建立
                 </Button>
               </Link>
@@ -190,12 +190,12 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-2 sm:p-2 md:p-3 bg-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
+              <div className="icon-container icon-container-gradient-emerald group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
                 <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-base font-semibold text-emerald-700">生產記錄</h3>
-                <p className="text-xs sm:text-sm md:text-sm text-emerald-600">檢視管理</p>
+                <h3 className="text-sm sm:text-base md:text-base font-semibold text-[rgb(16,185,129)]">生產記錄</h3>
+                <p className="text-xs sm:text-sm md:text-sm text-[rgb(16,185,129)]/80">檢視管理</p>
               </div>
             </div>
             <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
@@ -203,7 +203,7 @@ export default function HomePage() {
             </p>
             <div className="mt-auto">
               <Link href="/orders">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
+                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:brightness-110 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
                   查看記錄
                 </Button>
               </Link>
@@ -367,7 +367,7 @@ export default function HomePage() {
           <Link href="/ai-recipe-generator">
             <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-violet mx-auto mb-4">
+                <div className="icon-container icon-container-gradient-violet mx-auto mb-4">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
@@ -385,7 +385,7 @@ export default function HomePage() {
           <Link href="/granulation-analyzer">
             <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-emerald mx-auto mb-4">
+                <div className="icon-container icon-container-gradient-emerald-light mx-auto mb-4">
                   <FlaskConical className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">製粒分析工具</h3>
@@ -403,8 +403,8 @@ export default function HomePage() {
           <Link href="/work-orders">
             <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
               <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-rose mx-auto mb-4">
-                  <ClipboardList className="h-6 w-6 text-white" />
+                <div className="icon-container icon-container-gradient-rose mx-auto mb-4">
+                  <ClipboardCheck className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">工作單生成</h3>
                 <p className="text-sm text-gray-600 mb-4">
