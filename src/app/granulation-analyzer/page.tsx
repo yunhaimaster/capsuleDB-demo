@@ -299,9 +299,9 @@ export default function GranulationAnalyzerPage() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* 頁面標題 */}
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-white/70 border border-white/60 text-[--brand-neutral] text-sm">
-              <Brain className="h-5 w-5 text-emerald-600" />
-              <span className="font-medium tracking-wide">製粒必要性分析工具</span>
+            <div className="inline-flex items-center justify-center gap-3 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-300/40 text-emerald-700 text-sm">
+              <Brain className="h-4 w-4" />
+              <span className="font-medium tracking-wide">AI 輔助工具</span>
             </div>
             <h1 className="text-2xl md:text-xl font-semibold text-gray-800">
               多模型製粒分析
