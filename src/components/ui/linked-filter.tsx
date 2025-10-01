@@ -418,13 +418,6 @@ export function LinkedFilter({
           <X className="h-4 w-4" />
           清除篩選
         </Button>
-        <Button
-          onClick={handleSearch}
-          disabled={loading}
-          className="flex items-center justify-center gap-2"
-        >
-          {loading ? '搜尋中...' : '重新搜尋'}
-        </Button>
         {onExport && (
           <Button
             onClick={onExport}
@@ -436,6 +429,13 @@ export function LinkedFilter({
             匯出 CSV
           </Button>
         )}
+        <Button
+          onClick={handleSearch}
+          disabled={loading}
+          className="flex items-center justify-center gap-2"
+        >
+          {loading ? '搜尋中...' : '重新搜尋'}
+        </Button>
         <Link href="/orders/new" className="sm:ml-auto">
           <Button
             className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
