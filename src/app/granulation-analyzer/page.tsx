@@ -312,27 +312,29 @@ export default function GranulationAnalyzerPage() {
           </div>
 
           {/* 配方輸入區域 */}
-          <Card className="liquid-glass-card liquid-glass-card-elevated">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                <Brain className="h-5 w-5 text-purple-600" />
-                配方輸入
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2 mb-4">
-                <SmartRecipeImport onImport={handleSmartImport} />
-                <Badge variant="outline" className="text-xs">
-                  智能導入支援文字和圖片
-                </Badge>
+          <Card className="liquid-glass-card liquid-glass-card-elevated mb-8">
+            <div className="liquid-glass-content">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="icon-container icon-container-emerald">
+                  <Brain className="h-5 w-5 text-white" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-800">配方輸入</h2>
               </div>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-6">
+                <div className="flex gap-2 mb-4">
+                  <SmartRecipeImport onImport={handleSmartImport} />
+                  <Badge variant="outline" className="text-xs">
+                    智能導入支援文字和圖片
+                  </Badge>
+                </div>
+                
+                <div className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   {ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex gap-3 items-center p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex gap-3 items-center p-4 bg-white rounded-lg border border-gray-200">
                       <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           原料名稱
                         </label>
                         <input
@@ -343,12 +345,12 @@ export default function GranulationAnalyzerPage() {
                             newIngredients[index] = { ...ingredient, materialName: e.target.value }
                             setIngredients(newIngredients)
                           }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                           placeholder="輸入原料名稱"
                         />
                       </div>
                       <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           單粒重量 (mg)
                         </label>
                         <input
@@ -359,7 +361,7 @@ export default function GranulationAnalyzerPage() {
                             newIngredients[index] = { ...ingredient, unitContentMg: Number(e.target.value) || 0 }
                             setIngredients(newIngredients)
                           }}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                           placeholder="輸入重量"
                         />
                       </div>
@@ -384,13 +386,13 @@ export default function GranulationAnalyzerPage() {
                 <div className="text-center">
                   <button
                     onClick={() => setIngredients([...ingredients, { materialName: '', unitContentMg: 0, isCustomerProvided: true }])}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition-colors"
                   >
                     + 添加原料
                   </button>
                 </div>
               </div>
-            </CardContent>
+            </div>
           </Card>
 
           {/* 分析按鈕 */}
@@ -398,7 +400,7 @@ export default function GranulationAnalyzerPage() {
             <Button
               onClick={analyzeGranulation}
               disabled={isAnalyzing || ingredients.length === 0 || ingredients[0].materialName === ''}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 text-lg font-medium"
             >
               {isAnalyzing ? (
                 <>
@@ -416,21 +418,27 @@ export default function GranulationAnalyzerPage() {
 
           {/* 分析結果 */}
           {analyses.length > 0 && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-800">分析結果</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearAnalysis}
-                  className="flex items-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  清除結果
-                </Button>
-              </div>
+            <Card className="liquid-glass-card liquid-glass-card-elevated">
+              <div className="liquid-glass-content">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="icon-container icon-container-emerald">
+                    <Brain className="h-5 w-5 text-white" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-gray-800">分析結果</h2>
+                </div>
+                <div className="space-y-6">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={clearAnalysis}
+                    className="flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    清除結果
+                  </Button>
+                </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {analyses.map((analysis, index) => (
                   <Card key={index} className="liquid-glass-card liquid-glass-card-elevated">
                     <CardHeader>
@@ -495,8 +503,9 @@ export default function GranulationAnalyzerPage() {
                     </CardContent>
                   </Card>
                 ))}
+                </div>
               </div>
-            </div>
+            </Card>
           )}
         </div>
       </main>

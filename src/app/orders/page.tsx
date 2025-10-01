@@ -53,7 +53,7 @@ export default function OrdersPage() {
                 <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">資料匯出</span>
               </div>
               <Link href="/orders/new">
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                <button className="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-300/40 text-purple-700 text-xs font-medium hover:bg-purple-500/20 transition-colors duration-200">
                   + 新建訂單
                 </button>
               </Link>
