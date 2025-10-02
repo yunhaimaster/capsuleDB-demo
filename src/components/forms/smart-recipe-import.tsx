@@ -20,6 +20,7 @@ interface ParsedIngredient {
   originalText: string
   needsConfirmation: boolean
   isCustomerProvided?: boolean
+  isCustomerSupplied?: boolean
 }
 
 interface SmartRecipeImportProps {
