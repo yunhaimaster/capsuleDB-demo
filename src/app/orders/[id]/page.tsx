@@ -167,7 +167,6 @@ export default function OrderDetailPage() {
                 <p><span className="font-medium text-slate-900">訂單數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
                 <p><span className="font-medium text-slate-900">實際生產數量：</span>{order.actualProductionQuantity != null ? formatNumber(order.actualProductionQuantity) + ' 粒' : '—'}</p>
                 <p><span className="font-medium text-slate-900">材料可做數量：</span>{order.materialYieldQuantity != null ? formatNumber(order.materialYieldQuantity) + ' 粒' : '—'}</p>
-                <p><span className="font-medium text-slate-900">累積工時：</span>{order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工` : '—'}</p>
                 <p><span className="font-medium text-slate-900">客服：</span>{order.customerService || '未填寫'}</p>
               </div>
             </div>
@@ -179,14 +178,15 @@ export default function OrderDetailPage() {
               </h4>
               <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
                 <p><span className="font-medium text-slate-900">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-                <p><span className="font-medium text-slate-900">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
-                <p><span className="font-medium text-slate-900">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+                <p><span className="font-medium text-slate-900">累積工時：</span>{order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工` : '—'}</p>
                 <p><span className="font-medium text-slate-900">工時狀態：</span>
                   {order.worklogs && order.worklogs.length > 0
                     ? order.completionDate
                       ? '已完工'
                       : '進行中'
                     : '未開始'}</p>
+                <p><span className="font-medium text-slate-900">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
+                <p><span className="font-medium text-slate-900">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
               </div>
             </div>
           </div>
