@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
@@ -24,14 +23,7 @@ interface OrderAIAssistantProps {
 export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: externalIsOpen }: OrderAIAssistantProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
   const [enableReasoning, setEnableReasoning] = useState(false)
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPortalContainer(document.body)
-    }
-  }, [])
   
   const {
     messages,
@@ -109,8 +101,7 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
         <span className="hidden sm:inline">AI 助手</span>
         <span className="sm:hidden">AI</span>
       </Button>
-      {portalContainer && createPortal(
-        <LiquidGlassModal
+      <LiquidGlassModal
           isOpen={isOpen}
           onClose={handleClose}
           title="AI 訂單分析助手"
@@ -239,9 +230,7 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
               </Button>
             </div>
           </div>
-        </LiquidGlassModal>,
-        portalContainer
-      )}
+        </LiquidGlassModal>
     </>
   )
 }

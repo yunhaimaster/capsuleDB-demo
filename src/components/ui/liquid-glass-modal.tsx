@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, ReactNode, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -35,6 +36,13 @@ export function LiquidGlassModal({
 }: LiquidGlassModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPortalContainer(document.body)
+    }
+  }, [])
 
   // Focus management for accessibility
   useEffect(() => {
@@ -131,9 +139,9 @@ export function LiquidGlassModal({
     full: 'max-w-7xl'
   }
 
-  if (!isOpen) return null
+  if (!isOpen || !portalContainer) return null
 
-  return (
+  const modalNode = (
     <div
       className={`liquid-glass-modal-backdrop active ${className}`}
       onClick={handleBackdropClick}
@@ -183,6 +191,8 @@ export function LiquidGlassModal({
       </div>
     </div>
   )
+
+  return createPortal(modalNode, portalContainer)
 }
 
 // Hook for managing modal state
