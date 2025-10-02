@@ -327,7 +327,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <Input
                 id="actualProductionQuantity"
                 type="number"
-                {...register('actualProductionQuantity', { valueAsNumber: true })}
+                {...register('actualProductionQuantity', {
+                  setValueAs: (value) => {
+                    if (value === '' || value === null || value === undefined) return undefined
+                    const parsed = Number(value)
+                    return Number.isNaN(parsed) ? undefined : parsed
+                  }
+                })}
                 placeholder="包裝完成後填寫"
                 min="0"
               />
@@ -341,7 +347,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <Input
                 id="materialYieldQuantity"
                 type="number"
-                {...register('materialYieldQuantity', { valueAsNumber: true })}
+                {...register('materialYieldQuantity', {
+                  setValueAs: (value) => {
+                    if (value === '' || value === null || value === undefined) return undefined
+                    const parsed = Number(value)
+                    return Number.isNaN(parsed) ? undefined : parsed
+                  }
+                })}
                 placeholder="材料實際可生產數量"
                 min="0"
               />
