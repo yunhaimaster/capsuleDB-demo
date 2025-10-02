@@ -71,7 +71,8 @@ export async function PUT(
         capsuleColor: validatedData.capsuleColor,
         capsuleSize: validatedData.capsuleSize,
         capsuleType: validatedData.capsuleType,
-        // 更新原料：先刪除舊的再新增，包含客戶指定標記
+        customerService: validatedData.customerService,
+        // 更新原料：先刪除舊的再新增，包含客戶來源標記
         ingredients: {
           deleteMany: {},
           create: validatedData.ingredients.map(ingredient => ({

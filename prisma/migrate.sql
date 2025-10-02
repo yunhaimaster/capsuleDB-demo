@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS "production_orders" (
     "qualityNotes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "createdBy" TEXT,
+    "customerService" TEXT,
 
     CONSTRAINT "production_orders_pkey" PRIMARY KEY ("id")
 );

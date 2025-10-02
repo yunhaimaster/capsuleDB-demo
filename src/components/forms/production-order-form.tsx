@@ -60,7 +60,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       capsuleColor: initialData?.capsuleColor || '',
       capsuleSize: initialData?.capsuleSize || null,
       capsuleType: initialData?.capsuleType || null,
-      createdBy: initialData?.createdBy || '系統',
+      customerService: initialData?.customerService || '',
       ingredients: initialData?.ingredients?.map(ingredient => ({
         ...ingredient,
         isCustomerProvided: ingredient.isCustomerProvided ?? true
@@ -138,7 +138,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         throw new Error('導入數據格式不正確')
       }
       
-      // 初始原料：預設為客戶指定
+      // 初始原料：預設為客戶提供
       const newIngredients = importedIngredients.length > 0 
         ? importedIngredients
             .map((ing, index) => {
@@ -153,7 +153,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               return {
                 materialName,
                 unitContentMg: Math.max(0, unitContentMg),
-                // 導入的配方原料預設視為客戶指定
+                // 導入的配方原料預設視為客戶提供
                 isCustomerProvided: true
               }
             })
@@ -246,7 +246,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             </div>
           </div>
           <div className="px-6 pb-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="customerName">客戶名稱 *</Label>
               <div className="flex gap-2">
@@ -287,6 +287,19 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               </div>
               {errors.productName && (
                 <p className="text-sm text-destructive">{errors.productName.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="customerService">客服 *</Label>
+              <Input
+                id="customerService"
+                {...register('customerService')}
+                placeholder="請輸入客服姓名"
+                className="flex-1 form-focus-effect input-micro-focus"
+              />
+              {errors.customerService && (
+                <p className="text-sm text-destructive">{errors.customerService.message}</p>
               )}
             </div>
 
@@ -516,7 +529,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                                   onCheckedChange={(checked) => field.onChange(Boolean(checked))}
                                   className="h-4 w-4"
                                 />
-                                <span>客戶指定原料</span>
+                                <span>客戶提供</span>
                               </label>
                             )}
                           />
@@ -597,7 +610,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       )}
                     </div>
 
-                    {/* 單粒含量、客戶指定 */}
+                    {/* 單粒含量、原料來源 */}
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">單粒含量 (mg) *</Label>
                       <Controller
@@ -633,7 +646,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                               onCheckedChange={(checked) => field.onChange(Boolean(checked))}
                               className="h-4 w-4"
                             />
-                            <span>客戶指定原料</span>
+                            <span>客戶提供</span>
                           </label>
                         )}
                       />

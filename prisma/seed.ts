@@ -17,7 +17,7 @@ async function main() {
       capsuleColor: '白色',
       capsuleSize: '#0',
       capsuleType: '明膠胃溶',
-      createdBy: '張藥師',
+      customerService: '張小姐',
       ingredients: [
         { materialName: '維生素C', unitContentMg: 500.0 },
         { materialName: '維生素D3', unitContentMg: 25.0 },
@@ -35,7 +35,7 @@ async function main() {
       capsuleColor: '透明',
       capsuleSize: '#1',
       capsuleType: '植物胃溶',
-      createdBy: '李藥師',
+      customerService: '李小姐',
       ingredients: [
         { materialName: '魚油', unitContentMg: 1000.0 },
         { materialName: '維生素E', unitContentMg: 50.0 },
@@ -52,7 +52,7 @@ async function main() {
       capsuleColor: '棕色',
       capsuleSize: '#0',
       capsuleType: '明膠腸溶',
-      createdBy: '王藥師',
+      customerService: '王小姐',
       ingredients: [
         { materialName: '葉酸', unitContentMg: 400.0 },
         { materialName: '鐵質', unitContentMg: 18.0 },
@@ -70,7 +70,7 @@ async function main() {
       capsuleColor: '黃色',
       capsuleSize: '#00',
       capsuleType: '植物腸溶',
-      createdBy: '陳藥師',
+      customerService: '陳小姐',
       ingredients: [
         { materialName: '益生菌', unitContentMg: 50.0 },
         { materialName: '乳糖', unitContentMg: 200.0 },
@@ -87,7 +87,7 @@ async function main() {
       capsuleColor: '藍色',
       capsuleSize: '#1',
       capsuleType: '明膠胃溶',
-      createdBy: '林藥師',
+      customerService: '林小姐',
       ingredients: [
         { materialName: '葡萄糖胺', unitContentMg: 750.0 },
         { materialName: '軟骨素', unitContentMg: 600.0 },
@@ -118,11 +118,12 @@ async function main() {
         capsuleColor: orderData.capsuleColor,
         capsuleSize: orderData.capsuleSize,
         capsuleType: orderData.capsuleType,
-        createdBy: orderData.createdBy,
+        customerService: orderData.customerService,
         ingredients: {
           create: orderData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
-            unitContentMg: ingredient.unitContentMg
+            unitContentMg: ingredient.unitContentMg,
+            isCustomerProvided: ingredient.isCustomerProvided ?? true
           }))
         }
       }

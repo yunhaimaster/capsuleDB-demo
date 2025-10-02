@@ -13,7 +13,7 @@ export interface ProductionOrder {
   capsuleType?: string | null
   createdAt: Date
   updatedAt: Date
-  createdBy?: string | null
+  customerService?: string | null
   ingredients: Ingredient[]
 }
 
@@ -35,7 +35,7 @@ export interface CreateProductionOrderData {
   capsuleColor?: string | null
   capsuleSize?: string | null
   capsuleType?: string | null
-  createdBy?: string | null
+  customerService?: string | null
   ingredients: CreateIngredientData[]
 }
 

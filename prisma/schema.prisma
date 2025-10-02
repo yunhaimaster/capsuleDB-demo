@@ -25,7 +25,7 @@ model ProductionOrder {
   capsuleType        String?      // 膠囊成份 (明膠胃溶, 植物胃溶, 明膠腸溶, 植物腸溶)
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
-  createdBy          String?      // 建檔人員
+  customerService    String?      // 客服姓名
   ingredients        Ingredient[]
 
   @@map("production_orders")
@@ -36,7 +36,7 @@ model Ingredient {
   orderId       String
   materialName  String          // 原料品名
   unitContentMg Float           // 單粒含量
-  isCustomerProvided Boolean    @default(true) // 是否為客戶指定原料
+  isCustomerProvided Boolean    @default(true) // 是否為客戶提供原料
   order         ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("ingredients")

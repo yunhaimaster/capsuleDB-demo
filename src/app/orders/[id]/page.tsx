@@ -164,7 +164,7 @@ export default function OrderDetailPage() {
                 <p><span className="font-medium text-slate-900">客戶名稱：</span>{order.customerName}</p>
                 <p><span className="font-medium text-slate-900">產品名字：</span>{order.productName}</p>
                 <p><span className="font-medium text-slate-900">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-                <p><span className="font-medium text-slate-900">建檔人員：</span>{order.createdBy || '系統'}</p>
+                <p><span className="font-medium text-slate-900">客服：</span>{order.customerService || '未填寫'}</p>
               </div>
             </div>
             
@@ -245,7 +245,7 @@ export default function OrderDetailPage() {
                 <TableRow>
                   <TableHead>原料品名</TableHead>
                   <TableHead>單粒含量 (mg)</TableHead>
-                  <TableHead>客戶指定</TableHead>
+                  <TableHead>原料來源</TableHead>
                   <TableHead>批次用量</TableHead>
                 </TableRow>
               </TableHeader>
@@ -258,12 +258,12 @@ export default function OrderDetailPage() {
                       {ingredient.isCustomerProvided ? (
                         <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
                           <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                          客戶指定
+                          客戶提供
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-blue-500 text-xs sm:text-sm">
                           <span className="h-2 w-2 rounded-full bg-blue-400" />
-                          自行添加
+                          公司提供
                         </span>
                       )}
                     </TableCell>
@@ -286,8 +286,8 @@ export default function OrderDetailPage() {
                     {ingredient.materialName}
                   </h4>
                   <div className="flex items-center text-xs font-medium text-emerald-600">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 mr-1" />
-                    {ingredient.isCustomerProvided ? '客戶指定' : '自行添加'}
+                    <span className={`h-2 w-2 rounded-full mr-1 ${ingredient.isCustomerProvided ? 'bg-emerald-500' : 'bg-blue-400'}`} />
+                    {ingredient.isCustomerProvided ? '客戶提供' : '公司提供'}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm text-slate-700">

@@ -101,7 +101,7 @@ export function generateCSV(data: any[], headers: string[]): string {
 }
 
 export function downloadFile(content: string | Blob, filename: string, mimeType: string): void {
-  const blob = typeof content === 'string' ? new Blob([content], { type: mimeType }) : new Blob([content], { type: mimeType })
+  const blob = typeof content === 'string' ? new Blob([content], { type: mimeType }) : content
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

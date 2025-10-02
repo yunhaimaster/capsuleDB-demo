@@ -226,7 +226,7 @@ export async function POST(request: NextRequest) {
         capsuleColor: validatedData.capsuleColor,
         capsuleSize: validatedData.capsuleSize,
         capsuleType: validatedData.capsuleType,
-        createdBy: validatedData.createdBy || '系統',
+        customerService: validatedData.customerService,
         ingredients: {
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,

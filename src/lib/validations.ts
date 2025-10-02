@@ -64,7 +64,10 @@ export const productionOrderSchema = z.object({
     })
     .optional()
     .nullable(),
-  createdBy: z.string().optional().nullable(),
+  customerService: z
+    .string({ required_error: '客服姓名不能為空' })
+    .min(1, '客服姓名不能為空')
+    .max(100, '客服姓名不能超過100字'),
   ingredients: z
     .array(ingredientSchema)
     .min(1, '至少需要一項原料')

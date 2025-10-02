@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
         '單粒總重量(mg)',
         '批次總重量(mg)',
         '完工日期',
-        '建檔人員'
+        '客服'
       ]
 
       if (includeIngredients) {
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             (order.completionDate instanceof Date ? 
               order.completionDate.toISOString().split('T')[0] : 
               order.completionDate) : '',
-          order.createdBy || ''
+          order.customerService || ''
         ]
 
         if (includeIngredients) {

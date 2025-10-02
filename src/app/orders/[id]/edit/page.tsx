@@ -69,7 +69,7 @@ export default function EditOrderPage() {
               capsuleColor: order.capsuleColor,
               capsuleSize: order.capsuleSize as "#1" | "#0" | "#00" | null,
               capsuleType: order.capsuleType as "明膠胃溶" | "植物胃溶" | "明膠腸溶" | "植物腸溶" | null,
-              createdBy: order.createdBy,
+              customerService: order.customerService,
               ingredients: order.ingredients
             }}
             orderId={order.id}

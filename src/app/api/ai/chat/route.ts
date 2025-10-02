@@ -16,8 +16,8 @@ function cleanOrderData(orders: any[]): any[] {
     completionDate: order.completionDate,
     processIssues: order.processIssues,
     qualityNotes: order.qualityNotes,
+    customerService: order.customerService,
     ingredients: order.ingredients,
-    createdBy: order.createdBy,
     createdAt: order.createdAt,
     updatedAt: order.updatedAt
   }))

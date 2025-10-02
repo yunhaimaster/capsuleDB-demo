@@ -32,7 +32,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
             <p><span className="font-medium">產品名字：</span>{order.productName}</p>
             <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-            <p><span className="font-medium">建檔人員：</span>{order.createdBy || '系統'}</p>
+            <p><span className="font-medium">客服：</span>{order.customerService || '未填寫'}</p>
             {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
               <div className="mt-3 pt-3 border-t">
                 <h5 className="font-medium mb-2">膠囊規格</h5>
