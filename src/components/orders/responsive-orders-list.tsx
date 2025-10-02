@@ -6,12 +6,26 @@ import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
-import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot } from 'lucide-react'
+import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square } from 'lucide-react'
 import { formatDateOnly, downloadFile } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
   initialOrders?: ProductionOrder[]
   initialPagination?: any
+}
+
+const ORDER_STATUS_LABEL = {
+  inProgress: '進行中',
+  notStarted: '未開始',
+  completed: '已完成',
+}
+
+const getOrderStatus = (order: ProductionOrder) => {
+  const hasWork = order.worklogs && order.worklogs.length > 0
+  const completed = !!order.completionDate
+  if (hasWork && !completed) return 'inProgress' as const
+  if (!completed) return 'notStarted' as const
+  return 'completed' as const
 }
 
 export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: ResponsiveOrdersListProps) {
@@ -177,7 +191,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       {/* 篩選器 */}
       <LinkedFilter
         customerOptions={customerOptions}
@@ -191,114 +205,55 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
 
       {/* 桌面版表格 */}
       <div className="hidden lg:block">
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
-          <div className="liquid-glass-content">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <div className="icon-container icon-container-blue shadow-[0_10px_24px_rgba(42,150,209,0.25)]">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <h2 className="text-lg md:text-xl font-semibold text-[--brand-neutral] tracking-tight">訂單管理</h2>
-                  <p className="text-xs text-gray-600">檢視與維護所有生產訂單，掌握即時狀態</p>
-                </div>
-              </div>
-              <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/60 border border-white/70 text-[--brand-neutral]">
-                共 {orders.length} 筆
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-3 mb-6 text-xs font-medium">
-              <span className="px-3 py-1 rounded-full bg-blue-500/15 border border-blue-300/40 text-blue-700">
-                即時同步
-              </span>
-              <span className="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-300/40 text-purple-700">
-                支援匯出
-              </span>
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('customerName')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      客戶名稱
-                      {getSortIcon('customerName')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('productName')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      產品名稱
-                      {getSortIcon('productName')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('capsuleColor')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      膠囊規格
-                      {getSortIcon('capsuleColor')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('ingredients')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      原料成分
-                      {getSortIcon('ingredients')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('productionQuantity')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      訂單數量
-                      {getSortIcon('productionQuantity')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    <button
-                      onClick={() => handleSort('completionDate')}
-                      className="flex items-center gap-1 hover:text-gray-700"
-                    >
-                      完工日期
-                      {getSortIcon('completionDate')}
-                    </button>
-                  </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                    操作
-                  </th>
+        <div className="overflow-hidden rounded-3xl bg-white/70 backdrop-blur border border-white/60 shadow-[0_15px_45px_rgba(15,32,77,0.12)]">
+          <table className="min-w-full divide-y divide-slate-200">
+            <thead className="bg-white/80">
+              <tr>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">客戶名稱</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">產品名稱</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">狀態</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">配方摘要</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">訂單數量</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <button
+                    onClick={() => handleSort('completionDate')}
+                    className="flex items-center gap-1 hover:text-gray-700"
+                  >
+                    完工日期
+                    {getSortIcon('completionDate')}
+                  </button>
+                </th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-8 text-gray-500">
+                    載入中...
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-500">
-                      載入中...
-                    </td>
-                  </tr>
-                ) : orders.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="text-center py-8 text-gray-500">
-                      沒有找到訂單
-                    </td>
-                  </tr>
-                ) : (
-                  orders.map((order) => (
-                    <tr 
-                      key={order.id} 
-                      className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+              ) : orders.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-8 text-gray-500">
+                    沒有找到訂單
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => {
+                  const status = getOrderStatus(order)
+                  const statusLabel = ORDER_STATUS_LABEL[status]
+                  const statusBadgeClass =
+                    status === 'inProgress'
+                      ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white shadow-sm'
+                      : status === 'notStarted'
+                        ? 'bg-slate-200 text-slate-600'
+                        : 'bg-emerald-100 text-emerald-600'
+
+                  return (
+                    <tr
+                      key={order.id}
+                      className="border-b border-gray-100 hover:bg-white/80 cursor-pointer transition-colors"
                       onClick={() => window.location.href = `/orders/${order.id}`}
                     >
                       <td className="py-3 px-4 text-gray-900 text-sm">
@@ -320,24 +275,18 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                           )}
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                        {order.productName}
+                      <td className="py-3 px-4 text-gray-900 text-sm">{order.productName}</td>
+                      <td className="py-3 px-4 text-sm">
+                        <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${statusBadgeClass}`}>
+                          {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" /> : status === 'completed' ? <ChevronRight className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5" />}
+                          {statusLabel}
+                        </span>
+                        {status === 'inProgress' && order.totalWorkUnits ? (
+                          <div className="text-xs text-slate-500 mt-1">累積 {order.totalWorkUnits.toFixed(1)} 工</div>
+                        ) : null}
                       </td>
                       <td className="py-3 px-4 text-gray-900 text-sm">
-                        <div className="flex items-center gap-2">
-                          {order.capsuleColor && (
-                            <div 
-                              className="w-4 h-4 rounded-full border border-gray-300" 
-                              style={{ backgroundColor: getCapsuleColorCode(order.capsuleColor) }}
-                            />
-                          )}
-                          <span className="text-sm">
-                            {order.capsuleColor || '未設定'}{order.capsuleSize ? order.capsuleSize : ''}{order.capsuleType || ''}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                <div className="text-sm max-w-xs">
+                        <div className="text-sm max-w-xs">
                           {order.ingredients && order.ingredients.length > 0 ? (
                             <div className="space-y-1">
                               {order.ingredients
@@ -403,11 +352,11 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                  )
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -422,123 +371,127 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
             沒有找到訂單
           </div>
         ) : (
-          orders.map((order) => (
-            <div
-              key={order.id}
-              className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction cursor-pointer hover:scale-[1.02] transition-all duration-200"
-              onClick={() => window.location.href = `/orders/${order.id}`}
-            >
-              <div className="p-4 space-y-3">
-                {/* 標題行 */}
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900 text-base">
-                        {order.productName}
-                      </h3>
-                      {hasProcessOrQualityIssues(order) && (
-                        <div className="flex items-center gap-1">
-                          {order.processIssues && order.processIssues.trim() !== '' && (
-                            <div title={`製程問題: ${order.processIssues}`}>
-                              <AlertTriangle className="h-4 w-4 text-red-500" />
-                            </div>
-                          )}
-                          {order.qualityNotes && order.qualityNotes.trim() !== '' && (
-                            <div title={`品管備註: ${order.qualityNotes}`}>
-                              <ClipboardCheck className="h-4 w-4 text-blue-500" />
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {order.customerName}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        window.location.href = `/orders/${order.id}/edit`
-                      }}
-                      className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                      title="編輯訂單"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleOrderAIClick(order)
-                      }}
-                      className="text-purple-600 hover:text-purple-800 transition-colors p-1"
-                      title="Order AI 分析"
-                    >
-                      <Bot className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleDeleteClick(order.id)
-                      }}
-                      className="text-red-600 hover:text-red-800 transition-colors p-1"
-                      title="刪除訂單"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* 膠囊規格 */}
-                <div className="flex items-center gap-2">
-                  {order.capsuleColor && (
-                    <div 
-                      className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
-                      style={{ backgroundColor: getCapsuleColorCode(order.capsuleColor) }}
-                    />
-                  )}
-                  <span className="text-sm text-gray-700">
-                    {order.capsuleColor || '未設定'}{order.capsuleSize ? order.capsuleSize : ''}{order.capsuleType || ''}
-                  </span>
-                </div>
-
-                {/* 原料成分 */}
-                <div className="text-sm text-gray-600">
-                  {order.ingredients && order.ingredients.length > 0 ? (
-                    <div className="space-y-1">
-                      <span className="font-medium">主要原料：</span>
-                      <div className="flex flex-wrap gap-1">
-                        {order.ingredients
-                          .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
-                          .slice(0, 3)
-                          .map((ingredient, index) => (
-                          <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                            {ingredient.materialName}
-                          </span>
-                        ))}
-                        {order.ingredients.length > 3 && (
-                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                            +{order.ingredients.length - 3}
-                          </span>
+          orders.map((order) => {
+            const status = getOrderStatus(order)
+            const statusLabel = ORDER_STATUS_LABEL[status]
+            return (
+              <div
+                key={order.id}
+                className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction cursor-pointer hover:scale-[1.02] transition-all duration-200"
+                onClick={() => window.location.href = `/orders/${order.id}`}
+              >
+                <div className="p-4 space-y-3">
+                  {/* 標題行 */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-gray-900 text-base">
+                          {order.productName}
+                        </h3>
+                        {hasProcessOrQualityIssues(order) && (
+                          <div className="flex items-center gap-1">
+                            {order.processIssues && order.processIssues.trim() !== '' && (
+                              <div title={`製程問題: ${order.processIssues}`}>
+                                <AlertTriangle className="h-4 w-4 text-red-500" />
+                              </div>
+                            )}
+                            {order.qualityNotes && order.qualityNotes.trim() !== '' && (
+                              <div title={`品管備註: ${order.qualityNotes}`}>
+                                <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
+                      <p className="text-sm text-gray-600">
+                        {order.customerName}
+                      </p>
                     </div>
-                  ) : (
-                    <span className="text-gray-500">無原料資料</span>
-                  )}
-                </div>
-
-                {/* 底部資訊 */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <span>{order.productionQuantity?.toLocaleString()} 粒</span>
-                    <span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          window.location.href = `/orders/${order.id}/edit`
+                        }}
+                        className="text-blue-600 hover:text-blue-800 transition-colors p-1"
+                        title="編輯訂單"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleOrderAIClick(order)
+                        }}
+                        className="text-purple-600 hover:text-purple-800 transition-colors p-1"
+                        title="Order AI 分析"
+                      >
+                        <Bot className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteClick(order.id)
+                        }}
+                        className="text-red-600 hover:text-red-800 transition-colors p-1"
+                        title="刪除訂單"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-gray-400" />
+
+                  {/* 膠囊規格 */}
+                  <div className="flex items-center gap-2">
+                    {order.capsuleColor && (
+                      <div 
+                        className="w-4 h-4 rounded-full border border-gray-300" 
+                        style={{ backgroundColor: getCapsuleColorCode(order.capsuleColor) }}
+                      />
+                    )}
+                    <span className="text-sm text-gray-700">
+                      {order.capsuleColor || '未設定'}{order.capsuleSize ? order.capsuleSize : ''}{order.capsuleType || ''}
+                    </span>
+                  </div>
+
+                  {/* 原料成分 */}
+                  <div className="text-sm text-gray-600">
+                    {order.ingredients && order.ingredients.length > 0 ? (
+                      <div className="space-y-1">
+                        <span className="font-medium">主要原料：</span>
+                        <div className="flex flex-wrap gap-1">
+                          {order.ingredients
+                            .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
+                            .slice(0, 3)
+                            .map((ingredient, index) => (
+                            <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                              {ingredient.materialName}
+                            </span>
+                          ))}
+                          {order.ingredients.length > 3 && (
+                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                              +{order.ingredients.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-gray-500">無原料資料</span>
+                    )}
+                  </div>
+
+                  {/* 底部資訊 */}
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <span>{order.productionQuantity?.toLocaleString()} 粒</span>
+                      <span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            )
+          })
         )}
       </div>
 

@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
 
     const skip = (validatedFilters.page - 1) * validatedFilters.limit
     
-    // 自定義排序邏輯：未完工的在前，已完工的按日期排序
+    // 自定義排序邏輯：進行中 > 未開始 > 已完成（依完工日期）
     const [allOrders, total] = await Promise.all([
       prisma.productionOrder.findMany({
         where,
@@ -121,48 +121,31 @@ export async function GET(request: NextRequest) {
 
     // 應用自定義排序
     const sortedOrders = allOrders.sort((a, b) => {
-      // 如果是按完工日期排序，使用默認邏輯（未完工在前）
-      if (validatedFilters.sortBy === 'completionDate') {
-        const aCompleted = a.completionDate !== null
-        const bCompleted = b.completionDate !== null
-        
-        if (aCompleted !== bCompleted) {
-          return aCompleted ? 1 : -1 // 未完工的在前
-        }
-        
-        // 都是未完工或都是已完工時，按日期排序
+      const getStatusRank = (order: typeof a) => {
+        const hasWorklogs = order.worklogs && order.worklogs.length > 0
+        const completed = order.completionDate !== null
+        if (hasWorklogs && !completed) return 0 // 進行中
+        if (!completed) return 1 // 未開始
+        return 2 // 已完成
+      }
+
+      const rankA = getStatusRank(a)
+      const rankB = getStatusRank(b)
+
+      if (rankA !== rankB) {
+        return rankA - rankB
+      }
+
+      // 同一狀態下進行排序：已完成依完成日期，其餘依建立時間
+      if (rankA === 2) {
         const aDate = a.completionDate ? new Date(a.completionDate) : new Date(0)
         const bDate = b.completionDate ? new Date(b.completionDate) : new Date(0)
         return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
       }
-      
-      // 其他字段直接按指定字段排序
-      if (validatedFilters.sortBy === 'createdAt') {
-        const aDate = new Date(a.createdAt)
-        const bDate = new Date(b.createdAt)
-        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
-      } else {
-        // 字符串和數字字段的排序
-        const aValue = (a as any)[validatedFilters.sortBy]
-        const bValue = (b as any)[validatedFilters.sortBy]
-        
-        // 處理 null/undefined 值
-        if (aValue == null && bValue == null) return 0
-        if (aValue == null) return validatedFilters.sortOrder === 'asc' ? -1 : 1
-        if (bValue == null) return validatedFilters.sortOrder === 'asc' ? 1 : -1
-        
-        // 字符串排序
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-          return validatedFilters.sortOrder === 'asc' 
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue)
-        }
-        
-        // 數字排序
-        if (aValue < bValue) return validatedFilters.sortOrder === 'asc' ? -1 : 1
-        if (aValue > bValue) return validatedFilters.sortOrder === 'asc' ? 1 : -1
-        return 0
-      }
+
+      const aCreated = new Date(a.createdAt)
+      const bCreated = new Date(b.createdAt)
+      return validatedFilters.sortOrder === 'asc' ? aCreated.getTime() - bCreated.getTime() : bCreated.getTime() - aCreated.getTime()
     })
 
     // 應用分頁
