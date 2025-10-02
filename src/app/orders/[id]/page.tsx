@@ -51,7 +51,8 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6 brand-logo-bg-animation min-h-screen">
+      <div className="brand-logo-bg-animation min-h-screen flex flex-col">
+        <LiquidGlassNav />
         <div className="space-y-6 skeleton-stagger">
           {/* Basic Info Skeleton */}
           <Card className="liquid-glass-card liquid-glass-card-subtle">
@@ -89,13 +90,17 @@ export default function OrderDetailPage() {
             </CardContent>
           </Card>
         </div>
+        <div className="mt-auto w-full">
+          <LiquidGlassFooter />
+        </div>
       </div>
     )
   }
 
   if (error || !order) {
     return (
-      <div className="space-y-6">
+      <div className="brand-logo-bg-animation min-h-screen flex flex-col">
+        <LiquidGlassNav />
         <div className="flex items-center justify-center min-h-[400px]">
           <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction max-w-md w-full">
             <CardHeader className="text-center">
@@ -112,6 +117,9 @@ export default function OrderDetailPage() {
             </CardContent>
           </Card>
         </div>
+        <div className="mt-auto w-full">
+          <LiquidGlassFooter />
+        </div>
       </div>
     )
   }
@@ -122,8 +130,8 @@ export default function OrderDetailPage() {
       <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="relative z-10 w-full">
-        <div className="pt-24 sm:pt-28 pb-24 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
+      <div className="relative z-10 w-full flex-1">
+        <div className="pt-20 sm:pt-24 pb-16 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
           <div className="mx-auto w-full max-w-6xl space-y-8">
           {/* 操作按鈕 */}
           <div className="flex flex-wrap items-center justify-end gap-3 relative z-[2000]">
