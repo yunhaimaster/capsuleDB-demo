@@ -11,6 +11,7 @@ import { ProductionOrder, OrderWorklog } from '@/types'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
+import { LiquidGlassLoading } from '@/components/ui/liquid-glass-loading'
 import Link from 'next/link'
 import { sumWorkUnits } from '@/lib/worklog'
 
@@ -50,7 +51,12 @@ export default function OrderDetailPage() {
   }
 
   if (loading) {
-    return null
+    return (
+      <LiquidGlassLoading
+        title="載入訂單詳情"
+        message="資料正在整理，請稍候…"
+      />
+    )
   }
 
   if (error || !order) {
