@@ -435,13 +435,13 @@ export function LinkedFilter({
           <Button
             onClick={handleSearch}
             disabled={loading}
-            className="flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:shadow-[0_10px_24px_rgba(29,78,216,0.28)] transition-shadow"
           >
             {loading ? '搜尋中...' : '重新搜尋'}
           </Button>
-          <Link href="/orders/new">
+          <Link href="/orders/new" className="w-full sm:w-auto">
             <Button
-              className="flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#8b5cf6] via-[#a855f7] to-[#ec4899] text-white shadow-[0_8px_20px_rgba(139,92,246,0.25)] hover:shadow-[0_10px_26px_rgba(236,72,153,0.28)] transition-shadow w-full sm:w-auto"
               disabled={loading}
             >
               + 新建訂單

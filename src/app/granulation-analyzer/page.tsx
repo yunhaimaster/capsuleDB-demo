@@ -582,7 +582,7 @@ export default function GranulationAnalyzerPage() {
                               <div>
                                 <div className="flex items-center gap-3 mb-1">
                                   <h3 className="text-base font-semibold text-gray-800">{config.name}</h3>
-                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_BADGE_CLASS[analysis.status]}`}>
+                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium min-w-[64px] justify-center ${STATUS_BADGE_CLASS[analysis.status]}`}>
                                     {STATUS_LABEL[analysis.status]}
                                   </span>
                                 </div>
@@ -644,7 +644,7 @@ export default function GranulationAnalyzerPage() {
                             </div>
                           ) : (
                             <div className="relative">
-                              <div className="prose max-w-none">
+                              <div className="prose max-w-none overflow-x-auto">
                                 {analysis.content ? (
                                   <MarkdownRenderer content={analysis.content} />
                                 ) : hasRequested ? (

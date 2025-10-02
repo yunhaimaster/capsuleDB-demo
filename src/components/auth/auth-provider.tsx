@@ -27,12 +27,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (code === '2356') {
       setIsAuthenticated(true)
       localStorage.setItem('easypack_auth', 'true')
+      localStorage.setItem('isAuthenticated', 'true')
     }
   }
 
   const logout = () => {
     setIsAuthenticated(false)
     localStorage.removeItem('easypack_auth')
+    localStorage.removeItem('isAuthenticated')
   }
 
   if (isLoading) {

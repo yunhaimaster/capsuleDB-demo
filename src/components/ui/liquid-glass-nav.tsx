@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Logo } from '@/components/ui/logo'
 import { NavDropdown } from '@/components/ui/nav-dropdown'
 import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
+import { useAuth } from '@/components/auth/auth-provider'
 
 type NavLink = NavigationLink & {
   active?: boolean
@@ -26,6 +27,8 @@ export function LiquidGlassNav({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
+  const router = useRouter()
+  const { logout } = useAuth()
 
   // Auto-detect active link based on current pathname
   const processedLinks = links.map(link => ({
@@ -93,9 +96,12 @@ export function LiquidGlassNav({
                 key={link.href}
                 href={link.href}
                 className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
-                onClick={() => {
+                onClick={(event) => {
                   if (link.label === '登出') {
-                    localStorage.removeItem('isAuthenticated')
+                    event.preventDefault()
+                    logout()
+                    setIsMobileMenuOpen(false)
+                    router.push('/login?logout=true')
                   }
                 }}
                 aria-current={link.active ? 'page' : undefined}
@@ -149,10 +155,12 @@ export function LiquidGlassNav({
                 <Link
                   href={link.href}
                   className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
-                  onClick={() => {
+                  onClick={(event) => {
                     setIsMobileMenuOpen(false)
                     if (link.label === '登出') {
-                      localStorage.removeItem('isAuthenticated')
+                      event.preventDefault()
+                      logout()
+                      router.push('/login?logout=true')
                     }
                   }}
                   aria-current={link.active ? 'page' : undefined}

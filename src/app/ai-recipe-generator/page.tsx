@@ -621,7 +621,7 @@ export default function AIRecipeGeneratorPage() {
                         <div>
                           <div className="flex items-center gap-3 mb-1">
                             <h2 className="text-lg font-semibold text-gray-800">{model.config.name}</h2>
-                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${STATUS_BADGE_CLASS[model.response.status]}`}>
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium min-w-[64px] justify-center ${STATUS_BADGE_CLASS[model.response.status]}`}>
                               {STATUS_LABEL[model.response.status]}
                             </span>
                           </div>
@@ -685,7 +685,7 @@ export default function AIRecipeGeneratorPage() {
                       </div>
                     ) : (
                       <div className="relative">
-                        <div className="prose max-w-none">
+                        <div className="prose max-w-none overflow-x-auto">
                           {model.response.content ? (
                             <MarkdownRenderer content={model.response.content} />
                           ) : hasRequested ? (
