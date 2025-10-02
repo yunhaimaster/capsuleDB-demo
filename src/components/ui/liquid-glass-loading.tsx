@@ -11,6 +11,10 @@ interface LiquidGlassLoadingProps {
   className?: string
 }
 
+/**
+ * Displays a full-screen Liquid Glass themed loading screen with optional navigation and footer.
+ * Useful when awaiting page-level data fetches while preserving overall brand styling.
+ */
 export function LiquidGlassLoading({
   title = '正在載入',
   message = '請稍候，系統正在準備最新資料…',
