@@ -6,7 +6,7 @@ const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter
 
 const MODEL_CATALOG = [
   { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini', supportsReasoning: false },
-  { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', supportsReasoning: true },
+  { id: 'x-ai/grok-4-fast', name: 'xAI Grok 4 Fast', supportsReasoning: false },
   { id: 'deepseek/deepseek-chat-v3.1', name: 'DeepSeek v3.1', supportsReasoning: true }
 ]
 
@@ -193,8 +193,7 @@ export async function POST(request: NextRequest) {
                         const parsed = JSON.parse(payload)
                         const delta = parsed.choices?.[0]?.delta?.content
                         if (delta) {
-                          const sanitized = delta.replace(/\n?[-]{3,}\n?/g, '\n\n')
-                          sendEvent('delta', { modelId: model.id, delta: sanitized })
+                          sendEvent('delta', { modelId: model.id, delta })
                         }
                       } catch (_err) {
                         // 忽略單行解析錯誤

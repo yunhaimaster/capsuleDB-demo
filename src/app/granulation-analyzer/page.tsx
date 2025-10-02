@@ -47,12 +47,12 @@ const MODEL_CONFIG = [
     supportsReasoning: false
   },
   {
-    id: 'google/gemini-2.5-flash',
-    name: 'Google Gemini 2.5 Flash',
-    badgeClass: 'badge-gemini',
-    description: '快速生成視覺化與重點摘要建議',
-    iconClass: 'icon-container-cyan',
-    supportsReasoning: true
+    id: 'x-ai/grok-4-fast',
+    name: 'xAI Grok 4 Fast',
+    badgeClass: 'badge-grok',
+    description: '快速生成視覺化重點摘要與洞見',
+    iconClass: 'icon-container-blue',
+    supportsReasoning: false
   },
   {
     id: 'deepseek/deepseek-chat-v3.1',
@@ -84,9 +84,6 @@ const STATUS_LABEL: Record<AnalysisStatus, string> = {
   success: '完成',
   error: '錯誤'
 }
-
-const sanitizeStreamingMarkdown = (content: string) =>
-  content.replace(/^\s*[-]{6,}\s*$/gm, '------')
 
 export default function GranulationAnalyzerPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([
@@ -226,13 +223,13 @@ export default function GranulationAnalyzerPage() {
                 [modelId]: prev[modelId]
                   ? {
                       ...prev[modelId],
-                      content: sanitizeStreamingMarkdown((prev[modelId].content || '') + delta),
+                      content: (prev[modelId].content || '') + delta,
                       status: 'loading'
                     }
                   : {
                       modelId,
                       modelName: MODEL_CONFIG.find((m) => m.id === modelId)?.name || modelId,
-                      content: sanitizeStreamingMarkdown(delta),
+                      content: delta,
                       status: 'loading',
                       startedAt: Date.now()
                     }
@@ -619,7 +616,7 @@ export default function GranulationAnalyzerPage() {
                                 <Repeat2 className="h-4 w-4" />
                                 重試
                               </Button>
-                              {config.supportsReasoning && (
+                        {config.supportsReasoning && (
                                 <label className="flex items-center gap-1 text-xs text-gray-500">
                                   <input
                                     type="checkbox"
