@@ -61,6 +61,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       capsuleSize: initialData?.capsuleSize || null,
       capsuleType: initialData?.capsuleType || null,
       customerService: initialData?.customerService || '',
+      actualProductionQuantity: initialData?.actualProductionQuantity ?? undefined,
+      materialYieldQuantity: initialData?.materialYieldQuantity ?? undefined,
       ingredients: initialData?.ingredients?.map(ingredient => ({
         ...ingredient,
         isCustomerProvided: ingredient.isCustomerProvided ?? false,
