@@ -434,7 +434,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                   <TableBody>
                     {worklogFields.map((field, index) => {
                       const summary = calculateWorklogSummary(index)
-                      const errorPrefix = errors.worklogs?.[index]
+                      const errorPrefix = errors.worklogs?.[index] as any
                       return (
                         <TableRow key={field.id}>
                           <TableCell className="min-w-[140px]">
@@ -474,7 +474,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <div className="md:hidden space-y-4">
                 {worklogFields.map((field, index) => {
                   const summary = calculateWorklogSummary(index)
-                  const errorPrefix = errors.worklogs?.[index]
+                  const errorPrefix = errors.worklogs?.[index] as any
                   return (
                     <div key={field.id} className="p-4 rounded-2xl bg-white/70 backdrop-blur border border-white/40 space-y-3">
                       <div className="flex items-center justify-between">
