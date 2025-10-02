@@ -50,58 +50,14 @@ export default function OrderDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className="brand-logo-bg-animation min-h-screen flex flex-col">
-        <LiquidGlassNav />
-        <div className="space-y-6 skeleton-stagger">
-          {/* Basic Info Skeleton */}
-          <Card className="liquid-glass-card liquid-glass-card-subtle">
-            <CardHeader>
-              <div className="skeleton skeleton-title"></div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="skeleton skeleton-text-sm"></div>
-                  <div className="skeleton skeleton-text"></div>
-                  <div className="skeleton skeleton-text"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="skeleton skeleton-text-sm"></div>
-                  <div className="skeleton skeleton-text"></div>
-                  <div className="skeleton skeleton-text"></div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Ingredients Skeleton */}
-          <Card className="liquid-glass-card liquid-glass-card-subtle">
-            <CardHeader>
-              <div className="skeleton skeleton-title"></div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="skeleton skeleton-table-row"></div>
-                <div className="skeleton skeleton-table-row"></div>
-                <div className="skeleton skeleton-table-row"></div>
-                <div className="skeleton skeleton-table-row"></div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="mt-auto w-full">
-          <LiquidGlassFooter />
-        </div>
-      </div>
-    )
+    return null
   }
 
   if (error || !order) {
     return (
       <div className="brand-logo-bg-animation min-h-screen flex flex-col">
         <LiquidGlassNav />
-        <div className="flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center justify-center flex-1 px-4">
           <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction max-w-md w-full">
             <CardHeader className="text-center">
               <CardTitle className="text-xl text-red-600">載入失敗</CardTitle>
@@ -131,7 +87,7 @@ export default function OrderDetailPage() {
 
       {/* Main Content with padding for fixed nav */}
       <div className="relative z-10 w-full flex-1">
-        <div className="pt-20 sm:pt-24 pb-16 px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
+        <div className="pt-20 sm:pt-24 pb-16 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
           <div className="mx-auto w-full max-w-6xl space-y-8">
           {/* 操作按鈕 */}
           <div className="flex flex-wrap items-center justify-end gap-3 relative z-[2000]">
