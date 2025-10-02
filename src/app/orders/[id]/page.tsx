@@ -121,7 +121,7 @@ export default function OrderDetailPage() {
       <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 pb-24 floating-combined relative">
+      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-16 lg:px-20 xl:px-24 space-y-8 pb-24 floating-combined relative">
 
 
       {/* 操作按鈕 */}
@@ -310,7 +310,9 @@ export default function OrderDetailPage() {
         </CardContent>
       </Card>
       </div>
-      <LiquidGlassFooter />
+      <div className="mt-auto w-full">
+        <LiquidGlassFooter />
+      </div>
     </div>
   )
 }
