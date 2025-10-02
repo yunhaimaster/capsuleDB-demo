@@ -7,8 +7,7 @@ import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot } from 'lucide-react'
-import { formatDateOnly } from '@/lib/utils'
-import { formatDateOnly, generateCSV, downloadFile } from '@/lib/utils'
+import { formatDateOnly, downloadFile } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
   initialOrders?: ProductionOrder[]
