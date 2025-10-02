@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 interface AuthContextType {
   isAuthenticated: boolean
@@ -14,7 +13,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     // 檢查本地存儲中是否有認證狀態
@@ -37,7 +35,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsAuthenticated(false)
     localStorage.removeItem('easypack_auth')
     localStorage.removeItem('isAuthenticated')
-    router.push('/login?logout=true')
   }
 
   if (isLoading) {

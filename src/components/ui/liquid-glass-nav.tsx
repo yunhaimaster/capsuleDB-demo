@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Logo } from '@/components/ui/logo'
 import { NavDropdown } from '@/components/ui/nav-dropdown'
 import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
@@ -27,7 +27,6 @@ export function LiquidGlassNav({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
-  const router = useRouter()
   const { logout } = useAuth()
 
   // Auto-detect active link based on current pathname
@@ -101,7 +100,7 @@ export function LiquidGlassNav({
                     event.preventDefault()
                     logout()
                     setIsMobileMenuOpen(false)
-                    router.push('/login?logout=true')
+                    setTimeout(() => window.location.assign('/login?logout=true'), 50)
                   }
                 }}
                 aria-current={link.active ? 'page' : undefined}
@@ -160,7 +159,7 @@ export function LiquidGlassNav({
                     if (link.label === '登出') {
                       event.preventDefault()
                       logout()
-                      router.push('/login?logout=true')
+                      setTimeout(() => window.location.assign('/login?logout=true'), 50)
                     }
                   }}
                   aria-current={link.active ? 'page' : undefined}

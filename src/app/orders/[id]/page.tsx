@@ -125,7 +125,7 @@ export default function OrderDetailPage() {
 
 
       {/* 操作按鈕 */}
-      <div className="flex flex-wrap items-center justify-end gap-3 relative z-[1200]">
+      <div className="flex flex-wrap items-center justify-end gap-3 relative z-[2000]">
         <OrderAIAssistant order={order} />
         <Link href={`/orders/${order.id}/edit`}>
           <Button className="ripple-effect btn-micro-hover bg-blue-600 hover:bg-blue-700 h-10 px-4">

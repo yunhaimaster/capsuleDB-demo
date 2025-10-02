@@ -2496,7 +2496,7 @@
   pointer-events: none;
 }
 
-.floating-combined > * {
+.floating-combined > *:not(.liquid-glass-modal-backdrop) {
   position: relative;
   z-index: 1;
 }
