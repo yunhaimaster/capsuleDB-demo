@@ -8,6 +8,7 @@ import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/li
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
+import { formatDateOnly, generateCSV, downloadFile } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -110,16 +111,46 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     return filters.sortOrder === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
   }
 
-  const handleExport = (format: 'csv' | 'excel') => {
-    const params = new URLSearchParams()
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== '' && value !== null) {
-        params.append(key, value.toString())
+  const handleExport = async (format: 'csv' | 'pdf') => {
+    try {
+      const response = await fetch('/api/orders/export', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          format,
+          filters
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('匯出失敗，請稍後再試')
       }
-    })
-    params.append('format', format)
-    
-    window.open(`/api/orders/export?${params}`, '_blank')
+
+      if (format === 'csv') {
+        const blob = await response.blob()
+        const text = await blob.text()
+        downloadFile(
+          text,
+          `production-orders-${new Date().toISOString().split('T')[0]}.csv`,
+          'text/csv;charset=utf-8'
+        )
+      } else {
+        const blob = await response.blob()
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `production-orders-${new Date().toISOString().split('T')[0]}.pdf`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+      }
+    } catch (error) {
+      console.error('匯出錯誤:', error)
+      alert('匯出失敗，請稍後再試')
+    }
   }
 
   const handleDeleteClick = (orderId: string) => {

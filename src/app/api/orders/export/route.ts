@@ -6,13 +6,77 @@ import jsPDF from 'jspdf'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { format, includeIngredients = false, dateRange } = body
+    const { format, includeIngredients = false, dateRange, filters } = body
 
-    const where: any = {}
+    const where: Record<string, any> = {}
+    const searchConditions: any[] = []
+
+    if (filters?.customerName) {
+      searchConditions.push({
+        customerName: {
+          contains: filters.customerName,
+          mode: 'insensitive'
+        }
+      })
+    }
+
+    if (filters?.productName) {
+      searchConditions.push({
+        productName: {
+          contains: filters.productName,
+          mode: 'insensitive'
+        }
+      })
+    }
+
+    if (filters?.ingredientName) {
+      searchConditions.push({
+        ingredients: {
+          some: {
+            materialName: {
+              contains: filters.ingredientName,
+              mode: 'insensitive'
+            }
+          }
+        }
+      })
+    }
+
+    if (filters?.capsuleType) {
+      searchConditions.push({
+        capsuleType: {
+          contains: filters.capsuleType,
+          mode: 'insensitive'
+        }
+      })
+    }
+
+    if (searchConditions.length > 0) {
+      where.AND = searchConditions
+    }
+
     if (dateRange) {
       where.createdAt = {
         gte: new Date(dateRange.from),
         lte: new Date(dateRange.to)
+      }
+    }
+
+    if (filters?.minQuantity !== undefined || filters?.maxQuantity !== undefined) {
+      where.productionQuantity = {}
+      if (filters.minQuantity !== undefined) {
+        where.productionQuantity.gte = Number(filters.minQuantity)
+      }
+      if (filters.maxQuantity !== undefined) {
+        where.productionQuantity.lte = Number(filters.maxQuantity)
+      }
+    }
+
+    if (filters?.isCompleted !== undefined) {
+      if (filters.isCompleted) {
+        where.completionDate = { not: null }
+      } else {
+        where.completionDate = null
       }
     }
 
