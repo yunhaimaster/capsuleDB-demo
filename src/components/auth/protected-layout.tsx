@@ -3,6 +3,7 @@
 import { useAuth } from './auth-provider'
 import { LoginForm } from './login-form'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 interface ProtectedLayoutProps {
   children: React.ReactNode
@@ -10,6 +11,11 @@ interface ProtectedLayoutProps {
 
 export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const { isAuthenticated, login } = useAuth()
+  const pathname = usePathname()
+
+  if (!isAuthenticated && pathname === '/login') {
+    return <>{children}</>
+  }
 
   if (!isAuthenticated) {
     return (

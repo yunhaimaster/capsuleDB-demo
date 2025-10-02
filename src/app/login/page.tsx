@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/components/auth/auth-provider'
 import { LoginForm } from '@/components/auth/login-form'
 
 export default function LoginPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLogout, setIsLogout] = useState(false)
   const router = useRouter()
+  const { login } = useAuth()
 
   useEffect(() => {
     // 檢查是否是登出操作
@@ -31,9 +33,7 @@ export default function LoginPage() {
   }, [router])
 
   const handleLogin = (code: string) => {
-    // Store authentication status
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('easypack_auth', 'true') // 統一認證系統
+    login(code)
     setIsAuthenticated(true)
     router.push('/')
   }
