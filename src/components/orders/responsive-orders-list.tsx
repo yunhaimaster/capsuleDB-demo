@@ -263,7 +263,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       onClick={() => handleSort('productionQuantity')}
                       className="flex items-center gap-1 hover:text-gray-700"
                     >
-                      生產數量
+                      訂單數量
                       {getSortIcon('productionQuantity')}
                     </button>
                   </th>
