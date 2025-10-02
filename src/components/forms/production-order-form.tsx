@@ -313,7 +313,15 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 id="productionQuantity"
                 type="number"
                 {...register('productionQuantity', { valueAsNumber: true })}
-                placeholder="請輸入生產數量"
+                placeholder="請輸入訂單數量"
+                min="1"
+                max="5000000"
+              />
+              {errors.productionQuantity && (
+                <p className="text-sm text-destructive">{errors.productionQuantity.message}</p>
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="actualProductionQuantity">實際生產數量 (粒)</Label>
               <Input
@@ -339,13 +347,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               />
               {errors.materialYieldQuantity && (
                 <p className="text-sm text-destructive">{errors.materialYieldQuantity.message}</p>
-              )}
-            </div>
-                min="1"
-                max="5000000"
-              />
-              {errors.productionQuantity && (
-                <p className="text-sm text-destructive">{errors.productionQuantity.message}</p>
               )}
             </div>
           </div>
