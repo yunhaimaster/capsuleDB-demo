@@ -20,6 +20,8 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     e.preventDefault()
     if (code === '2356') {
       onLogin(code)
+      localStorage.setItem('easypack_auth', 'true')
+      localStorage.setItem('isAuthenticated', 'true')
       setError('')
     } else {
       setError('登陸碼錯誤，請重新輸入')

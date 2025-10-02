@@ -17,7 +17,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // 檢查本地存儲中是否有認證狀態
     const authStatus = localStorage.getItem('easypack_auth')
-    if (authStatus === 'true') {
+    const classicStatus = localStorage.getItem('isAuthenticated')
+    if (authStatus === 'true' || classicStatus === 'true') {
       setIsAuthenticated(true)
     }
     setIsLoading(false)
