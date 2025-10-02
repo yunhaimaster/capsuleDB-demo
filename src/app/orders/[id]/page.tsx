@@ -57,7 +57,7 @@ export default function OrderDetailPage() {
     return (
       <div className="brand-logo-bg-animation min-h-screen flex flex-col">
         <LiquidGlassNav />
-        <div className="flex items-center justify-center flex-1 px-4">
+        <main className="flex-1 flex items-center justify-center px-4">
           <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction max-w-md w-full">
             <CardHeader className="text-center">
               <CardTitle className="text-xl text-red-600">載入失敗</CardTitle>
@@ -72,10 +72,8 @@ export default function OrderDetailPage() {
               </Link>
             </CardContent>
           </Card>
-        </div>
-        <div className="mt-auto w-full">
-          <LiquidGlassFooter />
-        </div>
+        </main>
+        <LiquidGlassFooter className="w-full" />
       </div>
     )
   }
@@ -85,10 +83,9 @@ export default function OrderDetailPage() {
       {/* Liquid Glass Navigation */}
       <LiquidGlassNav />
 
-      {/* Main Content with padding for fixed nav */}
-      <div className="relative z-10 w-full flex-1">
-        <div className="pt-20 sm:pt-24 pb-16 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
-          <div className="mx-auto w-full max-w-6xl space-y-8">
+      {/* Main Content */}
+      <main className="flex-1 w-full pt-20 sm:pt-24 pb-16">
+        <div className="mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
           {/* 操作按鈕 */}
           <div className="flex flex-wrap items-center justify-end gap-3 relative z-[2000]">
             <OrderAIAssistant order={order} />
@@ -112,7 +109,7 @@ export default function OrderDetailPage() {
               <CardTitle className="text-lg md:text-lg flex items-center gap-2">
                 <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
                   </svg>
                 </div>
                 <span className="text-[--brand-neutral]">基本資訊</span>
@@ -134,7 +131,7 @@ export default function OrderDetailPage() {
                     <p><span className="font-medium text-slate-900">客服：</span>{order.customerService || '未填寫'}</p>
                   </div>
                 </div>
-                
+
                 <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
                   <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-500 text-[11px] font-semibold">狀</span>
@@ -157,7 +154,7 @@ export default function OrderDetailPage() {
 
               {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
                 <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-                  <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                  <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md-text-sm">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-500 text-[11px] font-semibold">膠</span>
                     膠囊規格
                   </h4>
@@ -177,7 +174,7 @@ export default function OrderDetailPage() {
 
               {(order.processIssues || order.qualityNotes) && (
                 <div className="liquid-glass-card liquid-glass-card-subtle p-4 rounded-2xl space-y-3">
-                  <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md:text-sm">
+                  <h4 className="font-medium text-[--brand-neutral] flex items-center gap-2 text-xs md-text-sm">
                     <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-500 text-[11px] font-semibold">備</span>
                     備註資訊
                   </h4>
@@ -371,13 +368,10 @@ export default function OrderDetailPage() {
               )}
             </CardContent>
           </Card>
-
-            <div className="mt-12">
-              <LiquidGlassFooter />
-            </div>
-          </div>
         </div>
-      </div>
+      </main>
+
+      <LiquidGlassFooter className="w-full" />
     </div>
   )
 }
