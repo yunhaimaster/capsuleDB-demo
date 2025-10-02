@@ -3,17 +3,18 @@
 import { useState, useEffect } from 'react'
 import { useForm, useFieldArray, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { productionOrderSchema, type ProductionOrderFormData } from '@/lib/validations'
+import { productionOrderSchema, worklogSchema, type ProductionOrderFormData } from '@/lib/validations'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, Info } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
+import { calculateWorkUnits } from '@/lib/worklog'
 import { useRouter } from 'next/navigation'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -69,7 +70,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         isCustomerSupplied: ingredient.isCustomerSupplied ?? false
       })) || [
         { materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }
-      ]
+      ],
+      worklogs: (initialData?.worklogs as any[])?.map((log) => ({
+        ...log,
+        workDate: log.workDate ? log.workDate.toString().slice(0, 10) : '',
+        notes: log.notes || ''
+      })) || []
     }
   })
 
@@ -77,6 +83,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
     control,
     name: 'ingredients'
   })
+
+  const { fields: worklogFields, append: appendWorklog, remove: removeWorklog, update: updateWorklog } = useFieldArray({ control, name: 'worklogs' })
 
   const watchedIngredients = watch('ingredients')
 
@@ -99,14 +107,21 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       const url = orderId ? `/api/orders/${orderId}` : '/api/orders'
       const method = orderId ? 'PUT' : 'POST'
 
-      console.log('Submitting data:', data) // 調試用
+      const payload = {
+        ...data,
+        worklogs: data.worklogs?.map((entry) => {
+          const parsed = worklogSchema.parse(entry)
+          const { minutes, units } = calculateWorkUnits({ date: parsed.workDate, startTime: parsed.startTime, endTime: parsed.endTime, headcount: Number(parsed.headcount) })
+          return { ...parsed, effectiveMinutes: minutes, calculatedWorkUnits: units }
+        })
+      }
 
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       })
 
       console.log('Response status:', response.status) // 調試用
@@ -178,6 +193,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       console.error('導入原料時發生錯誤:', error)
       alert(`導入失敗：${error instanceof Error ? error.message : '未知錯誤'}`)
     }
+  }
+
+  const addWorklog = () => {
+    appendWorklog({ workDate: new Date().toISOString().slice(0, 10), headcount: 1, startTime: '08:30', endTime: '17:30', notes: '' })
+  }
+
+  const calculateWorklogSummary = (index: number) => {
+    const entry = watch(`worklogs.${index}`)
+    const headcountNumber = Number(entry?.headcount)
+    if (!entry?.workDate || !entry?.startTime || !entry?.endTime || !headcountNumber || Number.isNaN(headcountNumber)) return null
+    const { units } = calculateWorkUnits({ date: entry.workDate, startTime: entry.startTime, endTime: entry.endTime, headcount: headcountNumber })
+    return units
   }
 
   if (isSubmitting) {
@@ -364,6 +391,137 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           </div>
           </div>
         </div>
+
+      {/* 工時紀錄 */}
+      <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction">
+        <div className="liquid-glass-content">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+              <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v2a1 1 0 102 0V6h1v2a1 1 0 102 0V6h6v2a1 1 0 102 0V6h1v2a1 1 0 102 0V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 11a1 1 0 000 2h1v4a1 1 0 102 0v-4h6v4a1 1 0 102 0v-4h1a1 1 0 100-2H4z" />
+                </svg>
+              </div>
+              <span style={{ color: '#2a588c' }}>工時紀錄</span>
+            </h2>
+            <Button type="button" onClick={addWorklog} className="ripple-effect btn-micro-hover bg-amber-500 hover:bg-amber-600">
+              <Plus className="mr-2 h-4 w-4" /> 新增工時
+            </Button>
+          </div>
+        </div>
+        <CardContent className="space-y-6">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-amber-600 bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2">
+            <Info className="h-4 w-4" />
+            <p>系統自動扣除 12:30-13:30 午餐時間，並以 0.5 工為單位向上取整後乘以人數。</p>
+          </div>
+          {worklogFields.length === 0 ? (
+            <p className="text-sm text-slate-500">暫未新增工時紀錄，點擊「新增工時」加入第一筆。</p>
+          ) : (
+            <div className="space-y-4">
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>日期</TableHead>
+                      <TableHead>人數</TableHead>
+                      <TableHead>開始時間</TableHead>
+                      <TableHead>結束時間</TableHead>
+                      <TableHead>備註</TableHead>
+                      <TableHead className="text-right">當日工時 (工)</TableHead>
+                      <TableHead className="text-right">操作</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {worklogFields.map((field, index) => {
+                      const summary = calculateWorklogSummary(index)
+                      const errorPrefix = errors.worklogs?.[index]
+                      return (
+                        <TableRow key={field.id}>
+                          <TableCell className="min-w-[140px]">
+                            <Input type="date" {...register(`worklogs.${index}.workDate` as const)} className="form-focus-effect" />
+                            {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
+                          </TableCell>
+                          <TableCell className="min-w-[120px]">
+                            <Input type="number" min={1} step={1} {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })} />
+                            {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
+                          </TableCell>
+                          <TableCell className="min-w-[120px]">
+                            <Input type="time" {...register(`worklogs.${index}.startTime` as const)} />
+                            {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
+                          </TableCell>
+                          <TableCell className="min-w-[120px]">
+                            <Input type="time" {...register(`worklogs.${index}.endTime` as const)} />
+                            {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
+                          </TableCell>
+                          <TableCell>
+                            <Input placeholder="可填寫內容摘要" {...register(`worklogs.${index}.notes` as const)} />
+                          </TableCell>
+                          <TableCell className="text-right font-semibold text-slate-800">
+                            {summary != null ? summary.toFixed(1) : '—'}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button type="button" variant="ghost" size="icon" onClick={() => removeWorklog(index)}>
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+
+              <div className="md:hidden space-y-4">
+                {worklogFields.map((field, index) => {
+                  const summary = calculateWorklogSummary(index)
+                  const errorPrefix = errors.worklogs?.[index]
+                  return (
+                    <div key={field.id} className="p-4 rounded-2xl bg-white/70 backdrop-blur border border-white/40 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm font-semibold text-slate-700">工時 #{index + 1}</div>
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeWorklog(index)}>
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 text-sm">
+                        <div>
+                          <Label className="text-xs text-slate-500">日期</Label>
+                          <Input type="date" {...register(`worklogs.${index}.workDate` as const)} />
+                          {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
+                        </div>
+                        <div>
+                          <Label className="text-xs text-slate-500">人數</Label>
+                          <Input type="number" min={1} step={1} {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })} />
+                          {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <Label className="text-xs text-slate-500">開始</Label>
+                            <Input type="time" {...register(`worklogs.${index}.startTime` as const)} />
+                            {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
+                          </div>
+                          <div>
+                            <Label className="text-xs text-slate-500">結束</Label>
+                            <Input type="time" {...register(`worklogs.${index}.endTime` as const)} />
+                            {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
+                          </div>
+                        </div>
+                        <div>
+                          <Label className="text-xs text-slate-500">備註</Label>
+                          <Input placeholder="可填寫內容摘要" {...register(`worklogs.${index}.notes` as const)} />
+                        </div>
+                        <div className="text-right text-sm font-semibold text-slate-700">
+                          當日工時：{summary != null ? summary.toFixed(1) : '—'} 工
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </div>
 
       {/* 膠囊規格 */}
         <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction">

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { productionOrderSchema, searchFiltersSchema } from '@/lib/validations'
+import { productionOrderSchema, searchFiltersSchema, worklogSchema } from '@/lib/validations'
 import { SearchFilters } from '@/types'
+import { calculateWorkUnits } from '@/lib/worklog'
+import { DateTime } from 'luxon'
 
 export const dynamic = 'force-dynamic'
 
@@ -108,7 +110,10 @@ export async function GET(request: NextRequest) {
       prisma.productionOrder.findMany({
         where,
         include: {
-          ingredients: true
+          ingredients: true,
+          worklogs: {
+            orderBy: { workDate: 'asc' }
+          }
         }
       }),
       prisma.productionOrder.count({ where })
@@ -171,7 +176,8 @@ export async function GET(request: NextRequest) {
       completionDate: order.completionDate ? 
         (order.completionDate instanceof Date ? 
           order.completionDate.toISOString().split('T')[0] : 
-          order.completionDate) : null
+          order.completionDate) : null,
+      totalWorkUnits: order.worklogs?.reduce((sum, log) => sum + (log.calculatedWorkUnits || 0), 0) ?? 0
     }))
 
     return NextResponse.json({
@@ -213,22 +219,46 @@ export async function POST(request: NextRequest) {
     
     console.log('Calculated weights:', { unitWeightMg, batchTotalWeightMg })
     
+    const { worklogs = [], ...orderPayload } = validatedData as typeof validatedData & { worklogs?: any[] }
+
+    const preparedWorklogs = worklogs.map((entry) => {
+      const parsed = worklogSchema.parse(entry)
+      const { minutes, units } = calculateWorkUnits({
+        date: parsed.workDate,
+        startTime: parsed.startTime,
+        endTime: parsed.endTime,
+        headcount: parsed.headcount
+      })
+
+      const workDate = DateTime.fromISO(parsed.workDate, { zone: 'Asia/Hong_Kong' })
+
+      return {
+        workDate: workDate.toJSDate(),
+        headcount: parsed.headcount,
+        startTime: parsed.startTime,
+        endTime: parsed.endTime,
+        notes: parsed.notes || null,
+        effectiveMinutes: minutes,
+        calculatedWorkUnits: units
+      }
+    })
+
     const order = await prisma.productionOrder.create({
       data: {
-        customerName: validatedData.customerName,
-        productName: validatedData.productName,
-        productionQuantity: validatedData.productionQuantity,
+        customerName: orderPayload.customerName,
+        productName: orderPayload.productName,
+        productionQuantity: orderPayload.productionQuantity,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: validatedData.completionDate && validatedData.completionDate !== '' ? new Date(validatedData.completionDate) : null,
-        processIssues: validatedData.processIssues,
-        qualityNotes: validatedData.qualityNotes,
-        capsuleColor: validatedData.capsuleColor,
-        capsuleSize: validatedData.capsuleSize,
-        capsuleType: validatedData.capsuleType,
-        customerService: validatedData.customerService,
-        actualProductionQuantity: validatedData.actualProductionQuantity ?? null,
-        materialYieldQuantity: validatedData.materialYieldQuantity ?? null,
+        completionDate: orderPayload.completionDate && orderPayload.completionDate !== '' ? new Date(orderPayload.completionDate) : null,
+        processIssues: orderPayload.processIssues,
+        qualityNotes: orderPayload.qualityNotes,
+        capsuleColor: orderPayload.capsuleColor,
+        capsuleSize: orderPayload.capsuleSize,
+        capsuleType: orderPayload.capsuleType,
+        customerService: orderPayload.customerService,
+        actualProductionQuantity: orderPayload.actualProductionQuantity ?? null,
+        materialYieldQuantity: orderPayload.materialYieldQuantity ?? null,
         ingredients: {
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
@@ -236,10 +266,16 @@ export async function POST(request: NextRequest) {
             isCustomerProvided: ingredient.isCustomerProvided ?? true,
             isCustomerSupplied: ingredient.isCustomerSupplied ?? true
           }))
+        },
+        worklogs: {
+          create: preparedWorklogs
         }
       },
       include: {
-        ingredients: true
+        ingredients: true,
+        worklogs: {
+          orderBy: { workDate: 'asc' }
+        }
       }
     })
 

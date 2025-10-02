@@ -17,6 +17,8 @@ export interface ProductionOrder {
   actualProductionQuantity?: number | null
   materialYieldQuantity?: number | null
   ingredients: Ingredient[]
+  worklogs?: OrderWorklog[]
+  totalWorkUnits?: number
 }
 
 export interface Ingredient {
@@ -42,6 +44,7 @@ export interface CreateProductionOrderData {
   actualProductionQuantity?: number | null
   materialYieldQuantity?: number | null
   ingredients: CreateIngredientData[]
+  worklogs?: CreateOrderWorklogData[]
 }
 
 export interface CreateIngredientData {
@@ -49,6 +52,28 @@ export interface CreateIngredientData {
   unitContentMg: number
   isCustomerProvided?: boolean
   isCustomerSupplied?: boolean
+}
+
+export interface OrderWorklog {
+  id: string
+  orderId: string
+  workDate: string
+  headcount: number
+  startTime: string
+  endTime: string
+  notes?: string | null
+  effectiveMinutes: number
+  calculatedWorkUnits: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreateOrderWorklogData {
+  workDate: string
+  headcount: number
+  startTime: string
+  endTime: string
+  notes?: string
 }
 
 export interface UpdateProductionOrderData extends Partial<CreateProductionOrderData> {

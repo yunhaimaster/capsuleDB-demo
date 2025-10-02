@@ -1,5 +1,27 @@
 import { z } from 'zod'
 
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/
+
+const toMinutes = (time: string) => {
+  const [hours, minutes] = time.split(':').map(Number)
+  return hours * 60 + minutes
+}
+
+const worklogBaseSchema = z.object({
+  workDate: z.string().min(1, '工作日期必須填寫'),
+  headcount: z.coerce.number().int('人數必須為整數').min(1, '人數至少為 1'),
+  startTime: z.string().regex(timeRegex, '開始時間格式錯誤'),
+  endTime: z.string().regex(timeRegex, '結束時間格式錯誤'),
+  notes: z.string().max(500, '備註不能超過 500 字').optional().nullable()
+}).refine((data) => {
+  const start = toMinutes(data.startTime)
+  const end = toMinutes(data.endTime)
+  return end > start
+}, {
+  message: '結束時間必須晚於開始時間',
+  path: ['endTime']
+})
+
 export const ingredientSchema = z.object({
   materialName: z
     .string()
@@ -85,6 +107,7 @@ export const productionOrderSchema = z.object({
     .min(0, '材料可做數量不可小於0')
     .optional()
     .nullable(),
+  worklogs: z.array(z.any()).optional(),
   ingredients: z
     .array(ingredientSchema)
     .min(1, '至少需要一項原料')
@@ -118,6 +141,8 @@ export const searchFiltersSchema = z.object({
   sortBy: z.enum(['createdAt', 'productionQuantity', 'customerName', 'productName', 'completionDate']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 })
+
+export const worklogSchema = worklogBaseSchema
 
 export type ProductionOrderFormData = z.infer<typeof productionOrderSchema>
 export type IngredientFormData = z.infer<typeof ingredientSchema>

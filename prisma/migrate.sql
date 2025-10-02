@@ -30,6 +30,23 @@ CREATE TABLE IF NOT EXISTS "ingredients" (
     CONSTRAINT "ingredients_pkey" PRIMARY KEY ("id")
 );
 
+-- 工時紀錄表
+CREATE TABLE IF NOT EXISTS "order_worklogs" (
+    "id" TEXT NOT NULL,
+    "orderId" TEXT NOT NULL,
+    "workDate" TIMESTAMP(3) NOT NULL,
+    "headcount" INTEGER NOT NULL,
+    "startTime" VARCHAR(5) NOT NULL,
+    "endTime" VARCHAR(5) NOT NULL,
+    "notes" TEXT,
+    "effectiveMinutes" INTEGER NOT NULL,
+    "calculatedWorkUnits" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "order_worklogs_pkey" PRIMARY KEY ("id")
+);
+
 -- 添加外鍵約束
 DO $$ 
 BEGIN
@@ -41,3 +58,16 @@ BEGIN
         FOREIGN KEY ("orderId") REFERENCES "production_orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
     END IF;
 END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'order_worklogs_orderId_fkey'
+    ) THEN
+        ALTER TABLE "order_worklogs" ADD CONSTRAINT "order_worklogs_orderId_fkey"
+        FOREIGN KEY ("orderId") REFERENCES "production_orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+END $$;
+
+CREATE INDEX IF NOT EXISTS "order_worklogs_orderId_workDate_idx" ON "order_worklogs"("orderId", "workDate");

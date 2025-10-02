@@ -138,6 +138,9 @@ async function main() {
             isCustomerProvided: ingredient.isCustomerProvided ?? true,
             isCustomerSupplied: ingredient.isCustomerSupplied ?? true
           }))
+        },
+        worklogs: {
+          create: []
         }
       }
     })

@@ -83,7 +83,10 @@ export async function POST(request: NextRequest) {
     const orders = await prisma.productionOrder.findMany({
       where,
       include: {
-        ingredients: includeIngredients
+        ingredients: includeIngredients,
+        worklogs: {
+          orderBy: { workDate: 'asc' }
+        }
       },
       orderBy: {
         createdAt: 'desc'
@@ -101,7 +104,8 @@ export async function POST(request: NextRequest) {
         '完工日期',
         '客服',
         '實際生產數量',
-        '材料可做數量'
+        '材料可做數量',
+        '累積工時 (工)'
       ]
 
       if (includeIngredients) {
@@ -109,6 +113,8 @@ export async function POST(request: NextRequest) {
       }
 
       const csvData = orders.map(order => {
+        const totalWorkUnits = order.worklogs?.reduce((sum, log) => sum + (log.calculatedWorkUnits || 0), 0) ?? 0
+
         const row = [
           order.createdAt.toISOString().split('T')[0],
           order.customerName,
@@ -122,7 +128,8 @@ export async function POST(request: NextRequest) {
               order.completionDate) : '',
           order.customerService || '',
           order.actualProductionQuantity != null ? order.actualProductionQuantity.toString() : '',
-          order.materialYieldQuantity != null ? order.materialYieldQuantity.toString() : ''
+          order.materialYieldQuantity != null ? order.materialYieldQuantity.toString() : '',
+          totalWorkUnits.toString()
         ]
 
         if (includeIngredients) {

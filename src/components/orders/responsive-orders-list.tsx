@@ -337,7 +337,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         </div>
                       </td>
                       <td className="py-3 px-4 text-gray-900 text-sm">
-                        <div className="text-sm max-w-xs">
+                <div className="text-sm max-w-xs">
                           {order.ingredients && order.ingredients.length > 0 ? (
                             <div className="space-y-1">
                               {order.ingredients
@@ -360,7 +360,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         </div>
                       </td>
                       <td className="py-3 px-4 text-gray-900 text-sm">
-                        {order.productionQuantity?.toLocaleString()} 粒
+                        <div className="flex flex-col">
+                          <span>{order.productionQuantity?.toLocaleString()} 粒</span>
+                          <span className="text-xs text-gray-500">累積工時：{order.totalWorkUnits ? order.totalWorkUnits.toFixed(1) : '—'} 工</span>
+                        </div>
                       </td>
                       <td className="py-3 px-4 text-gray-900 text-sm">
                         {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}

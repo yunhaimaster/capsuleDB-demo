@@ -1,3 +1,48 @@
+      {/* 工時紀錄 */}
+      <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+        <CardHeader>
+          <CardTitle className="text-lg md:text-lg flex items-center gap-2">
+            <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl">
+              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v2a1 1 0 102 0V6h1v2a1 1 0 102 0V6h6v2a1 1 0 102 0V6h1v2a1 1 0 102 0V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 11a1 1 0 000 2h1v4a1 1 0 102 0v-4h6v4a1 1 0 102 0v-4h1a1 1 0 100-2H4z" />
+              </svg>
+            </div>
+            <span className="text-[--brand-neutral]">工時紀錄</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {order.worklogs && order.worklogs.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left text-slate-600">
+                <thead className="text-xs uppercase tracking-wide text-slate-400">
+                  <tr>
+                    <th className="py-2">日期</th>
+                    <th className="py-2">人數</th>
+                    <th className="py-2">開始</th>
+                    <th className="py-2">結束</th>
+                    <th className="py-2">工時 (工)</th>
+                    <th className="py-2">備註</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(order.worklogs as OrderWorklog[]).map((log) => (
+                    <tr key={log.id} className="border-t border-slate-200">
+                      <td className="py-2">{formatDateOnly(log.workDate)}</td>
+                      <td className="py-2">{log.headcount}</td>
+                      <td className="py-2">{log.startTime}</td>
+                      <td className="py-2">{log.endTime}</td>
+                      <td className="py-2">{log.calculatedWorkUnits.toFixed(1)}</td>
+                      <td className="py-2 text-slate-500">{log.notes || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-slate-500">暫無工時記錄。</p>
+          )}
+        </CardContent>
+      </Card>
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -7,11 +52,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Edit, Download } from 'lucide-react'
 import { formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
-import { ProductionOrder } from '@/types'
+import { ProductionOrder, OrderWorklog } from '@/types'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import Link from 'next/link'
+import { sumWorkUnits } from '@/lib/worklog'
 
 export default function OrderDetailPage() {
   const params = useParams()
@@ -166,6 +212,7 @@ export default function OrderDetailPage() {
                 <p><span className="font-medium text-slate-900">訂單數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
                 <p><span className="font-medium text-slate-900">實際生產數量：</span>{order.actualProductionQuantity != null ? formatNumber(order.actualProductionQuantity) + ' 粒' : '—'}</p>
                 <p><span className="font-medium text-slate-900">材料可做數量：</span>{order.materialYieldQuantity != null ? formatNumber(order.materialYieldQuantity) + ' 粒' : '—'}</p>
+                <p><span className="font-medium text-slate-900">累積工時：</span>{order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工` : '—'}</p>
                 <p><span className="font-medium text-slate-900">客服：</span>{order.customerService || '未填寫'}</p>
               </div>
             </div>
@@ -179,6 +226,12 @@ export default function OrderDetailPage() {
                 <p><span className="font-medium text-slate-900">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
                 <p><span className="font-medium text-slate-900">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
                 <p><span className="font-medium text-slate-900">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
+                <p><span className="font-medium text-slate-900">工時狀態：</span>
+                  {order.worklogs && order.worklogs.length > 0
+                    ? order.completionDate
+                      ? '已完工'
+                      : '進行中'
+                    : '未開始'}</p>
               </div>
             </div>
           </div>
@@ -229,17 +282,17 @@ export default function OrderDetailPage() {
       </Card>
 
       {/* 原料配方明細 */}
-        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
-          <CardHeader>
-            <CardTitle className="text-lg md:text-lg flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                </svg>
-              </div>
-              <span style={{ color: '#2a588c' }}>原料配方明細</span>
-            </CardTitle>
-          </CardHeader>
+      <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+        <CardHeader>
+          <CardTitle className="text-lg md:text-lg flex items-center gap-2">
+            <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </div>
+            <span style={{ color: '#2a588c' }}>原料配方明細</span>
+          </CardTitle>
+        </CardHeader>
         <CardContent>
           <div className="hidden md:block">
             <Table>

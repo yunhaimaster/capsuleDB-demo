@@ -76,7 +76,15 @@ export default function EditOrderPage() {
                 ...ingredient,
                 isCustomerProvided: ingredient.isCustomerProvided ?? true,
                 isCustomerSupplied: ingredient.isCustomerSupplied ?? true
-              }))
+              })),
+              worklogs: order.worklogs?.map((log) => ({
+                id: log.id,
+                workDate: typeof log.workDate === 'string' ? log.workDate.slice(0, 10) : new Date(log.workDate).toISOString().slice(0, 10),
+                headcount: log.headcount,
+                startTime: log.startTime,
+                endTime: log.endTime,
+                notes: log.notes || ''
+              })) || []
             }}
             orderId={order.id}
           />

@@ -29,6 +29,7 @@ model ProductionOrder {
   actualProductionQuantity Int?   // 實際生產完成數量（粒）
   materialYieldQuantity   Int?    // 材料實際可做數量（粒）
   ingredients        Ingredient[]
+  worklogs           OrderWorklog[]
 
   @@map("production_orders")
 }
@@ -43,6 +44,25 @@ model Ingredient {
   order         ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("ingredients")
+}
+
+model OrderWorklog {
+  id                   String            @id @default(cuid())
+  orderId              String
+  workDate             DateTime
+  headcount            Int
+  startTime            String            @db.VarChar(5)
+  endTime              String            @db.VarChar(5)
+  notes                String?
+  effectiveMinutes     Int
+  calculatedWorkUnits  Float
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  order ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_worklogs")
+  @@index([orderId, workDate])
 }
 
 // ===== v2.0 新增模型 =====
