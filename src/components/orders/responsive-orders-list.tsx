@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
-import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square } from 'lucide-react'
+import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square, Calendar, Package2 } from 'lucide-react'
 import { formatDateOnly, downloadFile } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
@@ -209,20 +209,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-white/80">
               <tr>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">客戶名稱</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">產品名稱</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">客戶 / 產品</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">狀態</th>
+                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">訂單資訊</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">配方摘要</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">訂單數量</th>
-                <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
-                  <button
-                    onClick={() => handleSort('completionDate')}
-                    className="flex items-center gap-1 hover:text-gray-700"
-                  >
-                    完工日期
-                    {getSortIcon('completionDate')}
-                  </button>
-                </th>
                 <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">操作</th>
               </tr>
             </thead>
@@ -250,75 +240,113 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         ? 'bg-slate-200 text-slate-600'
                         : 'bg-emerald-100 text-emerald-600'
 
+                  const latestWorklog = order.worklogs && order.worklogs.length > 0
+                    ? order.worklogs[order.worklogs.length - 1]
+                    : null
+
                   return (
                     <tr
                       key={order.id}
-                      className="border-b border-gray-100 hover:bg-white/80 cursor-pointer transition-colors"
+                      className="border-b border-gray-100 hover:bg-white/80 transition-colors"
                       onClick={() => window.location.href = `/orders/${order.id}`}
                     >
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                        <div className="flex items-center gap-2">
-                          <span>{order.customerName}</span>
+                      <td className="py-4 px-4 text-gray-900 text-sm align-top">
+                        <div className="flex flex-col gap-1">
+                          <div className="font-semibold text-slate-900 text-base">{order.productName}</div>
+                          <div className="flex items-center gap-2 text-sm text-slate-600">
+                            <span>{order.customerName}</span>
+                            {order.customerService && (
+                              <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">客服：{order.customerService}</span>
+                            )}
+                          </div>
                           {hasProcessOrQualityIssues(order) && (
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 text-xs text-slate-400">
                               {order.processIssues && order.processIssues.trim() !== '' && (
                                 <div title={`製程問題: ${order.processIssues}`}>
-                                  <AlertTriangle className="h-4 w-4 text-red-500" />
+                                  <AlertTriangle className="h-3.5 w-3.5 text-red-500" />
                                 </div>
                               )}
                               {order.qualityNotes && order.qualityNotes.trim() !== '' && (
                                 <div title={`品管備註: ${order.qualityNotes}`}>
-                                  <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                                  <ClipboardCheck className="h-3.5 w-3.5 text-blue-500" />
                                 </div>
                               )}
                             </div>
                           )}
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">{order.productName}</td>
-                      <td className="py-3 px-4 text-sm">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${statusBadgeClass}`}>
-                          {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" /> : status === 'completed' ? <ChevronRight className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5" />}
-                          {statusLabel}
-                        </span>
-                        {status === 'inProgress' && order.totalWorkUnits ? (
-                          <div className="text-xs text-slate-500 mt-1">累積 {order.totalWorkUnits.toFixed(1)} 工</div>
-                        ) : null}
+                      <td className="py-4 px-4 text-sm align-top">
+                        <div className="flex flex-col gap-2">
+                          <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${statusBadgeClass}`}>
+                            {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" /> : status === 'completed' ? <Calendar className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5" />}
+                            {statusLabel}
+                          </span>
+                          <div className="text-xs text-slate-500 leading-relaxed">
+                            {status === 'completed' && order.completionDate ? (
+                              <div>完成日期：{order.completionDate}</div>
+                            ) : null}
+                            {status === 'inProgress' && order.totalWorkUnits ? (
+                              <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工</div>
+                            ) : null}
+                            {status === 'inProgress' && latestWorklog ? (
+                              <div>最近：{latestWorklog.startTime} - {latestWorklog.endTime}</div>
+                            ) : null}
+                            {status === 'notStarted' ? (
+                              <div>尚未安排工時</div>
+                            ) : null}
+                          </div>
+                        </div>
                       </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                        <div className="text-sm max-w-xs">
+                      <td className="py-4 px-4 text-sm text-slate-700 align-top">
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <Package2 className="h-3.5 w-3.5 text-slate-400" />
+                            <span className="font-medium text-slate-900">訂單數量：{order.productionQuantity?.toLocaleString()} 粒</span>
+                          </div>
+                          {order.actualProductionQuantity != null && (
+                            <div className="text-xs text-slate-500">實際生產：{order.actualProductionQuantity.toLocaleString()} 粒</div>
+                          )}
+                          {order.materialYieldQuantity != null && (
+                            <div className="text-xs text-slate-500">材料可做：{order.materialYieldQuantity.toLocaleString()} 粒</div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 text-gray-900 text-sm align-top">
+                        <div className="text-sm max-w-xs text-slate-600 leading-relaxed">
                           {order.ingredients && order.ingredients.length > 0 ? (
-                            <div className="space-y-1">
-                              {order.ingredients
-                                .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
-                                .slice(0, 2)
-                                .map((ingredient, index) => (
-                                <div key={index}>
-                                  <span className="text-sm">{ingredient.materialName}</span>
-                                </div>
-                              ))}
-                              {order.ingredients.length > 2 && (
-                                <div className="text-gray-500 text-sm">
-                                  +{order.ingredients.length - 2} 更多...
-                                </div>
-                              )}
-                            </div>
+                            <>
+                              <div className="font-medium text-slate-700 mb-1">主要原料：</div>
+                              <div className="flex flex-wrap gap-1 text-xs">
+                                {order.ingredients
+                                  .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
+                                  .slice(0, 3)
+                                  .map((ingredient, index) => (
+                                    <span key={index} className="bg-white/80 border border-slate-200 px-2 py-0.5 rounded-full">
+                                      {ingredient.materialName}
+                                    </span>
+                                  ))}
+                                {order.ingredients.length > 3 && (
+                                  <span className="text-slate-400">+{order.ingredients.length - 3}</span>
+                                )}
+                              </div>
+                            </>
                           ) : (
-                            <span className="text-gray-500 text-sm">無原料資料</span>
+                            <span className="text-slate-400">無原料資料</span>
                           )}
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                        <div className="flex flex-col">
-                          <span>{order.productionQuantity?.toLocaleString()} 粒</span>
-                          <span className="text-xs text-gray-500">累積工時：{order.totalWorkUnits ? order.totalWorkUnits.toFixed(1) : '—'} 工</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-gray-900 text-sm">
-                        {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
-                      </td>
-                      <td className="py-3 px-4">
+                      <td className="py-4 px-4">
                         <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              window.location.href = `/orders/${order.id}`
+                            }}
+                            className="text-slate-500 hover:text-slate-700 transition-colors"
+                            title="查看訂單"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation()
@@ -359,8 +387,8 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           </table>
         </div>
       </div>
-
-      {/* 移動版卡片列表 */}
+      
+      {/* Mobile cards */}
       <div className="lg:hidden space-y-4">
         {loading ? (
           <div className="text-center py-8 text-gray-500">
@@ -374,6 +402,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           orders.map((order) => {
             const status = getOrderStatus(order)
             const statusLabel = ORDER_STATUS_LABEL[status]
+            const latestWorklog = order.worklogs && order.worklogs.length > 0
+              ? order.worklogs[order.worklogs.length - 1]
+              : null
+
             return (
               <div
                 key={order.id}
@@ -381,112 +413,75 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                 onClick={() => window.location.href = `/orders/${order.id}`}
               >
                 <div className="p-4 space-y-3">
-                  {/* 標題行 */}
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-gray-900 text-base">
-                          {order.productName}
-                        </h3>
-                        {hasProcessOrQualityIssues(order) && (
-                          <div className="flex items-center gap-1">
-                            {order.processIssues && order.processIssues.trim() !== '' && (
-                              <div title={`製程問題: ${order.processIssues}`}>
-                                <AlertTriangle className="h-4 w-4 text-red-500" />
-                              </div>
-                            )}
-                            {order.qualityNotes && order.qualityNotes.trim() !== '' && (
-                              <div title={`品管備註: ${order.qualityNotes}`}>
-                                <ClipboardCheck className="h-4 w-4 text-blue-500" />
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-600">
-                        {order.customerName}
-                      </p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-900">{order.productName}</h3>
+                      <p className="text-xs text-slate-500">{order.customerName}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          window.location.href = `/orders/${order.id}/edit`
-                        }}
-                        className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                        title="編輯訂單"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleOrderAIClick(order)
-                        }}
-                        className="text-purple-600 hover:text-purple-800 transition-colors p-1"
-                        title="Order AI 分析"
-                      >
-                        <Bot className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteClick(order.id)
-                        }}
-                        className="text-red-600 hover:text-red-800 transition-colors p-1"
-                        title="刪除訂單"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 膠囊規格 */}
-                  <div className="flex items-center gap-2">
-                    {order.capsuleColor && (
-                      <div 
-                        className="w-4 h-4 rounded-full border border-gray-300" 
-                        style={{ backgroundColor: getCapsuleColorCode(order.capsuleColor) }}
-                      />
-                    )}
-                    <span className="text-sm text-gray-700">
-                      {order.capsuleColor || '未設定'}{order.capsuleSize ? order.capsuleSize : ''}{order.capsuleType || ''}
+                    <span className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-1 ${status === 'completed' ? 'bg-emerald-100 text-emerald-600' : status === 'inProgress' ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                      {statusLabel}
                     </span>
                   </div>
 
-                  {/* 原料成分 */}
-                  <div className="text-sm text-gray-600">
-                    {order.ingredients && order.ingredients.length > 0 ? (
-                      <div className="space-y-1">
-                        <span className="font-medium">主要原料：</span>
-                        <div className="flex flex-wrap gap-1">
-                          {order.ingredients
-                            .sort((a, b) => (b.unitContentMg || 0) - (a.unitContentMg || 0))
-                            .slice(0, 3)
-                            .map((ingredient, index) => (
-                            <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                              {ingredient.materialName}
-                            </span>
-                          ))}
-                          {order.ingredients.length > 3 && (
-                            <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                              +{order.ingredients.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="text-gray-500">無原料資料</span>
+                  <div className="text-xs text-slate-500 space-y-1">
+                    {status === 'completed' && order.completionDate && (
+                      <div>完成：{order.completionDate}</div>
+                    )}
+                    {status === 'inProgress' && order.totalWorkUnits && (
+                      <div>累積：{order.totalWorkUnits.toFixed(1)} 工</div>
+                    )}
+                    {status === 'inProgress' && latestWorklog && (
+                      <div>最近工時：{latestWorklog.startTime}-{latestWorklog.endTime}</div>
                     )}
                   </div>
 
-                  {/* 底部資訊 */}
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span>{order.productionQuantity?.toLocaleString()} 粒</span>
-                      <span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</span>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-slate-600">
+                    <div>
+                      <span className="block text-slate-400">訂單數量</span>
+                      <span className="text-sm font-semibold text-slate-900">{order.productionQuantity?.toLocaleString()} 粒</span>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-gray-400" />
+                    {order.actualProductionQuantity != null && (
+                      <div>
+                        <span className="block text-slate-400">實際生產</span>
+                        <span className="text-sm font-semibold text-slate-900">{order.actualProductionQuantity.toLocaleString()} 粒</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {order.ingredients && order.ingredients.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {order.ingredients.slice(0, 3).map((ingredient, index) => (
+                        <span key={index} className="bg-white/80 border border-slate-200 px-2 py-0.5 rounded-full">
+                          {ingredient.materialName}
+                        </span>
+                      ))}
+                      {order.ingredients.length > 3 && (
+                        <span className="text-slate-400">+{order.ingredients.length - 3}</span>
+                      )}
+                    </div>
+                  ) : null}
+
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        window.location.href = `/orders/${order.id}/edit`
+                      }}
+                    >
+                      <Edit className="h-4 w-4 mr-1" /> 編輯
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleOrderAIClick(order)
+                      }}
+                    >
+                      <Bot className="h-4 w-4 mr-1" /> AI
+                    </Button>
                   </div>
                 </div>
               </div>
