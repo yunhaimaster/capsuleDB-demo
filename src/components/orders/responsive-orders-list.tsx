@@ -283,7 +283,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                           </span>
                           <div className="text-xs text-slate-500 leading-relaxed">
                             {status === 'completed' && order.completionDate ? (
-                              <div>完成日期：{order.completionDate}</div>
+                              <div>完成日期：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                             ) : null}
                             {status === 'inProgress' && order.totalWorkUnits ? (
                               <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工</div>
@@ -425,7 +425,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
 
                   <div className="text-xs text-slate-500 space-y-1">
                     {status === 'completed' && order.completionDate && (
-                      <div>完成：{order.completionDate}</div>
+                      <div>完成：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                     )}
                     {status === 'inProgress' && order.totalWorkUnits && (
                       <div>累積：{order.totalWorkUnits.toFixed(1)} 工</div>
