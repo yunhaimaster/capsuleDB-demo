@@ -76,7 +76,7 @@ export default function EditOrderPage() {
           />
         </div>
       </div>
-      <LiquidGlassFooter />
+      <LiquidGlassFooter className="w-full" />
     </div>
   )
 }
