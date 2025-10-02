@@ -163,7 +163,9 @@ export default function OrderDetailPage() {
               <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
                 <p><span className="font-medium text-slate-900">客戶名稱：</span>{order.customerName}</p>
                 <p><span className="font-medium text-slate-900">產品名字：</span>{order.productName}</p>
-                <p><span className="font-medium text-slate-900">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+                <p><span className="font-medium text-slate-900">訂單數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
+                <p><span className="font-medium text-slate-900">實際生產數量：</span>{order.actualProductionQuantity != null ? formatNumber(order.actualProductionQuantity) + ' 粒' : '—'}</p>
+                <p><span className="font-medium text-slate-900">材料可做數量：</span>{order.materialYieldQuantity != null ? formatNumber(order.materialYieldQuantity) + ' 粒' : '—'}</p>
                 <p><span className="font-medium text-slate-900">客服：</span>{order.customerService || '未填寫'}</p>
               </div>
             </div>

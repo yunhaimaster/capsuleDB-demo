@@ -95,11 +95,13 @@ export async function POST(request: NextRequest) {
         '建檔日期',
         '客戶名稱',
         '產品代號',
-        '生產數量',
+        '訂單數量',
         '單粒總重量(mg)',
         '批次總重量(mg)',
         '完工日期',
-        '客服'
+        '客服',
+        '實際生產數量',
+        '材料可做數量'
       ]
 
       if (includeIngredients) {
@@ -118,7 +120,9 @@ export async function POST(request: NextRequest) {
             (order.completionDate instanceof Date ? 
               order.completionDate.toISOString().split('T')[0] : 
               order.completionDate) : '',
-          order.customerService || ''
+          order.customerService || '',
+          order.actualProductionQuantity != null ? order.actualProductionQuantity.toString() : '',
+          order.materialYieldQuantity != null ? order.materialYieldQuantity.toString() : ''
         ]
 
         if (includeIngredients) {

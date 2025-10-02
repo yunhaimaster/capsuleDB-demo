@@ -140,7 +140,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       }
       
       // 初始原料：預設為客戶提供
-      const newIngredients = importedIngredients.length > 0 
+      const newIngredients = importedIngredients.length > 0
         ? importedIngredients
             .map((ing, index) => {
               const materialName = String(ing.materialName || '').trim()
@@ -306,12 +306,39 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="productionQuantity">生產數量 *</Label>
+              <Label htmlFor="productionQuantity">訂單數量 *</Label>
               <Input
                 id="productionQuantity"
                 type="number"
                 {...register('productionQuantity', { valueAsNumber: true })}
                 placeholder="請輸入生產數量"
+            <div className="space-y-2">
+              <Label htmlFor="actualProductionQuantity">實際生產數量 (粒)</Label>
+              <Input
+                id="actualProductionQuantity"
+                type="number"
+                {...register('actualProductionQuantity', { valueAsNumber: true })}
+                placeholder="包裝完成後填寫"
+                min="0"
+              />
+              {errors.actualProductionQuantity && (
+                <p className="text-sm text-destructive">{errors.actualProductionQuantity.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="materialYieldQuantity">材料可做數量 (粒)</Label>
+              <Input
+                id="materialYieldQuantity"
+                type="number"
+                {...register('materialYieldQuantity', { valueAsNumber: true })}
+                placeholder="材料實際可生產數量"
+                min="0"
+              />
+              {errors.materialYieldQuantity && (
+                <p className="text-sm text-destructive">{errors.materialYieldQuantity.message}</p>
+              )}
+            </div>
                 min="1"
                 max="5000000"
               />

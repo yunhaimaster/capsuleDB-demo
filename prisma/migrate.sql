@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS "production_orders" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "customerService" TEXT,
+    "actualProductionQuantity" INTEGER,
+    "materialYieldQuantity" INTEGER,
 
     CONSTRAINT "production_orders_pkey" PRIMARY KEY ("id")
 );

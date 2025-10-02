@@ -72,6 +72,8 @@ export async function PUT(
         capsuleSize: validatedData.capsuleSize,
         capsuleType: validatedData.capsuleType,
         customerService: validatedData.customerService,
+        actualProductionQuantity: validatedData.actualProductionQuantity ?? null,
+        materialYieldQuantity: validatedData.materialYieldQuantity ?? null,
         // 更新原料：先刪除舊的再新增，包含客戶來源標記
         ingredients: {
           deleteMany: {},

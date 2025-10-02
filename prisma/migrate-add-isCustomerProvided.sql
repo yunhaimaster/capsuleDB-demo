@@ -8,6 +8,8 @@ ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "capsuleColor" TEXT;
 ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "capsuleSize" TEXT;
 ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "capsuleType" TEXT;
 ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "customerService" TEXT;
+ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "actualProductionQuantity" INTEGER;
+ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "materialYieldQuantity" INTEGER;
 
 -- 移除舊的 productCode 字段（如果存在）
 ALTER TABLE "production_orders" DROP COLUMN IF EXISTS "productCode";

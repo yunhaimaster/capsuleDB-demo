@@ -227,6 +227,8 @@ export async function POST(request: NextRequest) {
         capsuleSize: validatedData.capsuleSize,
         capsuleType: validatedData.capsuleType,
         customerService: validatedData.customerService,
+        actualProductionQuantity: validatedData.actualProductionQuantity ?? null,
+        materialYieldQuantity: validatedData.materialYieldQuantity ?? null,
         ingredients: {
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,

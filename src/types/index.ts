@@ -14,6 +14,8 @@ export interface ProductionOrder {
   createdAt: Date
   updatedAt: Date
   customerService?: string | null
+  actualProductionQuantity?: number | null
+  materialYieldQuantity?: number | null
   ingredients: Ingredient[]
 }
 
@@ -37,6 +39,8 @@ export interface CreateProductionOrderData {
   capsuleSize?: string | null
   capsuleType?: string | null
   customerService?: string | null
+  actualProductionQuantity?: number | null
+  materialYieldQuantity?: number | null
   ingredients: CreateIngredientData[]
 }
 

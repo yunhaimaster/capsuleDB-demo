@@ -70,7 +70,21 @@ export const productionOrderSchema = z.object({
   customerService: z
     .string({ required_error: '客服姓名不能為空' })
     .min(1, '客服姓名不能為空')
-    .max(100, '客服姓名不能超過100字'),
+    .max(100, '客服姓名不能超過100字')
+    .optional()
+    .nullable(),
+  actualProductionQuantity: z
+    .number({ invalid_type_error: '實際生產數量必須為數字' })
+    .int('實際生產數量必須為整數')
+    .min(0, '實際生產數量不可小於0')
+    .optional()
+    .nullable(),
+  materialYieldQuantity: z
+    .number({ invalid_type_error: '材料可做數量必須為數字' })
+    .int('材料可做數量必須為整數')
+    .min(0, '材料可做數量不可小於0')
+    .optional()
+    .nullable(),
   ingredients: z
     .array(ingredientSchema)
     .min(1, '至少需要一項原料')
