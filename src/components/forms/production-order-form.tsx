@@ -201,8 +201,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
   const calculateWorklogSummary = (index: number) => {
     const entry = watch(`worklogs.${index}`)
-    const headcountNumber = Number(entry?.headcount)
-    if (!entry?.workDate || !entry?.startTime || !entry?.endTime || !headcountNumber || Number.isNaN(headcountNumber)) return null
+    const headcountNumber = Number(entry?.headcount ?? 0)
+    if (!entry?.workDate || !entry?.startTime || !entry?.endTime || headcountNumber <= 0 || Number.isNaN(headcountNumber)) {
+      return null
+    }
     const { units } = calculateWorkUnits({ date: entry.workDate, startTime: entry.startTime, endTime: entry.endTime, headcount: headcountNumber })
     return units
   }
@@ -438,23 +440,46 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       return (
                         <TableRow key={field.id}>
                           <TableCell className="min-w-[140px]">
-                            <Input type="date" {...register(`worklogs.${index}.workDate` as const)} className="form-focus-effect" />
+                            <Input
+                              type="date"
+                              defaultValue={field.workDate || ''}
+                              {...register(`worklogs.${index}.workDate` as const)}
+                              className="form-focus-effect"
+                            />
                             {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input type="number" min={1} step={1} {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })} />
+                            <Input
+                              type="number"
+                              min={1}
+                              step={1}
+                              defaultValue={field.headcount ?? 1}
+                              {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })}
+                            />
                             {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input type="time" {...register(`worklogs.${index}.startTime` as const)} />
+                            <Input
+                              type="time"
+                              defaultValue={field.startTime || ''}
+                              {...register(`worklogs.${index}.startTime` as const)}
+                            />
                             {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input type="time" {...register(`worklogs.${index}.endTime` as const)} />
+                            <Input
+                              type="time"
+                              defaultValue={field.endTime || ''}
+                              {...register(`worklogs.${index}.endTime` as const)}
+                            />
                             {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
                           </TableCell>
                           <TableCell>
-                            <Input placeholder="可填寫內容摘要" {...register(`worklogs.${index}.notes` as const)} />
+                            <Input
+                              placeholder="可填寫內容摘要"
+                              defaultValue={field.notes || ''}
+                              {...register(`worklogs.${index}.notes` as const)}
+                            />
                           </TableCell>
                           <TableCell className="text-right font-semibold text-slate-800">
                             {summary != null ? summary.toFixed(1) : '—'}
@@ -486,29 +511,51 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       <div className="grid grid-cols-1 gap-3 text-sm">
                         <div>
                           <Label className="text-xs text-slate-500">日期</Label>
-                          <Input type="date" {...register(`worklogs.${index}.workDate` as const)} />
+                          <Input
+                            type="date"
+                            defaultValue={field.workDate || ''}
+                            {...register(`worklogs.${index}.workDate` as const)}
+                          />
                           {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
                         </div>
                         <div>
                           <Label className="text-xs text-slate-500">人數</Label>
-                          <Input type="number" min={1} step={1} {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })} />
+                          <Input
+                            type="number"
+                            min={1}
+                            step={1}
+                            defaultValue={field.headcount ?? 1}
+                            {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })}
+                          />
                           {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <Label className="text-xs text-slate-500">開始</Label>
-                            <Input type="time" {...register(`worklogs.${index}.startTime` as const)} />
+                            <Input
+                              type="time"
+                              defaultValue={field.startTime || ''}
+                              {...register(`worklogs.${index}.startTime` as const)}
+                            />
                             {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
                           </div>
                           <div>
                             <Label className="text-xs text-slate-500">結束</Label>
-                            <Input type="time" {...register(`worklogs.${index}.endTime` as const)} />
+                            <Input
+                              type="time"
+                              defaultValue={field.endTime || ''}
+                              {...register(`worklogs.${index}.endTime` as const)}
+                            />
                             {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
                           </div>
                         </div>
                         <div>
                           <Label className="text-xs text-slate-500">備註</Label>
-                          <Input placeholder="可填寫內容摘要" {...register(`worklogs.${index}.notes` as const)} />
+                          <Input
+                            placeholder="可填寫內容摘要"
+                            defaultValue={field.notes || ''}
+                            {...register(`worklogs.${index}.notes` as const)}
+                          />
                         </div>
                         <div className="text-right text-sm font-semibold text-slate-700">
                           當日工時：{summary != null ? summary.toFixed(1) : '—'} 工
