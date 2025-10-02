@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
@@ -23,7 +24,14 @@ interface OrderAIAssistantProps {
 export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: externalIsOpen }: OrderAIAssistantProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false)
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
   const [enableReasoning, setEnableReasoning] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPortalContainer(document.body)
+    }
+  }, [])
   
   const {
     messages,
@@ -81,7 +89,7 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
 
 
   return (
-    <div>
+    <>
       <Button 
         variant="default"
         className={`bg-purple-600 hover:bg-purple-700 text-white border-purple-600 shadow-md hover:shadow-lg transition-all duration-500 relative z-[2100] liquid-glass-card-interactive h-10 px-4 ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100 hover:scale-[1.02]'}`}
@@ -101,136 +109,139 @@ export function OrderAIAssistant({ order, onModalReplace, onClose, isOpen: exter
         <span className="hidden sm:inline">AI 助手</span>
         <span className="sm:hidden">AI</span>
       </Button>
-      <LiquidGlassModal
-        isOpen={isOpen}
-        onClose={handleClose}
-        title="AI 訂單分析助手"
-        className="ai-chat-modal"
-        size="xl"
-        animateFrom="button"
-        headerButtons={
-          <div className="flex items-center space-x-2">
-            <AISettings 
-              enableReasoning={enableReasoning}
-              onToggleReasoning={setEnableReasoning}
-            />
-            <button
-              className="liquid-glass-modal-close"
-              onClick={clearChat}
-              title="重設對話"
-              type="button"
-            >
-              <RefreshCw className="h-5 w-5" />
-            </button>
-          </div>
-        }
-      >
-        
-        <div className="ai-modal-shell" style={{ height: '60vh' }}>
-
-          <div className="ai-modal-stream" ref={messagesContainerRef}>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`ai-message ${message.role === 'user' ? 'ai-message-user' : 'ai-message-assistant'}`}
+      {portalContainer && createPortal(
+        <LiquidGlassModal
+          isOpen={isOpen}
+          onClose={handleClose}
+          title="AI 訂單分析助手"
+          className="ai-chat-modal"
+          size="xl"
+          animateFrom="button"
+          headerButtons={
+            <div className="flex items-center space-x-2">
+              <AISettings 
+                enableReasoning={enableReasoning}
+                onToggleReasoning={setEnableReasoning}
+              />
+              <button
+                className="liquid-glass-modal-close"
+                onClick={clearChat}
+                title="重設對話"
+                type="button"
               >
-                <div className="ai-message-content">
-                  {message.role === 'assistant' && (
-                    <AIRealReasoning reasoning={message.reasoning} enableReasoning={enableReasoning} />
-                  )}
-                  <MarkdownRenderer content={message.content} whiteText={message.role === 'user'} />
+                <RefreshCw className="h-5 w-5" />
+              </button>
+            </div>
+          }
+        >
+          
+          <div className="ai-modal-shell" style={{ height: '60vh' }}>
 
-                  {message.suggestions && message.suggestions.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-xs font-medium text-[rgba(18,42,64,0.65)]">建議問題</p>
-                      {message.suggestions.map((suggestion, idx) => (
+            <div className="ai-modal-stream" ref={messagesContainerRef}>
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`ai-message ${message.role === 'user' ? 'ai-message-user' : 'ai-message-assistant'}`}
+                >
+                  <div className="ai-message-content">
+                    {message.role === 'assistant' && (
+                      <AIRealReasoning reasoning={message.reasoning} enableReasoning={enableReasoning} />
+                    )}
+                    <MarkdownRenderer content={message.content} whiteText={message.role === 'user'} />
+
+                    {message.suggestions && message.suggestions.length > 0 && (
+                      <div className="space-y-2">
+                        <p className="text-xs font-medium text-[rgba(18,42,64,0.65)]">建議問題</p>
+                        {message.suggestions.map((suggestion, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              if (suggestion === '重試') {
+                                retryLastMessage()
+                              } else {
+                                setInput(suggestion)
+                              }
+                            }}
+                            className="ai-suggestion-button"
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {message.content && (
+                      <div className="ai-message-actions">
                         <button
-                          key={idx}
-                          onClick={() => {
-                            if (suggestion === '重試') {
-                              retryLastMessage()
-                            } else {
-                              setInput(suggestion)
-                            }
-                          }}
-                          className="ai-suggestion-button"
+                          onClick={() => copyMessage(message.content)}
+                          className="ai-message-action-btn"
                         >
-                          {suggestion}
+                          <Copy className="w-3 h-3" />
+                          <span>複製</span>
                         </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {message.content && (
-                    <div className="ai-message-actions">
-                      <button
-                        onClick={() => copyMessage(message.content)}
-                        className="ai-message-action-btn"
-                      >
-                        <Copy className="w-3 h-3" />
-                        <span>複製</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          const messageIndex = messages.findIndex(msg => msg.id === message.id)
-                          if (messageIndex > 0) {
-                            const userMessage = messages[messageIndex - 1]
-                            if (userMessage && userMessage.role === 'user') {
-                              setInput(userMessage.content)
+                        <button
+                          onClick={() => {
+                            const messageIndex = messages.findIndex(msg => msg.id === message.id)
+                            if (messageIndex > 0) {
+                              const userMessage = messages[messageIndex - 1]
+                              if (userMessage && userMessage.role === 'user') {
+                                setInput(userMessage.content)
+                              } else {
+                                setInput('請重新回答這個問題')
+                              }
                             } else {
                               setInput('請重新回答這個問題')
                             }
-                          } else {
-                            setInput('請重新回答這個問題')
-                          }
-                        }}
-                        className="ai-message-action-btn"
-                      >
-                        <RotateCcw className="w-3 h-3" />
-                        <span>重新回答</span>
-                      </button>
-                    </div>
-                  )}
+                          }}
+                          className="ai-message-action-btn"
+                        >
+                          <RotateCcw className="w-3 h-3" />
+                          <span>重新回答</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-            {isLoading && isThinking && enableReasoning && (
-              <div className="ai-message ai-message-assistant">
-                <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
-              </div>
-            )}
-            {isLoading && isThinking && !enableReasoning && (
-              <div className="ai-message ai-message-assistant">
-                <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
-              </div>
-            )}
-            {isLoading && !isThinking && (
-              <div className="ai-message ai-message-assistant">
-                <AIThinkingIndicator isThinking={isLoading} enableReasoning={false} />
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+              ))}
+              {isLoading && isThinking && enableReasoning && (
+                <div className="ai-message ai-message-assistant">
+                  <AIReasoningIndicator isReasoning={isThinking} enableReasoning={enableReasoning} />
+                </div>
+              )}
+              {isLoading && isThinking && !enableReasoning && (
+                <div className="ai-message ai-message-assistant">
+                  <AIThinkingIndicator isThinking={isThinking} enableReasoning={enableReasoning} />
+                </div>
+              )}
+              {isLoading && !isThinking && (
+                <div className="ai-message ai-message-assistant">
+                  <AIThinkingIndicator isThinking={isLoading} enableReasoning={false} />
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
 
-          <div className="ai-modal-input-row">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="輸入您的問題，或選擇建議問題快速開始"
-              className="ai-modal-input"
-              disabled={isLoading}
-            />
-            <Button
-              onClick={() => handleSendMessage()} 
-              disabled={!input.trim() || isLoading}
-              className="ai-modal-send"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            <div className="ai-modal-input-row">
+              <Input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="輸入您的問題，或選擇建議問題快速開始"
+                className="ai-modal-input"
+                disabled={isLoading}
+              />
+              <Button
+                onClick={() => handleSendMessage()} 
+                disabled={!input.trim() || isLoading}
+                className="ai-modal-send"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-        </div>
-      </LiquidGlassModal>
-    </div>
+        </LiquidGlassModal>,
+        portalContainer
+      )}
+    </>
   )
 }
