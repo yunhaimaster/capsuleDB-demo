@@ -245,6 +245,7 @@ export default function OrderDetailPage() {
                 <TableRow>
                   <TableHead>原料品名</TableHead>
                   <TableHead>單粒含量 (mg)</TableHead>
+                  <TableHead>客戶指定</TableHead>
                   <TableHead>原料來源</TableHead>
                   <TableHead>批次用量</TableHead>
                 </TableRow>
@@ -256,6 +257,19 @@ export default function OrderDetailPage() {
                     <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
                     <TableCell>
                       {ingredient.isCustomerProvided ? (
+                        <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
+                          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                          客戶指定
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-blue-500 text-xs sm:text-sm">
+                          <span className="h-2 w-2 rounded-full bg-blue-400" />
+                          自行添加
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {ingredient.isCustomerSupplied ? (
                         <span className="inline-flex items-center gap-1 text-emerald-600 text-xs sm:text-sm">
                           <span className="h-2 w-2 rounded-full bg-emerald-500" />
                           客戶提供
@@ -285,9 +299,15 @@ export default function OrderDetailPage() {
                   <h4 className="text-base font-semibold text-slate-800 leading-tight">
                     {ingredient.materialName}
                   </h4>
-                  <div className="flex items-center text-xs font-medium text-emerald-600">
-                    <span className={`h-2 w-2 rounded-full mr-1 ${ingredient.isCustomerProvided ? 'bg-emerald-500' : 'bg-blue-400'}`} />
-                    {ingredient.isCustomerProvided ? '客戶提供' : '公司提供'}
+                  <div className="flex flex-col items-end gap-1 text-xs font-medium">
+                    <span className={`inline-flex items-center gap-1 ${ingredient.isCustomerProvided ? 'text-emerald-600' : 'text-blue-500'}`}>
+                      <span className={`h-2 w-2 rounded-full ${ingredient.isCustomerProvided ? 'bg-emerald-500' : 'bg-blue-400'}`} />
+                      {ingredient.isCustomerProvided ? '客戶指定' : '自行添加'}
+                    </span>
+                    <span className={`inline-flex items-center gap-1 ${ingredient.isCustomerSupplied ? 'text-emerald-600' : 'text-blue-500'}`}>
+                      <span className={`h-2 w-2 rounded-full ${ingredient.isCustomerSupplied ? 'bg-emerald-500' : 'bg-blue-400'}`} />
+                      {ingredient.isCustomerSupplied ? '客戶提供' : '公司提供'}
+                    </span>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm text-slate-700">

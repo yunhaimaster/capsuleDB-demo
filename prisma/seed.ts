@@ -19,10 +19,10 @@ async function main() {
       capsuleType: '明膠胃溶',
       customerService: '張小姐',
       ingredients: [
-        { materialName: '維生素C', unitContentMg: 500.0 },
-        { materialName: '維生素D3', unitContentMg: 25.0 },
-        { materialName: '鈣質', unitContentMg: 200.0 },
-        { materialName: '賦形劑', unitContentMg: 75.0 }
+        { materialName: '維生素C', unitContentMg: 500.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '維生素D3', unitContentMg: 25.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '鈣質', unitContentMg: 200.0, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: '賦形劑', unitContentMg: 75.0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     },
     {
@@ -37,9 +37,9 @@ async function main() {
       capsuleType: '植物胃溶',
       customerService: '李小姐',
       ingredients: [
-        { materialName: '魚油', unitContentMg: 1000.0 },
-        { materialName: '維生素E', unitContentMg: 50.0 },
-        { materialName: '明膠', unitContentMg: 150.0 }
+        { materialName: '魚油', unitContentMg: 1000.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '維生素E', unitContentMg: 50.0, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: '明膠', unitContentMg: 150.0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     },
     {
@@ -54,10 +54,10 @@ async function main() {
       capsuleType: '明膠腸溶',
       customerService: '王小姐',
       ingredients: [
-        { materialName: '葉酸', unitContentMg: 400.0 },
-        { materialName: '鐵質', unitContentMg: 18.0 },
-        { materialName: '維生素B12', unitContentMg: 2.4 },
-        { materialName: '澱粉', unitContentMg: 100.0 }
+        { materialName: '葉酸', unitContentMg: 400.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '鐵質', unitContentMg: 18.0, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: '維生素B12', unitContentMg: 2.4, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: '澱粉', unitContentMg: 100.0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     },
     {
@@ -72,9 +72,9 @@ async function main() {
       capsuleType: '植物腸溶',
       customerService: '陳小姐',
       ingredients: [
-        { materialName: '益生菌', unitContentMg: 50.0 },
-        { materialName: '乳糖', unitContentMg: 200.0 },
-        { materialName: '微晶纖維素', unitContentMg: 50.0 }
+        { materialName: '益生菌', unitContentMg: 50.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '乳糖', unitContentMg: 200.0, isCustomerProvided: false, isCustomerSupplied: false },
+        { materialName: '微晶纖維素', unitContentMg: 50.0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     },
     {
@@ -89,10 +89,10 @@ async function main() {
       capsuleType: '明膠胃溶',
       customerService: '林小姐',
       ingredients: [
-        { materialName: '葡萄糖胺', unitContentMg: 750.0 },
-        { materialName: '軟骨素', unitContentMg: 600.0 },
-        { materialName: 'MSM', unitContentMg: 500.0 },
-        { materialName: '賦形劑', unitContentMg: 150.0 }
+        { materialName: '葡萄糖胺', unitContentMg: 750.0, isCustomerProvided: true, isCustomerSupplied: true },
+        { materialName: '軟骨素', unitContentMg: 600.0, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: 'MSM', unitContentMg: 500.0, isCustomerProvided: true, isCustomerSupplied: false },
+        { materialName: '賦形劑', unitContentMg: 150.0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     }
   ]
@@ -123,7 +123,8 @@ async function main() {
           create: orderData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
             unitContentMg: ingredient.unitContentMg,
-            isCustomerProvided: ingredient.isCustomerProvided ?? true
+            isCustomerProvided: ingredient.isCustomerProvided ?? true,
+            isCustomerSupplied: ingredient.isCustomerSupplied ?? true
           }))
         }
       }

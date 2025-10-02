@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS "ingredients" (
     "orderId" TEXT NOT NULL,
     "materialName" TEXT NOT NULL,
     "unitContentMg" DOUBLE PRECISION NOT NULL,
+    "isCustomerProvided" BOOLEAN NOT NULL DEFAULT true,
+    "isCustomerSupplied" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "ingredients_pkey" PRIMARY KEY ("id")
 );

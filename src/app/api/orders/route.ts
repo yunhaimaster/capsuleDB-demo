@@ -231,7 +231,8 @@ export async function POST(request: NextRequest) {
           create: validatedData.ingredients.map(ingredient => ({
             materialName: ingredient.materialName,
             unitContentMg: ingredient.unitContentMg,
-            isCustomerProvided: ingredient.isCustomerProvided ?? true
+            isCustomerProvided: ingredient.isCustomerProvided ?? true,
+            isCustomerSupplied: ingredient.isCustomerSupplied ?? true
           }))
         }
       },

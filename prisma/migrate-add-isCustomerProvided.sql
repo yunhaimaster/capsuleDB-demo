@@ -1,5 +1,6 @@
 -- 添加 isCustomerProvided 字段到 ingredients 表
 ALTER TABLE "ingredients" ADD COLUMN IF NOT EXISTS "isCustomerProvided" BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE "ingredients" ADD COLUMN IF NOT EXISTS "isCustomerSupplied" BOOLEAN NOT NULL DEFAULT true;
 
 -- 添加缺失的字段到 production_orders 表
 ALTER TABLE "production_orders" ADD COLUMN IF NOT EXISTS "productName" TEXT NOT NULL DEFAULT '未命名產品';

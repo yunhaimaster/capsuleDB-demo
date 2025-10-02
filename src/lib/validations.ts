@@ -17,6 +17,9 @@ export const ingredientSchema = z.object({
     .refine((val) => val > 0, '單粒含量必須大於0'),
   isCustomerProvided: z
     .boolean()
+    .default(true),
+  isCustomerSupplied: z
+    .boolean()
     .default(true)
 })
 

@@ -36,7 +36,8 @@ model Ingredient {
   orderId       String
   materialName  String          // 原料品名
   unitContentMg Float           // 單粒含量
-  isCustomerProvided Boolean    @default(true) // 是否為客戶提供原料
+  isCustomerProvided Boolean    @default(true) // 是否客戶指定
+  isCustomerSupplied Boolean    @default(true) // 是否客戶提供
   order         ProductionOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("ingredients")
