@@ -21,7 +21,7 @@ export function LiquidGlassLoading({
     <div className={cn('min-h-screen brand-logo-bg-animation flex flex-col', className)}>
       {showNav && <LiquidGlassNav />}
 
-      <div className="flex-1 flex items-center justify-center px-6 py-16">
+      <div className="flex-1 flex items-center justify-center px-6 py-24 sm:py-28">
         <div className="liquid-glass-loader-card">
           <div className="liquid-glass-loader-spot" aria-hidden />
           <div className="space-y-4 text-center">
