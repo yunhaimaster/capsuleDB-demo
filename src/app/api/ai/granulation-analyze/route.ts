@@ -193,7 +193,8 @@ export async function POST(request: NextRequest) {
                         const parsed = JSON.parse(payload)
                         const delta = parsed.choices?.[0]?.delta?.content
                         if (delta) {
-                          sendEvent('delta', { modelId: model.id, delta })
+                          const sanitized = delta.replace(/\n?[-]{3,}\n?/g, '\n\n')
+                          sendEvent('delta', { modelId: model.id, delta: sanitized })
                         }
                       } catch (_err) {
                         // 忽略單行解析錯誤

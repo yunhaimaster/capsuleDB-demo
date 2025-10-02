@@ -85,6 +85,9 @@ const STATUS_LABEL: Record<AnalysisStatus, string> = {
   error: '錯誤'
 }
 
+const sanitizeStreamingMarkdown = (content: string) =>
+  content.replace(/^\s*[-]{6,}\s*$/gm, '------')
+
 export default function GranulationAnalyzerPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     { materialName: '', unitContentMg: 0, isCustomerProvided: true }
@@ -223,13 +226,13 @@ export default function GranulationAnalyzerPage() {
                 [modelId]: prev[modelId]
                   ? {
                       ...prev[modelId],
-                      content: prev[modelId].content + delta,
+                      content: sanitizeStreamingMarkdown((prev[modelId].content || '') + delta),
                       status: 'loading'
                     }
                   : {
                       modelId,
                       modelName: MODEL_CONFIG.find((m) => m.id === modelId)?.name || modelId,
-                      content: delta,
+                      content: sanitizeStreamingMarkdown(delta),
                       status: 'loading',
                       startedAt: Date.now()
                     }
