@@ -410,7 +410,7 @@ export default function GranulationAnalyzerPage() {
       <LiquidGlassNav />
       
       <main className="flex-1">
-        <div className="pt-24 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined pb-8">
+        <div className="pt-24 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 pb-8">
           {/* 頁面標題 */}
           <div className="text-center mb-6 space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-300/40 text-xs font-medium text-blue-700">
@@ -426,7 +426,7 @@ export default function GranulationAnalyzerPage() {
           </div>
           
           {/* 配方輸入區域 */}
-          <Card className="liquid-glass-card liquid-glass-card-elevated">
+          <Card className="liquid-glass-card liquid-glass-card-elevated" interactive={false}>
             <div className="liquid-glass-content">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="icon-container icon-container-emerald">
@@ -478,7 +478,20 @@ export default function GranulationAnalyzerPage() {
                           placeholder="輸入重量"
                         />
                       </div>
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 flex flex-col gap-2 items-end">
+                        <label className="flex items-center gap-2 text-xs text-gray-500">
+                          <input
+                            type="checkbox"
+                            checked={ingredient.isCustomerProvided}
+                            onChange={(event) => {
+                              const newIngredients = [...ingredients]
+                              newIngredients[index] = { ...ingredient, isCustomerProvided: event.target.checked }
+                              setIngredients(newIngredients)
+                            }}
+                            className="rounded border-gray-300"
+                          />
+                          客戶提供
+                        </label>
                         <button
                           onClick={() => {
                             if (ingredients.length > 1) {
@@ -496,6 +509,26 @@ export default function GranulationAnalyzerPage() {
                   ))}
                 </div>
                 
+                <div className="flex justify-between items-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      setIngredients((prev) => [
+                        ...prev,
+                        { materialName: '', unitContentMg: 0, isCustomerProvided: true }
+                      ])
+                    }
+                    className="flex items-center gap-2 text-emerald-600 border-emerald-300 hover:bg-emerald-50"
+                  >
+                    <span className="text-lg leading-none">＋</span>
+                    新增原料
+                  </Button>
+                  <Badge variant="outline" className="text-xs text-gray-500">
+                    已輸入 {ingredients.length} 項原料
+                  </Badge>
+                </div>
+
                 <div className="text-center">
                   <button
                     onClick={analyzeGranulation}
@@ -520,8 +553,8 @@ export default function GranulationAnalyzerPage() {
           </Card>
 
           {/* 分析結果 */}
-          {sortedAnalyses.length > 0 && (
-            <Card className="liquid-glass-card liquid-glass-card-elevated">
+        {sortedAnalyses.length > 0 && (
+          <Card className="liquid-glass-card liquid-glass-card-elevated" interactive={false}>
               <div className="liquid-glass-content">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                   <div className="flex items-center gap-3">

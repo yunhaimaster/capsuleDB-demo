@@ -23,7 +23,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>((
       ref={ref}
       className={cn(
         "liquid-glass-card liquid-glass-card-elevated",
-        interactive ? "liquid-glass-card-interactive liquid-glass-card-refraction" : "liquid-glass-static",
+        interactive ? "liquid-glass-card-interactive liquid-glass-card-refraction" : "liquid-glass-card-static",
         tone !== "default" && `liquid-glass-tone-${tone}`,
         className
       )}
