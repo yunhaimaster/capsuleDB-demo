@@ -717,14 +717,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         </div>
 
       {/* 其他信息 */}
-        <Card className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
-          <CardHeader>
-            <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
-              <span className="text-green-600">📋</span>
-              其他信息
-            </CardTitle>
-          </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="rounded-2xl border border-white/40 bg-white/85 backdrop-blur-sm shadow-sm">
+        <div className="px-6 pt-6 pb-2 flex items-center gap-2 text-lg sm:text-xl font-semibold text-[--brand-neutral]">
+          <span className="text-green-600">📋</span>
+          其他信息
+        </div>
+        <div className="px-6 pb-6 space-y-6">
           <div className="space-y-2">
             <Label htmlFor="completionDate">完工日期</Label>
             <Controller
@@ -766,8 +764,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <p className="text-sm text-destructive">{errors.qualityNotes.message}</p>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* 原料配方 */}
       <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
