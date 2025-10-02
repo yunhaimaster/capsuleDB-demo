@@ -110,7 +110,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
       <div className="liquid-glass-footer-bottom">
         <div className="liquid-glass-footer-bottom-content">
           <p className="text-sm text-gray-600">
-            © 2024 Easy Health. 保留所有權利。
+            © 2025 Easy Health. 保留所有權利。
           </p>
           <div className="flex space-x-4">
             <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
