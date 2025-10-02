@@ -439,13 +439,13 @@ export default function HomePage() {
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-amber-800">最新上線重點</h4>
-                    <span className="text-[11px] text-amber-600">更新：2025/10/01</span>
+                    <span className="text-[11px] text-amber-600">更新：2025/10/02</span>
                   </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 全站字體大小優化，桌面端閱讀更舒適</li>
-                    <li>• 製粒分析工具新增，三模型對比專業建議</li>
-                    <li>• 智能配方導入支援圖片識別，操作更便捷</li>
-                    <li>• 訂單 AI 助手功能增強，專業分析更精準</li>
+                    <li>• Grok AI 回歸製粒分析，輸出更聰明、語氣更活潑</li>
+                    <li>• 訂單 AI 助手 Modal 再強化，無論桌面或手機都穩定浮在內容上方</li>
+                    <li>• 新增「隱私政策」與「服務條款」頁面，Footer 連結正式生效</li>
+                    <li>• Footer 年份調整至 2025，細節同步最新進度</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
@@ -486,14 +486,14 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.0 - 2025年10月1日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.0 - 2025年10月2日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>全站字體大小優化，桌面端閱讀體驗更舒適</li>
-                    <li>新增製粒分析工具，三模型對比提供專業建議</li>
-                    <li>智能配方導入支援圖片識別，操作更便捷</li>
-                    <li>訂單 AI 助手功能增強，分析更精準專業</li>
+                    <li>Grok AI 回歸，製粒分析輸出更自然、更懂香港語氣</li>
+                    <li>訂單 AI 助手 Modal 重寫疊層，任何裝置都穩定顯示</li>
+                    <li>新增隱私政策與服務條款頁面，安心查閱資訊</li>
+                    <li>Footer 版面同步 2025 年度細節，細節再升級</li>
                   </ul>
                 </div>
                 <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
@@ -502,10 +502,10 @@ export default function HomePage() {
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full self-start sm:self-auto">功能更新</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-blue-700">
-                    <li>AI 對話體驗優化，可快速複製與重試回答</li>
-                    <li>首頁下載中心重整，常用文件更容易找到</li>
-                    <li>登入與導覽提示一致，切換帳號不迷路</li>
-                    <li>訂單頁資訊卡色彩更新，狀態一眼辨識</li>
+                    <li>AI 對話體驗更順手，快速複製與重試回答</li>
+                    <li>首頁下載中心重整，常用文件一眼找到</li>
+                    <li>登入提示一致，切換帳號不再迷路</li>
+                    <li>訂單卡片色彩更新，重要狀態更顯眼</li>
                   </ul>
                 </div>
                 <div className="text-center pt-2">

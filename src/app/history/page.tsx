@@ -10,22 +10,20 @@ import Link from 'next/link'
 export default function HistoryPage() {
   const versionHistory = [
     {
-      version: 'v2.2.0',
-      date: '2025年10月1日',
+      version: 'v2.2.1',
+      date: '2025年10月2日',
       type: '最新版本',
       typeColor: 'bg-green-100 text-green-800 border-green-200',
       features: [
-        '全站字體大小優化，桌面端閱讀體驗更舒適',
-        '新增製粒分析工具，支援三模型對比分析',
-        '智能配方導入功能增強，支援圖片識別',
-        '訂單 AI 助手功能優化，專業分析更精準',
-        '各頁面字體響應式調整，移動端保持良好體驗',
-        '用戶界面細節優化，提升整體使用感受'
+        'Grok AI 回歸製粒分析，回應更自然貼地',
+        '訂單 AI 助手 Modal 疊層再進化，所有裝置都能穩定顯示',
+        '新增隱私政策與服務條款頁面，Footer 連結立即可用',
+        'Footer 版權年份更新至 2025，細節同步最新狀態'
       ]
     },
     {
-      version: 'v2.1.0',
-      date: '2025年9月30日',
+      version: 'v2.2.0',
+      date: '2025年10月1日',
       type: '功能更新',
       typeColor: 'bg-blue-100 text-blue-800 border-blue-200',
       features: [
@@ -33,8 +31,7 @@ export default function HistoryPage() {
         'PDF 下載區改用 Liquid Glass 卡片，桌面排列一致',
         '導航列最大寬度調整，超寬螢幕仍保持左右留白',
         '登入頁整合 Liquid Glass 風格與品牌提示',
-        'Footer 帳戶連結改為動態顯示登入/登出狀態',
-        '新增品牌設計 Token 表與文檔版本同步到 v2.1.0'
+        'Footer 帳戶連結改為動態顯示登入/登出狀態'
       ]
     },
     {
