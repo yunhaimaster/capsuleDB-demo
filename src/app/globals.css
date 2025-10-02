@@ -1077,22 +1077,25 @@
 .brand-logo-bg-animation {
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background:
-    radial-gradient(120% 120% at 0% 0%, rgba(110, 199, 218, 0.38) 0%, rgba(110, 199, 218, 0.05) 55%),
-    radial-gradient(160% 160% at 100% 0%, rgba(142, 169, 232, 0.32) 0%, rgba(142, 169, 232, 0.04) 60%),
-    radial-gradient(140% 140% at 15% 100%, rgba(46, 138, 193, 0.24) 0%, rgba(46, 138, 193, 0) 70%),
-    linear-gradient(180deg, rgba(245, 250, 255, 1) 0%, rgba(225, 238, 252, 0.96) 100%);
+    radial-gradient(120% 120% at 0% 0%, rgba(110, 199, 218, 0.42) 0%, rgba(110, 199, 218, 0.06) 55%),
+    radial-gradient(160% 160% at 100% 0%, rgba(142, 169, 232, 0.36) 0%, rgba(142, 169, 232, 0.06) 60%),
+    radial-gradient(140% 140% at 15% 100%, rgba(46, 138, 193, 0.26) 0%, rgba(46, 138, 193, 0.04) 70%),
+    linear-gradient(180deg, rgba(245, 250, 255, 1) 0%, rgba(225, 238, 252, 0.98) 100%);
 }
 
 .brand-logo-bg-animation::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 156.97 217.98' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%2344bac6;opacity:0.08;%7D.cls-2%7Bfill:%232a588c;opacity:0.08;%7D%3C/style%3E%3C/defs%3E%3Cpath class='cls-2' d='M156.97,55.19v.48c-.12,47.01-.2,94.47-.24,142.4-.59,11.2-10.14,20.05-21.33,19.9V35.29c9.57-.23,18.22,6.46,20.67,15.64l.9,4.26h0Z'/%3E%3Cpath class='cls-2' d='M21.34,35.29v182.68c-10.72.19-19.9-8.07-21.3-18.61l-.04-144.78c.95-10.8,10.42-19.58,21.34-19.29Z'/%3E%3Cpath class='cls-2' d='M121.74,21.39H35v-9.71c0-5.22,4.02-10.16,9.06-11.32,22.35-.7,44.84-.15,67.24-.28,5.28.5,10.45,5.73,10.45,11.12v10.19h-.01Z'/%3E%3Cpath class='cls-2' d='M121.74,217.97H35v-21.34h67.46c.83,0,3.21.63,4.14.9,8.94,2.57,14.99,11.23,15.15,20.44h-.01Z'/%3E%3Cpath class='cls-1' d='M121.74,126.63H54.29c-4.29,0-10.82-3.8-13.66-6.95-3.6-3.98-5.38-9.05-5.63-14.39h67.94c.95,0,4.24,1.03,5.28,1.43,8.13,3.14,13.34,11.26,13.53,19.9h-.01Z'/%3E%3C/svg%3E") center/contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 156.97 217.98' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%2344bac6;opacity:0.08;%7D.cls-2%7Bfill:%232a588c;opacity:0.08;%7D%3C/style%3E%3C/defs%3E%3Cpath class='cls-2' d='M156.97,55.19v.48c-.12,47.01-.2,94.47-.24,142.4-.59,11.2-10.14,20.05-21.33,19.9V35.29c9.57-.23,18.22,6.46,20.67,15.64l.9,4.26h0Z'/%3E%3Cpath class='cls-2' d='M21.34,35.29v182.68c-10.72.19-19.9-8.07-21.3-18.61l-.04-144.78c.95-10.8,10.42-19.58,21.34-19.29Z'/%3E%3Cpath class='cls-2' d='M121.74,21.39H35v-9.71c0-5.22,4.02-10.16,9.06-11.32,22.35-.7,44.84-.15,67.24-.28,5.28.5,10.45,5.73,10.45,11.12v10.19h-.01Z'/%3E%3Cpath class='cls-2' d='M121.74,217.97H35v-21.34h67.46c.83,0,3.21.63,4.14.9,8.94,2.57,14.99,11.23,15.15,20.44h-.01Z'/%3E%3Cpath class='cls-1' d='M121.74,126.63H54.29c-4.29,0-10.82-3.8-13.66-6.95-3.6-3.98-5.38-9.05-5.63-14.39h67.94c.95,0,4.24,1.03,5.28,1.43,8.13,3.14,13.34,11.26,13.53,19.9h-.01Z'/%3E%3C/svg%3E") center/480px no-repeat;
   opacity: 0.08;
   mix-blend-mode: soft-light;
   pointer-events: none;
-  transform: translate3d(0, -6%, 0) scale(1.02);
+  transform: translate3d(0, -4%, 0) scale(1.01);
 }
 
 .brand-logo-bg-animation::after {
@@ -1100,8 +1103,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.1) 46%, rgba(255, 255, 255, 0) 74%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.36) 24%, rgba(255, 255, 255, 0.16) 52%, rgba(231, 240, 249, 0.24) 100%);
+    radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 46%, rgba(255, 255, 255, 0) 76%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.4) 30%, rgba(255, 255, 255, 0.12) 58%, rgba(231, 240, 249, 0.32) 100%);
   pointer-events: none;
 }
 
