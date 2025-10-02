@@ -127,25 +127,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
         throw new Error('匯出失敗，請稍後再試')
       }
 
-      if (format === 'csv') {
-        const blob = await response.blob()
-        const text = await blob.text()
-        downloadFile(
-          text,
-          `production-orders-${new Date().toISOString().split('T')[0]}.csv`,
-          'text/csv;charset=utf-8'
-        )
-      } else {
-        const blob = await response.blob()
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = `production-orders-${new Date().toISOString().split('T')[0]}.pdf`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        URL.revokeObjectURL(url)
-      }
+      const blob = await response.blob()
+      const filename = `production-orders-${new Date().toISOString().split('T')[0]}.${format}`
+      const mimeType = format === 'csv' ? 'text/csv;charset=utf-8' : 'application/pdf'
+      downloadFile(blob, filename, mimeType)
     } catch (error) {
       console.error('匯出錯誤:', error)
       alert('匯出失敗，請稍後再試')
