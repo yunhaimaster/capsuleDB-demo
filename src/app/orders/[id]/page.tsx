@@ -122,8 +122,9 @@ export default function OrderDetailPage() {
       <LiquidGlassNav />
 
       {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pb-24">
-        <div className="mx-auto w-full max-w-5xl space-y-8">
+      <div className="relative z-10 w-full">
+        <div className="pt-24 sm:pt-28 pb-24 px-2 sm:px-4 md:px-6 lg:px-8 w-full">
+          <div className="mx-auto w-full max-w-6xl space-y-8">
           {/* 操作按鈕 */}
           <div className="flex flex-wrap items-center justify-end gap-3 relative z-[2000]">
             <OrderAIAssistant order={order} />
@@ -407,8 +408,9 @@ export default function OrderDetailPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-12">
-            <LiquidGlassFooter />
+            <div className="mt-12">
+              <LiquidGlassFooter />
+            </div>
           </div>
         </div>
       </div>
