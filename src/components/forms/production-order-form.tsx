@@ -63,10 +63,10 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       customerService: initialData?.customerService || '',
       ingredients: initialData?.ingredients?.map(ingredient => ({
         ...ingredient,
-        isCustomerProvided: ingredient.isCustomerProvided ?? true,
-        isCustomerSupplied: ingredient.isCustomerSupplied ?? true
+        isCustomerProvided: ingredient.isCustomerProvided ?? false,
+        isCustomerSupplied: ingredient.isCustomerSupplied ?? false
       })) || [
-        { materialName: '', unitContentMg: 0, isCustomerProvided: true, isCustomerSupplied: true }
+        { materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }
       ]
     }
   })
@@ -156,11 +156,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 unitContentMg: Math.max(0, unitContentMg),
                 // 導入的配方原料預設視為客戶提供
                 isCustomerProvided: true,
-                isCustomerSupplied: true
+                isCustomerSupplied: ing.isCustomerSupplied ?? false
               }
             })
             .filter((item): item is { materialName: string; unitContentMg: number; isCustomerProvided: boolean; isCustomerSupplied: boolean } => item !== null)
-        : [{ materialName: '', unitContentMg: 0, isCustomerProvided: true, isCustomerSupplied: true }]
+        : [{ materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }]
       
       console.log('處理後的原料:', newIngredients)
       
@@ -694,7 +694,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             <Button
               type="button"
               variant="outline"
-            onClick={() => append({ materialName: '', unitContentMg: 0, isCustomerProvided: true, isCustomerSupplied: true })}
+            onClick={() => append({ materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false })}
             >
               <Plus className="mr-2 h-4 w-4" />
               新增原料

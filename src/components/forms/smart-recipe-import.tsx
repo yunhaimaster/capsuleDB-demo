@@ -131,8 +131,8 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
       if (data.success && data.data) {
         const ingredients = (data.data.ingredients || []).map((ingredient: ParsedIngredient) => ({
           ...ingredient,
-        isCustomerProvided: ingredient.isCustomerProvided ?? true,
-        isCustomerSupplied: ingredient.isCustomerSupplied ?? true
+          isCustomerProvided: ingredient.isCustomerProvided ?? true,
+          isCustomerSupplied: ingredient.isCustomerSupplied ?? false
         }))
         console.log('解析到的原料:', ingredients)
         
