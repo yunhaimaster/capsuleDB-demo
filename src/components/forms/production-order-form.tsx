@@ -440,45 +440,86 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       return (
                         <TableRow key={field.id}>
                           <TableCell className="min-w-[140px]">
-                            <Input
-                              type="date"
-                              defaultValue={field.workDate || ''}
-                              {...register(`worklogs.${index}.workDate` as const)}
-                              className="form-focus-effect"
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.workDate` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="date"
+                                  className="form-focus-effect"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
-                            {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
+                            {errorPrefix?.workDate && (
+                              <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>
+                            )}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input
-                              type="number"
-                              min={1}
-                              step={1}
-                              defaultValue={field.headcount ?? 1}
-                              {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.headcount` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="number"
+                                  min={1}
+                                  step={1}
+                                  value={controllerField.value ?? 1}
+                                  onChange={(e) => {
+                                    const raw = e.target.value
+                                    controllerField.onChange(raw === '' ? '' : Number(raw))
+                                  }}
+                                />
+                              )}
                             />
-                            {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
+                            {errorPrefix?.headcount && (
+                              <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>
+                            )}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input
-                              type="time"
-                              defaultValue={field.startTime || ''}
-                              {...register(`worklogs.${index}.startTime` as const)}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.startTime` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="time"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
-                            {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
+                            {errorPrefix?.startTime && (
+                              <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>
+                            )}
                           </TableCell>
                           <TableCell className="min-w-[120px]">
-                            <Input
-                              type="time"
-                              defaultValue={field.endTime || ''}
-                              {...register(`worklogs.${index}.endTime` as const)}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.endTime` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="time"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
-                            {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
+                            {errorPrefix?.endTime && (
+                              <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>
+                            )}
                           </TableCell>
                           <TableCell>
-                            <Input
-                              placeholder="可填寫內容摘要"
-                              defaultValue={field.notes || ''}
-                              {...register(`worklogs.${index}.notes` as const)}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.notes` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  placeholder="可填寫內容摘要"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
                           </TableCell>
                           <TableCell className="text-right font-semibold text-slate-800">
@@ -511,50 +552,83 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       <div className="grid grid-cols-1 gap-3 text-sm">
                         <div>
                           <Label className="text-xs text-slate-500">日期</Label>
-                          <Input
-                            type="date"
-                            defaultValue={field.workDate || ''}
-                            {...register(`worklogs.${index}.workDate` as const)}
+                          <Controller
+                            control={control}
+                            name={`worklogs.${index}.workDate` as const}
+                            render={({ field: controllerField }) => (
+                              <Input
+                                type="date"
+                                value={controllerField.value || ''}
+                                onChange={controllerField.onChange}
+                              />
+                            )}
                           />
                           {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
                         </div>
                         <div>
                           <Label className="text-xs text-slate-500">人數</Label>
-                          <Input
-                            type="number"
-                            min={1}
-                            step={1}
-                            defaultValue={field.headcount ?? 1}
-                            {...register(`worklogs.${index}.headcount` as const, { valueAsNumber: true })}
+                          <Controller
+                            control={control}
+                            name={`worklogs.${index}.headcount` as const}
+                            render={({ field: controllerField }) => (
+                              <Input
+                                type="number"
+                                min={1}
+                                step={1}
+                                value={controllerField.value ?? 1}
+                                onChange={(e) => {
+                                  const raw = e.target.value
+                                  controllerField.onChange(raw === '' ? '' : Number(raw))
+                                }}
+                              />
+                            )}
                           />
                           {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <Label className="text-xs text-slate-500">開始</Label>
-                            <Input
-                              type="time"
-                              defaultValue={field.startTime || ''}
-                              {...register(`worklogs.${index}.startTime` as const)}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.startTime` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="time"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
                             {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
                           </div>
                           <div>
                             <Label className="text-xs text-slate-500">結束</Label>
-                            <Input
-                              type="time"
-                              defaultValue={field.endTime || ''}
-                              {...register(`worklogs.${index}.endTime` as const)}
+                            <Controller
+                              control={control}
+                              name={`worklogs.${index}.endTime` as const}
+                              render={({ field: controllerField }) => (
+                                <Input
+                                  type="time"
+                                  value={controllerField.value || ''}
+                                  onChange={controllerField.onChange}
+                                />
+                              )}
                             />
                             {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
                           </div>
                         </div>
                         <div>
                           <Label className="text-xs text-slate-500">備註</Label>
-                          <Input
-                            placeholder="可填寫內容摘要"
-                            defaultValue={field.notes || ''}
-                            {...register(`worklogs.${index}.notes` as const)}
+                          <Controller
+                            control={control}
+                            name={`worklogs.${index}.notes` as const}
+                            render={({ field: controllerField }) => (
+                              <Input
+                                placeholder="可填寫內容摘要"
+                                value={controllerField.value || ''}
+                                onChange={controllerField.onChange}
+                              />
+                            )}
                           />
                         </div>
                         <div className="text-right text-sm font-semibold text-slate-700">
