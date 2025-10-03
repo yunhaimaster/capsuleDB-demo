@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -165,10 +165,43 @@ export default function HomePage() {
     setIsAuthenticated(true)
   }, [router])
 
-  useEffect(() => {
-    fetchRecentOrders()
-    fetchAllOrders()
+  const fetchRecentOrders = useCallback(async () => {
+    try {
+      const response = await fetch('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
+      if (response.ok) {
+        const data = await response.json()
+        setRecentOrders(data.orders || [])
+      }
+    } catch (error) {
+      console.error('載入最近訂單錯誤:', error)
+    }
   }, [])
+
+  const fetchAllOrders = useCallback(async () => {
+    try {
+      const response = await fetch('/api/orders?limit=100&sortBy=completionDate&sortOrder=desc')
+      if (response.ok) {
+        const data = await response.json()
+        console.log('為 AI 載入的所有訂單:', data.orders?.length || 0)
+        console.log('未完工訂單:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
+        setAllOrders(data.orders || [])
+      }
+    } catch (error) {
+      console.error('載入所有訂單錯誤:', error)
+    }
+  }, [])
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        await Promise.all([fetchRecentOrders(), fetchAllOrders()])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    run()
+  }, [fetchRecentOrders, fetchAllOrders])
 
   const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
 
