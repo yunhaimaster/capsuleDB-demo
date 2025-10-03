@@ -537,20 +537,20 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                 </Table>
               </div>
 
-              <div className="md:hidden space-y-4">
+              <div className="md:hidden space-y-5">
                 {worklogFields.map((field, index) => {
                   const summary = calculateWorklogSummary(index)
                   const errorPrefix = errors.worklogs?.[index] as any
                   return (
-                    <div key={field.id} className="p-4 rounded-2xl bg-white/70 backdrop-blur border border-white/40 space-y-3">
+                    <div key={field.id} className="p-5 rounded-2xl bg-white/75 backdrop-blur-sm border border-white/50 shadow-sm space-y-4">
                       <div className="flex items-center justify-between">
                         <div className="text-sm font-semibold text-slate-700">工時 #{index + 1}</div>
                         <Button type="button" variant="ghost" size="icon" onClick={() => removeWorklog(index)}>
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
                       </div>
-                      <div className="grid grid-cols-1 gap-3 text-sm">
-                        <div>
+                      <div className="grid grid-cols-1 gap-4 text-sm">
+                        <div className="space-y-2">
                           <Label className="text-xs text-slate-500">日期</Label>
                           <Controller
                             control={control}
@@ -565,7 +565,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           />
                           {errorPrefix?.workDate && <p className="text-xs text-destructive mt-1">{errorPrefix.workDate.message as string}</p>}
                         </div>
-                        <div>
+                        <div className="space-y-2">
                           <Label className="text-xs text-slate-500">人數</Label>
                           <Controller
                             control={control}
@@ -585,8 +585,8 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           />
                           {errorPrefix?.headcount && <p className="text-xs text-destructive mt-1">{errorPrefix.headcount.message as string}</p>}
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
                             <Label className="text-xs text-slate-500">開始</Label>
                             <Controller
                               control={control}
@@ -601,7 +601,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                             />
                             {errorPrefix?.startTime && <p className="text-xs text-destructive mt-1">{errorPrefix.startTime.message as string}</p>}
                           </div>
-                          <div>
+                          <div className="space-y-2">
                             <Label className="text-xs text-slate-500">結束</Label>
                             <Controller
                               control={control}
@@ -617,7 +617,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                             {errorPrefix?.endTime && <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>}
                           </div>
                         </div>
-                        <div>
+                        <div className="space-y-2">
                           <Label className="text-xs text-slate-500">備註</Label>
                           <Controller
                             control={control}
