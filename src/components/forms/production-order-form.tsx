@@ -509,7 +509,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                               <p className="text-xs text-destructive mt-1">{errorPrefix.endTime.message as string}</p>
                             )}
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="min-w-[220px]">
                             <Controller
                               control={control}
                               name={`worklogs.${index}.notes` as const}
@@ -518,6 +518,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                                   placeholder="可填寫內容摘要"
                                   value={controllerField.value || ''}
                                   onChange={controllerField.onChange}
+                                  className="w-full min-w-[160px]"
                                 />
                               )}
                             />
