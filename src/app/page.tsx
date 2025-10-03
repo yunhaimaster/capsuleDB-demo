@@ -212,6 +212,11 @@ export default function HomePage() {
 
   const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
 
+  const normalizeOrder = (order: ProductionOrder) => ({
+    ...order,
+    orderNumber: (order as any).orderNumber as string | undefined,
+  })
+
   return (
     <div className="min-h-screen logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
@@ -328,10 +333,8 @@ export default function HomePage() {
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0 space-y-1">
                               <div className="flex items-center gap-2 text-xs text-slate-400 uppercase tracking-[0.16em]">
-                                <span className="inline-flex items-center gap-1">
-                                  <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
-                                  {order.orderNumber || 'ORDER'}
-                                </span>
+                                <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                                <span>最近更新</span>
                                 <span>建立 {formatDateOnly(order.createdAt)}</span>
                               </div>
                               <h4 className="text-base font-semibold text-slate-900 truncate">{order.productName}</h4>
