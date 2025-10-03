@@ -11,7 +11,8 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Sparkles, Activity } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Sparkles, Activity, Package2, UserRound, Square, ArrowRight } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, OrderWorklog } from '@/types'
 import Link from 'next/link'
@@ -86,6 +87,62 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
   )
 }
 
+function MetricPill({ title, value, icon: Icon, accent }: { title: string; value: string; icon: LucideIcon; accent: string }) {
+  return (
+    <div className="rounded-2xl bg-white/70 border border-white/60 px-4 py-3 shadow-[0_10px_28px_rgba(15,32,77,0.08)]">
+      <div className="flex items-center gap-3">
+        <span className={`inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r ${accent}`}>
+          <Icon className="h-4 w-4 text-white" />
+        </span>
+        <div className="flex flex-col">
+          <span className="text-xs uppercase tracking-[0.18em] text-slate-400">{title}</span>
+          <span className="text-sm font-semibold text-slate-900">{value}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const summarizeRecentOrders = (orders: ProductionOrder[]) => {
+  if (!orders.length) {
+    return {
+      totalOrders: 0,
+      completedOrders: 0,
+      inProgressOrders: 0,
+      notStartedOrders: 0,
+      completionRate: 0,
+      totalWorkHours: 0,
+      averageProgress: 0,
+      latestWorklog: null as number | null,
+    }
+  }
+
+  const completedOrders = orders.filter(order => order.completionDate).length
+  const inProgressOrders = orders.filter(order => order.worklogs && order.worklogs.length > 0 && !order.completionDate).length
+  const notStartedOrders = orders.length - completedOrders - inProgressOrders
+  const totalWorkHours = orders.reduce((sum, order) => {
+    const worklogs = order.worklogs || []
+    return sum + worklogs.reduce((acc, log) => acc + (log.calculatedWorkUnits || 0), 0)
+  }, 0)
+  const completionRate = Math.round((completedOrders / orders.length) * 100)
+  const averageProgress = Math.round(((completedOrders + inProgressOrders * 0.6) / orders.length) * 100)
+  const latestWorklog = orders
+    .flatMap(order => order.worklogs || [])
+    .map(log => new Date(log.workDate).getTime())
+    .sort((a, b) => b - a)[0] || null
+
+  return {
+    totalOrders: orders.length,
+    completedOrders,
+    inProgressOrders,
+    notStartedOrders,
+    completionRate,
+    totalWorkHours,
+    averageProgress,
+    latestWorklog,
+  }
+}
+
 // 移除本地Footer組件，使用統一的LiquidGlassFooter
 
 export default function HomePage() {
@@ -153,6 +210,8 @@ export default function HomePage() {
     )
   }
 
+  const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
+
   return (
     <div className="min-h-screen logo-bg-animation flex flex-col">
       {/* Liquid Glass Navigation */}
@@ -212,45 +271,127 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Feature Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      {/* 最近生產紀錄區塊 */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] gap-4 sm:gap-6 md:gap-8">
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
-            <div className="mb-4">
-              <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center mb-2">
-                <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 mr-2 text-cyan-600" />
-                最近生產紀錄
-              </h3>
-              <p className="text-xs sm:text-sm md:text-sm opacity-80">
-                最新的生產訂單狀態
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+              <div>
+                <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center gap-2">
+                  <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-cyan-600" />
+                  最近生產紀錄
+                </h3>
+                <p className="text-xs sm:text-sm md:text-sm opacity-80">
+                  最新 5 筆訂單的進度與工時摘要
+                </p>
+              </div>
+              <Link
+                href="/orders"
+                className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+              >
+                查看全部訂單
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
-            <div className="space-y-3">
+
             {loading ? (
               <div className="space-y-3 skeleton-stagger">
-                <div className="skeleton skeleton-title"></div>
-                <div className="skeleton skeleton-text"></div>
-                <div className="skeleton skeleton-text"></div>
-                <div className="skeleton skeleton-text-sm"></div>
-                <div className="skeleton skeleton-text-sm"></div>
-                <div className="skeleton skeleton-button"></div>
+                <div className="skeleton skeleton-title" />
+                <div className="skeleton skeleton-text" />
+                <div className="skeleton skeleton-text" />
+                <div className="skeleton skeleton-text-sm" />
+                <div className="skeleton skeleton-text-sm" />
+                <div className="skeleton skeleton-button" />
               </div>
             ) : recentOrders.length > 0 ? (
-              <div className="space-y-2">
-                {recentOrders.map((order) => (
-                  <Link href={`/orders/${order.id}`} key={order.id} className="block">
-                    <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors liquid-glass-card-interactive">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{order.customerName} - {order.productName}</p>
-                        <p className="text-xs text-gray-500">數量: {formatNumber(order.productionQuantity)} 粒</p>
+              <div className="space-y-3">
+                {recentOrders.map((order) => {
+                  const status = order.completionDate
+                    ? 'completed'
+                    : order.worklogs && order.worklogs.length > 0
+                      ? 'inProgress'
+                      : 'notStarted'
+                  const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
+                  const statusAccent = status === 'completed'
+                    ? 'from-emerald-500/80 to-emerald-600/90 text-white'
+                    : status === 'inProgress'
+                      ? 'from-blue-500/80 to-cyan-500/90 text-white'
+                      : 'from-slate-200 to-slate-300 text-slate-600'
+                  const latestWorklog = order.worklogs && order.worklogs.length > 0
+                    ? order.worklogs[order.worklogs.length - 1]
+                    : null
+
+                  return (
+                    <Link key={order.id} href={`/orders/${order.id}`} className="block">
+                      <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/90 transition-all duration-200 shadow-[0_8px_22px_rgba(15,32,77,0.08)] hover:shadow-[0_14px_32px_rgba(45,85,155,0.18)]">
+                        <div className="p-4 space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0 space-y-1">
+                              <div className="flex items-center gap-2 text-xs text-slate-400 uppercase tracking-[0.16em]">
+                                <span className="inline-flex items-center gap-1">
+                                  <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                                  {order.orderNumber || 'ORDER'}
+                                </span>
+                                <span>建立 {formatDateOnly(order.createdAt)}</span>
+                              </div>
+                              <h4 className="text-base font-semibold text-slate-900 truncate">{order.productName}</h4>
+                              <p className="text-xs text-slate-500 truncate">客戶：{order.customerName}</p>
+                            </div>
+                            <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold bg-gradient-to-r ${statusAccent}`}>
+                              {status === 'completed' ? <Calendar className="h-3.5 w-3.5" />
+                                : status === 'inProgress' ? <Timer className="h-3.5 w-3.5" />
+                                : <Square className="h-3.5 w-3.5" />}
+                              {statusLabel}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">訂單數量</p>
+                              <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
+                            </div>
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">累積工時</p>
+                              <p className="text-sm font-semibold text-slate-900">
+                                {order.worklogs && order.worklogs.length > 0
+                                  ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時`
+                                  : '—'}
+                              </p>
+                            </div>
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">客服</p>
+                              <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
+                            <div className="flex items-center gap-2">
+                              <Package2 className="h-3.5 w-3.5 text-slate-400" />
+                              <span>
+                                {order.actualProductionQuantity != null
+                                  ? `實際：${formatNumber(order.actualProductionQuantity)} 粒`
+                                  : order.materialYieldQuantity != null
+                                    ? `材料可做：${formatNumber(order.materialYieldQuantity)} 粒`
+                                    : '尚未提供實際數據'}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <UserRound className="h-3.5 w-3.5 text-slate-400" />
+                              <span>{formatDateOnly(order.createdAt)}</span>
+                            </div>
+                          </div>
+
+                          {latestWorklog && (
+                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-3 py-2 text-xs text-indigo-600 flex items-center justify-between">
+                              <span className="font-medium">最新工時</span>
+                              <span>{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime} - {latestWorklog.endTime}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-                        <p className="text-xs text-gray-500">{order.completionDate ? '已完工' : '進行中'}</p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  )
+                })}
               </div>
             ) : (
               <div className="text-center py-8">
@@ -262,90 +403,138 @@ export default function HomePage() {
                 </Link>
               </div>
             )}
-            </div>
           </div>
         </div>
 
-        {/* PDF 參考資料下載 */}
-        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction">
           <div className="liquid-glass-content">
-            <div className="mb-4">
-              <h3 className="text-lg md:text-lg font-semibold text-emerald-800 flex items-center mb-2">
-                <span className="mr-2">📚</span>
-                參考資料下載
-              </h3>
-              <p className="text-sm md:text-sm text-emerald-600 opacity-80">
-                行業相關培訓資料和風險管控指南
-              </p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900">狀態總覽</h3>
+                <p className="text-xs text-slate-500">最近 5 筆訂單的整體工時與進度</p>
+              </div>
+              <Link
+                href="/orders"
+                className="inline-flex items-center text-xs font-medium text-indigo-600 hover:text-indigo-700 gap-1"
+              >
+                查看全部
+                <Eye className="h-3.5 w-3.5" />
+              </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {/* 風險原料清單 */}
-              <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
-                <div className="liquid-glass-content flex h-full flex-col">
-                  <div className="flex items-start gap-4">
-                    <div className="icon-container icon-container-indigo">
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0 space-y-2">
-                      <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
-                        保健品行業常見生產風險原料清單
-                      </h4>
-                      <p className="text-sm md:text-sm text-indigo-600/90">
-                        行業風險管控參考資料
-                      </p>
-                    </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+              <MetricPill
+                title="總訂單"
+                value={`${performanceSummary.totalOrders} 筆`}
+                icon={ClipboardList}
+                accent="from-blue-500 to-cyan-500"
+              />
+              <MetricPill
+                title="完成率"
+                value={`${performanceSummary.completionRate}%`}
+                icon={Sparkles}
+                accent="from-emerald-500 to-teal-500"
+              />
+              <MetricPill
+                title="累積工時"
+                value={`${performanceSummary.totalWorkHours.toFixed(1)} 工時`}
+                icon={Timer}
+                accent="from-indigo-500 to-purple-500"
+              />
+              <MetricPill
+                title="平均進度"
+                value={`${performanceSummary.averageProgress}%`}
+                icon={Activity}
+                accent="from-orange-500 to-rose-500"
+              />
+            </div>
+
+            <div className="rounded-2xl bg-white/70 border border-white/60 p-4 shadow-[0_12px_30px_rgba(15,32,77,0.08)]">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">最新工時</p>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {performanceSummary.latestWorklog
+                      ? formatDateOnly(new Date(performanceSummary.latestWorklog))
+                      : '尚未填寫工時'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <div className="flex items-center gap-1">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-blue-400" />
+                    進行中
                   </div>
-                  <div className="mt-auto pt-6">
-                    <Button
-                      asChild
-                      size="lg"
-                      className="w-full text-white shadow-[0_18px_38px_rgba(41,102,146,0.18)] border-none"
-                      style={{ background: 'var(--brand-gradient-primary)' }}
-                    >
-                      <a href="/pdf/保健品行業常見生產風險原料清單.pdf" download>
-                        <span className="flex items-center justify-center gap-2 text-base">
-                          <Download className="w-4 h-4" />
-                          下載 PDF
-                        </span>
-                      </a>
-                    </Button>
+                  <div className="flex items-center gap-1">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    已完成
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-slate-300" />
+                    未開始
                   </div>
                 </div>
               </div>
 
-              {/* 培訓手冊 */}
-              <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction h-full">
-                <div className="liquid-glass-content flex h-full flex-col">
-                  <div className="flex items-start gap-4">
-                    <div className="icon-container icon-container-teal">
-                      <FileText className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0 space-y-2">
-                      <h4 className="text-base font-semibold text-[--brand-neutral] leading-tight">
-                        膠囊生產培訓手冊
-                      </h4>
-                      <p className="text-sm md:text-sm text-teal-600/90">
-                        香港版修訂版
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-auto pt-6">
-                    <Button
-                      asChild
-                      size="lg"
-                      variant="secondary"
-                      className="w-full bg-green-500 hover:bg-green-600 text-white shadow-[0_18px_38px_rgba(34,197,94,0.18)] border-none"
-                    >
-                      <a href="/pdf/膠囊生產培訓手冊（香港版-修訂版）.pdf" download>
-                        <span className="flex items-center justify-center gap-2 text-base">
-                          <Download className="w-4 h-4" />
-                          下載 PDF
-                        </span>
-                      </a>
-                    </Button>
-                  </div>
+              {recentOrders.length > 0 ? (
+                <div className="space-y-3">
+                  {recentOrders.map((order) => {
+                    const status = order.completionDate
+                      ? 'completed'
+                      : order.worklogs && order.worklogs.length > 0
+                        ? 'inProgress'
+                        : 'notStarted'
+                    const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
+                    const statusAccent = status === 'completed'
+                      ? 'text-emerald-600 bg-emerald-50 border border-emerald-100'
+                      : status === 'inProgress'
+                        ? 'text-blue-600 bg-blue-50 border border-blue-100'
+                        : 'text-slate-500 bg-slate-100 border border-slate-200'
+                    const latestWorklog = order.worklogs && order.worklogs.length > 0
+                      ? order.worklogs[order.worklogs.length - 1]
+                      : null
+
+                    return (
+                      <div key={order.id} className="rounded-2xl bg-white/60 border border-white/60 p-4 hover:border-white/90 transition-all duration-200">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <div className="space-y-1">
+                            <p className="text-sm font-semibold text-slate-900">{order.productName}</p>
+                            <p className="text-xs text-slate-500">{formatDateOnly(order.createdAt)} · {order.customerName}</p>
+                          </div>
+                          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${statusAccent}`}>
+                            {statusLabel}
+                          </span>
+                        </div>
+                        <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-500">
+                          <div>
+                            <p className="uppercase tracking-[0.12em] text-slate-400">訂單數量</p>
+                            <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
+                          </div>
+                          <div>
+                            <p className="uppercase tracking-[0.12em] text-slate-400">累積工時</p>
+                            <p className="text-sm font-semibold text-slate-900">
+                              {order.worklogs && order.worklogs.length > 0
+                                ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時`
+                                : '—'}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="uppercase tracking-[0.12em] text-slate-400">客服</p>
+                            <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
+                          </div>
+                          <div>
+                            <p className="uppercase tracking-[0.12em] text-slate-400">工時更新</p>
+                            <p className="text-sm font-semibold text-slate-900 truncate">
+                              {latestWorklog ? `${formatDateOnly(latestWorklog.workDate)} ${latestWorklog.startTime}` : '—'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-              </div>
+              ) : (
+                <div className="text-sm text-slate-500">暫無最近訂單資料。</div>
+              )}
             </div>
           </div>
         </div>
