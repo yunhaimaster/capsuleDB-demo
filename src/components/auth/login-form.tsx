@@ -29,10 +29,10 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <Card className="liquid-glass-card liquid-glass-card-elevated w-full max-w-md mx-auto shadow-xl">
+    <Card className="liquid-glass-card liquid-glass-card-elevated login-liquid-card w-full max-w-md mx-auto shadow-xl">
       <CardContent className="pt-10 pb-8 px-8 space-y-8">
         <div className="text-center space-y-3">
-          <div className="mx-auto mb-2 p-3 bg-blue-500/10 rounded-full w-fit">
+          <div className="mx-auto mb-2 login-liquid-emblem">
             <Logo size="lg" variant="icon" />
           </div>
           <h2 className="text-xl sm:text-2xl font-semibold text-blue-600">Easy Health 系統登入</h2>
