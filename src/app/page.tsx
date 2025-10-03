@@ -168,7 +168,7 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="icon-container icon-container-gradient-sunrise group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
+              <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce">
                 <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
@@ -192,7 +192,7 @@ export default function HomePage() {
         <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
-              <div className="icon-container icon-container-gradient-emerald group-hover:scale-110 transition-transform duration-300 icon-micro-bounce">
+              <div className="icon-container icon-container-gradient-emerald icon-micro-bounce">
                 <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
               </div>
               <div className="text-right">
@@ -362,7 +362,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* AI 配方生成器 */}
           <Link href="/ai-recipe-generator">
-            <div className="liquid-glass-card liquid-glass-card-interactive hover:scale-105 transition-transform cursor-pointer">
+            <div className="liquid-glass-card liquid-glass-card-interactive cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-gradient-violet mx-auto mb-4">
                   <Brain className="h-6 w-6 text-white" />
@@ -380,7 +380,7 @@ export default function HomePage() {
 
           {/* 製粒分析工具 */}
           <Link href="/granulation-analyzer">
-            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
+            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-gradient-emerald-light mx-auto mb-4">
                   <FlaskConical className="h-6 w-6 text-white" />
@@ -398,7 +398,7 @@ export default function HomePage() {
 
           {/* 工作單生成 */}
           <Link href="/work-orders">
-            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction hover:scale-105 transition-transform cursor-pointer">
+            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction cursor-pointer">
               <div className="liquid-glass-content text-center">
                 <div className="icon-container icon-container-gradient-rose mx-auto mb-4">
                   <ClipboardCheck className="h-6 w-6 text-white" />

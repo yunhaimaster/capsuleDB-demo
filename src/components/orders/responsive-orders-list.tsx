@@ -417,7 +417,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
             return (
               <div
                 key={order.id}
-                className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction cursor-pointer hover:scale-[1.02] transition-all duration-200"
+                className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction cursor-pointer"
                 onClick={() => window.location.href = `/orders/${order.id}`}
               >
                 <div className="p-4 space-y-3">

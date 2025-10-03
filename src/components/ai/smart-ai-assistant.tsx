@@ -85,7 +85,7 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
         <Button 
           variant="outline" 
           size="lg"
-          className={`bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-500 liquid-glass-card-interactive rounded-full h-14 w-14 sm:h-auto sm:w-auto sm:rounded-lg ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100 hover:scale-[1.02]'}`}
+          className={`bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-xl hover:shadow-2xl transition-all duration-500 liquid-glass-card-interactive rounded-full h-14 w-14 sm:h-auto sm:w-auto sm:rounded-lg ${isOpen ? 'scale-95 opacity-70 pointer-events-none' : 'scale-100 opacity-100'}`}
           onClick={() => setIsOpen(true)}
         >
           <Bot className="h-5 w-5 sm:mr-2" />

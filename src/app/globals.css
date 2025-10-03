@@ -31,20 +31,14 @@
   mix-blend-mode: screen;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.24s ease, transform 0.3s ease;
-  transform: translate3d(0, 0, 0) scale(1);
-  will-change: background, opacity, transform;
+  transition: opacity 0.24s ease;
 }
 
 .liquid-glass-card:hover .liquid-glass-caustic,
 .liquid-glass-card:focus-within .liquid-glass-caustic {
   opacity: 0.45;
-  transform: translate3d(
-    calc((var(--lg-pointer-x, 50%) - 50%) * 0.04%),
-    calc((var(--lg-pointer-y, 50%) - 50%) * 0.04%),
-    0
-  ) scale(1.02);
 }
+
 .badge-grok {
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.3);
