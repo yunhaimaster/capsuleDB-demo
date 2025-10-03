@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,8 +11,7 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Sparkles, Activity, Package2, UserRound, Square, ArrowRight } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Package2, UserRound, Square, ArrowRight } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, OrderWorklog } from '@/types'
 import Link from 'next/link'
@@ -87,64 +86,6 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
   )
 }
 
-function MetricPill({ title, value, icon: Icon, accent }: { title: string; value: string; icon: LucideIcon; accent: string }) {
-  return (
-    <div className="rounded-2xl bg-white/70 border border-white/60 px-4 py-3 shadow-[0_10px_28px_rgba(15,32,77,0.08)]">
-      <div className="flex items-center gap-3">
-        <span className={`inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r ${accent}`}>
-          <Icon className="h-4 w-4 text-white" />
-        </span>
-        <div className="flex flex-col">
-          <span className="text-xs uppercase tracking-[0.18em] text-slate-400">{title}</span>
-          <span className="text-sm font-semibold text-slate-900">{value}</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const summarizeRecentOrders = (orders: ProductionOrder[]) => {
-  if (!orders.length) {
-    return {
-      totalOrders: 0,
-      completedOrders: 0,
-      inProgressOrders: 0,
-      notStartedOrders: 0,
-      completionRate: 0,
-      totalWorkHours: 0,
-      averageProgress: 0,
-      latestWorklog: null as number | null,
-    }
-  }
-
-  const completedOrders = orders.filter(order => order.completionDate).length
-  const inProgressOrders = orders.filter(order => order.worklogs && order.worklogs.length > 0 && !order.completionDate).length
-  const notStartedOrders = orders.length - completedOrders - inProgressOrders
-  const totalWorkHours = orders.reduce((sum, order) => {
-    const worklogs = order.worklogs || []
-    return sum + worklogs.reduce((acc, log) => acc + (log.calculatedWorkUnits || 0), 0)
-  }, 0)
-  const completionRate = Math.round((completedOrders / orders.length) * 100)
-  const averageProgress = Math.round(((completedOrders + inProgressOrders * 0.6) / orders.length) * 100)
-  const latestWorklog = orders
-    .flatMap(order => order.worklogs || [])
-    .map(log => new Date(log.workDate).getTime())
-    .sort((a, b) => b - a)[0] || null
-
-  return {
-    totalOrders: orders.length,
-    completedOrders,
-    inProgressOrders,
-    notStartedOrders,
-    completionRate,
-    totalWorkHours,
-    averageProgress,
-    latestWorklog,
-  }
-}
-
-// 移除本地Footer組件，使用統一的LiquidGlassFooter
-
 export default function HomePage() {
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
   const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
@@ -202,8 +143,6 @@ export default function HomePage() {
 
     run()
   }, [fetchRecentOrders, fetchAllOrders])
-
-  const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
 
   if (!isAuthenticated) {
     return (
@@ -276,7 +215,7 @@ export default function HomePage() {
       </div>
 
       {/* 最近生產紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8">
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
@@ -405,139 +344,6 @@ export default function HomePage() {
                 </Link>
               </div>
             )}
-          </div>
-        </div>
-
-        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-refraction">
-          <div className="liquid-glass-content">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900">狀態總覽</h3>
-                <p className="text-xs text-slate-500">最近 5 筆訂單的整體工時與進度</p>
-              </div>
-              <Link
-                href="/orders"
-                className="inline-flex items-center text-xs font-medium text-indigo-600 hover:text-indigo-700 gap-1"
-              >
-                查看全部
-                <Eye className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-              <MetricPill
-                title="總訂單"
-                value={`${performanceSummary.totalOrders} 筆`}
-                icon={ClipboardList}
-                accent="from-blue-500 to-cyan-500"
-              />
-              <MetricPill
-                title="完成率"
-                value={`${performanceSummary.completionRate}%`}
-                icon={Sparkles}
-                accent="from-emerald-500 to-teal-500"
-              />
-              <MetricPill
-                title="累積工時"
-                value={`${performanceSummary.totalWorkHours.toFixed(1)} 工時`}
-                icon={Timer}
-                accent="from-indigo-500 to-purple-500"
-              />
-              <MetricPill
-                title="平均進度"
-                value={`${performanceSummary.averageProgress}%`}
-                icon={Activity}
-                accent="from-orange-500 to-rose-500"
-              />
-            </div>
-
-            <div className="rounded-2xl bg-white/70 border border-white/60 p-4 shadow-[0_12px_30px_rgba(15,32,77,0.08)]">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-slate-400">最新工時</p>
-                  <p className="text-sm font-semibold text-slate-800">
-                    {performanceSummary.latestWorklog
-                      ? formatDateOnly(new Date(performanceSummary.latestWorklog))
-                      : '尚未填寫工時'}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-slate-500">
-                  <div className="flex items-center gap-1">
-                    <span className="inline-flex h-2 w-2 rounded-full bg-blue-400" />
-                    進行中
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                    已完成
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="inline-flex h-2 w-2 rounded-full bg-slate-300" />
-                    未開始
-                  </div>
-                </div>
-              </div>
-
-              {recentOrders.length > 0 ? (
-                <div className="space-y-3">
-                  {recentOrders.map((order) => {
-                    const status = order.completionDate
-                      ? 'completed'
-                      : order.worklogs && order.worklogs.length > 0
-                        ? 'inProgress'
-                        : 'notStarted'
-                    const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
-                    const statusAccent = status === 'completed'
-                      ? 'text-emerald-600 bg-emerald-50 border border-emerald-100'
-                      : status === 'inProgress'
-                        ? 'text-blue-600 bg-blue-50 border border-blue-100'
-                        : 'text-slate-500 bg-slate-100 border border-slate-200'
-                    const latestWorklog = order.worklogs && order.worklogs.length > 0
-                      ? order.worklogs[order.worklogs.length - 1]
-                      : null
-
-                    return (
-                      <div key={order.id} className="rounded-2xl bg-white/60 border border-white/60 p-4 hover:border-white/90 transition-all duration-200">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                          <div className="space-y-1">
-                            <p className="text-sm font-semibold text-slate-900">{order.productName}</p>
-                            <p className="text-xs text-slate-500">{formatDateOnly(order.createdAt)} · {order.customerName}</p>
-                          </div>
-                          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${statusAccent}`}>
-                            {statusLabel}
-                          </span>
-                        </div>
-                        <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-500">
-                          <div>
-                            <p className="uppercase tracking-[0.12em] text-slate-400">訂單數量</p>
-                            <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
-                          </div>
-                          <div>
-                            <p className="uppercase tracking-[0.12em] text-slate-400">累積工時</p>
-                            <p className="text-sm font-semibold text-slate-900">
-                              {order.worklogs && order.worklogs.length > 0
-                                ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時`
-                                : '—'}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="uppercase tracking-[0.12em] text-slate-400">客服</p>
-                            <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
-                          </div>
-                          <div>
-                            <p className="uppercase tracking-[0.12em] text-slate-400">工時更新</p>
-                            <p className="text-sm font-semibold text-slate-900 truncate">
-                              {latestWorklog ? `${formatDateOnly(latestWorklog.workDate)} ${latestWorklog.startTime}` : '—'}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="text-sm text-slate-500">暫無最近訂單資料。</div>
-              )}
-            </div>
           </div>
         </div>
       </div>
