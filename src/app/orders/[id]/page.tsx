@@ -145,7 +145,7 @@ export default function OrderDetailPage() {
                   </h4>
                   <div className="grid grid-cols-1 gap-1 text-xs md:text-sm text-slate-700">
                     <p><span className="font-medium text-slate-900">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-                    <p><span className="font-medium text-slate-900">累積工時：</span>{order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工` : '—'}</p>
+                    <p><span className="font-medium text-slate-900">累積工時：</span>{order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時` : '—'}</p>
                     <p><span className="font-medium text-slate-900">工時狀態：</span>
                       {order.worklogs && order.worklogs.length > 0
                         ? order.completionDate
@@ -330,7 +330,7 @@ export default function OrderDetailPage() {
                           <TableHead>人數</TableHead>
                           <TableHead>開始時間</TableHead>
                           <TableHead>結束時間</TableHead>
-                          <TableHead>工時 (工)</TableHead>
+                          <TableHead>工時 (工時)</TableHead>
                           <TableHead>備註</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -357,7 +357,7 @@ export default function OrderDetailPage() {
                             {formatDateOnly(worklog.workDate)}
                           </h4>
                           <div className="flex flex-col items-end gap-1 text-xs font-medium text-slate-600">
-                            <span>工時：{worklog.calculatedWorkUnits.toFixed(1)} 工</span>
+                            <span>工時：{worklog.calculatedWorkUnits.toFixed(1)} 工時</span>
                             <span>人數：{worklog.headcount}</span>
                           </div>
                         </div>

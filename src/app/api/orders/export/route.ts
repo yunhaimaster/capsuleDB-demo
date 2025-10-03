@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
         '客服',
         '實際生產數量',
         '材料可做數量',
-        '累積工時 (工)'
+        '累積工時 (工時)'
       ]
 
       if (includeIngredients) {

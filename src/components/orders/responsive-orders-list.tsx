@@ -286,7 +286,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                               <div>完成日期：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                             ) : null}
                             {status === 'inProgress' && order.totalWorkUnits ? (
-                              <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工</div>
+                              <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工時</div>
                             ) : null}
                             {status === 'inProgress' && latestWorklog ? (
                               <div>最近：{latestWorklog.startTime} - {latestWorklog.endTime}</div>
@@ -428,7 +428,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <div>完成：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                     )}
                     {status === 'inProgress' && order.totalWorkUnits && (
-                      <div>累積：{order.totalWorkUnits.toFixed(1)} 工</div>
+                      <div>累積：{order.totalWorkUnits.toFixed(1)} 工時</div>
                     )}
                     {status === 'inProgress' && latestWorklog && (
                       <div>最近工時：{latestWorklog.startTime}-{latestWorklog.endTime}</div>

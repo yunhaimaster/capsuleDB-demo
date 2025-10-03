@@ -414,7 +414,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         <CardContent className="space-y-6">
           <div className="flex items-center gap-2 text-xs sm:text-sm text-amber-600 bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2">
             <Info className="h-4 w-4" />
-            <p>系統自動扣除 12:30-13:30 午餐時間，並以 0.5 工為單位向上取整後乘以人數。</p>
+            <p>系統自動扣除 12:30-13:30 午餐時間，並以 0.5 工時為單位向上取整後乘以人數。</p>
           </div>
           {worklogFields.length === 0 ? (
             <p className="text-sm text-slate-500">暫未新增工時紀錄，點擊「新增工時」加入第一筆。</p>
@@ -429,7 +429,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       <TableHead>開始時間</TableHead>
                       <TableHead>結束時間</TableHead>
                       <TableHead>備註</TableHead>
-                      <TableHead className="text-right">當日工時 (工)</TableHead>
+                      <TableHead className="text-right">當日工時 (工時)</TableHead>
                       <TableHead className="text-right">操作</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -632,7 +632,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           />
                         </div>
                         <div className="text-right text-sm font-semibold text-slate-700">
-                          當日工時：{summary != null ? summary.toFixed(1) : '—'} 工
+                          當日工時：{summary != null ? summary.toFixed(1) : '—'} 工時
                         </div>
                       </div>
                     </div>
