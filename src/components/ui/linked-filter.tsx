@@ -296,28 +296,30 @@ export function LinkedFilter({
 
   return (
     <div className="liquid-glass-card liquid-glass-card-subtle p-6 relative">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <h3 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">訂單篩選</h3>
-          <p className="text-xs text-slate-500">支援客戶、產品、原料與膠囊規格快速查找</p>
-        </div>
-        <div className="flex items-center gap-2 justify-end">
-          <span className="text-xs text-slate-500 uppercase tracking-wide">每頁顯示</span>
-          <Select
-            value={String(limit)}
-            onValueChange={(value) => onLimitChange?.(Number(value))}
-          >
-            <SelectTrigger className="w-24 bg-white/70 backdrop-blur border border-white/60">
-              <SelectValue placeholder="每頁筆數" />
-            </SelectTrigger>
-            <SelectContent className="bg-white/80 backdrop-blur">
-              {limitOptions.map((option) => (
-                <SelectItem key={option} value={option.toString()}>
-                  {option} 筆
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <div className="flex flex-col gap-4 mb-5 sm:mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">訂單篩選</h3>
+            <p className="text-xs text-slate-500">支援客戶、產品、原料與膠囊規格的即時篩查</p>
+          </div>
+          <div className="flex items-center gap-2 sm:self-auto self-start rounded-full bg-white/70 backdrop-blur px-3 py-1.5 border border-white/60 shadow-sm">
+            <span className="text-xs font-semibold text-slate-600">每頁顯示</span>
+            <Select
+              value={String(limit)}
+              onValueChange={(value) => onLimitChange?.(Number(value))}
+            >
+              <SelectTrigger className="w-[84px] h-7 border-none bg-transparent text-sm font-medium text-slate-700 focus:ring-0 focus:outline-none">
+                <SelectValue placeholder="筆數" />
+              </SelectTrigger>
+              <SelectContent className="bg-white/90 backdrop-blur-xl border border-white/60 shadow-xl">
+                {limitOptions.map((option) => (
+                  <SelectItem key={option} value={option.toString()} className="text-sm">
+                    {option} 筆
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,10 +11,11 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Sparkles, Activity } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
-import { ProductionOrder } from '@/types'
+import { ProductionOrder, OrderWorklog } from '@/types'
 import Link from 'next/link'
+import { sumWorkUnits } from '@/lib/worklog'
 
 // 訂單詳情檢視組件
 function OrderDetailView({ order }: { order: ProductionOrder }) {
@@ -114,7 +115,6 @@ export default function HomePage() {
 
   const fetchRecentOrders = async () => {
     try {
-      // 使用與生產紀錄管理頁相同的排序邏輯：未完工優先，已完工按日期排序
       const response = await fetch('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
       if (response.ok) {
         const data = await response.json()
