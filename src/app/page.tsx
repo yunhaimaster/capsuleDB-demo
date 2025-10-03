@@ -170,34 +170,7 @@ export default function HomePage() {
     fetchAllOrders()
   }, [])
 
-  const fetchRecentOrders = async () => {
-    try {
-      const response = await fetch('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
-      if (response.ok) {
-        const data = await response.json()
-        setRecentOrders(data.orders || [])
-      }
-    } catch (error) {
-      console.error('載入最近訂單錯誤:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchAllOrders = async () => {
-    try {
-      // 獲取所有訂單，使用相同的排序邏輯：未完工優先，已完工按日期排序
-      const response = await fetch('/api/orders?limit=100&sortBy=completionDate&sortOrder=desc')
-      if (response.ok) {
-        const data = await response.json()
-        console.log('為 AI 載入的所有訂單:', data.orders?.length || 0)
-        console.log('未完工訂單:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
-        setAllOrders(data.orders || [])
-      }
-    } catch (error) {
-      console.error('載入所有訂單錯誤:', error)
-    }
-  }
+  const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
 
   if (!isAuthenticated) {
     return (
@@ -209,13 +182,6 @@ export default function HomePage() {
       </div>
     )
   }
-
-  const performanceSummary = useMemo(() => summarizeRecentOrders(recentOrders), [recentOrders])
-
-  const normalizeOrder = (order: ProductionOrder) => ({
-    ...order,
-    orderNumber: (order as any).orderNumber as string | undefined,
-  })
 
   return (
     <div className="min-h-screen logo-bg-animation flex flex-col">
