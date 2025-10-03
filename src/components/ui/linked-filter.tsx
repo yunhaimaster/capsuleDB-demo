@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { X, Download } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,6 +26,8 @@ interface LinkedFilterProps {
   }) => void
   onExport?: () => void
   loading?: boolean
+  limit?: number
+  onLimitChange?: (limit: number) => void
 }
 
 export function LinkedFilter({
@@ -34,7 +37,9 @@ export function LinkedFilter({
   capsuleOptions,
   onSearch,
   onExport,
-  loading = false
+  loading = false,
+  limit = 25,
+  onLimitChange
 }: LinkedFilterProps) {
   const [filters, setFilters] = useState({
     customerName: '',
@@ -287,8 +292,35 @@ export function LinkedFilter({
     )
   }
 
+  const limitOptions = [25, 50, 100]
+
   return (
     <div className="liquid-glass-card liquid-glass-card-subtle p-6 relative">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <h3 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">訂單篩選</h3>
+          <p className="text-xs text-slate-500">支援客戶、產品、原料與膠囊規格快速查找</p>
+        </div>
+        <div className="flex items-center gap-2 justify-end">
+          <span className="text-xs text-slate-500 uppercase tracking-wide">每頁顯示</span>
+          <Select
+            value={String(limit)}
+            onValueChange={(value) => onLimitChange?.(Number(value))}
+          >
+            <SelectTrigger className="w-24 bg-white/70 backdrop-blur border border-white/60">
+              <SelectValue placeholder="每頁筆數" />
+            </SelectTrigger>
+            <SelectContent className="bg-white/80 backdrop-blur">
+              {limitOptions.map((option) => (
+                <SelectItem key={option} value={option.toString()}>
+                  {option} 筆
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* 客戶名稱篩選 */}
         <div className="relative">

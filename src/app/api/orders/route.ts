@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       maxQuantity: searchParams.get('maxQuantity') ? parseInt(searchParams.get('maxQuantity')!) : undefined,
       isCompleted: searchParams.get('isCompleted') ? searchParams.get('isCompleted') === 'true' : undefined,
       page: parseInt(searchParams.get('page') || '1'),
-      limit: parseInt(searchParams.get('limit') || '10'),
+      limit: parseInt(searchParams.get('limit') || '25'),
       sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
       sortOrder: (searchParams.get('sortOrder') as any) || 'desc'
     }

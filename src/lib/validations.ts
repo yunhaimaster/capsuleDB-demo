@@ -137,7 +137,7 @@ export const searchFiltersSchema = z.object({
   maxQuantity: z.number().int().positive().optional(),
   isCompleted: z.boolean().optional(),
   page: z.number().int().positive().default(1),
-  limit: z.number().int().positive().max(100).default(10),
+  limit: z.number().int().positive().max(100).default(25),
   sortBy: z.enum(['createdAt', 'productionQuantity', 'customerName', 'productName', 'completionDate']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 })

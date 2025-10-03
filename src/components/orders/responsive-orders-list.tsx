@@ -50,7 +50,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     ingredientName: '',
     capsuleType: '',
     page: 1,
-    limit: 10,
+    limit: 25,
     sortBy: 'completionDate',
     sortOrder: 'desc'
   })
@@ -107,7 +107,13 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   }, [])
 
   const handleSearch = (newFilters: any) => {
-    const updatedFilters = { ...newFilters, page: 1 }
+    const updatedFilters = { ...filters, ...newFilters, page: 1 }
+    setFilters(updatedFilters)
+    fetchOrders(updatedFilters)
+  }
+
+  const handleLimitChange = (limit: number) => {
+    const updatedFilters = { ...filters, limit, page: 1 }
     setFilters(updatedFilters)
     fetchOrders(updatedFilters)
   }
@@ -201,6 +207,8 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
         onSearch={handleSearch}
         onExport={() => handleExport('csv')}
         loading={loading}
+        limit={filters.limit}
+        onLimitChange={handleLimitChange}
       />
 
       {/* 桌面版表格 */}

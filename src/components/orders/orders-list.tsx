@@ -22,7 +22,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     ingredientName: '',
     capsuleType: '',
     page: 1,
-    limit: 10,
+    limit: 25,
     sortBy: 'completionDate',
     sortOrder: 'desc'
   })
@@ -89,6 +89,16 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       ...filters, 
       ...searchFilters,
       page: 1 // Reset to first page when searching
+    }
+    setFilters(updatedFilters)
+    fetchOrders(updatedFilters)
+  }
+
+  const handleLimitChange = (limit: number) => {
+    const updatedFilters = {
+      ...filters,
+      limit,
+      page: 1
     }
     setFilters(updatedFilters)
     fetchOrders(updatedFilters)
@@ -192,6 +202,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           onSearch={handleSearch}
           onExport={() => handleExport('csv')}
           loading={loading}
+          limit={filters.limit}
+          onLimitChange={handleLimitChange}
         />
 
         <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
