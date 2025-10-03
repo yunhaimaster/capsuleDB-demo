@@ -297,7 +297,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                               <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工時</div>
                             ) : null}
                             {status === 'inProgress' && latestWorklog ? (
-                              <div>最近：{latestWorklog.startTime} - {latestWorklog.endTime}</div>
+                              <div>最新工時：{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</div>
                             ) : null}
                             {status === 'notStarted' ? (
                               <div>尚未安排工時</div>
@@ -439,7 +439,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <div>累積：{order.totalWorkUnits.toFixed(1)} 工時</div>
                     )}
                     {status === 'inProgress' && latestWorklog && (
-                      <div>最近工時：{latestWorklog.startTime}-{latestWorklog.endTime}</div>
+                      <div>最新工時：{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</div>
                     )}
                   </div>
 
