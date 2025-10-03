@@ -369,7 +369,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">AI 配方生成器</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  使用人工智能技術，根據目標功效自動生成專業膠囊配方
+                  全新 Liquid Glass 體驗，快速產出多版本專業膠囊配方
                 </p>
                 <div className="inline-flex items-center text-violet-600 text-sm font-medium">
                   開始使用 →
@@ -387,7 +387,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">製粒分析工具</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  智能評估膠囊配方是否需要製粒，多模型專業建議
+                  多場景模型同步升級，提供更貼近產線的製粒建議
                 </p>
                 <div className="inline-flex items-center text-emerald-600 text-sm font-medium">
                   開始分析 →
@@ -405,7 +405,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-base font-semibold text-gray-800 mb-2">工作單生成</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  自動生成符合 ISO 標準的生產工作單和質量控制文件
+                  一鍵輸出符合 ISO 的工作單，新增樣板與圖檔附件
                 </p>
                 <div className="inline-flex items-center text-rose-600 text-sm font-medium">
                   生成工作單 →
@@ -436,13 +436,13 @@ export default function HomePage() {
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-amber-800">最新上線重點</h4>
-                    <span className="text-[11px] text-amber-600">更新：2025/10/02</span>
+                    <span className="text-[11px] text-amber-600">更新：2025/10/03</span>
                   </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• Grok AI 回歸製粒分析，輸出更聰明、語氣更活潑</li>
-                    <li>• 訂單 AI 助手 Modal 再強化，無論桌面或手機都穩定浮在內容上方</li>
-                    <li>• 新增「隱私政策」與「服務條款」頁面，Footer 連結正式生效</li>
-                    <li>• Footer 年份調整至 2025，細節同步最新進度</li>
+                    <li>• 登入頁導入 Liquid Glass 卡片視覺，呈現更沉浸的玻璃質感</li>
+                    <li>• 工時模組移除 hover 變形並優化輸入體驗，手機桌機一致</li>
+                    <li>• 首頁功能卡內容更新，凸顯本週改版亮點</li>
+                    <li>• 「新增工時」桌面版備註欄位加寬，方便長字串輸入</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
@@ -483,14 +483,14 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.0 - 2025年10月2日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.1 - 2025年10月3日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>Grok AI 回歸，製粒分析輸出更自然、更懂香港語氣</li>
-                    <li>訂單 AI 助手 Modal 重寫疊層，任何裝置都穩定顯示</li>
-                    <li>新增隱私政策與服務條款頁面，安心查閱資訊</li>
-                    <li>Footer 版面同步 2025 年度細節，細節再升級</li>
+                    <li>登入頁 Liquid Glass 質感釋出，登入體驗全面升級</li>
+                    <li>工時模組桌面 / 手機 UI 調整，支援更長備註與行動操作</li>
+                    <li>首頁功能模組文案更新，凸顯最新功能與優化</li>
+                    <li>停用所有卡片 hover 位移，確保各裝置觀感一致</li>
                   </ul>
                 </div>
                 <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
