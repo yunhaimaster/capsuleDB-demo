@@ -73,7 +73,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       ],
       worklogs: (initialData?.worklogs as any[])?.map((log) => ({
         ...log,
-        workDate: log.workDate ? log.workDate.toString().slice(0, 10) : '',
+        workDate: log.workDate ? new Date(log.workDate).toISOString().slice(0, 10) : '',
         notes: log.notes || ''
       })) || []
     }
