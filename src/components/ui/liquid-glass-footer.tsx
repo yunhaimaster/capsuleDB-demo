@@ -36,8 +36,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
             links: [
               { href: '/ai-recipe-generator', label: 'AI配方生成器' },
               { href: '/granulation-analyzer', label: '製粒分析工具' },
-              { href: '/work-orders', label: '工作單生成' },
-              { href: '/tools/supplements-news', label: '保健品產業新聞' }
+              { href: '/work-orders', label: '工作單生成' }
             ]
           },
       {
@@ -45,7 +44,6 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
         links: [
           { href: '/', label: '首頁' },
           { href: '/worklogs', label: '工時紀錄' },
-          { href: '/tools/supplements-news', label: '保健品產業新聞' },
           { href: '/history', label: '版本歷史' }
         ]
       }

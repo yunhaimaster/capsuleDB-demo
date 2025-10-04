@@ -518,26 +518,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 保健品產業新聞 */}
-          <Link href="/tools/supplements-news">
-            <div className="liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction cursor-pointer">
-              <div className="liquid-glass-content text-center">
-                <div className="icon-container icon-container-gradient-indigo mx-auto mb-4">
-                  <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.25 11.25l2.25 2.25 5.25-5.25M4.5 19.5h15a1.5 1.5 0 001.5-1.5v-12A1.5 1.5 0 0019.5 4.5h-15A1.5 1.5 0 003 6v12a1.5 1.5 0 001.5 1.5z" />
-                  </svg>
-                </div>
-                <h3 className="text-base font-semibold text-gray-800 mb-2">保健品產業新聞</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  聚合全球 RSS 來源，自由選取管道，快速掌握最新補充品趨勢
-                </p>
-                <div className="inline-flex items-center text-indigo-600 text-sm font-medium">
-                  串流查看 →
-                </div>
-              </div>
-            </div>
-          </Link>
-
         </div>
       </div>
 
