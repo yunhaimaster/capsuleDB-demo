@@ -46,6 +46,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
         title: '系統',
         links: [
           { href: '/', label: '首頁' },
+          { href: '/worklogs', label: '工時紀錄' },
           { href: '/history', label: '版本歷史' }
         ]
       }
