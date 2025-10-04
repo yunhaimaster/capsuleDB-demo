@@ -71,11 +71,19 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       })) || [
         { materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }
       ],
-      worklogs: (initialData?.worklogs as any[])?.map((log) => ({
-        ...log,
-        workDate: log.workDate ? new Date(log.workDate).toISOString().slice(0, 10) : '',
-        notes: log.notes || ''
-      })) || []
+      worklogs: (initialData?.worklogs as any[])?.map((log) => {
+        const isoDate = (() => {
+          if (!log.workDate) return ''
+          const date = new Date(log.workDate)
+          return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().slice(0, 10)
+        })()
+
+        return {
+          ...log,
+          workDate: isoDate,
+          notes: log.notes || ''
+        }
+      }) || []
     }
   })
 
