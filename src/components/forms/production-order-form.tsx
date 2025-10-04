@@ -15,7 +15,6 @@ import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { calculateWorkUnits } from '@/lib/worklog'
-import { normalizeDateOnly } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -72,13 +71,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       })) || [
         { materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }
       ],
-      worklogs: (initialData?.worklogs as any[])?.map((log) => {
-        return {
-          ...log,
-          workDate: normalizeDateOnly(log.workDate),
-          notes: log.notes || ''
-        }
-      }) || []
+      worklogs: (initialData?.worklogs as any[])?.map((log) => ({
+        ...log,
+        workDate: typeof log.workDate === 'string' ? log.workDate : new Date(log.workDate).toISOString().split('T')[0],
+        notes: log.notes || ''
+      })) || []
     }
   })
 
@@ -115,7 +112,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         worklogs: data.worklogs?.map((entry) => {
           const parsed = worklogSchema.parse(entry)
           const { minutes, units } = calculateWorkUnits({ date: parsed.workDate, startTime: parsed.startTime, endTime: parsed.endTime, headcount: Number(parsed.headcount) })
-          return { ...parsed, effectiveMinutes: minutes, calculatedWorkUnits: units }
+          return { ...parsed, workDate: parsed.workDate, effectiveMinutes: minutes, calculatedWorkUnits: units }
         })
       }
 
