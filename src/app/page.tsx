@@ -11,9 +11,9 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Package2, UserRound, Square, ArrowRight } from 'lucide-react'
+import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Package2, UserRound, Square, ArrowRight, Clock3 } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
-import { ProductionOrder, OrderWorklog } from '@/types'
+import { ProductionOrder, OrderWorklog, WorklogWithOrder } from '@/types'
 import Link from 'next/link'
 import { sumWorkUnits } from '@/lib/worklog'
 
@@ -88,6 +88,7 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
 
 export default function HomePage() {
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
+  const [recentWorklogs, setRecentWorklogs] = useState<WorklogWithOrder[]>([])
   const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
@@ -132,17 +133,29 @@ export default function HomePage() {
     }
   }, [])
 
+  const fetchRecentWorklogs = useCallback(async () => {
+    try {
+      const response = await fetch('/api/worklogs?limit=5')
+      if (response.ok) {
+        const data = await response.json()
+        setRecentWorklogs(data.worklogs || [])
+      }
+    } catch (error) {
+      console.error('載入最近工時錯誤:', error)
+    }
+  }, [])
+
   useEffect(() => {
     const run = async () => {
       try {
-        await Promise.all([fetchRecentOrders(), fetchAllOrders()])
+        await Promise.all([fetchRecentOrders(), fetchAllOrders(), fetchRecentWorklogs()])
       } finally {
         setLoading(false)
       }
     }
 
     run()
-  }, [fetchRecentOrders, fetchAllOrders])
+  }, [fetchRecentOrders, fetchAllOrders, fetchRecentWorklogs])
 
   if (!isAuthenticated) {
     return (
@@ -214,8 +227,9 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 最近生產紀錄區塊 */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8">
+      {/* 最近紀錄區塊 */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] gap-4 sm:gap-6 md:gap-8">
+        {/* 最近生產紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
@@ -340,6 +354,96 @@ export default function HomePage() {
                 <Link href="/orders/new">
                   <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                     建立第一筆記錄
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+        {/* 最近工時紀錄 */}
+        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
+          <div className="liquid-glass-content">
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div>
+                <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center gap-2">
+                  <Clock3 className="h-4 w-4 md:h-5 md:w-5 text-indigo-500" />
+                  最近工時紀錄
+                </h3>
+                <p className="text-xs sm:text-sm md:text-sm opacity-80">
+                  最新 5 筆填報的工時資訊
+                </p>
+              </div>
+              <Link
+                href="/worklogs"
+                className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+              >
+                查看全部工時
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            {loading ? (
+              <div className="space-y-3 skeleton-stagger">
+                <div className="skeleton skeleton-title" />
+                <div className="skeleton skeleton-text" />
+                <div className="skeleton skeleton-text" />
+                <div className="skeleton skeleton-text-sm" />
+              </div>
+            ) : recentWorklogs.length > 0 ? (
+              <div className="space-y-3">
+                {recentWorklogs.map((worklog) => (
+                  <Link key={worklog.id} href={`/orders/${worklog.orderId}`} className="block">
+                    <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/90 transition-all duration-200 shadow-[0_8px_22px_rgba(15,32,77,0.08)] hover:shadow-[0_14px_32px_rgba(45,85,155,0.18)]">
+                      <div className="p-4 space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-2 text-xs text-slate-400 uppercase tracking-[0.16em]">
+                              <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+                              <span>{formatDateOnly(worklog.workDate)}</span>
+                            </div>
+                            <h4 className="text-sm font-semibold text-slate-900 truncate">
+                              {worklog.order?.productName || '未指派訂單'}
+                            </h4>
+                            <p className="text-xs text-slate-500 truncate">
+                              客戶：{worklog.order?.customerName || '未填寫'}
+                            </p>
+                          </div>
+                          <span className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
+                            <Timer className="h-3.5 w-3.5" />
+                            {worklog.startTime} - {worklog.endTime}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600">
+                          <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
+                            <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">有效工時</p>
+                            <p className="text-sm font-semibold text-slate-900">{(worklog.effectiveMinutes / 60).toFixed(1)} 工時</p>
+                          </div>
+                          <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
+                            <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">填報人數</p>
+                            <p className="text-sm font-semibold text-slate-900">{worklog.headcount} 人</p>
+                          </div>
+                        </div>
+
+                        {worklog.notes && (
+                          <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-3 py-2 text-xs text-indigo-600">
+                            <span className="font-medium">備註</span>
+                            <p className="mt-1 text-xs leading-relaxed text-indigo-700 line-clamp-2">
+                              {worklog.notes}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500 mb-4">目前沒有最近的工時紀錄。</p>
+                <Link href="/worklogs">
+                  <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+                    新增工時紀錄
                   </Button>
                 </Link>
               </div>

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
-import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react'
 
 import { WorklogWithOrder } from '@/types'
 import { WorklogFilter } from '@/components/worklogs/worklog-filter'
@@ -91,6 +91,46 @@ export function ResponsiveWorklogsList() {
     setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')
   }
 
+  const handleExport = async () => {
+    try {
+      const response = await fetch('/api/worklogs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          format: 'csv',
+          filters: {
+            orderKeyword: filters.orderKeyword || undefined,
+            notesKeyword: filters.notesKeyword || undefined,
+            dateFrom: filters.dateFrom || undefined,
+            dateTo: filters.dateTo || undefined,
+            sortOrder
+          }
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('匯出失敗，請稍後再試')
+      }
+
+      const blob = await response.blob()
+      const filename = `worklogs-${new Date().toISOString().split('T')[0]}.csv`
+
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(link)
+    } catch (err) {
+      console.error('匯出錯誤:', err)
+      alert('匯出失敗，請稍後再試')
+    }
+  }
+
   const sortIcon = useMemo(() => {
     if (sortOrder === 'asc') return <ArrowUp className="h-3 w-3" />
     if (sortOrder === 'desc') return <ArrowDown className="h-3 w-3" />
@@ -118,12 +158,24 @@ export function ResponsiveWorklogsList() {
 
   return (
     <div className="space-y-6">
-      <WorklogFilter
-        filters={filters}
-        onSearch={handleSearch}
-        onLimitChange={handleLimitChange}
-        loading={loading}
-      />
+      <div className="flex flex-col gap-4">
+        <WorklogFilter
+          filters={filters}
+          onSearch={handleSearch}
+          onLimitChange={handleLimitChange}
+          loading={loading}
+        />
+        <div className="flex justify-end">
+          <button
+            onClick={handleExport}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium shadow-[0_10px_30px_rgba(37,99,235,0.25)] hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={loading}
+          >
+            <Download className="h-4 w-4" />
+            匯出 CSV
+          </button>
+        </div>
+      </div>
 
       <div className="hidden lg:block">
         <div className="overflow-hidden rounded-3xl bg-white/70 backdrop-blur border border-white/60 shadow-[0_15px_45px_rgba(15,32,77,0.12)]">
