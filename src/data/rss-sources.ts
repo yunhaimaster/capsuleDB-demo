@@ -9,114 +9,66 @@ export interface RssSource {
 
 export const RSS_SOURCES: RssSource[] = [
   {
-    id: 'fooddive',
-    title: 'Food Dive',
-    description: '食品產業決策者的每日新聞摘要',
-    url: 'https://www.fooddive.com/feeds/news/',
-    origin: '美國',
-    language: 'en'
+    id: 'cfs-hk',
+    title: '香港食物安全中心',
+    description: '食物安全中心發布的食品安全風險警示與召回資訊',
+    url: 'https://www.cfs.gov.hk/tc_chi/rss/rss.xml',
+    origin: '香港',
+    language: 'zh'
   },
   {
-    id: 'foodsafetynews',
-    title: 'Food Safety News',
-    description: '食品安全與召回即時資訊',
-    url: 'https://www.foodsafetynews.com/feed/',
-    origin: '美國',
-    language: 'en'
+    id: 'nmpa-notice',
+    title: '中國國家藥監局通知公告',
+    description: '保健食品註冊審批、監管政策與風險警示公告',
+    url: 'https://www.nmpa.gov.cn/rss/notice.xml',
+    origin: '中國',
+    language: 'zh'
   },
   {
-    id: 'foodbusinessnews',
-    title: 'Food Business News',
-    description: '食品加工與市場趨勢分析',
-    url: 'https://www.foodbusinessnews.net/rss/articles',
-    origin: '美國',
-    language: 'en'
+    id: 'nutraingredients-cn',
+    title: 'NutraIngredients-Asia 中文版',
+    description: '亞洲保健食品與功能性食品產業新聞',
+    url: 'https://cn.nutraingredients-asia.com/rss',
+    origin: '亞洲',
+    language: 'zh'
   },
   {
-    id: 'vitamin-retailer',
-    title: 'Vitamin Retailer Magazine',
-    description: '保健品零售產業新聞與專題',
-    url: 'https://vitaminretailer.com/feed',
-    origin: '美國',
-    language: 'en'
+    id: '21food',
+    title: '中國食品商務網',
+    description: '中國食品與保健品市場趨勢、企業動態與數據分析',
+    url: 'https://www.21food.cn/rss',
+    origin: '中國',
+    language: 'zh'
   },
   {
-    id: 'wholefoodsmag',
-    title: 'Whole Foods Magazine',
-    description: '天然產品零售與健康產業新聞',
-    url: 'https://www.wholefoodsmagazine.com/rss',
-    origin: '美國',
-    language: 'en'
+    id: 'chc-association',
+    title: '中國保健協會',
+    description: '協會公告、行業標準與政策解讀',
+    url: 'https://www.chc.org.cn/rss',
+    origin: '中國',
+    language: 'zh'
   },
   {
-    id: 'foodsafetymag',
-    title: 'Food Safety Magazine',
-    description: '食品安全管理、召回與最佳實務',
-    url: 'https://www.food-safety.com/rss',
-    origin: '美國',
-    language: 'en'
+    id: 'hktdc-health',
+    title: '香港貿發局．健康及養生產品',
+    description: '香港健康及養生產品的展會活動與市場洞察',
+    url: 'https://hkmb.hktdc.com/rss/Industry/Health.xml',
+    origin: '香港',
+    language: 'zh'
   },
   {
-    id: 'preparedfoods',
-    title: 'Prepared Foods',
-    description: '食品研發與成分配方趨勢',
-    url: 'https://www.preparedfoods.com/rss/articles',
-    origin: '美國',
-    language: 'en'
-  },
-  {
-    id: 'newfoodmag',
-    title: 'New Food Magazine',
-    description: '食品與飲料科學、創新與法規',
-    url: 'https://www.newfoodmagazine.com/feed/',
-    origin: '英國',
-    language: 'en'
-  },
-  {
-    id: 'justfood',
-    title: 'Just Food',
-    description: '全球食品市場與併購動態',
-    url: 'https://www.just-food.com/feed/',
-    origin: '英國',
-    language: 'en'
-  },
-  {
-    id: 'nutraceuticalsworld',
-    title: 'Nutraceuticals World',
-    description: '全球保健食品製造與市場新聞',
-    url: 'https://www.nutraceuticalsworld.com/rss/all',
-    origin: '美國',
-    language: 'en'
-  },
-  {
-    id: 'statnews',
-    title: 'STAT News',
-    description: '醫療、生命科學與保健趨勢',
-    url: 'https://www.statnews.com/feed',
-    origin: '美國',
-    language: 'en'
-  },
-  {
-    id: 'bmj-nutrition',
-    title: 'BMJ Nutrition, Prevention & Health',
-    description: 'BMJ 營養與預防醫學研究最新文章',
-    url: 'https://nutrition.bmj.com/rss/current.xml',
-    origin: '英國',
-    language: 'en'
+    id: 'cnsoc',
+    title: '中國營養學會',
+    description: '中國營養學會研究成果與學術會議公告',
+    url: 'http://www.cnsoc.org.cn/rss/news.xml',
+    origin: '中國',
+    language: 'zh'
   },
   {
     id: 'nutritionfacts',
     title: 'NutritionFacts.org',
-    description: 'Greger 醫師整理的科學營養影片與文章',
+    description: 'Greger 醫師整理的科學營養研究與解讀',
     url: 'https://nutritionfacts.org/feed',
-    origin: '全球',
-    language: 'en'
-  },
-  {
-    id: 'bmjnutrition',
-    title: 'Nutrition & Life (Podcast)',
-    description: '營養生活相關的播客內容更新',
-    url: 'https://rss.com/podcasts/nutrition-and-life/feed/',
     origin: '全球',
     language: 'en'
   }
