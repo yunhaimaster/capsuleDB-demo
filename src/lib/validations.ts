@@ -144,6 +144,25 @@ export const searchFiltersSchema = z.object({
 
 export const worklogSchema = worklogBaseSchema
 
+export const worklogFiltersSchema = z.object({
+  orderKeyword: z.string().trim().min(1).max(120).optional(),
+  notesKeyword: z.string().trim().min(1).max(200).optional(),
+  dateFrom: z.date().optional(),
+  dateTo: z.date().optional(),
+  page: z.number().int().positive().default(1),
+  limit: z.number().int().positive().max(100).default(25),
+  sortOrder: z.enum(['asc', 'desc']).default('desc')
+}).refine((data) => {
+  if (data.dateFrom && data.dateTo) {
+    return data.dateFrom <= data.dateTo
+  }
+  return true
+}, {
+  message: '開始日期不得晚於結束日期',
+  path: ['dateFrom']
+})
+
 export type ProductionOrderFormData = z.infer<typeof productionOrderSchema>
 export type IngredientFormData = z.infer<typeof ingredientSchema>
 export type SearchFiltersFormData = z.infer<typeof searchFiltersSchema>
+export type WorklogFiltersFormData = z.infer<typeof worklogFiltersSchema>

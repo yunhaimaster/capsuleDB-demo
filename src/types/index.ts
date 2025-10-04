@@ -68,6 +68,15 @@ export interface OrderWorklog {
   updatedAt: string
 }
 
+export interface WorklogWithOrder extends OrderWorklog {
+  order?: {
+    id: string
+    customerName: string
+    productName: string
+    createdAt: string
+  } | null
+}
+
 export interface CreateOrderWorklogData {
   workDate: string
   headcount: number
@@ -108,4 +117,14 @@ export interface ExportOptions {
     from: Date
     to: Date
   }
+}
+
+export interface WorklogFilters {
+  orderKeyword?: string
+  notesKeyword?: string
+  dateFrom?: Date
+  dateTo?: Date
+  page?: number
+  limit?: number
+  sortOrder?: 'asc' | 'desc'
 }

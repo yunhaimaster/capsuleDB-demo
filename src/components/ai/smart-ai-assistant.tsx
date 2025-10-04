@@ -19,15 +19,18 @@ interface SmartAIAssistantProps {
   currentOrder?: ProductionOrder | null
   pageData?: any
   showOnPages?: string[]
+  includePathnames?: string[]
 }
 
-export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'] }: SmartAIAssistantProps) {
+export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages = ['/orders'], includePathnames }: SmartAIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
   const pathname = usePathname()
   
   // 檢查當前頁面是否應該顯示 Smart AI
-  const shouldShow = showOnPages.some(page => pathname.startsWith(page))
+  const shouldShow = (includePathnames && includePathnames.length > 0)
+    ? includePathnames.some(page => pathname.startsWith(page))
+    : showOnPages.some(page => pathname.startsWith(page))
   
   if (!shouldShow) {
     return null

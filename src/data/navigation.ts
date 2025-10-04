@@ -19,6 +19,10 @@ const BASE_NAVIGATION_LINKS: NavigationLink[] = [
     ],
   },
   {
+    href: '/worklogs',
+    label: '工時紀錄'
+  },
+  {
     href: '/ai-recipe-generator',
     label: '工具',
     children: [
