@@ -15,6 +15,7 @@ import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
 import { calculateWorkUnits } from '@/lib/worklog'
+import { normalizeDateOnly } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -72,15 +73,9 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         { materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }
       ],
       worklogs: (initialData?.worklogs as any[])?.map((log) => {
-        const isoDate = (() => {
-          if (!log.workDate) return ''
-          const date = new Date(log.workDate)
-          return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().slice(0, 10)
-        })()
-
         return {
           ...log,
-          workDate: isoDate,
+          workDate: normalizeDateOnly(log.workDate),
           notes: log.notes || ''
         }
       }) || []

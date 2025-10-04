@@ -40,6 +40,18 @@ export function formatDateOnly(date: Date | string | null | undefined): string {
   }).format(dateObj)
 }
 
+export function normalizeDateOnly(date: Date | string | null | undefined): string {
+  if (!date) return ''
+
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  if (isNaN(dateObj.getTime())) return ''
+
+  const normalized = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate())
+  normalized.setMinutes(normalized.getMinutes() - normalized.getTimezoneOffset())
+
+  return normalized.toISOString().slice(0, 10)
+}
+
 export function convertWeight(mg: number): WeightUnit {
   if (mg >= 1000000) {
     return {
