@@ -543,10 +543,10 @@ export default function HomePage() {
                     <span className="text-[11px] text-amber-600">更新：2025/10/03</span>
                   </div>
                   <ul className="space-y-1 text-xs md:text-sm text-amber-700">
-                    <li>• 登入頁導入 Liquid Glass 卡片視覺，呈現更沉浸的玻璃質感</li>
-                    <li>• 工時模組移除 hover 變形並優化輸入體驗，手機桌機一致</li>
-                    <li>• 首頁功能卡內容更新，凸顯本週改版亮點</li>
-                    <li>• 「新增工時」桌面版備註欄位加寬，方便長字串輸入</li>
+                    <li>• 新增工時列表頁面，可依關鍵字、日期篩選並匯出 CSV</li>
+                    <li>• 首頁加入最新工時區塊與縮排卡片，桌機雙欄更易瀏覽</li>
+                    <li>• 導航列與 Footer 顯示最近工時更新時間，資訊同步</li>
+                    <li>• 編輯訂單時工時日期偏移問題已修復，資料更可靠</li>
                   </ul>
                 </div>
                 <div className="bg-amber-50 p-3 md:p-4 rounded-xl border border-amber-200">
@@ -587,14 +587,14 @@ export default function HomePage() {
               <div className="space-y-3">
                 <div className="bg-green-50 p-3 rounded-xl border border-green-200">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.1 - 2025年10月3日</h4>
+                    <h4 className="font-medium text-green-800 text-sm sm:text-base">v2.2.2 - 2025年10月4日</h4>
                     <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full self-start sm:self-auto">最新版本</span>
                   </div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
-                    <li>登入頁 Liquid Glass 質感釋出，登入體驗全面升級</li>
-                    <li>工時模組桌面 / 手機 UI 調整，支援更長備註與行動操作</li>
-                    <li>首頁功能模組文案更新，凸顯最新功能與優化</li>
-                    <li>停用所有卡片 hover 位移，確保各裝置觀感一致</li>
+                    <li>推出工時紀錄專頁，支援匯出與進階篩選</li>
+                    <li>首頁新增最近工時卡片、導覽提示最新工時</li>
+                    <li>工時日期偏移問題修復，編輯與詳情保持一致</li>
+                    <li>Footer 加入工時快連結，資訊入口更齊全</li>
                   </ul>
                 </div>
                 <div className="bg-blue-50 p-3 rounded-xl border border-blue-200">
