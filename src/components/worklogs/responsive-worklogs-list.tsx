@@ -200,14 +200,8 @@ export function ResponsiveWorklogsList() {
               ) : (
                 worklogs.map((worklog) => (
                   <tr key={worklog.id} className="border-b border-slate-100 hover:bg-white/80 transition-colors">
-                    <td className="py-4 px-4 align-top text-sm text-slate-800">
-                      <div className="flex flex-col gap-1">
-                        <span className="font-semibold text-slate-900">{formatWorkDate(worklog.workDate)}</span>
-                        <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                          <CalendarDays className="h-3.5 w-3.5" />
-                          建立於 {format(new Date(worklog.createdAt), 'yyyy/MM/dd HH:mm')}
-                        </span>
-                      </div>
+                    <td className="py-4 px-4 align-top text-sm text-slate-800 font-semibold text-slate-900">
+                      {formatWorkDate(worklog.workDate)}
                     </td>
                     <td className="py-4 px-4 align-top text-sm text-slate-800">
                       <div className="flex flex-col gap-1">
