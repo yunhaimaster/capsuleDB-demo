@@ -142,11 +142,6 @@ export function ResponsiveWorklogsList() {
     return format(date, 'yyyy/MM/dd (EEE)', { locale: zhTW })
   }
 
-  const formatWorkUnits = (minutes: number) => {
-    const hours = minutes / 60
-    return hours.toFixed(1)
-  }
-
   const pageNumbers = useMemo(() => {
     if (!pagination) return []
     const pages: number[] = []
@@ -230,10 +225,7 @@ export function ResponsiveWorklogsList() {
                       </div>
                     </td>
                     <td className="py-4 px-4 align-top text-sm text-slate-800">
-                      <div className="flex flex-col gap-1">
-                        <span className="font-semibold text-slate-900">{formatWorkUnits(worklog.effectiveMinutes)} 工時</span>
-                        <span className="text-xs text-slate-500">原始時數：{worklog.calculatedWorkUnits.toFixed(1)} 工時</span>
-                      </div>
+                      <span className="font-semibold text-slate-900">{worklog.calculatedWorkUnits.toFixed(1)} 工時</span>
                     </td>
                     <td className="py-4 px-4 align-top text-sm text-slate-800">
                       <div className="max-w-xs text-sm text-slate-600 leading-relaxed">
@@ -314,9 +306,9 @@ export function ResponsiveWorklogsList() {
                     <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">工時範圍</p>
                     <p className="text-sm font-medium text-slate-900">{worklog.startTime} - {worklog.endTime}</p>
                   </div>
-                  <div className="rounded-xl bg-white/75 border border-white/60 px-3 py-2">
+                    <div className="rounded-xl bg-white/75 border border-white/60 px-3 py-2">
                     <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">總工時</p>
-                    <p className="text-sm font-medium text-slate-900">{formatWorkUnits(worklog.effectiveMinutes)} 工時</p>
+                    <p className="text-sm font-medium text-slate-900">{worklog.calculatedWorkUnits.toFixed(1)} 工時</p>
                   </div>
                 </div>
 
