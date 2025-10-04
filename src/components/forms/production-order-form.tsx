@@ -73,7 +73,11 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       ],
       worklogs: (initialData?.worklogs as any[])?.map((log) => ({
         ...log,
-        workDate: typeof log.workDate === 'string' ? log.workDate : new Date(log.workDate.getTime() - log.workDate.getTimezoneOffset() * 60000).toISOString().split('T')[0],
+        workDate: typeof log.workDate === 'string'
+          ? log.workDate
+          : log.workDate instanceof Date
+            ? log.workDate.toISOString().split('T')[0]
+            : new Date(log.workDate).toISOString().split('T')[0],
         notes: log.notes || ''
       })) || []
     }

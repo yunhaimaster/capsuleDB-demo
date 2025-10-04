@@ -34,7 +34,11 @@ export async function GET(
       completionDate: order.completionDate ? 
         (order.completionDate instanceof Date ? 
           order.completionDate.toISOString().split('T')[0] : 
-          order.completionDate) : null
+          order.completionDate) : null,
+      worklogs: order.worklogs.map((log) => ({
+        ...log,
+        workDate: DateTime.fromJSDate(log.workDate, { zone: 'Asia/Hong_Kong' }).startOf('day').toFormat('yyyy-MM-dd')
+      }))
     }
 
     return NextResponse.json(serializedOrder)
