@@ -105,7 +105,6 @@ const xmlParser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: '',
   textNodeName: 'text',
-  parseNodeValue: true,
   trimValues: true
 })
 
@@ -137,12 +136,17 @@ function parseRss(xml: string): Array<{ title: string; link: string; publishedAt
         }
       }
 
-      if (title && link) {
-        return { title, link, publishedAt, description }
+      if (!title || !link) {
+        return null
       }
 
-      return null
+      return {
+        title: String(title),
+        link: String(link),
+        publishedAt,
+        description: description ? String(description) : undefined
+      }
     })
-    .filter((item): item is { title: string; link: string; publishedAt: string | null; description?: string } => Boolean(item))
+    .filter(Boolean) as Array<{ title: string; link: string; publishedAt: string | null; description?: string }>
 }
 
