@@ -228,23 +228,23 @@ export default function HomePage() {
       </div>
 
       {/* 最近紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] gap-4 sm:gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.85fr)_minmax(0,1.05fr)] gap-4 sm:gap-5 md:gap-6">
         {/* 最近生產紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
               <div>
-                <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center gap-2">
-                  <FileText className="h-4 w-4 sm:h-4 sm:w-4 md:h-5 md:w-5 text-cyan-600" />
+                <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
+                  <FileText className="h-4 w-4 text-cyan-600" />
                   最近生產紀錄
                 </h3>
-                <p className="text-xs sm:text-sm md:text-sm opacity-80">
+                <p className="text-[11px] sm:text-xs md:text-xs opacity-75">
                   最新 5 筆訂單的進度與工時摘要
                 </p>
               </div>
               <Link
                 href="/orders"
-                className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-700"
               >
                 查看全部訂單
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -261,7 +261,7 @@ export default function HomePage() {
                 <div className="skeleton skeleton-button" />
               </div>
             ) : recentOrders.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {recentOrders.map((order) => {
                   const status = order.completionDate
                     ? 'completed'
@@ -280,19 +280,19 @@ export default function HomePage() {
 
                   return (
                     <Link key={order.id} href={`/orders/${order.id}`} className="block">
-                      <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/90 transition-all duration-200 shadow-[0_8px_22px_rgba(15,32,77,0.08)] hover:shadow-[0_14px_32px_rgba(45,85,155,0.18)]">
-                        <div className="p-4 space-y-3">
-                          <div className="flex items-start justify-between gap-3">
+                      <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
+                        <div className="p-3.5 space-y-2.5">
+                          <div className="flex items-start justify-between gap-2.5">
                             <div className="min-w-0 space-y-1">
-                              <div className="flex items-center gap-2 text-xs text-slate-400 uppercase tracking-[0.16em]">
+                              <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
                                 <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
                                 <span>最近更新</span>
                                 <span>建立 {formatDateOnly(order.createdAt)}</span>
                               </div>
-                              <h4 className="text-base font-semibold text-slate-900 truncate">{order.productName}</h4>
-                              <p className="text-xs text-slate-500 truncate">客戶：{order.customerName}</p>
+                              <h4 className="text-sm font-semibold text-slate-900 truncate">{order.productName}</h4>
+                              <p className="text-[12px] text-slate-500 truncate">客戶：{order.customerName}</p>
                             </div>
-                            <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold bg-gradient-to-r ${statusAccent}`}>
+                            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r ${statusAccent}`}>
                               {status === 'completed' ? <Calendar className="h-3.5 w-3.5" />
                                 : status === 'inProgress' ? <Timer className="h-3.5 w-3.5" />
                                 : <Square className="h-3.5 w-3.5" />}
@@ -300,26 +300,26 @@ export default function HomePage() {
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
-                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">訂單數量</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-slate-600">
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">訂單數量</p>
                               <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
                             </div>
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
-                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">累積工時</p>
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">累積工時</p>
                               <p className="text-sm font-semibold text-slate-900">
                                 {order.worklogs && order.worklogs.length > 0
                                   ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時`
                                   : '—'}
                               </p>
                             </div>
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
-                              <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">客服</p>
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">客服</p>
                               <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
                             </div>
                           </div>
 
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-slate-500">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 text-[11px] text-slate-500">
                             <div className="flex items-center gap-2">
                               <Package2 className="h-3.5 w-3.5 text-slate-400" />
                               <span>
@@ -337,7 +337,7 @@ export default function HomePage() {
                           </div>
 
                           {latestWorklog && (
-                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-3 py-2 text-xs text-indigo-600 flex items-center justify-between">
+                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600 flex items-center justify-between">
                               <span className="font-medium">最新工時</span>
                               <span>{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime} - {latestWorklog.endTime}</span>
                             </div>
@@ -363,19 +363,19 @@ export default function HomePage() {
         {/* 最近工時紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
           <div className="liquid-glass-content">
-            <div className="flex items-start justify-between gap-4 mb-6">
+            <div className="flex items-start justify-between gap-3 mb-5">
               <div>
-                <h3 className="text-base sm:text-lg md:text-lg font-semibold flex items-center gap-2">
-                  <Clock3 className="h-4 w-4 md:h-5 md:w-5 text-indigo-500" />
+                <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
+                  <Clock3 className="h-4 w-4 text-indigo-500" />
                   最近工時紀錄
                 </h3>
-                <p className="text-xs sm:text-sm md:text-sm opacity-80">
+                <p className="text-[11px] sm:text-xs md:text-xs opacity-75">
                   最新 5 筆填報的工時資訊
                 </p>
               </div>
               <Link
                 href="/worklogs"
-                className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-700"
               >
                 查看全部工時
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -390,45 +390,45 @@ export default function HomePage() {
                 <div className="skeleton skeleton-text-sm" />
               </div>
             ) : recentWorklogs.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {recentWorklogs.map((worklog) => (
                   <Link key={worklog.id} href={`/orders/${worklog.orderId}`} className="block">
-                    <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/90 transition-all duration-200 shadow-[0_8px_22px_rgba(15,32,77,0.08)] hover:shadow-[0_14px_32px_rgba(45,85,155,0.18)]">
-                      <div className="p-4 space-y-3">
-                        <div className="flex items-start justify-between gap-3">
+                    <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
+                      <div className="p-3.5 space-y-2.5">
+                        <div className="flex items-start justify-between gap-2.5">
                           <div className="min-w-0 space-y-1">
-                            <div className="flex items-center gap-2 text-xs text-slate-400 uppercase tracking-[0.16em]">
+                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
                               <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
                               <span>{formatDateOnly(worklog.workDate)}</span>
                             </div>
                             <h4 className="text-sm font-semibold text-slate-900 truncate">
                               {worklog.order?.productName || '未指派訂單'}
                             </h4>
-                            <p className="text-xs text-slate-500 truncate">
+                            <p className="text-[12px] text-slate-500 truncate">
                               客戶：{worklog.order?.customerName || '未填寫'}
                             </p>
                           </div>
-                          <span className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
+                          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
                             <Timer className="h-3.5 w-3.5" />
                             {worklog.startTime} - {worklog.endTime}
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600">
-                          <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
-                            <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">有效工時</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] text-slate-600">
+                          <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                            <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">有效工時</p>
                             <p className="text-sm font-semibold text-slate-900">{(worklog.effectiveMinutes / 60).toFixed(1)} 工時</p>
                           </div>
-                          <div className="rounded-xl bg-white/80 border border-white/60 px-3 py-2">
-                            <p className="uppercase tracking-[0.12em] text-[11px] text-slate-400 mb-1">填報人數</p>
+                          <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                            <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">填報人數</p>
                             <p className="text-sm font-semibold text-slate-900">{worklog.headcount} 人</p>
                           </div>
                         </div>
 
                         {worklog.notes && (
-                          <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-3 py-2 text-xs text-indigo-600">
+                          <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600">
                             <span className="font-medium">備註</span>
-                            <p className="mt-1 text-xs leading-relaxed text-indigo-700 line-clamp-2">
+                            <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 line-clamp-2">
                               {worklog.notes}
                             </p>
                           </div>

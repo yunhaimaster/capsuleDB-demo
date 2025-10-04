@@ -1,7 +1,9 @@
 "use client"
 
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { formatDistanceToNow } from 'date-fns'
+import zhTW from 'date-fns/locale/zh-TW'
 
 import { useAuth } from '@/components/auth/auth-provider'
 
@@ -21,6 +23,7 @@ interface LiquidGlassFooterProps {
 
 export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
   const { isAuthenticated } = useAuth()
+  const [latestWorklogInfo, setLatestWorklogInfo] = useState<string | null>(null)
 
   const footerSections: FooterSection[] = useMemo(() => {
     const sharedSections: FooterSection[] = [
@@ -61,6 +64,29 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
     return [...sharedSections, accountSection]
   }, [isAuthenticated])
 
+  useEffect(() => {
+    const fetchLatestWorklog = async () => {
+      try {
+        const response = await fetch('/api/worklogs?limit=1')
+        if (response.ok) {
+          const data = await response.json()
+          const latest = data.worklogs?.[0]
+          if (latest) {
+            const relative = formatDistanceToNow(new Date(latest.workDate), {
+              addSuffix: true,
+              locale: zhTW
+            })
+            setLatestWorklogInfo(`${relative} 填報 · ${latest.order?.productName || '未指派訂單'}`)
+          }
+        }
+      } catch (error) {
+        console.error('載入最新工時失敗:', error)
+      }
+    }
+
+    fetchLatestWorklog()
+  }, [])
+
   return (
     <footer className={`liquid-glass-footer ${className}`}>
       <div className="liquid-glass-footer-content">
@@ -82,6 +108,12 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
           <p className="text-sm text-gray-600 max-w-xs">
             專業的膠囊灌裝工廠代工管理系統，提供AI驅動的配方生成和生產管理解決方案。
           </p>
+          {latestWorklogInfo && (
+            <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/70 backdrop-blur border border-white/50 text-[11px] text-indigo-600">
+              <span className="inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
+              <span>最新工時：{latestWorklogInfo}</span>
+            </div>
+          )}
         </div>
 
         {/* 導航鏈接 */}

@@ -7,6 +7,8 @@ import { Logo } from '@/components/ui/logo'
 import { NavDropdown } from '@/components/ui/nav-dropdown'
 import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
 import { useAuth } from '@/components/auth/auth-provider'
+import { formatDistanceToNow } from 'date-fns'
+import zhTW from 'date-fns/locale/zh-TW'
 
 type NavLink = NavigationLink & {
   active?: boolean
@@ -28,6 +30,7 @@ export function LiquidGlassNav({
   const navRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const { logout } = useAuth()
+  const [latestWorklogTime, setLatestWorklogTime] = useState<string | null>(null)
 
   // Auto-detect active link based on current pathname
   const processedLinks = links.map(link => ({
@@ -46,6 +49,29 @@ export function LiquidGlassNav({
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const fetchLatestWorklog = async () => {
+      try {
+        const response = await fetch('/api/worklogs?limit=1')
+        if (response.ok) {
+          const data = await response.json()
+          const latest = data.worklogs?.[0]
+          if (latest?.workDate) {
+            const relative = formatDistanceToNow(new Date(latest.workDate), {
+              addSuffix: true,
+              locale: zhTW
+            })
+            setLatestWorklogTime(`${relative} 更新`) 
+          }
+        }
+      } catch (error) {
+        console.error('載入最新工時失敗:', error)
+      }
+    }
+
+    fetchLatestWorklog()
   }, [])
 
   // Mobile menu toggle
@@ -110,6 +136,13 @@ export function LiquidGlassNav({
             )
           ))}
         </div>
+
+        {latestWorklogTime && (
+          <div className="hidden md:flex items-center gap-1 ml-4 px-3 py-1 rounded-full bg-white/70 backdrop-blur border border-white/50 text-[11px] text-indigo-600">
+            <span className="inline-flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            <span>{latestWorklogTime}</span>
+          </div>
+        )}
 
         {/* Mobile Menu Toggle */}
         <button
