@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
-import zhTW from 'date-fns/locale/zh-TW'
+import { zhTW } from 'date-fns/locale'
 
 import { useAuth } from '@/components/auth/auth-provider'
 

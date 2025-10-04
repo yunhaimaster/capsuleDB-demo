@@ -8,7 +8,7 @@ import { NavDropdown } from '@/components/ui/nav-dropdown'
 import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
 import { useAuth } from '@/components/auth/auth-provider'
 import { formatDistanceToNow } from 'date-fns'
-import zhTW from 'date-fns/locale/zh-TW'
+import { zhTW } from 'date-fns/locale'
 
 type NavLink = NavigationLink & {
   active?: boolean
