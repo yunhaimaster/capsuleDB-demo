@@ -136,12 +136,12 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   const getSortIcon = (column: string) => {
     if (filters.sortBy !== column) {
-      return <ArrowUpDown className="h-3 w-3 text-gray-400" />
+      return <ArrowUpDown className="h-3 w-3 text-gray-400" aria-hidden="true" />
     }
     
     return filters.sortOrder === 'asc' 
-      ? <ArrowUp className="h-3 w-3 text-gray-600" />
-      : <ArrowDown className="h-3 w-3 text-gray-600" />
+      ? <ArrowUp className="h-3 w-3 text-gray-600" aria-hidden="true" />
+      : <ArrowDown className="h-3 w-3 text-gray-600" aria-hidden="true" />
   }
 
   const handleDelete = async (orderId: string) => {
@@ -157,7 +157,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       fetchOrders(filters)
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
-      alert('刪除失敗，請重試')
+      // TODO: replace with toast notification system
+      window.alert('刪除失敗，請重試')
     }
   }
 
@@ -187,7 +188,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Error exporting:', error)
-      alert('匯出失敗，請重試')
+      window.alert('匯出失敗，請重試')
     }
   }
 
@@ -365,7 +366,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             onClick={() => window.location.href = `/orders/${order.id}/edit`}
                             className="h-6 w-6 p-0 text-xs"
                           >
-                            <Edit className="h-3 w-3" />
+                            <Edit className="h-3 w-3" aria-hidden="true" />
                           </Button>
                           <Button
                             variant="outline"
@@ -373,7 +374,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             onClick={() => handleDelete(order.id)}
                             className="h-6 w-6 p-0 text-red-600 hover:text-red-700 text-xs"
                           >
-                            <Trash2 className="h-3 w-3" />
+                            <Trash2 className="h-3 w-3" aria-hidden="true" />
                           </Button>
                         </div>
                       </td>

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { productionOrderSchema, searchFiltersSchema, worklogSchema } from '@/lib/validations'
 import { SearchFilters } from '@/types'
@@ -29,11 +30,10 @@ export async function GET(request: NextRequest) {
 
     const validatedFilters = searchFiltersSchema.parse(filters)
     
-    const where: any = {}
-    
-    // 構建搜尋條件
-    const searchConditions: any[] = []
-    
+    const where: Prisma.ProductionOrderWhereInput = {}
+
+    const searchConditions: Prisma.ProductionOrderWhereInput[] = []
+
     if (validatedFilters.customerName) {
       searchConditions.push({
         customerName: {
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-    
+
     if (validatedFilters.productName) {
       searchConditions.push({
         productName: {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-    
+
     if (validatedFilters.ingredientName) {
       searchConditions.push({
         ingredients: {
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-    
+
     if (validatedFilters.capsuleType) {
       searchConditions.push({
         capsuleType: {
@@ -73,19 +73,18 @@ export async function GET(request: NextRequest) {
         }
       })
     }
-    
-    // 如果有搜尋條件，使用 AND 邏輯
+
     if (searchConditions.length > 0) {
       where.AND = searchConditions
     }
-    
+
     if (validatedFilters.dateTo) {
       where.completionDate = {
         gte: new Date(validatedFilters.dateTo.getFullYear(), validatedFilters.dateTo.getMonth(), validatedFilters.dateTo.getDate()),
         lt: new Date(validatedFilters.dateTo.getFullYear(), validatedFilters.dateTo.getMonth(), validatedFilters.dateTo.getDate() + 1)
       }
     }
-    
+
     if (validatedFilters.minQuantity !== undefined || validatedFilters.maxQuantity !== undefined) {
       where.productionQuantity = {}
       if (validatedFilters.minQuantity !== undefined) {
@@ -95,7 +94,7 @@ export async function GET(request: NextRequest) {
         where.productionQuantity.lte = validatedFilters.maxQuantity
       }
     }
-    
+
     if (validatedFilters.isCompleted !== undefined) {
       if (validatedFilters.isCompleted) {
         where.completionDate = { not: null }
@@ -105,9 +104,38 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (validatedFilters.page - 1) * validatedFilters.limit
-    
-    // 自定義排序邏輯：進行中 > 未開始 > 已完成（依完工日期）
-    const [allOrders, total] = await Promise.all([
+
+    const orderBy: Prisma.ProductionOrderOrderByWithRelationInput[] = [
+      { completionDate: 'asc' },
+      { worklogs: { _count: 'desc' } }
+    ]
+
+    const sortOrder: Prisma.SortOrder = validatedFilters.sortOrder
+
+    switch (validatedFilters.sortBy) {
+      case 'customerName':
+        orderBy.push({ customerName: sortOrder })
+        break
+      case 'productName':
+        orderBy.push({ productName: sortOrder })
+        break
+      case 'productionQuantity':
+        orderBy.push({ productionQuantity: sortOrder })
+        break
+      case 'completionDate':
+        orderBy.push({ completionDate: sortOrder })
+        break
+      case 'createdAt':
+      default:
+        orderBy.push({ createdAt: sortOrder })
+        break
+    }
+
+    if (validatedFilters.sortBy !== 'createdAt') {
+      orderBy.push({ createdAt: 'desc' })
+    }
+
+    const [orders, total] = await Promise.all([
       prisma.productionOrder.findMany({
         where,
         include: {
@@ -115,44 +143,14 @@ export async function GET(request: NextRequest) {
           worklogs: {
             orderBy: { workDate: 'asc' }
           }
-        }
+        },
+        orderBy,
+        take: validatedFilters.limit,
+        skip
       }),
       prisma.productionOrder.count({ where })
     ])
 
-    // 應用自定義排序
-    const sortedOrders = allOrders.sort((a, b) => {
-      const getStatusRank = (order: typeof a) => {
-        const hasWorklogs = order.worklogs && order.worklogs.length > 0
-        const completed = order.completionDate !== null
-        if (hasWorklogs && !completed) return 0 // 進行中
-        if (!completed) return 1 // 未開始
-        return 2 // 已完成
-      }
-
-      const rankA = getStatusRank(a)
-      const rankB = getStatusRank(b)
-
-      if (rankA !== rankB) {
-        return rankA - rankB
-      }
-
-      // 同一狀態下進行排序：已完成依完成日期，其餘依建立時間
-      if (rankA === 2) {
-        const aDate = a.completionDate ? new Date(a.completionDate) : new Date(0)
-        const bDate = b.completionDate ? new Date(b.completionDate) : new Date(0)
-        return validatedFilters.sortOrder === 'asc' ? aDate.getTime() - bDate.getTime() : bDate.getTime() - aDate.getTime()
-      }
-
-      const aCreated = new Date(a.createdAt)
-      const bCreated = new Date(b.createdAt)
-      return validatedFilters.sortOrder === 'asc' ? aCreated.getTime() - bCreated.getTime() : bCreated.getTime() - aCreated.getTime()
-    })
-
-    // 應用分頁
-    const orders = sortedOrders.slice(skip, skip + validatedFilters.limit)
-
-    // 確保日期正確序列化
     const serializedOrders = orders.map(order => ({
       ...order,
       createdAt: order.createdAt.toISOString(),

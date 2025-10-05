@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Trash2, Info } from 'lucide-react'
+import { Plus, Trash2, Info, Loader2, Upload, ArrowLeft, History } from 'lucide-react'
 import { FieldTranslator } from '@/components/ui/field-translator'
 import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } from '@/lib/utils'
@@ -411,13 +411,13 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               <span style={{ color: '#2a588c' }}>工時紀錄</span>
             </h2>
             <Button type="button" onClick={addWorklog} className="ripple-effect btn-micro-hover bg-amber-500 hover:bg-amber-600">
-              <Plus className="mr-2 h-4 w-4" /> 新增工時
+              <Plus className="mr-2 h-4 w-4" aria-hidden="true" /> 新增工時
             </Button>
           </div>
         </div>
         <CardContent className="space-y-6">
           <div className="flex items-center gap-2 text-xs sm:text-sm text-amber-600 bg-amber-50/70 border border-amber-200 rounded-xl px-3 py-2">
-            <Info className="h-4 w-4" />
+            <Info className="h-4 w-4" aria-hidden="true" />
             <p>系統自動扣除 12:30-13:30 午餐時間，並以 0.5 工時為單位向上取整後乘以人數。</p>
           </div>
           {worklogFields.length === 0 ? (
@@ -532,7 +532,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                           </TableCell>
                           <TableCell className="text-right">
                             <Button type="button" variant="ghost" size="icon" onClick={() => removeWorklog(index)}>
-                              <Trash2 className="h-4 w-4 text-red-500" />
+                              <Trash2 className="h-4 w-4 text-red-500" aria-hidden="true" />
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -551,7 +551,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       <div className="flex items-center justify-between">
                         <div className="text-sm font-semibold text-slate-700">工時 #{index + 1}</div>
                         <Button type="button" variant="ghost" size="icon" onClick={() => removeWorklog(index)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
+                          <Trash2 className="h-4 w-4 text-red-500" aria-hidden="true" />
                         </Button>
                       </div>
                       <div className="grid grid-cols-1 gap-4 text-sm">
@@ -890,7 +890,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                         onClick={() => remove(index)}
                         disabled={fields.length === 1}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -916,7 +916,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
                       disabled={fields.length === 1}
                       className="h-8 w-8 p-0"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </div>
                   
@@ -1020,7 +1020,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
               variant="outline"
             onClick={() => append({ materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false })}
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="h-4 w-4" aria-hidden="true" />
               新增原料
             </Button>
           </div>
@@ -1073,6 +1073,7 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           onClick={() => router.back()}
           className="w-full sm:w-auto order-2 sm:order-1"
         >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           取消
         </Button>
         <Button
@@ -1080,7 +1081,14 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
           disabled={isSubmitting}
           className="ripple-effect btn-micro-hover micro-brand-glow w-full sm:w-auto order-1 sm:order-2"
         >
-          {isSubmitting ? '儲存中...' : '儲存配方'}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              儲存中...
+            </>
+          ) : (
+            '儲存配方'
+          )}
         </Button>
       </div>
     </form>

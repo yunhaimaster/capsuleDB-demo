@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
-import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react'
+import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download, Filter, RefreshCw, Loader2, ChevronDown } from 'lucide-react'
 
 import { WorklogWithOrder } from '@/types'
 import { WorklogFilter } from '@/components/worklogs/worklog-filter'
@@ -166,7 +166,7 @@ export function ResponsiveWorklogsList() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium shadow-[0_10px_30px_rgba(37,99,235,0.25)] hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             disabled={loading}
           >
-            <Download className="h-4 w-4" />
+            <Download className="h-4 w-4" aria-hidden="true" />
             匯出 CSV
           </button>
         </div>

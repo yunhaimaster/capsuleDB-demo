@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { X, Download } from 'lucide-react'
+import { X, Download, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 
 interface FilterOption {
@@ -345,7 +345,7 @@ export function LinkedFilter({
               onClick={() => toggleDropdown('customer')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              ▼
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </button>
             <DropdownPortal
               field="customer"
@@ -374,7 +374,7 @@ export function LinkedFilter({
               onClick={() => toggleDropdown('product')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              ▼
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </button>
             <DropdownPortal
               field="product"
@@ -403,7 +403,7 @@ export function LinkedFilter({
               onClick={() => toggleDropdown('ingredient')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              ▼
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </button>
             <DropdownPortal
               field="ingredient"
@@ -432,7 +432,7 @@ export function LinkedFilter({
               onClick={() => toggleDropdown('capsule')}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              ▼
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </button>
             <DropdownPortal
               field="capsule"
@@ -452,7 +452,7 @@ export function LinkedFilter({
             disabled={loading}
             className="flex items-center justify-center gap-2"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
             清除篩選
           </Button>
           {onExport && (
@@ -462,7 +462,7 @@ export function LinkedFilter({
               className="flex items-center justify-center gap-2"
               disabled={loading}
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-4 w-4" aria-hidden="true" />
               匯出 CSV
             </Button>
           )}

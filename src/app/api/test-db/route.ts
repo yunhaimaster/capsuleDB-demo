@@ -1,25 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
   try {
-    // 檢查 ingredients 表的結構
     const result = await prisma.$queryRaw`
-      SELECT column_name, data_type, is_nullable, column_default
-      FROM information_schema.columns 
-      WHERE table_name = 'ingredients' 
-      ORDER BY ordinal_position
+      SELECT 1 as ok
     `
-    
-    return NextResponse.json({ 
-      success: true, 
-      ingredientsTableStructure: result 
+
+    logger.info('Database health check succeeded')
+
+    return NextResponse.json({
+      success: true,
+      result
     })
   } catch (error) {
-    console.error('Database check error:', error)
+    logger.error('Database check error', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'Database check failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       },

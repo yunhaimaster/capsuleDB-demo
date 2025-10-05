@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useMemo } from 'react'
 
 import { useAuth } from '@/components/auth/auth-provider'
+import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react'
 
 interface FooterLink {
   href: string

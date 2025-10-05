@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
-import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square, Calendar, Package2 } from 'lucide-react'
+import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square, Calendar, Package2, RefreshCw, Loader2 } from 'lucide-react'
 import { formatDateOnly, downloadFile } from '@/lib/utils'
 
 interface ResponsiveOrdersListProps {
@@ -126,8 +126,8 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   }, [fetchOrders, filters])
 
   const getSortIcon = (field: string) => {
-    if (filters.sortBy !== field) return <ArrowUpDown className="h-3 w-3" />
-    return filters.sortOrder === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+    if (filters.sortBy !== field) return <ArrowUpDown className="h-3 w-3" aria-hidden="true" />
+    return filters.sortOrder === 'asc' ? <ArrowUp className="h-3 w-3" aria-hidden="true" /> : <ArrowDown className="h-3 w-3" aria-hidden="true" />
   }
 
   const handleExport = async (format: 'csv' | 'pdf') => {
@@ -153,7 +153,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       downloadFile(blob, filename, mimeType)
     } catch (error) {
       console.error('匯出錯誤:', error)
-      alert('匯出失敗，請稍後再試')
+      window.alert('匯出失敗，請稍後再試')
     }
   }
 
@@ -180,7 +180,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       setOrderToDelete(null)
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
-      alert('刪除失敗，請重試')
+      window.alert('刪除失敗，請重試')
     }
   }
 
@@ -271,12 +271,12 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             <div className="flex items-center gap-1 text-xs text-slate-400">
                               {order.processIssues && order.processIssues.trim() !== '' && (
                                 <div title={`製程問題: ${order.processIssues}`}>
-                                  <AlertTriangle className="h-3.5 w-3.5 text-red-500" />
+                                  <AlertTriangle className="h-3.5 w-3.5 text-red-500" aria-hidden="true" />
                                 </div>
                               )}
                               {order.qualityNotes && order.qualityNotes.trim() !== '' && (
                                 <div title={`品管備註: ${order.qualityNotes}`}>
-                                  <ClipboardCheck className="h-3.5 w-3.5 text-blue-500" />
+                                  <ClipboardCheck className="h-3.5 w-3.5 text-blue-500" aria-hidden="true" />
                                 </div>
                               )}
                             </div>
@@ -286,7 +286,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <td className="py-4 px-4 text-sm align-top">
                         <div className="flex flex-col gap-2">
                           <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${statusBadgeClass}`}>
-                            {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" /> : status === 'completed' ? <Calendar className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5" />}
+                            {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" aria-hidden="true" /> : status === 'completed' ? <Calendar className="h-3.5 w-3.5" aria-hidden="true" /> : <Square className="h-3.5 w-3.5" aria-hidden="true" />}
                             {statusLabel}
                           </span>
                           <div className="text-xs text-slate-500 leading-relaxed">
@@ -308,7 +308,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <td className="py-4 px-4 text-sm text-slate-700 align-top">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2">
-                            <Package2 className="h-3.5 w-3.5 text-slate-400" />
+                            <Package2 className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
                             <span className="font-medium text-slate-900">訂單數量：{order.productionQuantity?.toLocaleString()} 粒</span>
                           </div>
                           {order.actualProductionQuantity != null && (
@@ -353,7 +353,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             className="text-slate-500 hover:text-slate-700 transition-colors"
                             title="查看訂單"
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-4 w-4" aria-hidden="true" />
                           </button>
                           <button
                             onClick={(e) => {
@@ -363,7 +363,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             className="text-blue-600 hover:text-blue-800 transition-colors"
                             title="編輯訂單"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-4 w-4" aria-hidden="true" />
                           </button>
                           <button
                             onClick={(e) => {
@@ -373,7 +373,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             className="text-purple-600 hover:text-purple-800 transition-colors"
                             title="Order AI 分析"
                           >
-                            <Bot className="h-4 w-4" />
+                            <Bot className="h-4 w-4" aria-hidden="true" />
                           </button>
                           <button
                             onClick={(e) => {
@@ -383,7 +383,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             className="text-red-600 hover:text-red-800 transition-colors"
                             title="刪除訂單"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
                       </td>
@@ -478,7 +478,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         window.location.href = `/orders/${order.id}/edit`
                       }}
                     >
-                      <Edit className="h-4 w-4 mr-1" /> 編輯
+                      <Edit className="h-4 w-4 mr-1" aria-hidden="true" /> 編輯
                     </Button>
                     <Button
                       size="sm"
@@ -488,7 +488,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                         handleOrderAIClick(order)
                       }}
                     >
-                      <Bot className="h-4 w-4 mr-1" /> AI
+                      <Bot className="h-4 w-4 mr-1" aria-hidden="true" /> AI
                     </Button>
                   </div>
                 </div>

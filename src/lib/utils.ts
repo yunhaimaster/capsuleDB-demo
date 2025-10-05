@@ -1,6 +1,9 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { WeightUnit } from "@/types"
+import { format } from 'date-fns'
+import { zhTW } from 'date-fns/locale'
+import { v4 as uuid } from 'uuid'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -112,16 +115,22 @@ export function generateCSV(data: any[], headers: string[]): string {
   return csvContent
 }
 
-export function downloadFile(content: string | Blob, filename: string, mimeType: string): void {
-  const blob = typeof content === 'string' ? new Blob([content], { type: mimeType }) : content
-  const url = URL.createObjectURL(blob)
+export function generateUUID() {
+  return uuid()
+}
+
+export function downloadFile(blob: Blob, filename: string, mimeType?: string) {
   const link = document.createElement('a')
+  const url = window.URL.createObjectURL(blob)
   link.href = url
   link.download = filename
+  if (mimeType) {
+    (link as HTMLAnchorElement).type = mimeType
+  }
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+  window.URL.revokeObjectURL(url)
 }
 
 export function debounce<T extends (...args: any[]) => any>(

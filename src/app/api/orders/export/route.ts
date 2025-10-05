@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
         }
       },
       orderBy: {
-        createdAt: 'desc'
+        [filters?.sortBy ?? 'createdAt']: filters?.sortOrder ?? 'desc'
       }
     })
 

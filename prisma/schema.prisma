@@ -32,6 +32,7 @@ model ProductionOrder {
   worklogs           OrderWorklog[]
 
   @@map("production_orders")
+  @@index([completionDate, createdAt])
 }
 
 model Ingredient {
@@ -63,6 +64,7 @@ model OrderWorklog {
 
   @@map("order_worklogs")
   @@index([orderId, workDate])
+  @@index([workDate, createdAt])
 }
 
 // ===== v2.0 新增模型 =====
