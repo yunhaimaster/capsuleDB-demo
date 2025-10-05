@@ -188,8 +188,10 @@ export default function HomePage() {
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
-      const orders: ProductionOrder[] = payload.data?.orders || []
-      setRecentOrders(reorderOrdersByStatus(orders))
+
+      const orders = Array.isArray(payload.data?.orders) ? payload.data.orders : []
+      const normalized = reorderOrdersByStatus(orders).slice(0, ORDER_DISPLAY_LIMIT)
+      setRecentOrders(normalized)
     } catch (error) {
       console.error('載入最近訂單錯誤:', error)
     }
@@ -215,7 +217,9 @@ export default function HomePage() {
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
-      setRecentWorklogs(payload.data?.worklogs || [])
+
+      const worklogs = Array.isArray(payload.data?.worklogs) ? payload.data.worklogs : []
+      setRecentWorklogs(worklogs.slice(0, WORKLOG_DISPLAY_LIMIT))
     } catch (error) {
       console.error('載入最近工時錯誤:', error)
     }
@@ -289,10 +293,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 最近紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-3 sm:gap-4">
+      {/* 最近紀錄卡改為迷你版 */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-3 sm:gap-4">
         {/* 最近生產紀錄 */}
-        <div className="liquid-glass-card">
+        <div className="rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] p-3 sm:p-4">
           <div className="liquid-glass-content p-4 sm:p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
