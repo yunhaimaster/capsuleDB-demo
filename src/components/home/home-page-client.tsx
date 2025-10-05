@@ -1,30 +1,17 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { DateTime } from 'luxon'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { fetchWithTimeout } from '@/lib/api-client'
-import { downloadFile, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
+import { formatDateOnly, formatNumber } from '@/lib/utils'
 import { sumWorkUnits } from '@/lib/worklog'
 import type { ProductionOrder, OrderWorklog, WorklogWithOrder } from '@/types'
-import { Plus, FileText, ArrowRight, Calendar, Timer, ClipboardList, Clock3, Brain, FlaskConical, ClipboardCheck } from 'lucide-react'
-
-const SmartAIAssistant = dynamic(
-  () => import('@/components/ai/smart-ai-assistant').then((mod) => mod.SmartAIAssistant),
-  { ssr: false }
-)
-
-const OrderAIAssistant = dynamic(
-  () => import('@/components/ai/order-ai-assistant').then((mod) => mod.OrderAIAssistant),
-  { ssr: false }
-)
+import { Plus, FileText, ArrowRight, Calendar, Timer, ClipboardList, Clock3, Wand2, FlaskConical, ClipboardCheck, CalendarDays } from 'lucide-react'
 
 const QUICK_CARD_PADDING = 'px-4 py-4 sm:px-6 sm:py-6'
 const MINI_CARD_PADDING = 'px-3 sm:px-3.5 py-3'
@@ -35,9 +22,8 @@ const STATUS_PRIORITY: Record<'inProgress' | 'notStarted' | 'completed', number>
   completed: 2,
 }
 
-const ORDER_FETCH_LIMIT = 50
-const WORKLOG_DISPLAY_LIMIT = 5
 const ORDER_DISPLAY_LIMIT = 5
+const WORKLOG_DISPLAY_LIMIT = 5
 
 const getOrderStatus = (order: ProductionOrder) => {
   const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
@@ -81,67 +67,11 @@ const formatWorklogDate = (value: string) => {
   return date.toFormat('yyyy/MM/dd (ccc)', { locale: 'zh-Hant' })
 }
 
-function OrderDetailView({ order }: { order: ProductionOrder }) {
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-end">
-        <OrderAIAssistant order={order} />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h4 className="font-medium mb-2">基本資訊</h4>
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">客戶名稱：</span>{order.customerName}</p>
-            <p><span className="font-medium">產品名字：</span>{order.productName}</p>
-            <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
-            <p><span className="font-medium">客服：</span>{order.customerService || '未填寫'}</p>
-          </div>
-        </div>
-        <div>
-          <h4 className="font-medium mb-2">生產狀態</h4>
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
-            <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
-            <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
-          </div>
-        </div>
-      </div>
-
-      {order.ingredients?.length ? (
-        <div>
-          <h4 className="font-medium mb-2">原料配方</h4>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>原料品名</TableHead>
-                <TableHead>單粒含量 (mg)</TableHead>
-                <TableHead>批次用量</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {order.ingredients.map((ingredient, index) => (
-                <TableRow key={index}>
-                  <TableCell>{ingredient.materialName}</TableCell>
-                  <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
-                  <TableCell>{calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : null}
-    </div>
-  )
-}
-
 export function HomePageClient() {
   const router = useRouter()
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
   const [recentWorklogs, setRecentWorklogs] = useState<WorklogWithOrder[]>([])
-  const [allOrders, setAllOrders] = useState<ProductionOrder[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedOrder, setSelectedOrder] = useState<ProductionOrder | null>(null)
-  const [showOrderDetails, setShowOrderDetails] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
@@ -156,7 +86,7 @@ export function HomePageClient() {
 
   const fetchRecentOrders = useCallback(async () => {
     try {
-      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_FETCH_LIMIT}&sortBy=completionDate&sortOrder=desc`)
+      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_DISPLAY_LIMIT}&sortBy=completionDate&sortOrder=desc`)
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
@@ -164,18 +94,6 @@ export function HomePageClient() {
       setRecentOrders(sortOrdersForHomepage(orders).slice(0, ORDER_DISPLAY_LIMIT))
     } catch (error) {
       console.error('載入最近訂單錯誤:', error)
-    }
-  }, [])
-
-  const fetchAllOrders = useCallback(async () => {
-    try {
-      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_FETCH_LIMIT}&sortBy=completionDate&sortOrder=desc`)
-      if (!response.ok) return
-      const payload = await response.json()
-      if (!payload?.success) return
-      setAllOrders(Array.isArray(payload.data?.orders) ? payload.data.orders : [])
-    } catch (error) {
-      console.error('載入所有訂單錯誤:', error)
     }
   }, [])
 
@@ -194,42 +112,13 @@ export function HomePageClient() {
   useEffect(() => {
     const load = async () => {
       try {
-        await Promise.all([fetchRecentOrders(), fetchAllOrders(), fetchRecentWorklogs()])
+        await Promise.all([fetchRecentOrders(), fetchRecentWorklogs()])
       } finally {
         setLoading(false)
       }
     }
     load()
-  }, [fetchRecentOrders, fetchAllOrders, fetchRecentWorklogs])
-
-  const recentOrdersMetrics = useMemo(() => {
-    if (recentOrders.length === 0) {
-      return { totalQuantity: 0, totalWorkUnits: 0, completedCount: 0 }
-    }
-
-    const totalQuantity = recentOrders.reduce((sum, order) => sum + (order.productionQuantity || 0), 0)
-    const totalWorkUnits = recentOrders.reduce((sum, order) => {
-      if (!order.worklogs || order.worklogs.length === 0) return sum
-      return sum + sumWorkUnits(order.worklogs as OrderWorklog[])
-    }, 0)
-    const completedCount = recentOrders.filter((order) => getOrderStatus(order) === 'completed').length
-
-    return { totalQuantity, totalWorkUnits, completedCount }
-  }, [recentOrders])
-
-  const recentWorklogMetrics = useMemo(() => {
-    if (recentWorklogs.length === 0) {
-      return { totalHours: 0, uniqueOrders: 0 }
-    }
-
-    const totalHours = recentWorklogs.reduce((sum, worklog) => {
-      const units = worklog.calculatedWorkUnits || 0
-      return sum + units
-    }, 0)
-    const uniqueOrders = new Set(recentWorklogs.map((worklog) => worklog.orderId)).size
-
-    return { totalHours, uniqueOrders }
-  }, [recentWorklogs])
+  }, [fetchRecentOrders, fetchRecentWorklogs])
 
   if (!isAuthenticated) {
     return (
@@ -436,188 +325,76 @@ export function HomePageClient() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
-          <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
+          <div className="rounded-2xl bg-white/65 border border-white/75 px-4 py-4 sm:px-5 sm:py-5 shadow-[0_5px_18px_rgba(15,32,77,0.08)]">
             <div className="flex items-center gap-3">
-              <div className="icon-container icon-container-gradient-sunrise">
-                <Brain className="h-4 w-4 text-white" />
+              <div className="icon-container icon-container-gradient-indigo">
+                <Wand2 className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-800">AI 工單助手</h3>
-                <p className="text-xs text-slate-500">即時分析生產資訊</p>
+                <h3 className="text-sm font-semibold text-slate-800">AI 配方生成器</h3>
+                <p className="text-xs text-slate-500">智慧分析原料比例與配方靈感</p>
               </div>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed mt-3">
-              使用 AI 評估工單執行風險，提供生產建議與下批準備提醒。
+              上傳需求後即時獲得建議配方並產出實際操作步驟，支援多語系與中文專業術語。
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
+          <div className="rounded-2xl bg-white/65 border border-white/75 px-4 py-4 sm:px-5 sm:py-5 shadow-[0_5px_18px_rgba(15,32,77,0.08)]">
             <div className="flex items-center gap-3">
               <div className="icon-container icon-container-gradient-emerald">
                 <FlaskConical className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-800">品質控管摘要</h3>
-                <p className="text-xs text-slate-500">日常稽核快速檢視</p>
+                <h3 className="text-sm font-semibold text-slate-800">製粒分析工具</h3>
+                <p className="text-xs text-slate-500">三十秒內評估製粒風險</p>
               </div>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed mt-3">
-              監控生產過程中的關鍵品質指標，確保每批產品符合標準。
+              自動判斷配方顆粒性、濕度與應用注意事項，提供客製化製程建議與 SOP 提示。
             </p>
           </div>
 
-          <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
+          <div className="rounded-2xl bg-white/65 border border-white/75 px-4 py-4 sm:px-5 sm:py-5 shadow-[0_5px_18px_rgba(15,32,77,0.08)]">
             <div className="flex items-center gap-3">
-              <div className="icon-container icon-container-gradient-indigo">
+              <div className="icon-container icon-container-gradient-cyan">
                 <ClipboardCheck className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-800">工序檢查提醒</h3>
-                <p className="text-xs text-slate-500">關鍵時間點通知</p>
+                <h3 className="text-sm font-semibold text-slate-800">工作單生成</h3>
+                <p className="text-xs text-slate-500">一鍵整理生產工作單與檢核表</p>
               </div>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed mt-3">
-              設定提醒節奏，提醒團隊完成保養、清潔等關鍵維護工序。
+              整合工時、訂單與品質指標，自動輸出標準化工作單，支援列印與 CSV 匯出。
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-          <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
-            <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
-              <ClipboardList className="h-4 w-4 text-emerald-500" /> 生產指標摘要
-            </h3>
-            <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-xl bg-white/80 border border-white/70 px-3 py-2 text-center">
-                <div className="text-[11px] text-slate-400">最近訂單</div>
-                <div className="text-lg font-semibold text-slate-900">{recentOrders.length}</div>
+        <div className="rounded-2xl bg-white/70 border border-white/75 px-4 py-5 sm:px-6 sm:py-6 shadow-[0_6px_20px_rgba(15,32,77,0.08)]">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="icon-container icon-container-gradient-sunrise">
+                <CalendarDays className="h-5 w-5 text-white" />
               </div>
-              <div className="rounded-xl bg-white/80 border border-white/70 px-3 py-2 text-center">
-                <div className="text-[11px] text-slate-400">累積工時</div>
-                <div className="text-lg font-semibold text-slate-900">{recentOrdersMetrics.totalWorkUnits.toFixed(1)}h</div>
-              </div>
-              <div className="rounded-xl bg-white/80 border border-white/70 px-3 py-2 text-center">
-                <div className="text-[11px] text-slate-400">完成訂單</div>
-                <div className="text-lg font-semibold text-slate-900">{recentOrdersMetrics.completedCount}</div>
+              <div>
+                <h3 className="text-base font-semibold text-slate-800">2025年10月5日 · 版本更新</h3>
+                <p className="text-xs text-slate-500">最新版本：v2.2.2</p>
               </div>
             </div>
+            <Link href="/history" className="text-xs font-medium text-indigo-600 hover:text-indigo-700">
+              查看完整歷史
+            </Link>
           </div>
-
-          <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
-            <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
-              <Clock3 className="h-4 w-4 text-indigo-500" /> 工時分佈摘要
-            </h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-white/80 border border-white/70 px-3 py-2 text-center">
-                <div className="text-[11px] text-slate-400">總工時</div>
-                <div className="text-lg font-semibold text-slate-900">{recentWorklogMetrics.totalHours.toFixed(1)}h</div>
-              </div>
-              <div className="rounded-xl bg-white/80 border border-white/70 px-3 py-2 text-center">
-                <div className="text-[11px] text-slate-400">涉及訂單</div>
-                <div className="text-lg font-semibold text-slate-900">{recentWorklogMetrics.uniqueOrders}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-2xl bg-white/60 border border-white/70 shadow-[0_6px_16px_rgba(15,32,77,0.1)] px-4 py-4 sm:px-5 sm:py-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-              <FileText className="h-4 w-4 text-indigo-500" /> 最近訂單清單
-            </h3>
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <button
-                type="button"
-                onClick={async () => {
-                  try {
-                    const response = await fetchWithTimeout('/api/orders/export', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({ format: 'csv', includeIngredients: true }),
-                    })
-                    if (!response.ok) {
-                      throw new Error('匯出失敗')
-                    }
-                    const blob = await response.blob()
-                    const fileUrl = URL.createObjectURL(blob)
-                    downloadFile(fileUrl, `recent-orders-${DateTime.now().toFormat('yyyyMMdd')}.csv`)
-                    URL.revokeObjectURL(fileUrl)
-                  } catch (error) {
-                    console.error('匯出最近訂單失敗:', error)
-                  }
-                }}
-                className="rounded-full border border-slate-200 px-3 py-1 hover:bg-slate-50 transition"
-              >
-                匯出 CSV
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowOrderDetails(false)}
-                className="rounded-full border border-slate-200 px-3 py-1 hover:bg-slate-50 transition"
-              >
-                關閉詳情
-              </button>
-            </div>
-          </div>
-
-          <div className="overflow-hidden rounded-xl border border-white/70">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50/60">
-                  <TableHead>訂單</TableHead>
-                  <TableHead>客戶</TableHead>
-                  <TableHead>狀態</TableHead>
-                  <TableHead>完工日期</TableHead>
-                  <TableHead>操作</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentOrders.slice(0, 5).map((order) => {
-                  const status = getOrderStatus(order)
-                  const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
-                  return (
-                    <TableRow key={order.id}>
-                      <TableCell>{order.productName}</TableCell>
-                      <TableCell>{order.customerName}</TableCell>
-                      <TableCell>
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium text-white ${status === 'completed' ? 'bg-emerald-600' : status === 'inProgress' ? 'bg-blue-600' : 'bg-slate-600'}`}>
-                          {statusLabel}
-                        </span>
-                      </TableCell>
-                      <TableCell>{order.completionDate ? formatDateOnly(order.completionDate) : '—'}</TableCell>
-                      <TableCell>
-                        <button
-                          type="button"
-                          className="text-indigo-600 hover:text-indigo-700 text-xs"
-                          onClick={() => {
-                            setSelectedOrder(order)
-                            setShowOrderDetails(true)
-                          }}
-                        >
-                          檢視詳情
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </div>
+          <ul className="mt-4 space-y-2 text-xs sm:text-sm text-slate-600">
+            <li>· 導航與首頁全面符合 WCAG 2.1 AA，新增焦點捕捉與動態減敏支援。</li>
+            <li>· 首頁優化為四大重點卡片，並加入工具導覽與最新更新摘要。</li>
+            <li>· 統一 API 錯誤提示與 Toast 無障礙標記，提升跨頁操作體驗。</li>
+          </ul>
         </div>
       </div>
 
       <LiquidGlassFooter />
-
-      <LiquidGlassModal
-        isOpen={showOrderDetails && Boolean(selectedOrder)}
-        onClose={() => setShowOrderDetails(false)}
-        title={selectedOrder ? `${selectedOrder.productName} 詳細資訊` : '訂單詳細'}
-        size="lg"
-      >
-        {selectedOrder && <OrderDetailView order={selectedOrder} />}
-      </LiquidGlassModal>
     </div>
   )
 }

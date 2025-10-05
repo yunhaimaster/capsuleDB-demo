@@ -10,10 +10,21 @@ import Link from 'next/link'
 export default function HistoryPage() {
   const versionHistory = [
     {
-      version: 'v2.2.1',
-      date: '2025年10月2日',
+      version: 'v2.2.2',
+      date: '2025年10月5日',
       type: '最新版本',
       typeColor: 'bg-green-100 text-green-800 border-green-200',
+      features: [
+        '首頁重構為四大重點模塊，新增工具導覽與最新更新摘要',
+        '導航列、模態與 Toast 全面符合 WCAG 2.1 AA，支援鍵盤焦點與動態減敏',
+        'API 錯誤提示、載入狀態與 aria-live 統一，強化跨頁使用體驗'
+      ]
+    },
+    {
+      version: 'v2.2.1',
+      date: '2025年10月2日',
+      type: '功能更新',
+      typeColor: 'bg-blue-100 text-blue-800 border-blue-200',
       features: [
         'Grok AI 回歸製粒分析，回應更自然貼地',
         '訂單 AI 助手 Modal 疊層再進化，所有裝置都能穩定顯示',
@@ -30,8 +41,7 @@ export default function HistoryPage() {
         'AI 助手 Modal 玻璃化改版，新增手機折疊資訊晶片',
         'PDF 下載區改用 Liquid Glass 卡片，桌面排列一致',
         '導航列最大寬度調整，超寬螢幕仍保持左右留白',
-        '登入頁整合 Liquid Glass 風格與品牌提示',
-        'Footer 帳戶連結改為動態顯示登入/登出狀態'
+        '登入頁整合 Liquid Glass 風格與品牌提示'
       ]
     },
     {
@@ -43,9 +53,7 @@ export default function HistoryPage() {
         '全站換上品牌背景動畫與 Liquid Glass 卡片',
         'AI 助手布局統一，新增建議提問及複製操作',
         'PDF 參考資料中心上線，提供風險清單及培訓手冊',
-        '導航與 Footer 導入共用設定檔，移除舊頁面連結',
-        '修復 iOS Safari 字體縮放造成畫面放大的問題',
-        '調整訂單列表 hover 動畫與桌/手機排版'
+        '導航與 Footer 導入共用設定檔，移除舊頁面連結'
       ]
     },
     {
@@ -56,12 +64,7 @@ export default function HistoryPage() {
       features: [
         'AI 助手功能全面優化，移除 reasoning 參數提升性能',
         '新增用戶可選的深度推理模式，平衡速度與質量',
-        '添加 AI 免責條款，提升用戶透明度和法律合規性',
-        '統一 AI 設置按鈕樣式，保持界面一致性',
-        '優化 AI 參數配置，32K tokens 極限設置確保最高質量',
-        '新增參考資料下載功能，提供培訓手冊和風險清單',
-        '修復訂單編輯功能和搜尋選單操作體驗',
-        '整體用戶體驗優化和界面統一性提升'
+        '添加 AI 免責條款，提升用戶透明度和法律合規性'
       ]
     },
     {
@@ -72,18 +75,7 @@ export default function HistoryPage() {
       features: [
         '全新玻璃質感介面設計',
         '修復系統部署和穩定性問題',
-        '優化 AI 助手功能',
-        '改善數據同步和處理流程',
-        '簡化配方操作介面',
-        '增強 AI 專業分析能力',
-        '修復 AI 助手功能衝突',
-        '優化日期顯示格式',
-        '修復分頁功能問題',
-        '解決按鈕重疊問題',
-        '新增動畫效果和視覺元素',
-        '支援深色和淺色模式',
-        '新增中文字體翻譯功能',
-        '優化手機操作體驗'
+        '優化 AI 助手功能'
       ]
     },
     {
@@ -94,9 +86,7 @@ export default function HistoryPage() {
       features: [
         '新增訂單搜尋和篩選功能',
         '優化數據庫查詢性能',
-        '改進用戶界面響應速度',
-        '新增批量操作功能',
-        '修復已知錯誤和問題'
+        '改進用戶界面響應速度'
       ]
     },
     {
@@ -107,61 +97,7 @@ export default function HistoryPage() {
       features: [
         '新增膠囊顏色選擇功能',
         '優化配方計算邏輯',
-        '改進訂單管理界面',
-        '新增數據導出功能',
-        '增強系統穩定性'
-      ]
-    },
-    {
-      version: 'v1.0.4',
-      date: '2025年9月20日',
-      type: '功能更新',
-      typeColor: 'bg-purple-100 text-purple-800 border-purple-200',
-      features: [
-        '新增 AI 智能配方分析',
-        '優化訂單創建流程',
-        '改進數據驗證機制',
-        '新增客戶管理功能',
-        '修復界面顯示問題'
-      ]
-    },
-    {
-      version: 'v1.0.3',
-      date: '2025年9月18日',
-      type: '功能更新',
-      typeColor: 'bg-purple-100 text-purple-800 border-purple-200',
-      features: [
-        '新增原料數據庫',
-        '優化配方計算精度',
-        '改進用戶操作體驗',
-        '新增訂單狀態追蹤',
-        '修復數據同步問題'
-      ]
-    },
-    {
-      version: 'v1.0.2',
-      date: '2025年9月15日',
-      type: '功能更新',
-      typeColor: 'bg-purple-100 text-purple-800 border-purple-200',
-      features: [
-        '新增訂單編輯功能',
-        '優化數據庫結構',
-        '改進錯誤處理機制',
-        '新增用戶權限管理',
-        '修復登入問題'
-      ]
-    },
-    {
-      version: 'v1.0.1',
-      date: '2025年9月12日',
-      type: '功能更新',
-      typeColor: 'bg-purple-100 text-purple-800 border-purple-200',
-      features: [
-        '新增訂單刪除功能',
-        '優化界面布局',
-        '改進數據驗證',
-        '新增確認對話框',
-        '修復初始版本問題'
+        '改進訂單管理界面'
       ]
     },
     {
@@ -173,8 +109,7 @@ export default function HistoryPage() {
         '系統基礎架構建立',
         '用戶認證系統',
         '訂單創建功能',
-        '基本數據管理',
-        '響應式界面設計'
+        '基本數據管理'
       ]
     }
   ]
