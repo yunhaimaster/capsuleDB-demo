@@ -1,69 +1,51 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
+import { jsonSuccess, jsonError } from '@/lib/api-response'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = request.nextUrl
-    
-    // 獲取所有訂單數據
-    const allOrders = await prisma.productionOrder.findMany({
-      include: {
-        ingredients: true
-      }
+    const [customers, products, ingredients, capsuleTypes] = await Promise.all([
+      prisma.productionOrder.findMany({
+        select: { customerName: true },
+        distinct: ['customerName'],
+        orderBy: { customerName: 'asc' },
+      }),
+      prisma.productionOrder.findMany({
+        select: { productName: true },
+        distinct: ['productName'],
+        orderBy: { productName: 'asc' },
+      }),
+      prisma.ingredient.findMany({
+        select: { materialName: true },
+        distinct: ['materialName'],
+        orderBy: { materialName: 'asc' },
+      }),
+      prisma.productionOrder.findMany({
+        select: { capsuleType: true },
+        distinct: ['capsuleType'],
+        where: { capsuleType: { not: null } },
+        orderBy: { capsuleType: 'asc' },
+      }),
+    ])
+
+    return jsonSuccess({
+      customers: customers.map((item) => item.customerName).filter(Boolean),
+      products: products.map((item) => item.productName).filter(Boolean),
+      ingredients: ingredients.map((item) => item.materialName).filter(Boolean),
+      capsuleTypes: capsuleTypes.map((item) => item.capsuleType).filter(Boolean),
     })
-
-    // 提取所有客戶名稱（去重）
-    const allCustomers = Array.from(new Set(allOrders.map(order => order.customerName))).sort()
-
-    // 根據客戶名稱篩選產品
-    let filteredOrders = allOrders
-    const customerName = searchParams.get('customerName')
-    if (customerName) {
-      filteredOrders = filteredOrders.filter(order => order.customerName === customerName)
-    }
-
-    // 根據產品名稱進一步篩選
-    const productName = searchParams.get('productName')
-    if (productName) {
-      filteredOrders = filteredOrders.filter(order => order.productName === productName)
-    }
-
-    // 根據原料名稱進一步篩選
-    const ingredientName = searchParams.get('ingredientName')
-    if (ingredientName) {
-      filteredOrders = filteredOrders.filter(order => 
-        order.ingredients.some(ingredient => ingredient.materialName === ingredientName)
-      )
-    }
-
-    // 提取產品名稱（基於篩選後的訂單）
-    const products = Array.from(new Set(filteredOrders.map(order => order.productName))).sort()
-
-    // 提取原料名稱（基於篩選後的訂單）
-    const ingredients = Array.from(new Set(filteredOrders.flatMap(order => 
-      order.ingredients.map(ingredient => ingredient.materialName)
-    ))).sort()
-
-    // 提取膠囊類型（基於篩選後的訂單）
-    const capsuleTypes = Array.from(new Set(filteredOrders
-      .map(order => order.capsuleType)
-      .filter(Boolean)
-    )).sort()
-
-    return NextResponse.json({
-      customers: allCustomers,
-      products,
-      ingredients,
-      capsuleTypes
-    })
-
   } catch (error) {
-    console.error('Error fetching dropdown options:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch dropdown options' },
-      { status: 500 }
-    )
+    logger.error('載入訂單下拉選項錯誤', {
+      error: error instanceof Error ? error.message : String(error),
+    })
+
+    return jsonError(500, {
+      code: 'ORDERS_OPTIONS_FAILED',
+      message: '載入訂單篩選選項失敗',
+      details: error instanceof Error ? error.message : String(error),
+    })
   }
 }

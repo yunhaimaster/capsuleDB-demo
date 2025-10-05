@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
@@ -9,6 +9,7 @@ import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square, Calendar, Package2, RefreshCw, Loader2 } from 'lucide-react'
 import { formatDateOnly, downloadFile } from '@/lib/utils'
 import { useToast } from '@/components/ui/toast-provider'
+import { fetchWithTimeout } from '@/lib/api-client'
 
 interface ResponsiveOrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -31,6 +32,7 @@ const getOrderStatus = (order: ProductionOrder) => {
 
 export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: ResponsiveOrdersListProps) {
   const { showToast } = useToast()
+  const abortControllerRef = useRef<AbortController | null>(null)
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   
   // 檢查訂單是否有製程問題或品管備註
@@ -40,6 +42,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   }
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [orderToDelete, setOrderToDelete] = useState<string | null>(null)
   const [selectedOrderForAI, setSelectedOrderForAI] = useState<ProductionOrder | null>(null)
   
@@ -63,10 +66,22 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const [ingredientOptions, setIngredientOptions] = useState<Array<{value: string, label: string}>>([])
   const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<Array<{value: string, label: string}>>([])
 
-  // Fetch orders data
+  const cancelActiveRequest = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
+  }
+
   const fetchOrders = useCallback(async (newFilters = filters) => {
-    setLoading(true)
     try {
+      cancelActiveRequest()
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
+      setLoading(true)
+      setError(null)
+
       const params = new URLSearchParams()
       Object.entries(newFilters).forEach(([key, value]) => {
         if (value !== undefined && value !== '' && value !== null) {
@@ -74,39 +89,58 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
         }
       })
 
-      const response = await fetch(`/api/orders?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setOrders(data.orders || [])
-        setPagination(data.pagination)
+      const response = await fetchWithTimeout(`/api/orders?${params}`, { signal: controller.signal })
+
+      if (!response.ok) {
+        throw new Error('載入訂單失敗')
       }
+
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '載入訂單失敗')
+      }
+
+      const data = payload.data
+
+      setOrders(Array.isArray(data.orders) ? data.orders : [])
+      setPagination(data.pagination)
     } catch (error) {
+      if ((error as DOMException)?.name === 'AbortError') {
+        return
+      }
       console.error('Error fetching orders:', error)
     } finally {
       setLoading(false)
+      abortControllerRef.current = null
     }
   }, [filters])
 
   // Fetch dropdown options
   const fetchOptions = useCallback(async () => {
     try {
-      const response = await fetch('/api/orders/options')
-      if (response.ok) {
-        const data = await response.json()
-        setCustomerOptions(data.customers.map((item: string) => ({ value: item, label: item })))
-        setProductOptions(data.products.map((item: string) => ({ value: item, label: item })))
-        setIngredientOptions(data.ingredients.map((item: string) => ({ value: item, label: item })))
-        setCapsuleTypeOptions(data.capsuleTypes.map((item: string) => ({ value: item, label: item })))
+      const response = await fetchWithTimeout('/api/orders/options')
+      if (!response.ok) {
+        throw new Error('載入選項失敗')
       }
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '載入選項失敗')
+      }
+      const data = payload.data || {}
+      setCustomerOptions(Array.isArray(data.customers) ? data.customers.map((item: string) => ({ value: item, label: item })) : [])
+      setProductOptions(Array.isArray(data.products) ? data.products.map((item: string) => ({ value: item, label: item })) : [])
+      setIngredientOptions(Array.isArray(data.ingredients) ? data.ingredients.map((item: string) => ({ value: item, label: item })) : [])
+      setCapsuleTypeOptions(Array.isArray(data.capsuleTypes) ? data.capsuleTypes.map((item: string) => ({ value: item, label: item })) : [])
     } catch (error) {
       console.error('Error fetching options:', error)
     }
   }, [])
 
   useEffect(() => {
-    fetchOrders()
+    fetchOrders(filters)
     fetchOptions()
-  }, [fetchOrders, fetchOptions])
+    return () => cancelActiveRequest()
+  }, [fetchOrders, fetchOptions, filters])
 
   const handleSearch = useCallback((newFilters: any) => {
     const updatedFilters = { ...filters, ...newFilters, page: 1 }
@@ -134,7 +168,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
 
   const handleExport = async (format: 'csv' | 'pdf') => {
     try {
-      const response = await fetch('/api/orders/export', {
+      const response = await fetchWithTimeout('/api/orders/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -179,13 +213,21 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const handleDeleteConfirm = async () => {
     if (!orderToDelete) return
 
+    const controller = new AbortController()
+
     try {
-      const response = await fetch(`/api/orders/${orderToDelete}`, {
-        method: 'DELETE'
+      const response = await fetchWithTimeout(`/api/orders/${orderToDelete}`, {
+        method: 'DELETE',
+        signal: controller.signal,
       })
       
       if (!response.ok) throw new Error('刪除訂單失敗')
-      
+
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '刪除訂單失敗')
+      }
+
       fetchOrders(filters)
       setOrderToDelete(null)
       showToast({
@@ -199,6 +241,8 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
         description: '刪除訂單時發生錯誤，請稍後再試。',
         variant: 'destructive'
       })
+    } finally {
+      abortControllerRef.current = null
     }
   }
 

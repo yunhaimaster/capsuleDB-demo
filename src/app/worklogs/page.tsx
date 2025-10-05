@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { ResponsiveWorklogsList } from '@/components/worklogs/responsive-worklogs-list'
+import { fetchWithTimeout } from '@/lib/api-client'
 
 export default function WorklogsPage() {
   useEffect(() => {

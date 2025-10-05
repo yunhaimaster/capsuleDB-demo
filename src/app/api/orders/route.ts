@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { productionOrderSchema, searchFiltersSchema, worklogSchema } from '@/lib/validations'
@@ -6,6 +6,7 @@ import { SearchFilters } from '@/types'
 import { calculateWorkUnits } from '@/lib/worklog'
 import { DateTime } from 'luxon'
 import { logger } from '@/lib/logger'
+import { jsonSuccess, jsonError } from '@/lib/api-response'
 
 export const dynamic = 'force-dynamic'
 
@@ -162,7 +163,7 @@ export async function GET(request: NextRequest) {
       totalWorkUnits: order.worklogs?.reduce((sum, log) => sum + (log.calculatedWorkUnits || 0), 0) ?? 0
     }))
 
-    return NextResponse.json({
+    return jsonSuccess({
       orders: serializedOrders,
       pagination: {
         page: validatedFilters.page,
@@ -175,10 +176,11 @@ export async function GET(request: NextRequest) {
     logger.error('載入訂單錯誤', {
       error: error instanceof Error ? error.message : error
     })
-    return NextResponse.json(
-      { error: '載入訂單失敗' },
-      { status: 500 }
-    )
+    return jsonError(500, {
+      code: 'ORDERS_FETCH_FAILED',
+      message: '載入訂單失敗',
+      details: error instanceof Error ? error.message : String(error)
+    })
   }
 }
 
@@ -201,104 +203,198 @@ export async function POST(request: NextRequest) {
     
     logger.debug('Calculated production order weights', { unitWeightMg, batchTotalWeightMg })
     
-    const { worklogs = [], ...orderPayload } = validatedData as typeof validatedData & { worklogs?: any[] }
-
-    const preparedWorklogs = worklogs.map((entry) => {
-      const parsed = worklogSchema.parse(entry)
-      const { minutes, units } = calculateWorkUnits({
-        date: parsed.workDate,
-        startTime: parsed.startTime,
-        endTime: parsed.endTime,
-        headcount: parsed.headcount
-      })
-
-      const workDate = DateTime.fromISO(parsed.workDate, { zone: 'Asia/Hong_Kong' })
-
-      return {
-        workDate: workDate.toJSDate(),
-        headcount: parsed.headcount,
-        startTime: parsed.startTime,
-        endTime: parsed.endTime,
-        notes: parsed.notes || null,
-        effectiveMinutes: minutes,
-        calculatedWorkUnits: units
-      }
-    })
-
     const order = await prisma.productionOrder.create({
       data: {
-        customerName: orderPayload.customerName,
-        productName: orderPayload.productName,
-        productionQuantity: orderPayload.productionQuantity,
+        ...validatedData,
+        completionDate: validatedData.completionDate ? DateTime.fromFormat(validatedData.completionDate, 'yyyy-MM-dd').toJSDate() : null,
         unitWeightMg,
         batchTotalWeightMg,
-        completionDate: orderPayload.completionDate && orderPayload.completionDate !== '' ? new Date(orderPayload.completionDate) : null,
-        processIssues: orderPayload.processIssues,
-        qualityNotes: orderPayload.qualityNotes,
-        capsuleColor: orderPayload.capsuleColor,
-        capsuleSize: orderPayload.capsuleSize,
-        capsuleType: orderPayload.capsuleType,
-        customerService: orderPayload.customerService,
-        actualProductionQuantity: orderPayload.actualProductionQuantity ?? null,
-        materialYieldQuantity: orderPayload.materialYieldQuantity ?? null,
         ingredients: {
-          create: validatedData.ingredients.map(ingredient => ({
+          create: validatedData.ingredients.map((ingredient) => ({
             materialName: ingredient.materialName,
             unitContentMg: ingredient.unitContentMg,
-            isCustomerProvided: ingredient.isCustomerProvided ?? true,
-            isCustomerSupplied: ingredient.isCustomerSupplied ?? true
-          }))
+            isCustomerProvided: ingredient.isCustomerProvided,
+            isCustomerSupplied: ingredient.isCustomerSupplied ?? ingredient.isCustomerProvided,
+          })),
         },
-        worklogs: {
-          create: preparedWorklogs
-        }
+        worklogs: validatedData.worklogs
+          ? {
+              create: validatedData.worklogs.map((entry) => {
+                const parsed = worklogSchema.parse(entry)
+                const { minutes, units } = calculateWorkUnits({
+                  date: parsed.workDate,
+                  startTime: parsed.startTime,
+                  endTime: parsed.endTime,
+                  headcount: Number(parsed.headcount),
+                })
+
+                return {
+                  workDate: parsed.workDate,
+                  startTime: parsed.startTime,
+                  endTime: parsed.endTime,
+                  headcount: Number(parsed.headcount),
+                  notes: parsed.notes || null,
+                  effectiveMinutes: minutes,
+                  calculatedWorkUnits: units,
+                }
+              }),
+            }
+          : undefined,
       },
       include: {
         ingredients: true,
-        worklogs: {
-          orderBy: { workDate: 'asc' }
-        }
-      }
+        worklogs: true,
+      },
     })
 
     logger.info('Order created successfully', {
       orderId: order.id,
       customerName: order.customerName,
-      worklogCount: order.worklogs?.length ?? 0
+      worklogCount: order.worklogs?.length ?? 0,
     })
 
-    // 確保日期正確序列化
-    const serializedOrder = {
-      ...order,
-      createdAt: order.createdAt.toISOString(),
-      updatedAt: order.updatedAt.toISOString(),
-      completionDate: order.completionDate ? 
-        (order.completionDate instanceof Date ? 
-          order.completionDate.toISOString().split('T')[0] : 
-          order.completionDate) : null
-    }
-
-    return NextResponse.json(serializedOrder, { status: 201 })
+    return jsonSuccess({
+      order,
+    }, { status: 201 })
   } catch (error) {
     logger.error('創建訂單錯誤', {
       name: error instanceof Error ? error.name : '未知',
       message: error instanceof Error ? error.message : '未知錯誤',
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     })
-    
-    if (error instanceof Error && error.name === 'ZodError') {
-      return NextResponse.json(
-        { error: '驗證失敗', details: error.message },
-        { status: 400 }
-      )
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      return jsonError(409, {
+        code: 'ORDERS_DUPLICATE',
+        message: '訂單資料重複，請確認客戶與產品資訊是否已存在。',
+        details: error.meta,
+      })
     }
-    
-    return NextResponse.json(
-      { 
-        error: '創建訂單失敗',
-        details: error instanceof Error ? error.message : '未知錯誤'
+
+    if (error instanceof Prisma.PrismaClientValidationError) {
+      return jsonError(400, {
+        code: 'ORDERS_VALIDATION_FAILED',
+        message: '訂單資料驗證失敗，請檢查輸入欄位。',
+        details: error.message,
+      })
+    }
+
+    if (error instanceof Error && 'issues' in error) {
+      return jsonError(422, {
+        code: 'ORDERS_SCHEMA_INVALID',
+        message: '提交的資料不符合格式要求。',
+        details: error,
+      })
+    }
+
+    return jsonError(500, {
+      code: 'ORDERS_CREATE_FAILED',
+      message: '建立訂單時發生錯誤，請稍後再試。',
+      details: error instanceof Error ? error.message : String(error),
+    })
+  }
+}
+
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const body = await request.json()
+    const validatedData = productionOrderSchema.parse(body)
+
+    const order = await prisma.productionOrder.update({
+      where: { id: params.id },
+      data: {
+        ...validatedData,
+        completionDate: validatedData.completionDate ? DateTime.fromFormat(validatedData.completionDate, 'yyyy-MM-dd').toJSDate() : null,
+        unitWeightMg: validatedData.ingredients.reduce(
+          (sum, ingredient) => sum + ingredient.unitContentMg,
+          0
+        ),
+        ingredients: {
+          deleteMany: {},
+          create: validatedData.ingredients.map((ingredient) => ({
+            materialName: ingredient.materialName,
+            unitContentMg: ingredient.unitContentMg,
+            isCustomerProvided: ingredient.isCustomerProvided,
+            isCustomerSupplied: ingredient.isCustomerSupplied ?? ingredient.isCustomerProvided,
+          })),
+        },
+        worklogs: validatedData.worklogs
+          ? {
+              deleteMany: {},
+              create: validatedData.worklogs.map((entry) => {
+                const parsed = worklogSchema.parse(entry)
+                const { minutes, units } = calculateWorkUnits({
+                  date: parsed.workDate,
+                  startTime: parsed.startTime,
+                  endTime: parsed.endTime,
+                  headcount: Number(parsed.headcount),
+                })
+
+                return {
+                  workDate: parsed.workDate,
+                  startTime: parsed.startTime,
+                  endTime: parsed.endTime,
+                  headcount: Number(parsed.headcount),
+                  notes: parsed.notes || null,
+                  effectiveMinutes: minutes,
+                  calculatedWorkUnits: units,
+                }
+              }),
+            }
+          : undefined,
       },
-      { status: 500 }
-    )
+      include: {
+        ingredients: true,
+        worklogs: true,
+      },
+    })
+
+    return jsonSuccess({ order })
+  } catch (error) {
+    logger.error('更新訂單錯誤', {
+      error: error instanceof Error ? error.message : String(error),
+      orderId: params.id,
+    })
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      return jsonError(404, {
+        code: 'ORDERS_NOT_FOUND',
+        message: '找不到指定的訂單。',
+      })
+    }
+
+    return jsonError(500, {
+      code: 'ORDERS_UPDATE_FAILED',
+      message: '更新訂單時發生錯誤，請稍後再試。',
+      details: error instanceof Error ? error.message : String(error),
+    })
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    await prisma.productionOrder.delete({
+      where: { id: params.id },
+    })
+
+    return jsonSuccess({ deleted: true })
+  } catch (error) {
+    logger.error('刪除訂單錯誤', {
+      error: error instanceof Error ? error.message : String(error),
+      orderId: params.id,
+    })
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      return jsonError(404, {
+        code: 'ORDERS_NOT_FOUND',
+        message: '找不到指定的訂單。',
+      })
+    }
+
+    return jsonError(500, {
+      code: 'ORDERS_DELETE_FAILED',
+      message: '刪除訂單時發生錯誤，請稍後再試。',
+      details: error instanceof Error ? error.message : String(error),
+    })
   }
 }

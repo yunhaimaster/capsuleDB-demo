@@ -11,6 +11,7 @@ import { FileText, Loader2, Download, Eye, CheckCircle, Clock, AlertCircle } fro
 import { AIDisclaimer } from '@/components/ui/ai-disclaimer'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import Link from 'next/link'
+import { fetchWithTimeout } from '@/lib/api-client'
 
 interface ProductionOrder {
   id: string
@@ -32,11 +33,13 @@ export default function WorkOrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('/api/orders')
-        if (response.ok) {
-          const data = await response.json()
-          setOrders(data.orders || [])
-        }
+        const response = await fetchWithTimeout('/api/orders?limit=50')
+        if (!response.ok) return
+        const payload = await response.json()
+        if (!payload?.success) return
+        const data = payload.data
+
+        setOrders(Array.isArray(data?.orders) ? data.orders : [])
       } catch (err) {
         console.error('獲取訂單列表失敗:', err)
       }
@@ -51,7 +54,7 @@ export default function WorkOrdersPage() {
     setError(null)
 
     try {
-      const response = await fetch('/api/work-orders/generate', {
+      const response = await fetchWithTimeout('/api/work-orders/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

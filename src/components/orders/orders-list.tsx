@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
@@ -8,6 +8,7 @@ import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, Arro
 import { formatDateOnly } from '@/lib/utils'
 import { useToast } from '@/components/ui/toast-provider'
 import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
+import { fetchWithTimeout } from '@/lib/api-client'
 
 interface OrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -17,6 +18,7 @@ interface OrdersListProps {
 export function OrdersList({ initialOrders = [], initialPagination }: OrdersListProps) {
   const { showToast } = useToast()
   const deleteModal = useLiquidGlassModal()
+  const abortControllerRef = useRef<AbortController | null>(null)
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   const [pagination, setPagination] = useState(initialPagination)
@@ -38,39 +40,68 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [ingredientOptions, setIngredientOptions] = useState<{value: string, label: string}[]>([])
   const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<{value: string, label: string}[]>([])
 
-  const fetchOrders = useCallback(async (newFilters: typeof filters) => {
+  const cancelOngoingRequest = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
+  }
+
+  const fetchOrders = useCallback(async (filtersToUse = filters) => {
     setLoading(true)
     try {
+      cancelOngoingRequest()
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
       const params = new URLSearchParams()
-      Object.entries(newFilters).forEach(([key, value]) => {
+      Object.entries(filtersToUse).forEach(([key, value]) => {
         if (value !== undefined && value !== '' && value !== null) {
           params.append(key, value.toString())
         }
       })
 
-      const response = await fetch(`/api/orders?${params}`)
-      if (!response.ok) throw new Error('載入訂單失敗')
-      
-      const data = await response.json()
-      setOrders(data.orders)
+      const response = await fetchWithTimeout(`/api/orders?${params}`, { signal: controller.signal })
+
+      if (!response.ok) {
+        throw new Error('載入訂單失敗')
+      }
+
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '載入訂單失敗')
+      }
+
+      const data = payload.data
+
+      setOrders(data.orders || [])
       setPagination(data.pagination)
     } catch (error) {
+      if ((error as DOMException)?.name === 'AbortError') {
+        return
+      }
       console.error('載入訂單錯誤:', error)
     } finally {
       setLoading(false)
+      abortControllerRef.current = null
     }
-  }, [])
+  }, [filters])
 
   const fetchDropdownOptions = useCallback(async () => {
     try {
-      const response = await fetch('/api/orders/options')
-      if (response.ok) {
-        const data = await response.json()
-        setCustomerOptions((data.customers || []).map((item: string) => ({ value: item, label: item })))
-        setProductOptions((data.products || []).map((item: string) => ({ value: item, label: item })))
-        setIngredientOptions((data.ingredients || []).map((item: string) => ({ value: item, label: item })))
-        setCapsuleTypeOptions((data.capsuleTypes || []).map((item: string) => ({ value: item, label: item })))
+      const response = await fetchWithTimeout('/api/orders/options')
+      if (!response.ok) {
+        throw new Error('載入下拉選項失敗')
       }
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '載入下拉選項失敗')
+      }
+      const data = payload.data
+      setCustomerOptions((data.customers || []).map((item: string) => ({ value: item, label: item })))
+      setProductOptions((data.products || []).map((item: string) => ({ value: item, label: item })))
+      setIngredientOptions((data.ingredients || []).map((item: string) => ({ value: item, label: item })))
+      setCapsuleTypeOptions((data.capsuleTypes || []).map((item: string) => ({ value: item, label: item })))
     } catch (error) {
       console.error('載入下拉選項錯誤:', error)
     }
@@ -78,6 +109,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   useEffect(() => {
     fetchOrders(filters)
+    return () => cancelOngoingRequest()
   }, [fetchOrders, filters])
 
   useEffect(() => {
@@ -157,12 +189,22 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const handleDelete = async () => {
     if (!pendingDeleteId) return
 
+    const controller = new AbortController()
+
     try {
-      const response = await fetch(`/api/orders/${pendingDeleteId}`, {
-        method: 'DELETE'
+      const response = await fetchWithTimeout(`/api/orders/${pendingDeleteId}`, {
+        method: 'DELETE',
+        signal: controller.signal,
       })
 
-      if (!response.ok) throw new Error('刪除訂單失敗')
+      if (!response.ok) {
+        throw new Error('刪除訂單失敗')
+      }
+
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '刪除訂單失敗')
+      }
 
       showToast({
         title: '訂單已刪除',
@@ -184,15 +226,15 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   const handleExport = async (format: 'csv' | 'pdf') => {
     try {
-      const response = await fetch('/api/orders/export', {
+      const response = await fetchWithTimeout('/api/orders/export', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           format,
-          includeIngredients: true
-        })
+          includeIngredients: true,
+        }),
       })
 
       if (!response.ok) throw new Error('Export failed')

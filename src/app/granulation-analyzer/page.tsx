@@ -1,9 +1,9 @@
 'use client'
 
 import { useMemo, useRef, useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
-import { SmartRecipeImport } from '@/components/forms/smart-recipe-import'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +11,11 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, AlertTriangle, CheckCircle } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { useToast } from '@/components/ui/toast-provider'
+
+const SmartRecipeImport = dynamic(
+  () => import('@/components/forms/smart-recipe-import').then(mod => mod.SmartRecipeImport),
+  { ssr: false }
+)
 
 interface Ingredient {
   materialName: string

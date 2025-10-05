@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { SmartAIAssistant } from '@/components/ai/smart-ai-assistant'
 import { Logo } from '@/components/ui/logo'
-import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
@@ -16,6 +15,25 @@ import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatch
 import { ProductionOrder, OrderWorklog, WorklogWithOrder } from '@/types'
 import Link from 'next/link'
 import { sumWorkUnits } from '@/lib/worklog'
+import { fetchWithTimeout } from '@/lib/api-client'
+
+const SmartAIAssistant = dynamic(() => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant), {
+  ssr: false,
+  loading: () => (
+    <div className="liquid-glass-card p-6 rounded-3xl shadow-sm bg-white/60 border border-white/80 text-sm text-slate-500">
+      AI 助手載入中...
+    </div>
+  ),
+})
+
+const OrderAIAssistant = dynamic(() => import('@/components/ai/order-ai-assistant').then(mod => mod.OrderAIAssistant), {
+  ssr: false,
+  loading: () => (
+    <div className="inline-flex items-center justify-center rounded-full border border-white/70 bg-white/40 px-4 py-2 text-xs text-slate-500">
+      助手初始化中...
+    </div>
+  ),
+})
 
 // 訂單詳情檢視組件
 function OrderDetailView({ order }: { order: ProductionOrder }) {
@@ -109,10 +127,14 @@ export default function HomePage() {
 
   const fetchRecentOrders = useCallback(async () => {
     try {
-      const response = await fetch('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
+      const response = await fetchWithTimeout('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
       if (response.ok) {
-        const data = await response.json()
-        setRecentOrders(data.orders || [])
+        const payload = await response.json()
+        if (payload?.success) {
+          setRecentOrders(payload.data?.orders || [])
+        } else {
+          console.warn('載入最近訂單回傳非成功狀態', payload?.error)
+        }
       }
     } catch (error) {
       console.error('載入最近訂單錯誤:', error)
@@ -121,10 +143,12 @@ export default function HomePage() {
 
   const fetchAllOrders = useCallback(async () => {
     try {
-      const response = await fetch('/api/orders?limit=100&sortBy=completionDate&sortOrder=desc')
+      const response = await fetchWithTimeout('/api/orders?limit=50&sortBy=completionDate&sortOrder=desc')
       if (response.ok) {
-        const data = await response.json()
-        setAllOrders(data.orders || [])
+        const payload = await response.json()
+        if (payload?.success) {
+          setAllOrders(payload.data?.orders || [])
+        }
       }
     } catch (error) {
       console.error('載入所有訂單錯誤:', error)
@@ -133,7 +157,7 @@ export default function HomePage() {
 
   const fetchRecentWorklogs = useCallback(async () => {
     try {
-      const response = await fetch('/api/worklogs?limit=5')
+      const response = await fetchWithTimeout('/api/worklogs?limit=5')
       if (response.ok) {
         const data = await response.json()
         setRecentWorklogs(data.worklogs || [])

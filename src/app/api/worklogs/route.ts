@@ -1,268 +1,191 @@
-import { NextRequest, NextResponse } from 'next/server'
-
+import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { worklogFiltersSchema } from '@/lib/validations'
-import { formatISO } from 'date-fns'
-import { generateCSV } from '@/lib/utils'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+import { jsonSuccess, jsonError } from '@/lib/api-response'
 
 export const dynamic = 'force-dynamic'
 
+const worklogFilterSchema = z.object({
+  orderKeyword: z.string().optional(),
+  notesKeyword: z.string().optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(25),
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+})
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = request.nextUrl
-
-    const filters = {
-      orderKeyword: searchParams.get('orderKeyword') || undefined,
-      notesKeyword: searchParams.get('notesKeyword') || undefined,
-      dateFrom: searchParams.get('dateFrom') ? new Date(searchParams.get('dateFrom')!) : undefined,
-      dateTo: searchParams.get('dateTo') ? new Date(searchParams.get('dateTo')!) : undefined,
-      page: parseInt(searchParams.get('page') || '1', 10),
-      limit: parseInt(searchParams.get('limit') || '25', 10),
-      sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc'
-    }
-
-    const validatedFilters = worklogFiltersSchema.parse(filters)
+    const params = Object.fromEntries(request.nextUrl.searchParams.entries())
+    const filters = worklogFilterSchema.parse(params)
 
     const where: any = {}
 
-    if (validatedFilters.orderKeyword) {
-      where.OR = [
-        {
-          order: {
-            customerName: {
-              contains: validatedFilters.orderKeyword,
-              mode: 'insensitive'
-            }
-          }
-        },
-        {
-          order: {
-            productName: {
-              contains: validatedFilters.orderKeyword,
-              mode: 'insensitive'
-            }
-          }
-        }
-      ]
+    if (filters.orderKeyword) {
+      where.order = {
+        OR: [
+          { productName: { contains: filters.orderKeyword, mode: 'insensitive' } },
+          { customerName: { contains: filters.orderKeyword, mode: 'insensitive' } },
+        ],
+      }
     }
 
-    if (validatedFilters.notesKeyword) {
+    if (filters.notesKeyword) {
       where.notes = {
-        contains: validatedFilters.notesKeyword,
-        mode: 'insensitive'
+        contains: filters.notesKeyword,
+        mode: 'insensitive',
       }
     }
 
-    if (validatedFilters.dateFrom || validatedFilters.dateTo) {
+    if (filters.dateFrom || filters.dateTo) {
       where.workDate = {}
-
-      if (validatedFilters.dateFrom) {
-        where.workDate.gte = new Date(
-          validatedFilters.dateFrom.getFullYear(),
-          validatedFilters.dateFrom.getMonth(),
-          validatedFilters.dateFrom.getDate()
-        )
+      if (filters.dateFrom) {
+        where.workDate.gte = new Date(filters.dateFrom)
       }
-
-      if (validatedFilters.dateTo) {
-        where.workDate.lte = new Date(
-          validatedFilters.dateTo.getFullYear(),
-          validatedFilters.dateTo.getMonth(),
-          validatedFilters.dateTo.getDate(),
-          23,
-          59,
-          59,
-          999
-        )
+      if (filters.dateTo) {
+        where.workDate.lte = new Date(filters.dateTo)
       }
     }
 
-    const page = validatedFilters.page
-    const limit = validatedFilters.limit
-    const skip = (page - 1) * limit
+    const skip = (filters.page - 1) * filters.limit
 
     const [worklogs, total] = await Promise.all([
       prisma.orderWorklog.findMany({
         where,
+        orderBy: { workDate: filters.sortOrder },
         include: {
           order: {
             select: {
               id: true,
-              customerName: true,
               productName: true,
-              createdAt: true
-            }
-          }
+              customerName: true,
+            },
+          },
         },
-        orderBy: [
-          { workDate: validatedFilters.sortOrder },
-          { startTime: validatedFilters.sortOrder }
-        ],
         skip,
-        take: limit
+        take: filters.limit,
       }),
-      prisma.orderWorklog.count({ where })
+      prisma.orderWorklog.count({ where }),
     ])
 
-    const serializedWorklogs = worklogs.map((worklog) => ({
-      ...worklog,
-      workDate: formatISO(worklog.workDate),
-      createdAt: formatISO(worklog.createdAt),
-      updatedAt: formatISO(worklog.updatedAt)
-    }))
-
-    return NextResponse.json({
-      worklogs: serializedWorklogs,
+    return jsonSuccess({
+      worklogs: worklogs.map((log) => ({
+        ...log,
+        workDate: log.workDate.toISOString().split('T')[0],
+        createdAt: log.createdAt.toISOString(),
+        updatedAt: log.updatedAt.toISOString(),
+      })),
       pagination: {
-        page,
-        limit,
+        page: filters.page,
+        limit: filters.limit,
         total,
-        totalPages: Math.ceil(total / limit)
-      }
+        totalPages: Math.ceil(total / filters.limit),
+      },
     })
   } catch (error) {
     logger.error('載入工時紀錄錯誤', {
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
-    return NextResponse.json({ error: '載入工時紀錄失敗' }, { status: 500 })
+
+    return jsonError(500, {
+      code: 'WORKLOG_FETCH_FAILED',
+      message: '載入工時紀錄失敗',
+      details: error instanceof Error ? error.message : String(error),
+    })
   }
 }
+
+const exportSchema = z.object({
+  format: z.enum(['csv', 'pdf']).default('csv'),
+  filters: worklogFilterSchema.partial().optional(),
+})
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { format, filters } = body as {
-      format: 'csv'
-      filters?: {
-        orderKeyword?: string
-        notesKeyword?: string
-        dateFrom?: string
-        dateTo?: string
-        sortOrder?: 'asc' | 'desc'
-      }
-    }
-
-    if (format !== 'csv') {
-      return NextResponse.json({ error: 'Unsupported format' }, { status: 400 })
-    }
-
-    const parsedFilters = worklogFiltersSchema.parse({
-      orderKeyword: filters?.orderKeyword,
-      notesKeyword: filters?.notesKeyword,
-      dateFrom: filters?.dateFrom ? new Date(filters.dateFrom) : undefined,
-      dateTo: filters?.dateTo ? new Date(filters.dateTo) : undefined,
-      sortOrder: filters?.sortOrder ?? 'desc'
-    })
+    const { format, filters } = exportSchema.parse(body)
 
     const where: any = {}
 
-    if (parsedFilters.orderKeyword) {
-      where.OR = [
-        {
-          order: {
-            customerName: {
-              contains: parsedFilters.orderKeyword,
-              mode: 'insensitive'
-            }
-          }
-        },
-        {
-          order: {
-            productName: {
-              contains: parsedFilters.orderKeyword,
-              mode: 'insensitive'
-            }
-          }
-        }
-      ]
+    if (filters?.orderKeyword) {
+      where.order = {
+        OR: [
+          { productName: { contains: filters.orderKeyword, mode: 'insensitive' } },
+          { customerName: { contains: filters.orderKeyword, mode: 'insensitive' } },
+        ],
+      }
     }
 
-    if (parsedFilters.notesKeyword) {
+    if (filters?.notesKeyword) {
       where.notes = {
-        contains: parsedFilters.notesKeyword,
-        mode: 'insensitive'
+        contains: filters.notesKeyword,
+        mode: 'insensitive',
       }
     }
 
-    if (parsedFilters.dateFrom || parsedFilters.dateTo) {
+    if (filters?.dateFrom || filters?.dateTo) {
       where.workDate = {}
-
-      if (parsedFilters.dateFrom) {
-        where.workDate.gte = new Date(
-          parsedFilters.dateFrom.getFullYear(),
-          parsedFilters.dateFrom.getMonth(),
-          parsedFilters.dateFrom.getDate()
-        )
+      if (filters.dateFrom) {
+        where.workDate.gte = new Date(filters.dateFrom)
       }
-
-      if (parsedFilters.dateTo) {
-        where.workDate.lte = new Date(
-          parsedFilters.dateTo.getFullYear(),
-          parsedFilters.dateTo.getMonth(),
-          parsedFilters.dateTo.getDate(),
-          23,
-          59,
-          59,
-          999
-        )
+      if (filters.dateTo) {
+        where.workDate.lte = new Date(filters.dateTo)
       }
     }
 
     const worklogs = await prisma.orderWorklog.findMany({
       where,
+      orderBy: { workDate: filters?.sortOrder || 'desc' },
       include: {
         order: {
           select: {
+            productName: true,
             customerName: true,
-            productName: true
-          }
-        }
+          },
+        },
       },
-      orderBy: [
-        { workDate: parsedFilters.sortOrder },
-        { startTime: parsedFilters.sortOrder }
-      ]
     })
 
-    const headers = [
-      '工時日期',
-      '訂單客戶',
-      '訂單品項',
-      '開始時間',
-      '結束時間',
-      '人數',
-      '有效工時',
-      '計算工時',
-      '備註'
-    ]
-
-    const csvData = worklogs.map((worklog) => [
-      formatISO(worklog.workDate, { representation: 'date' }),
-      worklog.order?.customerName ?? '',
-      worklog.order?.productName ?? '',
-      worklog.startTime,
-      worklog.endTime,
-      worklog.headcount.toString(),
-      (worklog.effectiveMinutes / 60).toFixed(1),
-      worklog.calculatedWorkUnits.toFixed(1),
-      worklog.notes ? worklog.notes.replace(/\r?\n/g, ' ') : ''
-    ])
-
-    const csvContent = '\uFEFF' + generateCSV(csvData, headers)
-
-    return new NextResponse(csvContent, {
-      status: 200,
-      headers: {
+    if (format === 'csv') {
+      const headers = new Headers({
         'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': `attachment; filename="worklogs-${new Date().toISOString().split('T')[0]}.csv"`
-      }
+        'Content-Disposition': `attachment; filename="worklogs-${Date.now()}.csv"`,
+      })
+
+      const csvRows = [
+        ['日期', '訂單', '客戶', '開始', '結束', '人數', '工時', '備註'],
+        ...worklogs.map((log) => [
+          log.workDate.toISOString().split('T')[0],
+          log.order?.productName || '-',
+          log.order?.customerName || '-',
+          log.startTime,
+          log.endTime,
+          log.headcount,
+          log.calculatedWorkUnits ?? '-',
+          log.notes || '',
+        ]),
+      ]
+
+      const csvContent = csvRows.map((row) => row.join(',')).join('\n')
+      return new Response(csvContent, { headers })
+    }
+
+    return jsonError(400, {
+      code: 'WORKLOG_EXPORT_UNSUPPORTED',
+      message: '目前僅支援匯出 CSV 格式',
     })
   } catch (error) {
     logger.error('匯出工時錯誤', {
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     })
-    return NextResponse.json({ error: '匯出工時失敗' }, { status: 500 })
+
+    return jsonError(500, {
+      code: 'WORKLOG_EXPORT_FAILED',
+      message: '匯出工時失敗',
+      details: error instanceof Error ? error.message : String(error),
+    })
   }
 }
 

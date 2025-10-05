@@ -7,7 +7,7 @@ import { Analytics } from '@vercel/analytics/next'
 import ErrorBoundary from '@/components/ui/error-boundary'
 import { PerformanceMonitor } from '@/components/ui/performance-monitor'
 import { OfflineIndicator } from '@/hooks/use-offline'
-import { ToastProvider } from '@/components/ui/toast-provider'
+import { AppClientProviders } from '@/components/app-client-providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -49,20 +49,19 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body className={`${inter.className} antialiased`} style={{ WebkitTextSizeAdjust: '100%', textSizeAdjust: '100%', MozTextSizeAdjust: '100%', fontSize: '16px' }}>
-        <ToastProvider>
+        <AppClientProviders>
           <ErrorBoundary>
             <AuthProvider>
               <ProtectedLayout>
                 <div className="min-h-screen">
                   {children}
                 </div>
-                <OfflineIndicator />
               </ProtectedLayout>
             </AuthProvider>
           </ErrorBoundary>
           <PerformanceMonitor />
           <Analytics />
-        </ToastProvider>
+        </AppClientProviders>
       </body>
     </html>
   )
