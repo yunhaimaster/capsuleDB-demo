@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -10,11 +10,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { Badge } from '@/components/ui/badge'
 import { Upload, FileText, Loader2, Image as ImageIcon, AlertCircle, CheckCircle2, ChevronRight, Sparkles, AlertTriangle } from 'lucide-react'
-import { ParsedIngredient } from '@/types'
 import { getGlassBadgeTone } from '@/lib/ui/glass-tones'
 import { logger } from '@/lib/logger'
 import { formatNumber } from '@/lib/utils'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
+
+interface ParsedIngredient {
+  materialName: string
+  unitContentMg: number
+  originalText?: string
+  needsConfirmation?: boolean
+  isCustomerProvided?: boolean
+  isCustomerSupplied?: boolean
+}
 
 interface SmartRecipeImportProps {
   onImport: (ingredients: ParsedIngredient[]) => void
@@ -31,6 +39,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
   const [parseSummary, setParseSummary] = useState('')
   const [confidence, setConfidence] = useState<'高' | '中' | '低'>('中')
   const [importMode, setImportMode] = useState<'text' | 'image'>('text')
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -67,6 +76,11 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
   }
 
   const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
   }
@@ -182,6 +196,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     setParsedIngredients([])
     setParseError('')
     setParseSummary('')
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
   }
 
   const resolveConfidenceBadge = (confidence: '低' | '中' | '高' | '未知') => {
@@ -307,7 +325,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={handleFileChange}
+                    onChange={handleImageUpload}
                   />
                   <div className="flex justify-center mt-4">
                     <Button onClick={handleUploadClick} variant="outline">
@@ -380,7 +398,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                     key={index}
                     className={`rounded-xl px-4 py-3 transition-colors ${getGlassBadgeTone(
                       ingredient.needsConfirmation ? 'caution' : 'positive'
-                    ).badge}`}
+                    )}`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
