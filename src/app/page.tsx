@@ -37,8 +37,9 @@ const STATUS_PRIORITY: Record<StatusKey, number> = {
   completed: 2
 }
 
-const ORDER_DISPLAY_LIMIT = 5
+const ORDER_FETCH_LIMIT = 50
 const WORKLOG_DISPLAY_LIMIT = 5
+const ORDER_DISPLAY_LIMIT = 5
 
 const getOrderStatus = (order: ProductionOrder): StatusKey => {
   const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
@@ -167,7 +168,7 @@ export default function HomePage() {
 
   const fetchRecentOrders = useCallback(async () => {
     try {
-      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_DISPLAY_LIMIT}&sortBy=completionDate&sortOrder=desc`)
+      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_FETCH_LIMIT}&sortBy=completionDate&sortOrder=desc`)
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
@@ -180,7 +181,7 @@ export default function HomePage() {
 
   const fetchAllOrders = useCallback(async () => {
     try {
-      const response = await fetchWithTimeout('/api/orders?limit=50&sortBy=completionDate&sortOrder=desc')
+      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_FETCH_LIMIT}&sortBy=completionDate&sortOrder=desc`)
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
@@ -278,7 +279,7 @@ export default function HomePage() {
 
         {/* 最近紀錄以迷你卡呈現 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] ${MINI_CARD_PADDING}`}>
+          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_4px_12px_rgba(15,32,77,0.1)] ${MINI_CARD_PADDING} space-y-3`}>
             <div className="flex items-center justify-between mb-2.5">
               <div>
                 <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
@@ -362,7 +363,7 @@ export default function HomePage() {
             )}
           </div>
 
-          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] ${MINI_CARD_PADDING}`}>
+          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_4px_12px_rgba(15,32,77,0.1)] ${MINI_CARD_PADDING} space-y-3`}>
             <div className="flex items-center justify-between mb-2.5">
               <div>
                 <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
