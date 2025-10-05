@@ -135,7 +135,7 @@ export function HomePageClient() {
     <div className="min-h-screen logo-bg-animation flex flex-col">
       <LiquidGlassNav />
 
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-6 floating-combined">
+      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-6 floating-combined pb-14">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div className={`liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group ${QUICK_CARD_PADDING}`}>
             <div className="liquid-glass-content flex flex-col gap-4">
