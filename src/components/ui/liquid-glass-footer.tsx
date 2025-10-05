@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useMemo } from 'react'
+import { Route } from 'next'
 
 import { useAuth } from '@/components/auth/auth-provider'
 import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react'
@@ -98,7 +99,7 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
                 {section.links.map((link) => (
                   <li key={link.href}>
                     <Link 
-                      href={link.href} 
+                      href={link.href as Route}
                       className="liquid-glass-footer-link"
                     >
                       {link.label}

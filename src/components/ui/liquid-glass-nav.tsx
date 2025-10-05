@@ -8,6 +8,7 @@ import { NavDropdown } from '@/components/ui/nav-dropdown'
 import { getMainNavigationLinks, type NavigationLink } from '@/data/navigation'
 import { useAuth } from '@/components/auth/auth-provider'
 import { Menu, X, ChevronDown } from 'lucide-react'
+import { Route } from 'next'
 
 type NavLink = NavigationLink & {
   active?: boolean
@@ -99,7 +100,7 @@ export function LiquidGlassNav({
               ) : (
                 <Link
                   key={link.href}
-                  href={link.href}
+                  href={link.href as Route}
                   className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
                   onClick={(event) => {
                     if (link.label === '登出') {
@@ -149,7 +150,7 @@ export function LiquidGlassNav({
                     {link.children.map((child) => (
                       <Link
                         key={child.href}
-                        href={child.href}
+                        href={child.href as Route}
                         className="liquid-glass-nav-link block pl-8"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
@@ -159,7 +160,7 @@ export function LiquidGlassNav({
                   </div>
                 ) : (
                   <Link
-                    href={link.href}
+                    href={link.href as Route}
                     className={`liquid-glass-nav-link ${link.active ? 'active' : ''}`}
                     onClick={(event) => {
                       setIsMobileMenuOpen(false)

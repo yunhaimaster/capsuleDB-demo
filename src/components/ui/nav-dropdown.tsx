@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
+import { Route } from 'next'
 
 import { type NavigationLink } from '@/data/navigation'
 
@@ -52,7 +53,7 @@ export function NavDropdown({ label, items, active = false }: NavDropdownProps) 
           {items.map((child) => (
             <Link
               key={child.href}
-              href={child.href}
+              href={child.href as Route}
               className="block px-4 py-3 text-sm text-gray-700 hover:bg-white/50 transition-colors duration-200"
               onClick={() => setIsOpen(false)}
             >

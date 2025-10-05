@@ -6,6 +6,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  experimental: {
+    typedRoutes: true,
+  },
 }
 
 module.exports = nextConfig

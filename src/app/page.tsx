@@ -124,8 +124,6 @@ export default function HomePage() {
       const response = await fetch('/api/orders?limit=100&sortBy=completionDate&sortOrder=desc')
       if (response.ok) {
         const data = await response.json()
-        console.log('為 AI 載入的所有訂單:', data.orders?.length || 0)
-        console.log('未完工訂單:', data.orders?.filter((order: any) => !order.completionDate)?.length || 0)
         setAllOrders(data.orders || [])
       }
     } catch (error) {

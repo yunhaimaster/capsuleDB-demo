@@ -23,7 +23,8 @@
     "setup:windows": "setup-postgresql.bat",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm run build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",

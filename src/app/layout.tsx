@@ -11,9 +11,34 @@ import { ToastProvider } from '@/components/ui/toast-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const appTitle = 'Easy Health 膠囊配方管理系統'
+const appDescription = 'Easy Health 內部生產管理系統'
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://capsuledb.easyhealth.internal'
+
 export const metadata: Metadata = {
-  title: 'Easy Health 膠囊配方管理系統',
-  description: 'Easy Health 內部生產管理系統',
+  title: appTitle,
+  description: appDescription,
+  metadataBase: new URL(baseUrl),
+  alternates: {
+    canonical: baseUrl,
+  },
+  openGraph: {
+    title: appTitle,
+    description: appDescription,
+    url: baseUrl,
+    siteName: appTitle,
+    locale: 'zh_TW',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: appTitle,
+    description: appDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({

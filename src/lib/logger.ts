@@ -89,19 +89,21 @@ function emit(level: LogLevel, message: string, metadata?: LogMetadata) {
 
   switch (level) {
     case 'debug':
-      console.debug(output)
-      break
     case 'info':
-      console.info(output)
+      if (process.env.NODE_ENV !== 'production') {
+        process.stdout.write(`${output}\n`)
+      }
       break
     case 'warn':
-      console.warn(output)
+      process.stderr.write(`${output}\n`)
       break
     case 'error':
-      console.error(output)
+      process.stderr.write(`${output}\n`)
       break
     default:
-      console.log(output)
+      if (process.env.NODE_ENV !== 'production') {
+        process.stdout.write(`${output}\n`)
+      }
   }
 }
 

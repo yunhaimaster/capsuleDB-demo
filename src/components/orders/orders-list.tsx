@@ -7,6 +7,7 @@ import { LinkedFilter } from '@/components/ui/linked-filter'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
 import { useToast } from '@/components/ui/toast-provider'
+import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 
 interface OrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -15,6 +16,8 @@ interface OrdersListProps {
 
 export function OrdersList({ initialOrders = [], initialPagination }: OrdersListProps) {
   const { showToast } = useToast()
+  const deleteModal = useLiquidGlassModal()
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
@@ -146,20 +149,27 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       : <ArrowDown className="h-3 w-3 text-gray-600" aria-hidden="true" />
   }
 
-  const handleDelete = async (orderId: string) => {
-    if (!confirm('確定要刪除此訂單嗎？此操作無法復原。')) return
+  const requestDelete = (orderId: string) => {
+    setPendingDeleteId(orderId)
+    deleteModal.openModal()
+  }
+
+  const handleDelete = async () => {
+    if (!pendingDeleteId) return
 
     try {
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await fetch(`/api/orders/${pendingDeleteId}`, {
         method: 'DELETE'
       })
-      
+
       if (!response.ok) throw new Error('刪除訂單失敗')
-      
+
       showToast({
         title: '訂單已刪除',
         description: '選定的訂單已成功移除。'
       })
+      setPendingDeleteId(null)
+      deleteModal.closeModal()
       fetchOrders(filters)
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
@@ -168,6 +178,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
         description: '刪除訂單時出現問題，請稍後再試。',
         variant: 'destructive'
       })
+      deleteModal.closeModal()
     }
   }
 
@@ -388,7 +399,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleDelete(order.id)}
+                            onClick={() => requestDelete(order.id)}
                             className="h-6 w-6 p-0 text-red-600 hover:text-red-700 text-xs"
                           >
                             <Trash2 className="h-3 w-3" aria-hidden="true" />
@@ -426,6 +437,20 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
             </div>
           </div>
         )}
+
+        <LiquidGlassConfirmModal
+          isOpen={deleteModal.isOpen}
+          onClose={() => {
+            deleteModal.closeModal()
+            setPendingDeleteId(null)
+          }}
+          onConfirm={handleDelete}
+          title="刪除訂單"
+          message="刪除後將無法恢復，確定要繼續嗎？"
+          confirmText="刪除"
+          cancelText="取消"
+          variant="danger"
+        />
 
     </div>
   )

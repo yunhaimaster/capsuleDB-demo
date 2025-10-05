@@ -160,8 +160,6 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
 
   const handleSmartImport = (importedIngredients: any[]) => {
     try {
-      console.log('開始導入原料:', importedIngredients)
-      
       // 驗證導入的原料數據
       if (!Array.isArray(importedIngredients)) {
         throw new Error('導入數據格式不正確')
@@ -190,15 +188,12 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
             .filter((item): item is { materialName: string; unitContentMg: number; isCustomerProvided: boolean; isCustomerSupplied: boolean } => item !== null)
         : [{ materialName: '', unitContentMg: 0, isCustomerProvided: false, isCustomerSupplied: false }]
       
-      console.log('處理後的原料:', newIngredients)
-      
       // 使用 setValue 設置表單值，觸發重新渲染
       setValue('ingredients', newIngredients, { 
         shouldValidate: true,
         shouldDirty: true 
       })
       
-      console.log('導入完成，表單已更新')
       showToast({
         title: '原料已導入',
         description: '智能解析的原料已套用到表單。'
