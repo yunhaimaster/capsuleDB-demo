@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Brain, Loader2, AlertCircle, RefreshCw, Copy, Repeat2, Clock, PauseCircle, Sparkles, AlertTriangle, CheckCircle } from 'lucide-react'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface Ingredient {
   materialName: string
@@ -24,9 +25,9 @@ interface GranulationAnalysis {
   modelName: string
   content: string
   status: AnalysisStatus
-  error?: string
+  error?: string | null
   startedAt?: number
-  finishedAt?: number
+  endedAt?: number
 }
 
 interface ModelConfig {
@@ -35,6 +36,7 @@ interface ModelConfig {
   badgeClass: string
   iconClass: string
   description: string
+  supportsReasoning: boolean
 }
 
 const MODEL_CONFIG = [
@@ -86,6 +88,7 @@ const STATUS_LABEL: Record<AnalysisStatus, string> = {
 }
 
 export default function GranulationAnalyzerPage() {
+  const { showToast } = useToast()
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     { materialName: '', unitContentMg: 0, isCustomerProvided: true }
   ])
@@ -127,15 +130,27 @@ export default function GranulationAnalyzerPage() {
         : [{ materialName: '', unitContentMg: 0, isCustomerProvided: true }]
 
       setIngredients(newIngredients)
+      showToast({
+        title: '原料已導入',
+        description: '已套用智能導入的原料清單。'
+      })
     } catch (error) {
       console.error('導入原料時發生錯誤:', error)
-      alert(`導入失敗：${error instanceof Error ? error.message : '未知錯誤'}`)
+      showToast({
+        title: '導入失敗',
+        description: error instanceof Error ? error.message : '未知錯誤',
+        variant: 'destructive'
+      })
     }
   }
 
   const analyzeGranulation = async () => {
     if (ingredients.length === 0 || ingredients[0].materialName === '') {
-      alert('請先輸入原料配方')
+      showToast({
+        title: '缺少原料資料',
+        description: '請先輸入原料配方後再開始分析。',
+        variant: 'destructive'
+      })
       return
     }
 
@@ -213,7 +228,9 @@ export default function GranulationAnalyzerPage() {
                   modelName: payload.modelName || MODEL_CONFIG.find((m) => m.id === modelId)?.name || modelId,
                   content: '',
                   status: 'loading',
-                  startedAt: Date.now()
+                  startedAt: Date.now(),
+                  endedAt: undefined,
+                  error: null
                 }
               }))
             } else if (eventName === 'delta') {
@@ -231,7 +248,9 @@ export default function GranulationAnalyzerPage() {
                       modelName: MODEL_CONFIG.find((m) => m.id === modelId)?.name || modelId,
                       content: delta,
                       status: 'loading',
-                      startedAt: Date.now()
+                      startedAt: Date.now(),
+                      endedAt: undefined,
+                      error: null
                     }
               }))
             } else if (eventName === 'error') {
@@ -241,18 +260,33 @@ export default function GranulationAnalyzerPage() {
                   ...prev[modelId],
                   status: 'error',
                   error: payload.error || '分析失敗',
-                  finishedAt: Date.now()
+                  endedAt: Date.now()
                 }
               }))
+              showToast({
+                title: '分析失敗',
+                description: payload.error || 'AI 分析時發生錯誤',
+                variant: 'destructive'
+              })
             } else if (eventName === 'done') {
-              setAnalyses((prev) => ({
-                ...prev,
-                [modelId]: {
-                  ...prev[modelId],
-                  status: prev[modelId]?.status === 'error' ? 'error' : 'success',
-                  finishedAt: Date.now()
+              setAnalyses((prev) => {
+                const existing = prev[modelId]
+                if (!existing) return prev
+                return {
+                  ...prev,
+                  [modelId]: {
+                    ...existing,
+                    status: payload.success ? 'success' : 'error',
+                    content: payload.success ? payload.content : existing.content,
+                    endedAt: Date.now(),
+                    error: payload.success ? null : payload.error || '分析失敗'
+                  }
                 }
-              }))
+              })
+              showToast({
+                title: '分析完成',
+                description: `${MODEL_CONFIG.find(m => m.id === modelId)?.name || modelId} 的分析已完成。`
+              })
             }
           } catch (error) {
             console.error('解析流式資料錯誤:', error)
@@ -261,11 +295,16 @@ export default function GranulationAnalyzerPage() {
       }
     } catch (error) {
       console.error('製粒分析錯誤:', error)
-      setGlobalError(error instanceof Error ? error.message : '分析失敗，請稍後再試')
+      setGlobalError(error instanceof Error ? error.message : '分析失敗，請稍後再試。')
+      showToast({
+        title: '分析失敗',
+        description: error instanceof Error ? error.message : '分析失敗，請稍後再試。',
+        variant: 'destructive'
+      })
       setAnalyses({})
+    } finally {
+      setIsAnalyzing(false)
     }
-
-    setIsAnalyzing(false)
   }
 
   const clearAnalysis = () => {
@@ -283,7 +322,9 @@ export default function GranulationAnalyzerPage() {
         modelName: MODEL_CONFIG.find((m) => m.id === modelId)?.name || modelId,
         content: '',
         status: 'loading',
-        startedAt: Date.now()
+        startedAt: Date.now(),
+        endedAt: undefined,
+        error: null
       }
     }))
 
@@ -349,7 +390,7 @@ export default function GranulationAnalyzerPage() {
                   ...prev[modelId],
                   status: 'error',
                   error: payload.error || '分析失敗',
-                  finishedAt: Date.now()
+                  endedAt: Date.now()
                 }
               }))
             } else if (eventName === 'done') {
@@ -358,7 +399,7 @@ export default function GranulationAnalyzerPage() {
                 [modelId]: {
                   ...prev[modelId],
                   status: prev[modelId]?.status === 'error' ? 'error' : 'success',
-                  finishedAt: Date.now()
+                  endedAt: Date.now()
                 }
               }))
             }
@@ -374,7 +415,7 @@ export default function GranulationAnalyzerPage() {
           ...prev[modelId],
           status: 'error',
           error: error instanceof Error ? error.message : '分析失敗',
-          finishedAt: Date.now()
+          endedAt: Date.now()
         }
       }))
     }
@@ -603,7 +644,7 @@ export default function GranulationAnalyzerPage() {
 
                 <div className="space-y-6">
                   {sortedAnalyses.map(({ config, analysis }) => {
-                    const duration = formatDuration(analysis.startedAt, analysis.finishedAt)
+                    const duration = formatDuration(analysis.startedAt, analysis.endedAt)
                     return (
                       <Card key={config.id} interactive={false} tone="neutral" className="liquid-glass-card liquid-glass-card-elevated">
                         <div className="liquid-glass-content">

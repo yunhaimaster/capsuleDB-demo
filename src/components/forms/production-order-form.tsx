@@ -17,6 +17,7 @@ import { formatNumber, convertWeight, calculateBatchWeight, copyToClipboard } fr
 import { calculateWorkUnits } from '@/lib/worklog'
 import { useRouter } from 'next/navigation'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface ProductionOrderFormProps {
   initialData?: Partial<ProductionOrderFormData>
@@ -25,6 +26,7 @@ interface ProductionOrderFormProps {
 
 export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFormProps) {
   const router = useRouter()
+  const { showToast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
@@ -128,23 +130,28 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
         body: JSON.stringify(payload),
       })
 
-      console.log('Response status:', response.status) // 調試用
-
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         console.error('API Error:', errorData)
         throw new Error(`儲存失敗: ${errorData.error || '未知錯誤'}`)
       }
 
-      const result = await response.json()
-      console.log('Success:', result) // 調試用
+      await response.json()
 
+      showToast({
+        title: orderId ? '訂單已更新' : '訂單已建立',
+        description: orderId ? '訂單資料更新完成。' : '新的訂單已成功建立。'
+      })
       router.push('/orders')
       router.refresh()
     } catch (error) {
       console.error('Error saving order:', error)
       const errorMessage = error instanceof Error ? error.message : '儲存失敗，請重試'
-      alert(errorMessage)
+      showToast({
+        title: '儲存失敗',
+        description: errorMessage,
+        variant: 'destructive'
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -192,10 +199,18 @@ export function ProductionOrderForm({ initialData, orderId }: ProductionOrderFor
       })
       
       console.log('導入完成，表單已更新')
+      showToast({
+        title: '原料已導入',
+        description: '智能解析的原料已套用到表單。'
+      })
       
     } catch (error) {
       console.error('導入原料時發生錯誤:', error)
-      alert(`導入失敗：${error instanceof Error ? error.message : '未知錯誤'}`)
+      showToast({
+        title: '導入失敗',
+        description: error instanceof Error ? error.message : '未知錯誤',
+        variant: 'destructive'
+      })
     }
   }
 

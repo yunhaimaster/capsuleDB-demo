@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { formatDateOnly } from '@/lib/utils'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface OrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -13,6 +14,7 @@ interface OrdersListProps {
 }
 
 export function OrdersList({ initialOrders = [], initialPagination }: OrdersListProps) {
+  const { showToast } = useToast()
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
@@ -154,11 +156,18 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       
       if (!response.ok) throw new Error('刪除訂單失敗')
       
+      showToast({
+        title: '訂單已刪除',
+        description: '選定的訂單已成功移除。'
+      })
       fetchOrders(filters)
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
-      // TODO: replace with toast notification system
-      window.alert('刪除失敗，請重試')
+      showToast({
+        title: '刪除失敗',
+        description: '刪除訂單時出現問題，請稍後再試。',
+        variant: 'destructive'
+      })
     }
   }
 
@@ -186,9 +195,17 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       a.click()
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
+      showToast({
+        title: '匯出完成',
+        description: `訂單資料已匯出為 ${format.toUpperCase()}。`
+      })
     } catch (error) {
       console.error('Error exporting:', error)
-      window.alert('匯出失敗，請重試')
+      showToast({
+        title: '匯出失敗',
+        description: '匯出時發生錯誤，請稍後再試。',
+        variant: 'destructive'
+      })
     }
   }
 

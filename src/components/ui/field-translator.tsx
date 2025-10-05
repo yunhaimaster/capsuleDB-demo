@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Loader2, Languages } from 'lucide-react'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface FieldTranslatorProps {
   value: string
@@ -14,10 +15,15 @@ interface FieldTranslatorProps {
 
 export function FieldTranslator({ value, onTranslate, className, disabled }: FieldTranslatorProps) {
   const [isTranslating, setIsTranslating] = useState(false)
+  const { showToast } = useToast()
 
   const handleTranslate = async () => {
     if (!value.trim()) {
-      alert('請先輸入要翻譯的文字')
+      showToast({
+        title: '無可翻譯內容',
+        description: '請先輸入要翻譯的文字。',
+        variant: 'destructive'
+      })
       return
     }
 
@@ -42,12 +48,20 @@ export function FieldTranslator({ value, onTranslate, className, disabled }: Fie
       
       if (data.success) {
         onTranslate(data.translatedText)
+        showToast({
+          title: '翻譯完成',
+          description: '內容已轉換為繁體中文。'
+        })
       } else {
         throw new Error(data.error || '翻譯失敗')
       }
     } catch (error) {
       console.error('翻譯錯誤:', error)
-      alert('翻譯失敗，請稍後再試')
+      showToast({
+        title: '翻譯失敗',
+        description: error instanceof Error ? error.message : '翻譯服務暫時無法使用',
+        variant: 'destructive'
+      })
     } finally {
       setIsTranslating(false)
     }

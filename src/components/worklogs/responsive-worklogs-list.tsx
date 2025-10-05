@@ -9,6 +9,7 @@ import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download, Filter
 import { WorklogWithOrder } from '@/types'
 import { WorklogFilter } from '@/components/worklogs/worklog-filter'
 import { LiquidGlassLoading } from '@/components/ui/liquid-glass-loading'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface Pagination {
   page: number
@@ -18,6 +19,7 @@ interface Pagination {
 }
 
 export function ResponsiveWorklogsList() {
+  const { showToast } = useToast()
   const [worklogs, setWorklogs] = useState<WorklogWithOrder[]>([])
   const [loading, setLoading] = useState(false)
   const [pagination, setPagination] = useState<Pagination | null>(null)
@@ -52,13 +54,23 @@ export function ResponsiveWorklogsList() {
       const data = await response.json()
       setWorklogs(data.worklogs || [])
       setPagination(data.pagination)
+      showToast({
+        title: '已更新工時紀錄',
+        description: '最新工時資料已載入。'
+      })
     } catch (err) {
       console.error(err)
-      setError(err instanceof Error ? err.message : '載入工時紀錄失敗')
+      const message = err instanceof Error ? err.message : '載入工時紀錄失敗'
+      setError(message)
+      showToast({
+        title: '載入失敗',
+        description: message,
+        variant: 'destructive'
+      })
     } finally {
       setLoading(false)
     }
-  }, [filters, sortOrder])
+  }, [filters, sortOrder, showToast])
 
   useEffect(() => {
     fetchWorklogs()
@@ -125,9 +137,17 @@ export function ResponsiveWorklogsList() {
       link.click()
       window.URL.revokeObjectURL(url)
       document.body.removeChild(link)
+      showToast({
+        title: '匯出完成',
+        description: '工時紀錄已匯出 CSV。'
+      })
     } catch (err) {
       console.error('匯出錯誤:', err)
-      alert('匯出失敗，請稍後再試')
+      showToast({
+        title: '匯出失敗',
+        description: err instanceof Error ? err.message : '匯出時發生錯誤，請稍後再試。',
+        variant: 'destructive'
+      })
     }
   }
 

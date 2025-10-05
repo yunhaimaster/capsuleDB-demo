@@ -14,6 +14,7 @@ import { getGlassBadgeTone } from '@/lib/ui/glass-tones'
 import { logger } from '@/lib/logger'
 import { formatNumber } from '@/lib/utils'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface ParsedIngredient {
   materialName: string
@@ -30,6 +31,7 @@ interface SmartRecipeImportProps {
 }
 
 export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps) {
+  const { showToast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [importText, setImportText] = useState('')
   const [importImage, setImportImage] = useState<string | null>(null)
@@ -51,13 +53,21 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
   const processImageFile = (file: File) => {
     // 檢查文件類型
     if (!file.type.startsWith('image/')) {
-      alert('請選擇圖片文件')
+      showToast({
+        title: '無效的檔案',
+        description: '請選擇圖片檔案 (JPG / PNG)。',
+        variant: 'destructive'
+      })
       return
     }
 
     // 檢查文件大小 (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('圖片文件大小不能超過 10MB')
+      showToast({
+        title: '檔案過大',
+        description: '圖片文件大小不能超過 10MB。',
+        variant: 'destructive'
+      })
       return
     }
 
@@ -152,6 +162,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
         setParsedIngredients(ingredients)
         setParseSummary(data.data.summary || '')
         setConfidence(data.data.confidence || '中')
+        showToast({
+          title: '解析完成',
+          description: `成功解析 ${ingredients.length} 項原料。`
+        })
       } else {
         throw new Error(data.error || '解析失敗')
       }
@@ -169,6 +183,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     if (parsedIngredients.length > 0) {
       try {
         logger.info('確認導入原料', { count: parsedIngredients.length })
+        showToast({
+          title: '原料已導入',
+          description: '智能解析的原料已套用到表單。'
+        })
         onImport(parsedIngredients)
         
         // 延遲關閉對話框，確保導入完成
@@ -184,6 +202,11 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
           error: error instanceof Error ? error.message : String(error)
         })
         setParseError('導入失敗，請重試')
+        showToast({
+          title: '導入失敗',
+          description: error instanceof Error ? error.message : '導入原料時發生錯誤。',
+          variant: 'destructive'
+        })
       }
     }
   }
@@ -196,6 +219,10 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
     setParsedIngredients([])
     setParseError('')
     setParseSummary('')
+    showToast({
+      title: '已取消',
+      description: '已清除暫存的導入資料。'
+    })
   }
 
   const handleUploadClick = () => {

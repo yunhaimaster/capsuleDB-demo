@@ -8,6 +8,7 @@ import { LiquidGlassConfirmModal, useLiquidGlassModal } from '@/components/ui/li
 import { OrderAIAssistant } from '@/components/ai/order-ai-assistant'
 import { Search, Filter, Download, Eye, Trash2, Edit, ArrowUpDown, ArrowUp, ArrowDown, ChevronRight, AlertTriangle, ClipboardCheck, Bot, Timer, Square, Calendar, Package2, RefreshCw, Loader2 } from 'lucide-react'
 import { formatDateOnly, downloadFile } from '@/lib/utils'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface ResponsiveOrdersListProps {
   initialOrders?: ProductionOrder[]
@@ -29,6 +30,7 @@ const getOrderStatus = (order: ProductionOrder) => {
 }
 
 export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: ResponsiveOrdersListProps) {
+  const { showToast } = useToast()
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   
   // 檢查訂單是否有製程問題或品管備註
@@ -151,9 +153,17 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       const filename = `production-orders-${new Date().toISOString().split('T')[0]}.${format}`
       const mimeType = format === 'csv' ? 'text/csv;charset=utf-8' : 'application/pdf'
       downloadFile(blob, filename, mimeType)
+      showToast({
+        title: '匯出完成',
+        description: `訂單已匯出為 ${format.toUpperCase()} 檔案。`
+      })
     } catch (error) {
       console.error('匯出錯誤:', error)
-      window.alert('匯出失敗，請稍後再試')
+      showToast({
+        title: '匯出失敗',
+        description: '匯出資料時發生錯誤，請稍後再試。',
+        variant: 'destructive'
+      })
     }
   }
 
@@ -178,9 +188,17 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       
       fetchOrders(filters)
       setOrderToDelete(null)
+      showToast({
+        title: '訂單已刪除',
+        description: '選定的訂單已成功刪除。'
+      })
     } catch (error) {
       console.error('刪除訂單錯誤:', error)
-      window.alert('刪除失敗，請重試')
+      showToast({
+        title: '刪除失敗',
+        description: '刪除訂單時發生錯誤，請稍後再試。',
+        variant: 'destructive'
+      })
     }
   }
 
