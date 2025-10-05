@@ -26,6 +26,9 @@ const STATUS_PRIORITY: Record<StatusKey, number> = {
   completed: 2,
 }
 
+const WORKLOG_DISPLAY_LIMIT = 5
+const ORDER_DISPLAY_LIMIT = 5
+
 const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
   const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
   const completed = Boolean(order.completionDate)
@@ -34,31 +37,27 @@ const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
   return 'completed'
 }
 
-const reorderOrdersByStatus = (orders: ProductionOrder[]) => {
-  const dateFromOrder = (order: ProductionOrder) => {
-    if (order.completionDate) {
-      return DateTime.fromISO(typeof order.completionDate === 'string' ? order.completionDate : order.completionDate.toISOString(), { zone: 'Asia/Hong_Kong' })
-    }
-    return DateTime.fromISO(typeof order.createdAt === 'string' ? order.createdAt : order.createdAt.toISOString(), { zone: 'Asia/Hong_Kong' })
-  }
+const toDateTime = (value: Date | string | null | undefined) => {
+  if (!value) return DateTime.invalid('missing')
+  if (value instanceof Date) return DateTime.fromJSDate(value, { zone: 'Asia/Hong_Kong' })
+  return DateTime.fromISO(value, { zone: 'Asia/Hong_Kong' })
+}
 
-  return [...orders].sort((a, b) => {
+const reorderOrdersByStatus = (orders: ProductionOrder[]) =>
+  [...orders].sort((a, b) => {
     const statusA = resolveOrderStatus(a)
     const statusB = resolveOrderStatus(b)
     if (statusA !== statusB) {
       return STATUS_PRIORITY[statusA] - STATUS_PRIORITY[statusB]
     }
 
-    const dateA = dateFromOrder(a)
-    const dateB = dateFromOrder(b)
-
+    const dateA = toDateTime(a.completionDate ?? a.createdAt)
+    const dateB = toDateTime(b.completionDate ?? b.createdAt)
     if (dateA.isValid && dateB.isValid) {
       return dateB.toMillis() - dateA.toMillis()
     }
-
     return 0
   })
-}
 
 const SmartAIAssistant = dynamic(() => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant), {
   ssr: false,
@@ -80,7 +79,9 @@ const OrderAIAssistant = dynamic(() => import('@/components/ai/order-ai-assistan
 
 const renderWorklogOrderLabel = (worklog: WorklogWithOrder) => {
   if (worklog.order) {
-    return `${worklog.order.productName || '未命名產品'} · ${worklog.order.customerName || '未知客戶'}`
+    const product = worklog.order.productName || '未指派訂單'
+    const customer = worklog.order.customerName || '未填寫'
+    return `${product} · ${customer}`
   }
   return '未關聯訂單'
 }
@@ -183,15 +184,12 @@ export default function HomePage() {
 
   const fetchRecentOrders = useCallback(async () => {
     try {
-      const response = await fetchWithTimeout('/api/orders?limit=5&sortBy=completionDate&sortOrder=desc')
-      if (response.ok) {
-        const payload = await response.json()
-        if (payload?.success) {
-          setRecentOrders(payload.data?.orders || [])
-        } else {
-          console.warn('載入最近訂單回傳非成功狀態', payload?.error)
-        }
-      }
+      const response = await fetchWithTimeout(`/api/orders?limit=${ORDER_DISPLAY_LIMIT}&sortBy=completionDate&sortOrder=desc`)
+      if (!response.ok) return
+      const payload = await response.json()
+      if (!payload?.success) return
+      const orders: ProductionOrder[] = payload.data?.orders || []
+      setRecentOrders(reorderOrdersByStatus(orders))
     } catch (error) {
       console.error('載入最近訂單錯誤:', error)
     }
@@ -213,11 +211,11 @@ export default function HomePage() {
 
   const fetchRecentWorklogs = useCallback(async () => {
     try {
-      const response = await fetchWithTimeout('/api/worklogs?limit=5')
-      if (response.ok) {
-        const data = await response.json()
-        setRecentWorklogs(data.worklogs || [])
-      }
+      const response = await fetchWithTimeout(`/api/worklogs?limit=${WORKLOG_DISPLAY_LIMIT}&sortOrder=desc`)
+      if (!response.ok) return
+      const payload = await response.json()
+      if (!payload?.success) return
+      setRecentWorklogs(payload.data?.worklogs || [])
     } catch (error) {
       console.error('載入最近工時錯誤:', error)
     }
@@ -255,157 +253,120 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 md:gap-5 items-stretch">
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive px-4 py-4 sm:px-5 sm:py-5 shadow-[0_8px_18px_rgba(45,85,155,0.15)]">
-          <div className="flex items-center justify-between mb-3">
-            <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce h-9 w-9 sm:h-10 sm:w-10">
-              <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-stretch">
+        <div className="liquid-glass-card px-3.5 py-3 sm:px-4 sm:py-4 shadow-[0_6px_14px_rgba(45,85,155,0.15)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="icon-container icon-container-gradient-sunrise h-8 w-8">
+                <Plus className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-indigo-600">新增配方</h3>
+                <p className="text-[11px] text-slate-500">快速建立新配方記錄</p>
+              </div>
             </div>
-            <div className="text-right space-y-0.5">
-              <h3 className="text-sm font-semibold text-[rgb(99,102,241)]">新增配方</h3>
-              <p className="text-[11px] text-[rgb(99,102,241)]/70">快速建立新記錄</p>
-            </div>
+            <Button asChild size="sm" className="text-xs px-3 py-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+              <Link href="/orders/new">開始</Link>
+            </Button>
           </div>
-          <p className="text-[11px] text-slate-600 leading-relaxed mb-3">
-            建立新的膠囊配方記錄，包含原料配置與生產參數。
-          </p>
-          <Button asChild className="w-full text-xs py-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110">
-            <Link href="/orders/new">開始建立</Link>
-          </Button>
         </div>
 
-        <div className="liquid-glass-card liquid-glass-card-interactive px-4 py-4 sm:px-5 sm:py-5 shadow-[0_8px_18px_rgba(13,148,136,0.18)]">
-          <div className="flex items-center justify-between mb-3">
-            <div className="icon-container icon-container-gradient-emerald icon-micro-bounce h-9 w-9 sm:h-10 sm:w-10">
-              <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+        <div className="liquid-glass-card px-3.5 py-3 sm:px-4 sm:py-4 shadow-[0_6px_14px_rgba(13,148,136,0.2)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="icon-container icon-container-gradient-emerald h-8 w-8">
+                <FileText className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-emerald-600">生產記錄</h3>
+                <p className="text-[11px] text-slate-500">管理歷史生產訂單</p>
+              </div>
             </div>
-            <div className="text-right space-y-0.5">
-              <h3 className="text-sm font-semibold text-emerald-600">生產記錄</h3>
-              <p className="text-[11px] text-emerald-600/70">檢視管理</p>
-            </div>
+            <Button asChild size="sm" className="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500">
+              <Link href="/orders">管理</Link>
+            </Button>
           </div>
-          <p className="text-[11px] text-slate-600 leading-relaxed mb-3">
-            檢視與管理所有生產記錄，支援搜尋、篩選與編輯。
-          </p>
-          <Button asChild className="w-full text-xs py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:brightness-110">
-            <Link href="/orders">查看記錄</Link>
-          </Button>
         </div>
       </div>
 
       {/* 最近紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1.05fr)] gap-3.5 sm:gap-4 md:gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-3 sm:gap-4">
         {/* 最近生產紀錄 */}
-        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content p-4 sm:p-4.5">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+        <div className="liquid-glass-card">
+          <div className="liquid-glass-content p-4 sm:p-4">
+            <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
+                <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
                   <FileText className="h-4 w-4 text-cyan-600" />
                   最近生產紀錄
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-xs opacity-75">
-                  最新 5 筆訂單的進度與工時摘要
-                </p>
+                <p className="text-[11px] text-slate-500">最新 5 筆訂單</p>
               </div>
-              <Link
-                href="/orders"
-                className="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-700"
-              >
-                查看全部訂單
+              <Link href="/orders" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1">
+                查看全部
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="space-y-3 skeleton-stagger">
-                <div className="skeleton skeleton-title" />
-                <div className="skeleton skeleton-text" />
-                <div className="skeleton skeleton-text" />
-                <div className="skeleton skeleton-text-sm" />
-                <div className="skeleton skeleton-text-sm" />
-                <div className="skeleton skeleton-button" />
+              <div className="space-y-3">
+                <div className="skeleton h-4 w-40" />
+                <div className="skeleton h-3 w-full" />
+                <div className="skeleton h-3 w-5/6" />
               </div>
             ) : recentOrders.length > 0 ? (
               <div className="space-y-2.5">
                 {recentOrders.map((order) => {
-                  const status = order.completionDate
-                    ? 'completed'
-                    : order.worklogs && order.worklogs.length > 0
-                      ? 'inProgress'
-                      : 'notStarted'
+                  const status = resolveOrderStatus(order)
                   const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
-                  const statusAccent = status === 'completed'
-                    ? 'from-emerald-500/80 to-emerald-600/90 text-white'
+                  const statusTone = status === 'completed'
+                    ? 'from-emerald-500 to-emerald-600'
                     : status === 'inProgress'
-                      ? 'from-blue-500/80 to-cyan-500/90 text-white'
-                      : 'from-slate-200 to-slate-300 text-slate-600'
-                  const latestWorklog = order.worklogs && order.worklogs.length > 0
-                    ? order.worklogs[order.worklogs.length - 1]
-                    : null
+                      ? 'from-sky-500 to-blue-600'
+                      : 'from-slate-300 to-slate-400'
+
+                  const latestWorklog = order.worklogs?.[order.worklogs.length - 1]
 
                   return (
                     <Link key={order.id} href={`/orders/${order.id}`} className="block">
-                      <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_5px_14px_rgba(15,32,77,0.06)] hover:shadow-[0_10px_22px_rgba(45,85,155,0.12)]">
-                        <div className="p-3 space-y-2">
-                          <div className="flex items-start justify-between gap-2.5">
+                      <div className="rounded-2xl bg-white/60 border border-white/70 hover:border-white/90 transition shadow-[0_4px_12px_rgba(15,32,77,0.08)] hover:shadow-[0_8px_18px_rgba(45,85,155,0.12)]">
+                        <div className="px-3.5 py-3 space-y-2">
+                          <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 space-y-1">
-                              <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
-                                <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
-                                <span>最近更新</span>
-                                <span>建立 {formatDateOnly(order.createdAt)}</span>
+                              <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.14em]">
+                                <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                                <span>更新 {formatDateOnly(order.createdAt)}</span>
                               </div>
                               <h4 className="text-sm font-semibold text-slate-900 truncate">{order.productName}</h4>
-                              <p className="text-[12px] text-slate-500 truncate">客戶：{order.customerName}</p>
+                              <p className="text-[11px] text-slate-500 truncate">客戶：{order.customerName}</p>
                             </div>
-                            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r ${statusAccent}`}>
-                              {status === 'completed' ? <Calendar className="h-3.5 w-3.5" />
-                                : status === 'inProgress' ? <Timer className="h-3.5 w-3.5" />
-                                : <Square className="h-3.5 w-3.5" />}
+                            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-white bg-gradient-to-r ${statusTone}`}>
+                              <Calendar className="h-3 w-3" />
                               {statusLabel}
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] sm:text-[11px] text-slate-600">
-                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
-                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">訂單數量</p>
-                              <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
+                          <div className="flex flex-wrap gap-2 text-[11px] text-slate-600">
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
+                              <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">訂單</span>
+                              {formatNumber(order.productionQuantity)} 粒
                             </div>
-                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
-                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">累積工時</p>
-                              <p className="text-sm font-semibold text-slate-900">
-                                {order.worklogs && order.worklogs.length > 0
-                                  ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時`
-                                  : '—'}
-                              </p>
+                            <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
+                              <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">工時</span>
+                              {order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時` : '—'}
                             </div>
-                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
-                              <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">客服</p>
-                              <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[10px] sm:text-[11px] text-slate-500">
-                            <div className="flex items-center gap-2">
-                              <Package2 className="h-3.5 w-3.5 text-slate-400" />
-                              <span>
-                                {order.actualProductionQuantity != null
-                                  ? `實際：${formatNumber(order.actualProductionQuantity)} 粒`
-                                  : order.materialYieldQuantity != null
-                                    ? `材料可做：${formatNumber(order.materialYieldQuantity)} 粒`
-                                    : '尚未提供實際數據'}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <UserRound className="h-3.5 w-3.5 text-slate-400" />
-                              <span>{formatDateOnly(order.createdAt)}</span>
-                            </div>
+                            {order.customerService && (
+                              <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
+                                <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">客服</span>
+                                {order.customerService}
+                              </div>
+                            )}
                           </div>
 
                           {latestWorklog && (
-                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/10 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-1.5 text-[11px] text-indigo-600 flex items-center justify-between">
-                              <span className="font-medium">最新工時</span>
-                              <span>{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime} - {latestWorklog.endTime}</span>
+                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-1.5 text-[10px] text-indigo-600 flex items-center justify-between">
+                              <span>最新工時</span>
+                              <span>{formatWorklogDateDisplay(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</span>
                             </div>
                           )}
                         </div>
@@ -415,104 +376,65 @@ export default function HomePage() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">目前沒有最近的生產記錄。</p>
-                <Link href="/orders/new">
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    建立第一筆記錄
-                  </Button>
-                </Link>
+              <div className="text-center py-8 text-sm text-gray-500">
+                目前沒有最近的生產記錄。
               </div>
             )}
           </div>
         </div>
+
         {/* 最近工時紀錄 */}
-        <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content p-4 sm:p-4.5">
-            <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="liquid-glass-card">
+          <div className="liquid-glass-content p-4 sm:p-4">
+            <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
+                <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
                   <Clock3 className="h-4 w-4 text-indigo-500" />
                   最近工時紀錄
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-xs opacity-75">
-                  最新 5 筆填報的工時資訊
-                </p>
+                <p className="text-[11px] text-slate-500">最新 5 筆填報</p>
               </div>
-              <Link
-                href="/worklogs"
-                className="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-700"
-              >
-                查看全部工時
+              <Link href="/worklogs" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1">
+                查看全部
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="space-y-3 skeleton-stagger">
-                <div className="skeleton skeleton-title" />
-                <div className="skeleton skeleton-text" />
-                <div className="skeleton skeleton-text" />
-                <div className="skeleton skeleton-text-sm" />
+              <div className="space-y-3">
+                <div className="skeleton h-4 w-36" />
+                <div className="skeleton h-3 w-full" />
               </div>
             ) : recentWorklogs.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {recentWorklogs.map((worklog) => (
-                  <div
-                    key={worklog.id}
-                    className="rounded-2xl bg-white/55 border border-white/60 px-3 py-3 shadow-[0_5px_14px_rgba(15,32,77,0.06)]"
-                  >
-                    <div className="p-3.5 space-y-2.5">
-                      <div className="flex items-start justify-between gap-2.5">
-                        <div className="min-w-0 space-y-1">
-                          <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
-                            <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
-                            <span>{formatDateOnly(worklog.workDate)}</span>
-                          </div>
-                          <h4 className="text-sm font-semibold text-slate-900 truncate">
-                            {worklog.order?.productName || '未指派訂單'}
-                          </h4>
-                          <p className="text-[12px] text-slate-500 truncate">
-                            客戶：{worklog.order?.customerName || '未填寫'}
-                          </p>
+                  <div key={worklog.id} className="rounded-2xl bg-white/55 border border-white/65 px-3 py-2.5 shadow-[0_4px_10px_rgba(15,32,77,0.08)]">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 space-y-1">
+                        <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.14em]">
+                          <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+                          <span>{formatWorklogDateDisplay(worklog.workDate)}</span>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
-                          <Timer className="h-3.5 w-3.5" />
-                          {worklog.startTime} - {worklog.endTime}
-                        </span>
+                        <h4 className="text-sm font-semibold text-slate-900 truncate">{renderWorklogOrderLabel(worklog)}</h4>
+                        <p className="text-[11px] text-slate-500">
+                          {worklog.startTime} - {worklog.endTime} · {worklog.headcount} 人
+                        </p>
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] text-slate-600">
-                        <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
-                          <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">有效工時</p>
-                          <p className="text-sm font-semibold text-slate-900">{(worklog.effectiveMinutes / 60).toFixed(1)} 工時</p>
-                        </div>
-                        <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
-                          <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">填報人數</p>
-                          <p className="text-sm font-semibold text-slate-900">{worklog.headcount} 人</p>
-                        </div>
-                      </div>
-
-                      {worklog.notes && (
-                        <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600">
-                          <span className="font-medium">備註</span>
-                          <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 line-clamp-2">
-                            {worklog.notes}
-                          </p>
-                        </div>
-                      )}
+                      <span className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500">
+                        <Timer className="h-3 w-3" />
+                        {(worklog.effectiveMinutes / 60).toFixed(1)}h
+                      </span>
                     </div>
+
+                    {worklog.notes && (
+                      <p className="mt-1 text-[11px] text-indigo-600 line-clamp-2">{worklog.notes}</p>
+                    )}
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">目前沒有最近的工時紀錄。</p>
-                <Link href="/worklogs">
-                  <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700">
-                    新增工時紀錄
-                  </Button>
-                </Link>
+              <div className="text-center py-8 text-sm text-gray-500">
+                目前沒有最近的工時紀錄。
               </div>
             )}
           </div>
