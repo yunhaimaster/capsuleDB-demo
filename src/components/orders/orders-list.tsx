@@ -65,6 +65,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
+  const [statusMessage, setStatusMessage] = useState('')
   
   // Dropdown options
   const [customerOptions, setCustomerOptions] = useState<{value: string, label: string}[]>([])
@@ -81,6 +82,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
   const fetchOrders = useCallback(async (filtersToUse = filters) => {
     setLoading(true)
+    setStatusMessage('訂單資料載入中…')
     try {
       cancelOngoingRequest()
       const controller = new AbortController()
@@ -120,11 +122,13 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
 
       setOrders(normalizedOrders)
       setPagination(data.pagination)
+      setStatusMessage(`已載入 ${normalizedOrders.length} 筆訂單資料`)
     } catch (error) {
       if ((error as DOMException)?.name === 'AbortError') {
         return
       }
       console.error('載入訂單錯誤:', error)
+      setStatusMessage('載入訂單時發生錯誤')
     } finally {
       setLoading(false)
       abortControllerRef.current = null
@@ -307,7 +311,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" aria-live="polite" aria-busy={loading}>
 
         <LinkedFilter
           customerOptions={customerOptions}
@@ -321,10 +325,10 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
           onLimitChange={handleLimitChange}
         />
 
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-refraction" role="region" aria-labelledby="orders-list-heading">
           <div className="liquid-glass-content">
             <div className="mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-3">
+              <h2 id="orders-list-heading" className="text-xl sm:text-2xl font-bold flex items-center gap-3">
                 <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl">
                   <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -335,65 +339,108 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
               <p className="text-gray-600 mt-2">管理所有膠囊生產訂單</p>
             </div>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" aria-live="polite">
+            <span className="sr-only" role="status">{statusMessage}</span>
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'customerName' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('customerName')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       客戶名稱
                       {getSortIcon('customerName')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'customerName' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'productName' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('productName')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       產品名稱
                       {getSortIcon('productName')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'productName' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'capsuleColor' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('capsuleColor')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       膠囊規格
                       {getSortIcon('capsuleColor')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'capsuleColor' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'ingredients' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('ingredients')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       原料成分
                       {getSortIcon('ingredients')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'ingredients' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'productionQuantity' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('productionQuantity')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       生產數量
                       {getSortIcon('productionQuantity')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'productionQuantity' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th
+                    scope="col"
+                    className="text-left py-3 px-4 font-medium text-gray-900 text-sm"
+                    aria-sort={filters.sortBy === 'completionDate' ? (filters.sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
                     <button
                       onClick={() => handleSort('completionDate')}
-                      className="flex items-center gap-1 hover:text-gray-700"
+                      className="flex items-center gap-1 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
                     >
                       完工日期
                       {getSortIcon('completionDate')}
+                      <span className="sr-only">
+                        {filters.sortBy === 'completionDate' ? (filters.sortOrder === 'asc' ? '升冪排序' : '降冪排序') : '未排序'}
+                      </span>
                     </button>
                   </th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
+                  <th scope="col" className="text-left py-3 px-4 font-medium text-gray-900 text-sm">
                     操作
                   </th>
                 </tr>
@@ -479,6 +526,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             size="sm"
                             onClick={() => window.location.href = `/orders/${order.id}/edit`}
                             className="h-6 w-6 p-0 text-xs"
+                            aria-label="編輯訂單"
+                            title="編輯訂單"
                           >
                             <Edit className="h-3 w-3" aria-hidden="true" />
                           </Button>
@@ -487,6 +536,8 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
                             size="sm"
                             onClick={() => requestDelete(order.id)}
                             className="h-6 w-6 p-0 text-red-600 hover:text-red-700 text-xs"
+                            aria-label="刪除訂單"
+                            title="刪除訂單"
                           >
                             <Trash2 className="h-3 w-3" aria-hidden="true" />
                           </Button>

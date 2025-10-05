@@ -31,9 +31,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const showToast = useCallback((toast: Omit<ToastMessage, 'id'>) => {
     setToasts((previous) => {
+      const baseDuration = toast.variant === 'destructive' ? Infinity : 10000
       const newToast: ToastMessage = {
         id: crypto.randomUUID(),
-        duration: 4000,
+        duration: baseDuration,
         variant: 'default',
         ...toast
       }
@@ -57,19 +58,31 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           {toasts.map(({ id, title, description, duration, variant }) => (
             <ToastPrimitive.Root
               key={id}
-              duration={duration}
+              duration={Number.isFinite(duration) ? duration : undefined}
               className={cn(
-                'bg-white/90 backdrop-blur-lg border border-white/60 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-800 flex flex-col gap-1',
-                variant === 'destructive' && 'border-red-200 bg-red-50 text-red-700'
+                'bg-white/90 backdrop-blur-lg border border-white/60 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-800 flex flex-col gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500',
+                variant === 'destructive' && 'border-red-300 bg-red-50 text-red-700'
               )}
               onOpenChange={(open) => handleOpenChange(id, open)}
+              role={variant === 'destructive' ? 'alert' : 'status'}
+              aria-live={variant === 'destructive' ? 'assertive' : 'polite'}
             >
-              {title && <ToastPrimitive.Title className="font-medium text-base">{title}</ToastPrimitive.Title>}
-              {description && (
-                <ToastPrimitive.Description className="text-sm text-slate-600">
-                  {description}
-                </ToastPrimitive.Description>
-              )}
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  {title && <ToastPrimitive.Title className="font-medium text-base text-slate-900">{title}</ToastPrimitive.Title>}
+                  {description && (
+                    <ToastPrimitive.Description className="text-sm text-slate-600">
+                      {description}
+                    </ToastPrimitive.Description>
+                  )}
+                </div>
+                <ToastPrimitive.Close
+                  className="text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-full"
+                  aria-label="關閉通知"
+                >
+                  ×
+                </ToastPrimitive.Close>
+              </div>
             </ToastPrimitive.Root>
           ))}
         </div>

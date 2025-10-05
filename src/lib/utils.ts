@@ -130,9 +130,16 @@ export function generateUUID() {
   return randomUUID()
 }
 
-export function downloadFile(blob: Blob, filename: string, mimeType?: string) {
+export function downloadFile(source: Blob | string, filename: string, mimeType?: string) {
   const link = document.createElement('a')
-  const url = window.URL.createObjectURL(blob)
+  let url: string
+
+  if (typeof source === 'string') {
+    url = source
+  } else {
+    url = window.URL.createObjectURL(source)
+  }
+
   link.href = url
   link.download = filename
   if (mimeType) {

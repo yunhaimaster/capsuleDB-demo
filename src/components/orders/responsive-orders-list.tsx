@@ -60,6 +60,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const { showToast } = useToast()
   const abortControllerRef = useRef<AbortController | null>(null)
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
+  const [statusMessage, setStatusMessage] = useState('')
   
   // 檢查訂單是否有製程問題或品管備註
   const hasProcessOrQualityIssues = (order: ProductionOrder) => {
@@ -97,6 +98,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       abortControllerRef.current = controller
 
       setLoading(true)
+      setStatusMessage('訂單資料載入中…')
       setError(null)
 
       const params = new URLSearchParams()
@@ -129,16 +131,23 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
 
       setOrders(shouldUseDefault ? sortOrdersByStatus(incomingOrders) : incomingOrders)
       setPagination(data.pagination)
+      setStatusMessage(`已載入 ${incomingOrders.length} 筆訂單`)
     } catch (error) {
       if ((error as DOMException)?.name === 'AbortError') {
         return
       }
       console.error('Error fetching orders:', error)
+      setStatusMessage('載入訂單時發生錯誤')
+      showToast({
+        title: '載入失敗',
+        description: '取得訂單資料時發生錯誤，請稍後再試。',
+        variant: 'destructive'
+      })
     } finally {
       setLoading(false)
       abortControllerRef.current = null
     }
-  }, [filters])
+  }, [filters, showToast])
 
   // Fetch dropdown options
   const fetchOptions = useCallback(async () => {
@@ -330,10 +339,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                   const statusLabel = STATUS_ORDER[status] === 0 ? '進行中' : STATUS_ORDER[status] === 1 ? '未開始' : '已完成'
                   const statusBadgeClass =
                     STATUS_ORDER[status] === 0
-                      ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white shadow-sm'
+                      ? 'bg-blue-600 text-white'
                       : STATUS_ORDER[status] === 1
-                        ? 'bg-slate-200 text-slate-600'
-                        : 'bg-emerald-100 text-emerald-600'
+                        ? 'bg-slate-600 text-white'
+                        : 'bg-emerald-600 text-white'
 
                   const latestWorklog = order.worklogs && order.worklogs.length > 0
                     ? order.worklogs[order.worklogs.length - 1]
@@ -439,6 +448,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             }}
                             className="text-slate-500 hover:text-slate-700 transition-colors"
                             title="查看訂單"
+                            aria-label="查看訂單"
                           >
                             <Eye className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -449,6 +459,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             }}
                             className="text-blue-600 hover:text-blue-800 transition-colors"
                             title="編輯訂單"
+                            aria-label="編輯訂單"
                           >
                             <Edit className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -459,6 +470,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             }}
                             className="text-purple-600 hover:text-purple-800 transition-colors"
                             title="Order AI 分析"
+                            aria-label="打開 AI 分析"
                           >
                             <Bot className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -469,6 +481,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                             }}
                             className="text-red-600 hover:text-red-800 transition-colors"
                             title="刪除訂單"
+                            aria-label="刪除訂單"
                           >
                             <Trash2 className="h-4 w-4" aria-hidden="true" />
                           </button>
@@ -513,7 +526,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <h3 className="text-base font-semibold text-slate-900">{order.productName}</h3>
                       <p className="text-xs text-slate-500">{order.customerName}</p>
                     </div>
-                    <span className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-1 ${STATUS_ORDER[status] === 2 ? 'bg-emerald-100 text-emerald-600' : STATUS_ORDER[status] === 0 ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                    <span className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-1 ${STATUS_ORDER[status] === 2 ? 'bg-emerald-600 text-white' : STATUS_ORDER[status] === 0 ? 'bg-blue-600 text-white' : 'bg-slate-600 text-white'}`}>
                       {statusLabel}
                     </span>
                   </div>
@@ -640,6 +653,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           onClose={() => setSelectedOrderForAI(null)}
         />
       )}
+      <span className="sr-only" role="status">{statusMessage}</span>
     </div>
   )
 }

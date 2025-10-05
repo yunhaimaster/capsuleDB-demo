@@ -44,93 +44,91 @@ export function LiquidGlassModal({
     }
   }, [])
 
-  // Focus management for accessibility
   useEffect(() => {
     if (isOpen) {
-      // Store the previously focused element
       previousActiveElement.current = document.activeElement as HTMLElement
-      
-      // Focus the modal when it opens
-      const focusableElements = modalRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      
-      if (focusableElements && focusableElements.length > 0) {
-        const firstElement = focusableElements[0] as HTMLElement
-        firstElement.focus()
+      const focusableSelectors = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea:not([disabled])',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])'
+      ]
+      const focusable = modalRef.current?.querySelectorAll<HTMLElement>(focusableSelectors.join(',')) || []
+      if (focusable.length) {
+        focusable[0].focus()
+      } else {
+        modalRef.current?.focus()
       }
     } else if (previousActiveElement.current) {
-      // Restore focus to the previously focused element
       previousActiveElement.current.focus()
     }
   }, [isOpen])
 
-  // Handle escape key
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (closeOnEscape && event.key === 'Escape' && isOpen) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!isOpen) return
+      if (event.key === 'Escape' && closeOnEscape) {
+        event.preventDefault()
         onClose()
+        return
+      }
+
+      if (event.key === 'Tab') {
+        const focusable = modalRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+        if (!focusable || focusable.length === 0) return
+
+        const firstElement = focusable[0]
+        const lastElement = focusable[focusable.length - 1]
+
+        if (event.shiftKey) {
+          if (document.activeElement === firstElement) {
+            event.preventDefault()
+            lastElement.focus()
+          }
+        } else if (document.activeElement === lastElement) {
+          event.preventDefault()
+          firstElement.focus()
+        }
       }
     }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape)
-      // Prevent body scroll when modal is open
-      const originalStyle = window.getComputedStyle(document.body).overflow
-      const originalPosition = window.getComputedStyle(document.body).position
-      const originalTop = window.getComputedStyle(document.body).top
-      const scrollY = window.scrollY
-      
-      // Store original values for restoration
-      document.body.dataset.originalOverflow = originalStyle
-      document.body.dataset.originalPosition = originalPosition
-      document.body.dataset.originalTop = originalTop
-      document.body.dataset.scrollY = scrollY.toString()
-      
-      // Apply scroll lock styles
-      document.body.style.overflow = 'hidden'
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${scrollY}px`
-      document.body.style.width = '100%'
+      document.addEventListener('keydown', handleKeyDown)
+      const body = document.body
+      body.dataset.scrollY = window.scrollY.toString()
+      body.style.overflow = 'hidden'
+      body.style.position = 'fixed'
+      body.style.top = `-${window.scrollY}px`
+      body.style.width = '100%'
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape)
-      // Restore original body styles
-      const originalOverflow = document.body.dataset.originalOverflow
-      const originalPosition = document.body.dataset.originalPosition
-      const originalTop = document.body.dataset.originalTop
-      const scrollY = parseInt(document.body.dataset.scrollY || '0')
-      
-      document.body.style.overflow = originalOverflow || 'unset'
-      document.body.style.position = originalPosition || 'unset'
-      document.body.style.top = originalTop || 'unset'
-      document.body.style.width = 'unset'
-      
-      // Restore scroll position
+      document.removeEventListener('keydown', handleKeyDown)
+      const body = document.body
+      const scrollY = parseInt(body.dataset.scrollY || '0', 10)
+      body.style.overflow = 'unset'
+      body.style.position = 'unset'
+      body.style.top = 'unset'
+      body.style.width = 'unset'
       window.scrollTo(0, scrollY)
-      
-      // Clean up data attributes
-      delete document.body.dataset.originalOverflow
-      delete document.body.dataset.originalPosition
-      delete document.body.dataset.originalTop
-      delete document.body.dataset.scrollY
+      delete body.dataset.scrollY
     }
   }, [isOpen, closeOnEscape, onClose])
 
-  // Handle backdrop click
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (closeOnBackdropClick && event.target === event.currentTarget) {
       onClose()
     }
   }
 
-  // Handle modal click to prevent closing
   const handleModalClick = (event: React.MouseEvent) => {
     event.stopPropagation()
   }
 
-  // Size classes
   const sizeClasses = {
     sm: 'max-w-md',
     md: 'max-w-lg',
@@ -147,15 +145,15 @@ export function LiquidGlassModal({
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-labelledby={title ? "modal-title" : undefined}
+      aria-labelledby={title ? 'modal-title' : undefined}
     >
       <div
         ref={modalRef}
         className={`liquid-glass-modal ${sizeClasses[size]} ${animateFrom === 'button' ? 'liquid-glass-modal-scale-from-button' : 'liquid-glass-modal-scale-from-center'} ${fullscreen ? 'fullscreen' : ''} ${className}`}
         onClick={handleModalClick}
         role="document"
+        tabIndex={-1}
       >
-        {/* Modal Header */}
         {(title || closeOnEscape || headerButtons) && (
           <div className="liquid-glass-modal-header">
             {title && (
@@ -177,12 +175,10 @@ export function LiquidGlassModal({
           </div>
         )}
 
-        {/* Modal Content */}
         <div className="liquid-glass-modal-content">
           {children}
         </div>
 
-        {/* Modal Footer */}
         {footer && (
           <div className="liquid-glass-modal-footer">
             {footer}

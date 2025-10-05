@@ -1,51 +1,20 @@
-'use client'
+import type { Metadata } from 'next'
+import { WorklogsPageClient } from '@/components/worklogs/worklogs-page-client'
 
-import { useEffect, useCallback } from 'react'
-
-import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
-import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { ResponsiveWorklogsList } from '@/components/worklogs/responsive-worklogs-list'
-import { fetchWithTimeout } from '@/lib/api-client'
+export const metadata: Metadata = {
+  title: '工時紀錄管理｜Easy Health 膠囊管理系統',
+  description: '查看每日工時紀錄與累積工時，支援依訂單、員工與日期區間篩選，提供 CSV 匯出功能。',
+  alternates: {
+    canonical: '/worklogs',
+  },
+  openGraph: {
+    title: '工時紀錄管理',
+    description: '掌握員工與訂單工時利用率，並匯出詳細報表。',
+    url: '/worklogs',
+  },
+}
 
 export default function WorklogsPage() {
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
-    }
-
-  }, [])
-
-  return (
-    <div className="min-h-screen logo-bg-animation flex flex-col">
-      <LiquidGlassNav />
-
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
-        <section className="liquid-glass-card liquid-glass-card-refraction liquid-glass-card-interactive p-6 md:p-8">
-          <div className="liquid-glass-content flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="icon-container icon-container-gradient-indigo shadow-[0_12px_30px_rgba(79,70,229,0.25)]">
-                <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6l4 2" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-lg md:text-lg font-semibold text-[--brand-neutral] tracking-tight">工時紀錄</h1>
-                <p className="text-xs md:text-xs text-gray-600">查看最新工時安排、快速篩選調整與導出紀錄</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-3 items-center">
-              <span className="px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-300/40 text-indigo-700 text-sm font-medium leading-none">最新工時優先</span>
-              <span className="px-3.5 py-1.5 rounded-full bg-purple-500/15 border border-purple-300/40 text-purple-700 text-sm font-medium leading-none">訂單交叉查看</span>
-            </div>
-          </div>
-        </section>
-
-        <ResponsiveWorklogsList />
-
-      </div>
-
-      <LiquidGlassFooter />
-    </div>
-  )
+  return <WorklogsPageClient />
 }
 

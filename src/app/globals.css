@@ -368,7 +368,18 @@
     #2a588c 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animated-gradient-bg {
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-bg {
+    background-size: 100% 100%;
+  }
 }
 
 /* More visible animated gradient for testing */
@@ -382,7 +393,18 @@
     rgba(42, 88, 140, 0.6) 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animated-gradient-bg-visible {
+    animation: gradientShift 6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-bg-visible {
+    background-size: 100% 100%;
+  }
 }
 
 /* Logo background animation */
@@ -452,7 +474,18 @@
     rgba(42, 88, 140, 0.03) 100%
   );
   background-size: 300% 300%;
-  animation: gradientShift 15s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animated-gradient-bg-subtle {
+    animation: gradientShift 15s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-bg-subtle {
+    background-size: 100% 100%;
+  }
 }
 
 .animated-gradient-bg-accent {
@@ -464,7 +497,18 @@
     rgba(68, 186, 198, 0.2) 100%
   );
   background-size: 200% 200%;
-  animation: gradientShift 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animated-gradient-bg-accent {
+    animation: gradientShift 6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-bg-accent {
+    background-size: 100% 100%;
+  }
 }
 
 @keyframes gradientShift {
@@ -2350,9 +2394,22 @@
     radial-gradient(circle at 10% 60%, rgba(68, 186, 198, 0.12) 1px, transparent 1px),
     radial-gradient(circle at 90% 40%, rgba(68, 186, 198, 0.08) 1px, transparent 1px);
   background-size: 100px 100px, 150px 150px, 200px 200px, 120px 120px, 80px 80px;
-  animation: floating-dots 40s linear infinite;
   pointer-events: none;
   z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .floating-dots::before {
+    animation: floating-dots 40s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-dots::before {
+    animation: none;
+    background-image: radial-gradient(circle at 25% 25%, rgba(68, 186, 198, 0.15) 1px, transparent 1px);
+    opacity: 0.3;
+  }
 }
 
 @keyframes floating-dots {
@@ -2387,9 +2444,21 @@
     linear-gradient(90deg, rgba(68, 186, 198, 0.1) 0%, transparent 50%),
     linear-gradient(180deg, rgba(68, 186, 198, 0.08) 0%, transparent 50%),
     linear-gradient(270deg, rgba(68, 186, 198, 0.06) 0%, transparent 50%);
-  animation: floating-waves 45s ease-in-out infinite;
   pointer-events: none;
   z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .floating-waves::before {
+    animation: floating-waves 32s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-waves::before {
+    animation: none;
+    opacity: 0.45;
+  }
 }
 
 @keyframes floating-waves {

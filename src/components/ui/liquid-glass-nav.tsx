@@ -72,7 +72,7 @@ export function LiquidGlassNav({
           <div className="liquid-glass-nav-brand flex items-center space-x-1 sm:space-x-2">
             <Link 
               href="/" 
-              className="liquid-glass-nav-logo"
+              className="liquid-glass-nav-logo focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2"
               aria-label="回到首頁"
             >
               {logo}
