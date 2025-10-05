@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
@@ -10,6 +10,7 @@ import { WorklogWithOrder } from '@/types'
 import { WorklogFilter } from '@/components/worklogs/worklog-filter'
 import { LiquidGlassLoading } from '@/components/ui/liquid-glass-loading'
 import { useToast } from '@/components/ui/toast-provider'
+import { fetchWithTimeout } from '@/lib/api-client'
 
 interface Pagination {
   page: number
@@ -25,6 +26,7 @@ export function ResponsiveWorklogsList() {
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   const [filters, setFilters] = useState({
     orderKeyword: '',
@@ -39,6 +41,12 @@ export function ResponsiveWorklogsList() {
     setLoading(true)
     setError(null)
     try {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+
       const params = new URLSearchParams()
       Object.entries(newFilters).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
@@ -47,18 +55,28 @@ export function ResponsiveWorklogsList() {
       })
       params.set('sortOrder', sortOrder)
 
-      const response = await fetch(`/api/worklogs?${params.toString()}`)
+      const response = await fetchWithTimeout(`/api/worklogs?${params.toString()}`, {
+        signal: controller.signal,
+      })
       if (!response.ok) {
         throw new Error('載入工時紀錄失敗')
       }
-      const data = await response.json()
-      setWorklogs(data.worklogs || [])
+      const payload = await response.json()
+      if (!payload?.success) {
+        throw new Error(payload?.error?.message || '載入工時紀錄失敗')
+      }
+
+      const data = payload.data
+      setWorklogs(Array.isArray(data.worklogs) ? data.worklogs : [])
       setPagination(data.pagination)
       showToast({
         title: '已更新工時紀錄',
         description: '最新工時資料已載入。'
       })
     } catch (err) {
+      if ((err as DOMException)?.name === 'AbortError') {
+        return
+      }
       console.error(err)
       const message = err instanceof Error ? err.message : '載入工時紀錄失敗'
       setError(message)
@@ -69,11 +87,13 @@ export function ResponsiveWorklogsList() {
       })
     } finally {
       setLoading(false)
+      abortControllerRef.current = null
     }
   }, [filters, sortOrder, showToast])
 
   useEffect(() => {
     fetchWorklogs()
+    return () => abortControllerRef.current?.abort()
   }, [fetchWorklogs])
 
   const handleSearch = (newFilters: Partial<typeof filters>) => {
@@ -105,7 +125,7 @@ export function ResponsiveWorklogsList() {
 
   const handleExport = async () => {
     try {
-      const response = await fetch('/api/worklogs', {
+      const response = await fetchWithTimeout('/api/worklogs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

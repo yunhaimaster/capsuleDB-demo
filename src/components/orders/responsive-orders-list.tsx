@@ -16,19 +16,45 @@ interface ResponsiveOrdersListProps {
   initialPagination?: any
 }
 
-const ORDER_STATUS_LABEL = {
-  inProgress: '進行中',
-  notStarted: '未開始',
-  completed: '已完成',
+const DEFAULT_FILTERS = {
+  customerName: '',
+  productName: '',
+  ingredientName: '',
+  capsuleType: '',
+  page: 1,
+  limit: 25,
+  sortBy: 'completionDate',
+  sortOrder: 'desc'
 }
 
-const getOrderStatus = (order: ProductionOrder) => {
-  const hasWork = order.worklogs && order.worklogs.length > 0
-  const completed = !!order.completionDate
-  if (hasWork && !completed) return 'inProgress' as const
-  if (!completed) return 'notStarted' as const
-  return 'completed' as const
+const STATUS_ORDER = {
+  inProgress: 0,
+  notStarted: 1,
+  completed: 2
+} as const
+
+type StatusKey = keyof typeof STATUS_ORDER
+
+const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
+  const hasWork = Array.isArray(order.worklogs) && order.worklogs.length > 0
+  const completed = Boolean(order.completionDate)
+  if (hasWork && !completed) return 'inProgress'
+  if (!completed) return 'notStarted'
+  return 'completed'
 }
+
+const sortOrdersByStatus = (orders: ProductionOrder[]) =>
+  [...orders].sort((a, b) => {
+    const statusA = resolveOrderStatus(a)
+    const statusB = resolveOrderStatus(b)
+    if (statusA !== statusB) {
+      return STATUS_ORDER[statusA] - STATUS_ORDER[statusB]
+    }
+
+    const dateA = a.completionDate ? new Date(a.completionDate).getTime() : new Date(a.createdAt).getTime()
+    const dateB = b.completionDate ? new Date(b.completionDate).getTime() : new Date(b.createdAt).getTime()
+    return dateB - dateA
+  })
 
 export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: ResponsiveOrdersListProps) {
   const { showToast } = useToast()
@@ -49,16 +75,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   // Modal hooks
   const deleteConfirmModal = useLiquidGlassModal()
   
-  const [filters, setFilters] = useState({
-    customerName: '',
-    productName: '',
-    ingredientName: '',
-    capsuleType: '',
-    page: 1,
-    limit: 25,
-    sortBy: 'completionDate',
-    sortOrder: 'desc'
-  })
+  const [filters, setFilters] = useState(DEFAULT_FILTERS)
   
   // Dropdown options
   const [customerOptions, setCustomerOptions] = useState<Array<{value: string, label: string}>>([])
@@ -101,8 +118,16 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
       }
 
       const data = payload.data
+      const incomingOrders = Array.isArray(data.orders) ? data.orders : []
+      const shouldUseDefault =
+        newFilters.sortBy === DEFAULT_FILTERS.sortBy &&
+        newFilters.sortOrder === DEFAULT_FILTERS.sortOrder &&
+        !newFilters.customerName &&
+        !newFilters.productName &&
+        !newFilters.ingredientName &&
+        !newFilters.capsuleType
 
-      setOrders(Array.isArray(data.orders) ? data.orders : [])
+      setOrders(shouldUseDefault ? sortOrdersByStatus(incomingOrders) : incomingOrders)
       setPagination(data.pagination)
     } catch (error) {
       if ((error as DOMException)?.name === 'AbortError') {
@@ -301,12 +326,12 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                 </tr>
               ) : (
                 orders.map((order) => {
-                  const status = getOrderStatus(order)
-                  const statusLabel = ORDER_STATUS_LABEL[status]
+                  const status = resolveOrderStatus(order)
+                  const statusLabel = STATUS_ORDER[status] === 0 ? '進行中' : STATUS_ORDER[status] === 1 ? '未開始' : '已完成'
                   const statusBadgeClass =
-                    status === 'inProgress'
+                    STATUS_ORDER[status] === 0
                       ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white shadow-sm'
-                      : status === 'notStarted'
+                      : STATUS_ORDER[status] === 1
                         ? 'bg-slate-200 text-slate-600'
                         : 'bg-emerald-100 text-emerald-600'
 
@@ -348,20 +373,20 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <td className="py-4 px-4 text-sm align-top">
                         <div className="flex flex-col gap-2">
                           <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${statusBadgeClass}`}>
-                            {status === 'inProgress' ? <Timer className="h-3.5 w-3.5" aria-hidden="true" /> : status === 'completed' ? <Calendar className="h-3.5 w-3.5" aria-hidden="true" /> : <Square className="h-3.5 w-3.5" aria-hidden="true" />}
+                            {STATUS_ORDER[status] === 0 ? <Timer className="h-3.5 w-3.5" aria-hidden="true" /> : STATUS_ORDER[status] === 2 ? <Calendar className="h-3.5 w-3.5" aria-hidden="true" /> : <Square className="h-3.5 w-3.5" aria-hidden="true" />}
                             {statusLabel}
                           </span>
                           <div className="text-xs text-slate-500 leading-relaxed">
-                            {status === 'completed' && order.completionDate ? (
+                            {STATUS_ORDER[status] === 2 && order.completionDate ? (
                               <div>完成日期：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                             ) : null}
-                            {status === 'inProgress' && order.totalWorkUnits ? (
+                            {STATUS_ORDER[status] === 0 && order.totalWorkUnits ? (
                               <div>累積工時：{order.totalWorkUnits.toFixed(1)} 工時</div>
                             ) : null}
-                            {status === 'inProgress' && latestWorklog ? (
+                            {STATUS_ORDER[status] === 0 && latestWorklog ? (
                               <div>最新工時：{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</div>
                             ) : null}
-                            {status === 'notStarted' ? (
+                            {STATUS_ORDER[status] === 1 ? (
                               <div>尚未安排工時</div>
                             ) : null}
                           </div>
@@ -470,8 +495,8 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
           </div>
         ) : (
           orders.map((order) => {
-            const status = getOrderStatus(order)
-            const statusLabel = ORDER_STATUS_LABEL[status]
+            const status = resolveOrderStatus(order)
+            const statusLabel = STATUS_ORDER[status] === 0 ? '進行中' : STATUS_ORDER[status] === 1 ? '未開始' : '已完成'
             const latestWorklog = order.worklogs && order.worklogs.length > 0
               ? order.worklogs[order.worklogs.length - 1]
               : null
@@ -488,19 +513,19 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
                       <h3 className="text-base font-semibold text-slate-900">{order.productName}</h3>
                       <p className="text-xs text-slate-500">{order.customerName}</p>
                     </div>
-                    <span className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-1 ${status === 'completed' ? 'bg-emerald-100 text-emerald-600' : status === 'inProgress' ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                    <span className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-1 ${STATUS_ORDER[status] === 2 ? 'bg-emerald-100 text-emerald-600' : STATUS_ORDER[status] === 0 ? 'bg-gradient-to-r from-blue-500/90 to-cyan-500/90 text-white' : 'bg-slate-200 text-slate-600'}`}>
                       {statusLabel}
                     </span>
                   </div>
 
                   <div className="text-xs text-slate-500 space-y-1">
-                    {status === 'completed' && order.completionDate && (
+                    {STATUS_ORDER[status] === 2 && order.completionDate && (
                       <div>完成：{typeof order.completionDate === 'string' ? order.completionDate : formatDateOnly(order.completionDate)}</div>
                     )}
-                    {status === 'inProgress' && order.totalWorkUnits && (
+                    {STATUS_ORDER[status] === 0 && order.totalWorkUnits && (
                       <div>累積：{order.totalWorkUnits.toFixed(1)} 工時</div>
                     )}
-                    {status === 'inProgress' && latestWorklog && (
+                    {STATUS_ORDER[status] === 0 && latestWorklog && (
                       <div>最新工時：{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</div>
                     )}
                   </div>

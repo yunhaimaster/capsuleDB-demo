@@ -15,6 +15,47 @@ interface OrdersListProps {
   initialPagination?: any
 }
 
+const DEFAULT_FILTERS = {
+  customerName: '',
+  productName: '',
+  ingredientName: '',
+  capsuleType: '',
+  page: 1,
+  limit: 25,
+  sortBy: 'completionDate',
+  sortOrder: 'desc'
+}
+
+const DEFAULT_STATUS_ORDER = {
+  inProgress: 0,
+  notStarted: 1,
+  completed: 2
+} as const
+
+type StatusKey = keyof typeof DEFAULT_STATUS_ORDER
+
+const determineStatus = (order: ProductionOrder): StatusKey => {
+  const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
+  const completed = Boolean(order.completionDate)
+  if (hasWorklog && !completed) return 'inProgress'
+  if (!completed) return 'notStarted'
+  return 'completed'
+}
+
+const reorderOrdersByStatus = (orders: ProductionOrder[]) => {
+  return [...orders].sort((a, b) => {
+    const statusA = determineStatus(a)
+    const statusB = determineStatus(b)
+    if (statusA !== statusB) {
+      return DEFAULT_STATUS_ORDER[statusA] - DEFAULT_STATUS_ORDER[statusB]
+    }
+
+    const dateA = a.completionDate ? new Date(a.completionDate).getTime() : new Date(a.createdAt).getTime()
+    const dateB = b.completionDate ? new Date(b.completionDate).getTime() : new Date(b.createdAt).getTime()
+    return dateB - dateA
+  })
+}
+
 export function OrdersList({ initialOrders = [], initialPagination }: OrdersListProps) {
   const { showToast } = useToast()
   const deleteModal = useLiquidGlassModal()
@@ -23,16 +64,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [orders, setOrders] = useState<ProductionOrder[]>(initialOrders)
   const [pagination, setPagination] = useState(initialPagination)
   const [loading, setLoading] = useState(false)
-  const [filters, setFilters] = useState({
-    customerName: '',
-    productName: '',
-    ingredientName: '',
-    capsuleType: '',
-    page: 1,
-    limit: 25,
-    sortBy: 'completionDate',
-    sortOrder: 'desc'
-  })
+  const [filters, setFilters] = useState(DEFAULT_FILTERS)
   
   // Dropdown options
   const [customerOptions, setCustomerOptions] = useState<{value: string, label: string}[]>([])
@@ -73,8 +105,20 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
       }
 
       const data = payload.data
+      const incomingOrders = data.orders || []
+      const shouldApplyDefaultOrdering =
+        filtersToUse.sortBy === DEFAULT_FILTERS.sortBy &&
+        filtersToUse.sortOrder === DEFAULT_FILTERS.sortOrder &&
+        !filtersToUse.customerName &&
+        !filtersToUse.productName &&
+        !filtersToUse.ingredientName &&
+        !filtersToUse.capsuleType
 
-      setOrders(data.orders || [])
+      const normalizedOrders = shouldApplyDefaultOrdering
+        ? reorderOrdersByStatus(incomingOrders)
+        : incomingOrders
+
+      setOrders(normalizedOrders)
       setPagination(data.pagination)
     } catch (error) {
       if ((error as DOMException)?.name === 'AbortError') {
