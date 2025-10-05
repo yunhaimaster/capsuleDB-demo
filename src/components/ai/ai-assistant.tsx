@@ -146,28 +146,28 @@ export function AIAssistant({ orders }: AIAssistantProps) {
                   className="bg-blue-50 hover:bg-blue-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
                   <p className="font-medium text-blue-800 mb-1">查詢訂單</p>
-                  <p className="text-blue-600">"顯示所有未完工的訂單"</p>
+                  <p className="text-blue-600">&ldquo;顯示所有未完工的訂單&rdquo;</p>
                 </button>
                 <button
                   onClick={() => setInput('哪個客戶的訂單最多？')}
                   className="bg-green-50 hover:bg-green-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
                   <p className="font-medium text-green-800 mb-1">統計分析</p>
-                  <p className="text-green-600">"哪個客戶的訂單最多？"</p>
+                  <p className="text-green-600">&ldquo;哪個客戶的訂單最多？&rdquo;</p>
                 </button>
                 <button
                   onClick={() => setInput('維生素C相關的訂單有哪些？')}
                   className="bg-purple-50 hover:bg-purple-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
                   <p className="font-medium text-purple-800 mb-1">原料查詢</p>
-                  <p className="text-purple-600">"維生素C相關的訂單有哪些？"</p>
+                  <p className="text-purple-600">&ldquo;維生素C相關的訂單有哪些？&rdquo;</p>
                 </button>
                 <button
                   onClick={() => setInput('最近一週的生產情況如何？')}
                   className="bg-orange-50 hover:bg-orange-100 p-3 rounded-lg text-left transition-colors cursor-pointer"
                 >
                   <p className="font-medium text-orange-800 mb-1">時間分析</p>
-                  <p className="text-orange-600">"最近一週的生產情況如何？"</p>
+                  <p className="text-orange-600">&ldquo;最近一週的生產情況如何？&rdquo;</p>
                 </button>
               </div>
             </div>

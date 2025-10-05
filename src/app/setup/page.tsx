@@ -181,8 +181,8 @@ export default function SetupPage() {
                     <div className="bg-blue-50 p-4 rounded-lg mb-4">
                       <h4 className="font-medium text-blue-800 mb-2">設置完成！</h4>
                       <p className="text-blue-700 text-sm">
-                        數據庫表已成功創建。如果AI配方生成器仍顯示"數據庫未設置"，
-                        請點擊該頁面的"刷新狀態"按鈕或重新載入頁面。
+                        數據庫表已成功創建。如果AI配方生成器仍顯示&ldquo;數據庫未設置&rdquo;，
+                        請點擊該頁面的&ldquo;刷新狀態&rdquo;按鈕或重新載入頁面。
                       </p>
                     </div>
                     

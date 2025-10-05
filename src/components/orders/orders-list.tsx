@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
@@ -33,7 +33,7 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
   const [ingredientOptions, setIngredientOptions] = useState<{value: string, label: string}[]>([])
   const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<{value: string, label: string}[]>([])
 
-  const fetchOrders = async (newFilters: any) => {
+  const fetchOrders = useCallback(async (newFilters: typeof filters) => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -54,9 +54,9 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const fetchDropdownOptions = async () => {
+  const fetchDropdownOptions = useCallback(async () => {
     try {
       const response = await fetch('/api/orders/options')
       if (response.ok) {
@@ -69,15 +69,15 @@ export function OrdersList({ initialOrders = [], initialPagination }: OrdersList
     } catch (error) {
       console.error('載入下拉選項錯誤:', error)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchOrders(filters)
-  }, [filters.page, filters.limit, filters.customerName, filters.productName, filters.ingredientName, filters.capsuleType])
+  }, [fetchOrders, filters])
 
   useEffect(() => {
     fetchDropdownOptions()
-  }, [])
+  }, [fetchDropdownOptions])
 
   const handleSearch = (searchFilters: {
     customerName: string

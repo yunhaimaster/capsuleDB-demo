@@ -245,18 +245,19 @@ export function LinkedFilter({
   }) => {
     const [position, setPosition] = useState({ top: 0, left: 0, width: 0 })
     
-    // 映射 field 到正確的 ref key
-    const fieldToRefKey: { [key: string]: string } = {
-      'customer': 'customerName',
-      'product': 'productName', 
-      'ingredient': 'ingredientName',
-      'capsule': 'capsuleType'
-    }
-    
     useEffect(() => {
-      const refKey = fieldToRefKey[field]
-      if (showDropdowns[field as keyof typeof showDropdowns] && inputRefs.current[refKey]) {
-        const input = inputRefs.current[refKey]
+      const refKeyMap: Record<string, string> = {
+        customer: 'customerName',
+        product: 'productName',
+        ingredient: 'ingredientName',
+        capsule: 'capsuleType'
+      }
+
+      const refKey = refKeyMap[field]
+      const isDropdownOpen = showDropdowns[field as keyof typeof showDropdowns]
+      const input = refKey ? inputRefs.current[refKey] : null
+
+      if (isDropdownOpen && input) {
         const rect = input.getBoundingClientRect()
         setPosition({
           top: rect.bottom + window.scrollY,
@@ -264,6 +265,7 @@ export function LinkedFilter({
           width: rect.width
         })
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [field, showDropdowns])
 
     if (!showDropdowns[field as keyof typeof showDropdowns]) return null

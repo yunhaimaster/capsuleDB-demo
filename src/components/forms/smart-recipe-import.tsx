@@ -10,7 +10,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { getGlassBadgeTone, getGlassCardTone } from '@/lib/ui/glass-tones'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Upload, FileText, Image, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react'
+import { Upload, FileText, Image as ImageIcon, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react'
+import Image from 'next/image'
 import { formatNumber } from '@/lib/utils'
 import { AIPoweredBadge } from '@/components/ui/ai-powered-badge'
 
@@ -235,7 +236,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                   onClick={() => setImportMode('image')}
                   className="flex-1"
                 >
-                  <Image className="w-4 h-4 mr-2" />
+                  <ImageIcon className="w-4 h-4 mr-2" />
                   圖片上傳
                 </Button>
               </div>
@@ -301,10 +302,12 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                   >
                     {importImage ? (
                       <div className="space-y-4">
-                        <img 
-                          src={importImage} 
-                          alt="配方圖片預覽" 
-                          className="max-w-full max-h-64 mx-auto rounded-lg shadow-sm"
+                        <Image
+                          src={importImage}
+                          alt="配方圖片預覽"
+                          width={512}
+                          height={512}
+                          className="max-w-full max-h-64 mx-auto rounded-lg shadow-sm object-contain"
                         />
                         <div className="flex gap-2 justify-center">
                           <Button
@@ -319,7 +322,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <Upload className="w-12 h-12 mx-auto text-gray-400" />
+                        <Upload className="w-12 h-12 mx-auto text-gray-400" aria-hidden="true" />
                         <div>
                           <p className="text-sm text-gray-600 mb-2">
                             點擊選擇圖片或拖拽到此處
@@ -339,7 +342,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                           variant="outline"
                           onClick={() => document.getElementById('import-image')?.click()}
                         >
-                          <Image className="w-4 h-4 mr-2" />
+                        <ImageIcon className="w-4 h-4 mr-2" />
                           選擇圖片
                         </Button>
                       </div>
@@ -360,7 +363,7 @@ export function SmartRecipeImport({ onImport, disabled }: SmartRecipeImportProps
                       </>
                     ) : (
                       <>
-                        <Image className="w-4 h-4 mr-2 icon-micro-bounce" />
+                        <ImageIcon className="w-4 h-4 mr-2 icon-micro-bounce" />
                         解析圖片
                       </>
                     )}

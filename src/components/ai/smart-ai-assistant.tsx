@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -26,16 +26,12 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
   const [isOpen, setIsOpen] = useState(false)
   const [enableReasoning, setEnableReasoning] = useState(false)
   const pathname = usePathname()
-  
-  // 檢查當前頁面是否應該顯示 Smart AI
-  const shouldShow = (includePathnames && includePathnames.length > 0)
-    ? includePathnames.some(page => pathname.startsWith(page))
-    : showOnPages.some(page => pathname.startsWith(page))
-  
-  if (!shouldShow) {
-    return null
-  }
-  
+
+  const shouldShow = useMemo(() => {
+    const targets = includePathnames && includePathnames.length > 0 ? includePathnames : showOnPages
+    return targets.some(page => pathname.startsWith(page))
+  }, [includePathnames, showOnPages, pathname])
+
   const {
     messages,
     input,
@@ -60,10 +56,10 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
     exportConversation,
     retryLastMessage
   } = useAIAssistant({
-    orders: orders,
-    currentOrder: currentOrder,
+    orders,
+    currentOrder,
     context: pageData,
-    enableReasoning: enableReasoning,
+    enableReasoning,
     initialAssistantMessage: {
       content: '您好！我是 Smart AI 助手，專門協助您分析訂單數據、客戶統計和生產效率。請選擇以下問題開始，或直接輸入您的問題：',
       suggestions: [
@@ -76,6 +72,10 @@ export function SmartAIAssistant({ orders, currentOrder, pageData, showOnPages =
       ]
     }
   })
+
+  if (!shouldShow) {
+    return null
+  }
 
   const handleClose = () => {
     setIsOpen(false)

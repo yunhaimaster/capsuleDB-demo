@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useMemo } from 'react'
 
 import { useAuth } from '@/components/auth/auth-provider'
@@ -68,11 +69,13 @@ export function LiquidGlassFooter({ className = '' }: LiquidGlassFooterProps) {
         {/* 公司信息 */}
         <div className="liquid-glass-footer-brand">
         <div className="flex items-center space-x-2 mb-4">
-          <div className="w-8 h-8">
-            <img 
+          <div className="w-8 h-8 relative">
+            <Image 
               src="/images/EasyHealth_Logo_only.svg" 
               alt="Easy Health Logo" 
-              className="w-full h-full object-contain"
+              fill
+              className="object-contain"
+              priority
             />
           </div>
           <div>

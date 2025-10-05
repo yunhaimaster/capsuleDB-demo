@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { ProductionOrder } from '@/types'
 import { Button } from '@/components/ui/button'
 import { LinkedFilter } from '@/components/ui/linked-filter'
@@ -62,7 +62,7 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
   const [capsuleTypeOptions, setCapsuleTypeOptions] = useState<Array<{value: string, label: string}>>([])
 
   // Fetch orders data
-  const fetchOrders = async (newFilters = filters) => {
+  const fetchOrders = useCallback(async (newFilters = filters) => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -83,10 +83,10 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters])
 
   // Fetch dropdown options
-  const fetchOptions = async () => {
+  const fetchOptions = useCallback(async () => {
     try {
       const response = await fetch('/api/orders/options')
       if (response.ok) {
@@ -99,31 +99,31 @@ export function ResponsiveOrdersList({ initialOrders = [], initialPagination }: 
     } catch (error) {
       console.error('Error fetching options:', error)
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchOrders()
     fetchOptions()
-  }, [])
+  }, [fetchOrders, fetchOptions])
 
-  const handleSearch = (newFilters: any) => {
+  const handleSearch = useCallback((newFilters: any) => {
     const updatedFilters = { ...filters, ...newFilters, page: 1 }
     setFilters(updatedFilters)
     fetchOrders(updatedFilters)
-  }
+  }, [fetchOrders, filters])
 
-  const handleLimitChange = (limit: number) => {
+  const handleLimitChange = useCallback((limit: number) => {
     const updatedFilters = { ...filters, limit, page: 1 }
     setFilters(updatedFilters)
     fetchOrders(updatedFilters)
-  }
+  }, [fetchOrders, filters])
 
-  const handleSort = (field: string) => {
+  const handleSort = useCallback((field: string) => {
     const newOrder = filters.sortBy === field && filters.sortOrder === 'asc' ? 'desc' : 'asc'
     const newFilters = { ...filters, sortBy: field, sortOrder: newOrder }
     setFilters(newFilters)
     fetchOrders(newFilters)
-  }
+  }, [fetchOrders, filters])
 
   const getSortIcon = (field: string) => {
     if (filters.sortBy !== field) return <ArrowUpDown className="h-3 w-3" />

@@ -8,11 +8,11 @@ import { type NavigationLink } from '@/data/navigation'
 
 interface NavDropdownProps {
   label: string
-  children: NavigationLink[]
+  items: NavigationLink[]
   active?: boolean
 }
 
-export function NavDropdown({ label, children, active = false }: NavDropdownProps) {
+export function NavDropdown({ label, items, active = false }: NavDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -49,7 +49,7 @@ export function NavDropdown({ label, children, active = false }: NavDropdownProp
 
       {isOpen && (
         <div className="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 z-50 overflow-hidden">
-          {children.map((child) => (
+          {items.map((child) => (
             <Link
               key={child.href}
               href={child.href}

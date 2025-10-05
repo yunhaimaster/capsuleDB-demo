@@ -88,7 +88,7 @@ export function LiquidGlassNav({
               <NavDropdown
                 key={link.href}
                 label={link.label}
-                children={link.children}
+                items={link.children}
                 active={link.active}
               />
             ) : (
