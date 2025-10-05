@@ -18,6 +18,48 @@ import { sumWorkUnits } from '@/lib/worklog'
 import { fetchWithTimeout } from '@/lib/api-client'
 import { DateTime } from 'luxon'
 
+type StatusKey = 'inProgress' | 'notStarted' | 'completed'
+
+const STATUS_PRIORITY: Record<StatusKey, number> = {
+  inProgress: 0,
+  notStarted: 1,
+  completed: 2,
+}
+
+const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
+  const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
+  const completed = Boolean(order.completionDate)
+  if (hasWorklog && !completed) return 'inProgress'
+  if (!completed) return 'notStarted'
+  return 'completed'
+}
+
+const reorderOrdersByStatus = (orders: ProductionOrder[]) => {
+  const dateFromOrder = (order: ProductionOrder) => {
+    if (order.completionDate) {
+      return DateTime.fromISO(typeof order.completionDate === 'string' ? order.completionDate : order.completionDate.toISOString(), { zone: 'Asia/Hong_Kong' })
+    }
+    return DateTime.fromISO(typeof order.createdAt === 'string' ? order.createdAt : order.createdAt.toISOString(), { zone: 'Asia/Hong_Kong' })
+  }
+
+  return [...orders].sort((a, b) => {
+    const statusA = resolveOrderStatus(a)
+    const statusB = resolveOrderStatus(b)
+    if (statusA !== statusB) {
+      return STATUS_PRIORITY[statusA] - STATUS_PRIORITY[statusB]
+    }
+
+    const dateA = dateFromOrder(a)
+    const dateB = dateFromOrder(b)
+
+    if (dateA.isValid && dateB.isValid) {
+      return dateB.toMillis() - dateA.toMillis()
+    }
+
+    return 0
+  })
+}
+
 const SmartAIAssistant = dynamic(() => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant), {
   ssr: false,
   loading: () => (
@@ -213,62 +255,50 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 xl:gap-8 items-stretch">
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full px-4 py-5 sm:px-5 sm:py-6">
-          <div className="liquid-glass-content flex h-full flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce">
-                <Plus className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
-              </div>
-              <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-base font-semibold text-[rgb(99,102,241)]">新增配方</h3>
-                <p className="text-xs sm:text-sm md:text-sm text-[rgb(99,102,241)]/80">建立新記錄</p>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 md:gap-5 items-stretch">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive px-4 py-4 sm:px-5 sm:py-5 shadow-[0_8px_18px_rgba(45,85,155,0.15)]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce h-9 w-9 sm:h-10 sm:w-10">
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
-            <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
-              建立新的膠囊配方記錄，包含原料配置與生產參數
-            </p>
-            <div className="mt-auto">
-              <Link href="/orders/new">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
-                  開始建立
-                </Button>
-              </Link>
+            <div className="text-right space-y-0.5">
+              <h3 className="text-sm font-semibold text-[rgb(99,102,241)]">新增配方</h3>
+              <p className="text-[11px] text-[rgb(99,102,241)]/70">快速建立新記錄</p>
             </div>
           </div>
+          <p className="text-[11px] text-slate-600 leading-relaxed mb-3">
+            建立新的膠囊配方記錄，包含原料配置與生產參數。
+          </p>
+          <Button asChild className="w-full text-xs py-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110">
+            <Link href="/orders/new">開始建立</Link>
+          </Button>
         </div>
 
-        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full px-4 py-5 sm:px-5 sm:py-6">
-          <div className="liquid-glass-content flex h-full flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <div className="icon-container icon-container-gradient-emerald icon-micro-bounce">
-                <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
-              </div>
-              <div className="text-right">
-                <h3 className="text-sm sm:text-base md:text-base font-semibold text-[rgb(16,185,129)]">生產記錄</h3>
-                <p className="text-xs sm:text-sm md:text-sm text-[rgb(16,185,129)]/80">檢視管理</p>
-              </div>
+        <div className="liquid-glass-card liquid-glass-card-interactive px-4 py-4 sm:px-5 sm:py-5 shadow-[0_8px_18px_rgba(13,148,136,0.18)]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="icon-container icon-container-gradient-emerald icon-micro-bounce h-9 w-9 sm:h-10 sm:w-10">
+              <ClipboardList className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
             </div>
-            <p className="text-xs sm:text-xs md:text-sm mb-3 sm:mb-3 md:mb-4 leading-relaxed opacity-90">
-              檢視與管理所有生產記錄，支援搜尋、篩選與編輯
-            </p>
-            <div className="mt-auto">
-              <Link href="/orders">
-                <Button className="ripple-effect btn-micro-hover micro-brand-glow w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:brightness-110 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-sm py-2 sm:py-2 md:py-3">
-                  查看記錄
-                </Button>
-              </Link>
+            <div className="text-right space-y-0.5">
+              <h3 className="text-sm font-semibold text-emerald-600">生產記錄</h3>
+              <p className="text-[11px] text-emerald-600/70">檢視管理</p>
             </div>
           </div>
+          <p className="text-[11px] text-slate-600 leading-relaxed mb-3">
+            檢視與管理所有生產記錄，支援搜尋、篩選與編輯。
+          </p>
+          <Button asChild className="w-full text-xs py-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:brightness-110">
+            <Link href="/orders">查看記錄</Link>
+          </Button>
         </div>
       </div>
 
       {/* 最近紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1.1fr)] gap-3.5 sm:gap-4 md:gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1.05fr)] gap-3.5 sm:gap-4 md:gap-5">
         {/* 最近生產紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content p-4 sm:p-5">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
+          <div className="liquid-glass-content p-4 sm:p-4.5">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
               <div>
                 <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
                   <FileText className="h-4 w-4 text-cyan-600" />
@@ -316,7 +346,7 @@ export default function HomePage() {
 
                   return (
                     <Link key={order.id} href={`/orders/${order.id}`} className="block">
-                      <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_16px_rgba(15,32,77,0.07)] hover:shadow-[0_10px_22px_rgba(45,85,155,0.12)]">
+                      <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_5px_14px_rgba(15,32,77,0.06)] hover:shadow-[0_10px_22px_rgba(45,85,155,0.12)]">
                         <div className="p-3 space-y-2">
                           <div className="flex items-start justify-between gap-2.5">
                             <div className="min-w-0 space-y-1">
@@ -336,7 +366,7 @@ export default function HomePage() {
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-slate-600">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] sm:text-[11px] text-slate-600">
                             <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
                               <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">訂單數量</p>
                               <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
@@ -355,7 +385,7 @@ export default function HomePage() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 text-[11px] text-slate-500">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[10px] sm:text-[11px] text-slate-500">
                             <div className="flex items-center gap-2">
                               <Package2 className="h-3.5 w-3.5 text-slate-400" />
                               <span>
@@ -373,7 +403,7 @@ export default function HomePage() {
                           </div>
 
                           {latestWorklog && (
-                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/10 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2 py-1.5 text-[11px] text-indigo-600 flex items-center justify-between">
+                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/10 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-1.5 text-[11px] text-indigo-600 flex items-center justify-between">
                               <span className="font-medium">最新工時</span>
                               <span>{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime} - {latestWorklog.endTime}</span>
                             </div>
@@ -398,8 +428,8 @@ export default function HomePage() {
         </div>
         {/* 最近工時紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content p-4 sm:p-5">
-            <div className="flex items-start justify-between gap-3 mb-5">
+          <div className="liquid-glass-content p-4 sm:p-4.5">
+            <div className="flex items-start justify-between gap-3 mb-4">
               <div>
                 <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
                   <Clock3 className="h-4 w-4 text-indigo-500" />
@@ -426,52 +456,53 @@ export default function HomePage() {
                 <div className="skeleton skeleton-text-sm" />
               </div>
             ) : recentWorklogs.length > 0 ? (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {recentWorklogs.map((worklog) => (
-                  <Link key={worklog.id} href={`/orders/${worklog.orderId}`} className="block">
-                    <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
-                      <div className="p-3.5 space-y-2.5">
-                        <div className="flex items-start justify-between gap-2.5">
-                          <div className="min-w-0 space-y-1">
-                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
-                              <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
-                              <span>{formatDateOnly(worklog.workDate)}</span>
-                            </div>
-                            <h4 className="text-sm font-semibold text-slate-900 truncate">
-                              {worklog.order?.productName || '未指派訂單'}
-                            </h4>
-                            <p className="text-[12px] text-slate-500 truncate">
-                              客戶：{worklog.order?.customerName || '未填寫'}
-                            </p>
+                  <div
+                    key={worklog.id}
+                    className="rounded-2xl bg-white/55 border border-white/60 px-3 py-3 shadow-[0_5px_14px_rgba(15,32,77,0.06)]"
+                  >
+                    <div className="p-3.5 space-y-2.5">
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
+                            <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+                            <span>{formatDateOnly(worklog.workDate)}</span>
                           </div>
-                          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
-                            <Timer className="h-3.5 w-3.5" />
-                            {worklog.startTime} - {worklog.endTime}
-                          </span>
+                          <h4 className="text-sm font-semibold text-slate-900 truncate">
+                            {worklog.order?.productName || '未指派訂單'}
+                          </h4>
+                          <p className="text-[12px] text-slate-500 truncate">
+                            客戶：{worklog.order?.customerName || '未填寫'}
+                          </p>
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] text-slate-600">
-                          <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
-                            <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">有效工時</p>
-                            <p className="text-sm font-semibold text-slate-900">{(worklog.effectiveMinutes / 60).toFixed(1)} 工時</p>
-                          </div>
-                          <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
-                            <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">填報人數</p>
-                            <p className="text-sm font-semibold text-slate-900">{worklog.headcount} 人</p>
-                          </div>
-                        </div>
-
-                        {worklog.notes && (
-                          <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600">
-                            <span className="font-medium">備註</span>
-                            <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 line-clamp-2">
-                              {worklog.notes}
-                            </p>
-                          </div>
-                        )}
+                        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-semibold bg-gradient-to-r from-indigo-500/80 to-purple-500/90 text-white">
+                          <Timer className="h-3.5 w-3.5" />
+                          {worklog.startTime} - {worklog.endTime}
+                        </span>
                       </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] text-slate-600">
+                        <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                          <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">有效工時</p>
+                          <p className="text-sm font-semibold text-slate-900">{(worklog.effectiveMinutes / 60).toFixed(1)} 工時</p>
+                        </div>
+                        <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                          <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">填報人數</p>
+                          <p className="text-sm font-semibold text-slate-900">{worklog.headcount} 人</p>
+                        </div>
+                      </div>
+
+                      {worklog.notes && (
+                        <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600">
+                          <span className="font-medium">備註</span>
+                          <p className="mt-1 text-[11px] leading-relaxed text-indigo-700 line-clamp-2">
+                            {worklog.notes}
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             ) : (

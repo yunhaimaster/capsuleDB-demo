@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 
-import { format } from 'date-fns'
-import { zhTW } from 'date-fns/locale'
 import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download, Filter, RefreshCw, Loader2, ChevronDown } from 'lucide-react'
 import { DateTime } from 'luxon'
 
@@ -76,10 +74,7 @@ export function ResponsiveWorklogsList() {
         : []
       setWorklogs(normalizedWorklogs)
       setPagination(data.pagination)
-      showToast({
-        title: '已更新工時紀錄',
-        description: '最新工時資料已載入。'
-      })
+
     } catch (err) {
       if ((err as DOMException)?.name === 'AbortError') {
         return
