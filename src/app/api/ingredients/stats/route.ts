@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+function assertDatabaseUrl() {
+  const url = process.env.DATABASE_URL
+  if (!url || (!url.startsWith('postgres://') && !url.startsWith('postgresql://'))) {
+    throw new Error('DATABASE_URL is misconfigured. Please ensure it uses postgres:// or postgresql:// protocol.')
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
+    assertDatabaseUrl()
     // 獲取所有原料使用統計
     const ingredientStats = await prisma.ingredient.groupBy({
       by: ['materialName'],
@@ -59,7 +67,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching ingredient stats:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch ingredient statistics' },
+      { error: 'Failed to fetch ingredient statistics', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

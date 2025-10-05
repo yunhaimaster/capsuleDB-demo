@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { WeightUnit } from "@/types"
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
-import { v4 as uuid } from 'uuid'
+import { randomUUID } from 'crypto'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -116,7 +116,7 @@ export function generateCSV(data: any[], headers: string[]): string {
 }
 
 export function generateUUID() {
-  return uuid()
+  return randomUUID()
 }
 
 export function downloadFile(blob: Blob, filename: string, mimeType?: string) {
