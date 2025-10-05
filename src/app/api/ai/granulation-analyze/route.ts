@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -226,7 +227,9 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('製粒分析總體錯誤:', error)
+    logger.error('製粒分析總體錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json({ error: '製粒分析失敗，請稍後再試' }, { status: 500 })
   }
 }

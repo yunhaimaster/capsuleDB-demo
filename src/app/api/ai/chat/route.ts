@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -141,11 +142,15 @@ AI回答：${aiResponse}
       }
     } else {
       const errorText = await suggestionsResponse.text()
-      console.error('建議 API 失敗:', suggestionsResponse.status)
-      console.error('建議 API 錯誤回應:', errorText)
+      logger.error('建議 API 失敗', {
+        status: suggestionsResponse.status,
+        errorText
+      })
     }
   } catch (error) {
-    console.error('生成動態建議時發生錯誤:', error)
+    logger.error('生成動態建議時發生錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
   }
 
   if (suggestions.length === 0) {
@@ -217,7 +222,9 @@ async function streamOpenRouterResponse(
         }
       }
     } catch (error) {
-      console.error('解析流資料時出錯:', error)
+      logger.error('解析流資料時出錯', {
+        error: error instanceof Error ? error.message : String(error)
+      })
     }
 
     return 'continue'
@@ -261,8 +268,8 @@ export async function POST(request: NextRequest) {
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
-    if (!OPENROUTER_API_KEY) {
-      console.error('OpenRouter API 密鑰未配置')
+  if (!OPENROUTER_API_KEY) {
+    logger.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
         { error: 'AI 服務暫時無法使用，請稍後再試或聯繫技術支援' },
         { status: 500 }
@@ -488,7 +495,10 @@ ${JSON.stringify(cleanedOrders, null, 2)}
 
     if (!upstreamResponse.ok || !upstreamResponse.body) {
       const errorText = await upstreamResponse.text()
-      console.error('OpenRouter API 錯誤:', errorText)
+      logger.error('OpenRouter API 錯誤', {
+        status: upstreamResponse.status,
+        errorText
+      })
       
       // 檢查是否是認證錯誤
       if (upstreamResponse.status === 401) {
@@ -510,7 +520,9 @@ ${JSON.stringify(cleanedOrders, null, 2)}
           controller.enqueue(`event: done\ndata: {"success":true}\n\n`)
           controller.close()
         } catch (error) {
-          console.error('流式處理時發生錯誤:', error)
+          logger.error('流式處理時發生錯誤', {
+            error: error instanceof Error ? error.message : String(error)
+          })
           controller.enqueue(`event: error\ndata: {"error":"AI 服務暫時無法回應，請稍後再試"}\n\n`)
           controller.close()
         }
@@ -525,7 +537,9 @@ ${JSON.stringify(cleanedOrders, null, 2)}
       }
     })
   } catch (error) {
-    console.error('AI 聊天錯誤:', error)
+    logger.error('AI 聊天錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { error: 'AI 助手暫時無法回應，請稍後再試或重試' },
       { status: 500 }

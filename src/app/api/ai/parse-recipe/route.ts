@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
     const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions'
 
     if (!OPENROUTER_API_KEY) {
-      console.error('OpenRouter API 密鑰未配置')
+      logger.error('OpenRouter API 密鑰未配置')
       return NextResponse.json(
         { error: 'AI 服務暫時無法使用，請稍後再試' },
         { status: 500 }
@@ -185,22 +186,25 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('OpenRouter API 錯誤:', errorText)
+      logger.error('OpenRouter API 錯誤', { errorText })
       throw new Error('OpenRouter API 請求失敗')
     }
 
     const data = await response.json()
-    console.log('配方解析 API 回應:', JSON.stringify(data, null, 2))
+    logger.debug('配方解析 API 回應', {
+      hasChoices: Boolean(data?.choices),
+      rawSize: JSON.stringify(data).length
+    })
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('API 回應結構無效:', data)
+      logger.error('API 回應結構無效', { data })
       throw new Error('API 回應結構無效')
     }
     
     let aiResponse = data.choices[0].message.content
     
     if (!aiResponse || aiResponse.trim() === '') {
-      console.error('AI 回應為空')
+      logger.error('AI 回應為空')
       throw new Error('AI 回應為空')
     }
 
@@ -223,8 +227,10 @@ export async function POST(request: NextRequest) {
         throw new Error('無法找到有效的 JSON 格式')
       }
     } catch (parseError) {
-      console.error('JSON 解析錯誤:', parseError)
-      console.error('原始回應:', aiResponse)
+      logger.error('JSON 解析錯誤', {
+        error: parseError instanceof Error ? parseError.message : String(parseError),
+        responseLength: aiResponse.length
+      })
       
       // 如果 JSON 解析失敗，嘗試手動構建基本結構
       const lines = aiResponse.split('\n').filter((line: string) => line.trim())
@@ -283,7 +289,9 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('配方解析錯誤:', error)
+    logger.error('配方解析錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { error: '配方解析失敗，請檢查輸入格式或稍後再試' },
       { status: 500 }

@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { worklogFiltersSchema } from '@/lib/validations'
 import { formatISO } from 'date-fns'
 import { generateCSV } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -121,7 +122,9 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('載入工時紀錄錯誤:', error)
+    logger.error('載入工時紀錄錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json({ error: '載入工時紀錄失敗' }, { status: 500 })
   }
 }
@@ -256,7 +259,9 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('匯出工時錯誤:', error)
+    logger.error('匯出工時錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json({ error: '匯出工時失敗' }, { status: 500 })
   }
 }

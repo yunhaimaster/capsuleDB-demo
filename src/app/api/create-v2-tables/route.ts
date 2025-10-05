@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('開始創建 v2.0 數據庫表...')
+    logger.info('開始創建 v2.0 數據庫表')
 
     // 創建 v2.0 表的 SQL 語句（分開執行）
     const createTablesSQL = [
@@ -152,12 +153,18 @@ export async function POST(request: NextRequest) {
           createdTables.push(tableName)
         }
       } catch (error) {
-        console.warn(`創建表失敗: ${sql}`, error)
+        logger.warn('創建表失敗', {
+          table: sql.match(/CREATE TABLE IF NOT EXISTS "(\w+)"/)?.[1],
+          error: error instanceof Error ? error.message : String(error)
+        })
         // 繼續執行其他表的創建
       }
     }
 
-    console.log('v2.0 表創建完成:', createdTables)
+    logger.info('v2.0 表創建完成', {
+      tablesCreated: createdTables,
+      tableCount: createdTables.length
+    })
 
     return NextResponse.json({
       success: true,
@@ -168,7 +175,9 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('創建 v2.0 表錯誤:', error)
+    logger.error('創建 v2.0 表錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { 
         success: false, 

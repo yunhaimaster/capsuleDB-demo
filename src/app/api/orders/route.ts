@@ -4,6 +4,7 @@ import { productionOrderSchema, searchFiltersSchema, worklogSchema } from '@/lib
 import { SearchFilters } from '@/types'
 import { calculateWorkUnits } from '@/lib/worklog'
 import { DateTime } from 'luxon'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -173,7 +174,9 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('載入訂單錯誤:', error)
+    logger.error('載入訂單錯誤', {
+      error: error instanceof Error ? error.message : error
+    })
     return NextResponse.json(
       { error: '載入訂單失敗' },
       { status: 500 }
@@ -183,15 +186,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('POST /api/orders - Starting request')
-    
     const body = await request.json()
-    console.log('Request body:', body)
-    
     const validatedData = productionOrderSchema.parse(body)
-    console.log('Validated data:', validatedData)
-    console.log('Completion date type:', typeof validatedData.completionDate)
-    console.log('Completion date value:', validatedData.completionDate)
+    logger.info('POST /api/orders - Payload validated', {
+      hasWorklogs: Array.isArray((validatedData as typeof validatedData & { worklogs?: unknown[] }).worklogs),
+      ingredientCount: validatedData.ingredients.length,
+      completionDateProvided: Boolean(validatedData.completionDate)
+    })
     
     // Calculate weights
     const unitWeightMg = validatedData.ingredients.reduce(
@@ -200,7 +201,7 @@ export async function POST(request: NextRequest) {
     )
     const batchTotalWeightMg = unitWeightMg * validatedData.productionQuantity
     
-    console.log('Calculated weights:', { unitWeightMg, batchTotalWeightMg })
+    logger.debug('Calculated production order weights', { unitWeightMg, batchTotalWeightMg })
     
     const { worklogs = [], ...orderPayload } = validatedData as typeof validatedData & { worklogs?: any[] }
 
@@ -262,7 +263,11 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log('Order created successfully:', order)
+    logger.info('Order created successfully', {
+      orderId: order.id,
+      customerName: order.customerName,
+      worklogCount: order.worklogs?.length ?? 0
+    })
 
     // 確保日期正確序列化
     const serializedOrder = {
@@ -277,11 +282,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(serializedOrder, { status: 201 })
   } catch (error) {
-    console.error('創建訂單錯誤:', error)
-    console.error('錯誤詳情:', {
+    logger.error('創建訂單錯誤', {
       name: error instanceof Error ? error.name : '未知',
       message: error instanceof Error ? error.message : '未知錯誤',
-      stack: error instanceof Error ? error.stack : '無堆疊追蹤'
+      stack: error instanceof Error ? error.stack : undefined
     })
     
     if (error instanceof Error && error.name === 'ZodError') {

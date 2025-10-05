@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('開始 v2.0 數據庫遷移...')
+    logger.info('開始 v2.0 數據庫遷移')
 
     // 檢查並創建 v2.0 表
     const migrations = []
@@ -13,63 +14,63 @@ export async function POST(request: NextRequest) {
     // 1. 檢查 AIRecipe 表
     try {
       await prisma.aIRecipe.findFirst()
-      console.log('AIRecipe 表已存在')
+      logger.info('AIRecipe 表已存在')
     } catch (error) {
-      console.log('AIRecipe 表不存在，需要創建')
+      logger.info('AIRecipe 表不存在，需要創建')
       migrations.push('AIRecipe 表')
     }
 
     // 2. 檢查 IngredientPrice 表
     try {
       await prisma.ingredientPrice.findFirst()
-      console.log('IngredientPrice 表已存在')
+      logger.info('IngredientPrice 表已存在')
     } catch (error) {
-      console.log('IngredientPrice 表不存在，需要創建')
+      logger.info('IngredientPrice 表不存在，需要創建')
       migrations.push('IngredientPrice 表')
     }
 
     // 3. 檢查 ProductEfficacy 表
     try {
       await prisma.productEfficacy.findFirst()
-      console.log('ProductEfficacy 表已存在')
+      logger.info('ProductEfficacy 表已存在')
     } catch (error) {
-      console.log('ProductEfficacy 表不存在，需要創建')
+      logger.info('ProductEfficacy 表不存在，需要創建')
       migrations.push('ProductEfficacy 表')
     }
 
     // 4. 檢查 WorkOrder 表
     try {
       await prisma.workOrder.findFirst()
-      console.log('WorkOrder 表已存在')
+      logger.info('WorkOrder 表已存在')
     } catch (error) {
-      console.log('WorkOrder 表不存在，需要創建')
+      logger.info('WorkOrder 表不存在，需要創建')
       migrations.push('WorkOrder 表')
     }
 
     // 5. 檢查 QCFile 表
     try {
       await prisma.qCFile.findFirst()
-      console.log('QCFile 表已存在')
+      logger.info('QCFile 表已存在')
     } catch (error) {
-      console.log('QCFile 表不存在，需要創建')
+      logger.info('QCFile 表不存在，需要創建')
       migrations.push('QCFile 表')
     }
 
     // 6. 檢查 ProductDatabase 表
     try {
       await prisma.productDatabase.findFirst()
-      console.log('ProductDatabase 表已存在')
+      logger.info('ProductDatabase 表已存在')
     } catch (error) {
-      console.log('ProductDatabase 表不存在，需要創建')
+      logger.info('ProductDatabase 表不存在，需要創建')
       migrations.push('ProductDatabase 表')
     }
 
     // 7. 檢查 AdCopy 表
     try {
       await prisma.adCopy.findFirst()
-      console.log('AdCopy 表已存在')
+      logger.info('AdCopy 表已存在')
     } catch (error) {
-      console.log('AdCopy 表不存在，需要創建')
+      logger.info('AdCopy 表不存在，需要創建')
       migrations.push('AdCopy 表')
     }
 
@@ -89,7 +90,9 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('v2.0 數據庫遷移錯誤:', error)
+    logger.error('v2.0 數據庫遷移錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { 
         success: false, 

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { productionOrderSchema, worklogSchema } from '@/lib/validations'
 import { calculateWorkUnits } from '@/lib/worklog'
 import { DateTime } from 'luxon'
+import { logger } from '@/lib/logger'
 
 export async function GET(
   request: NextRequest,
@@ -43,7 +44,9 @@ export async function GET(
 
     return NextResponse.json(serializedOrder)
   } catch (error) {
-    console.error('載入訂單錯誤:', error)
+    logger.error('載入訂單錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { error: '載入訂單失敗' },
       { status: 500 }
@@ -143,7 +146,9 @@ export async function PUT(
 
     return NextResponse.json(serializedOrder)
   } catch (error) {
-    console.error('更新訂單錯誤:', error)
+    logger.error('更新訂單錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     if (error instanceof Error && error.name === 'ZodError') {
       return NextResponse.json(
         { error: '驗證失敗', details: error.message },
@@ -168,7 +173,9 @@ export async function DELETE(
 
     return NextResponse.json({ message: '訂單刪除成功' })
   } catch (error) {
-    console.error('刪除訂單錯誤:', error)
+    logger.error('刪除訂單錯誤', {
+      error: error instanceof Error ? error.message : String(error)
+    })
     return NextResponse.json(
       { error: '刪除訂單失敗' },
       { status: 500 }
