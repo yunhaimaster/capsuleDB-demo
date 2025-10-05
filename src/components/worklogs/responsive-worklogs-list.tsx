@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
 import { CalendarDays, Clock3, ArrowUpDown, ArrowUp, ArrowDown, Download, Filter, RefreshCw, Loader2, ChevronDown } from 'lucide-react'
+import { DateTime } from 'luxon'
 
 import { WorklogWithOrder } from '@/types'
 import { WorklogFilter } from '@/components/worklogs/worklog-filter'
@@ -67,7 +68,13 @@ export function ResponsiveWorklogsList() {
       }
 
       const data = payload.data
-      setWorklogs(Array.isArray(data.worklogs) ? data.worklogs : [])
+      const normalizedWorklogs = Array.isArray(data.worklogs)
+        ? data.worklogs.map((log: any) => ({
+            ...log,
+            workDate: log.workDate,
+          }))
+        : []
+      setWorklogs(normalizedWorklogs)
       setPagination(data.pagination)
       showToast({
         title: '已更新工時紀錄',
@@ -178,8 +185,9 @@ export function ResponsiveWorklogsList() {
   }, [sortOrder])
 
   const formatWorkDate = (value: string) => {
-    const date = new Date(value)
-    return format(date, 'yyyy/MM/dd (EEE)', { locale: zhTW })
+    const date = DateTime.fromISO(value, { zone: 'Asia/Hong_Kong' })
+    if (!date.isValid) return value
+    return date.toFormat('yyyy/MM/dd (ccc)', { locale: 'zh-Hant' })
   }
 
   const pageNumbers = useMemo(() => {

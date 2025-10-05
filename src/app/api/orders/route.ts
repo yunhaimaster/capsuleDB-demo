@@ -158,8 +158,12 @@ export async function GET(request: NextRequest) {
       updatedAt: order.updatedAt.toISOString(),
       completionDate: order.completionDate ? 
         (order.completionDate instanceof Date ? 
-          order.completionDate.toISOString().split('T')[0] : 
+          DateTime.fromJSDate(order.completionDate, { zone: 'Asia/Hong_Kong' }).toFormat('yyyy-MM-dd') : 
           order.completionDate) : null,
+      worklogs: order.worklogs?.map((log) => ({
+        ...log,
+        workDate: DateTime.fromJSDate(new Date(log.workDate), { zone: 'Asia/Hong_Kong' }).toFormat('yyyy-MM-dd'),
+      })),
       totalWorkUnits: order.worklogs?.reduce((sum, log) => sum + (log.calculatedWorkUnits || 0), 0) ?? 0
     }))
 

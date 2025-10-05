@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { jsonSuccess, jsonError } from '@/lib/api-response'
+import { DateTime } from 'luxon'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,7 +74,7 @@ export async function GET(request: NextRequest) {
     return jsonSuccess({
       worklogs: worklogs.map((log) => ({
         ...log,
-        workDate: log.workDate.toISOString().split('T')[0],
+        workDate: DateTime.fromJSDate(log.workDate, { zone: 'Asia/Hong_Kong' }).toFormat('yyyy-MM-dd'),
         createdAt: log.createdAt.toISOString(),
         updatedAt: log.updatedAt.toISOString(),
       })),
@@ -157,7 +158,7 @@ export async function POST(request: NextRequest) {
       const csvRows = [
         ['日期', '訂單', '客戶', '開始', '結束', '人數', '工時', '備註'],
         ...worklogs.map((log) => [
-          log.workDate.toISOString().split('T')[0],
+          DateTime.fromJSDate(log.workDate, { zone: 'Asia/Hong_Kong' }).toFormat('yyyy-MM-dd'),
           log.order?.productName || '-',
           log.order?.customerName || '-',
           log.startTime,

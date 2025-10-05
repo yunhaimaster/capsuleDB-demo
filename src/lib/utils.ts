@@ -31,11 +31,22 @@ export function formatDate(date: Date | string | null | undefined): string {
 
 export function formatDateOnly(date: Date | string | null | undefined): string {
   if (!date) return '-'
-  
-  const dateObj = typeof date === 'string' ? new Date(date) : date
-  
+
+  let dateObj: Date
+
+  if (typeof date === 'string') {
+    if (date.includes('T')) {
+      dateObj = new Date(date)
+    } else {
+      const [year, month, day] = date.split('-').map(Number)
+      dateObj = new Date(year, (month ?? 1) - 1, day ?? 1)
+    }
+  } else {
+    dateObj = date
+  }
+
   if (isNaN(dateObj.getTime())) return '-'
-  
+
   return new Intl.DateTimeFormat('zh-TW', {
     year: 'numeric',
     month: '2-digit',

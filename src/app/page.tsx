@@ -16,6 +16,7 @@ import { ProductionOrder, OrderWorklog, WorklogWithOrder } from '@/types'
 import Link from 'next/link'
 import { sumWorkUnits } from '@/lib/worklog'
 import { fetchWithTimeout } from '@/lib/api-client'
+import { DateTime } from 'luxon'
 
 const SmartAIAssistant = dynamic(() => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant), {
   ssr: false,
@@ -34,6 +35,19 @@ const OrderAIAssistant = dynamic(() => import('@/components/ai/order-ai-assistan
     </div>
   ),
 })
+
+const renderWorklogOrderLabel = (worklog: WorklogWithOrder) => {
+  if (worklog.order) {
+    return `${worklog.order.productName || '未命名產品'} · ${worklog.order.customerName || '未知客戶'}`
+  }
+  return '未關聯訂單'
+}
+
+const formatWorklogDateDisplay = (workDate: string) => {
+  const date = DateTime.fromISO(workDate, { zone: 'Asia/Hong_Kong' })
+  if (!date.isValid) return workDate
+  return date.toFormat('yyyy/MM/dd (ccc)', { locale: 'zh-Hant' })
+}
 
 // 訂單詳情檢視組件
 function OrderDetailView({ order }: { order: ProductionOrder }) {
@@ -199,8 +213,8 @@ export default function HomePage() {
       <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
 
       {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 xl:gap-12 items-stretch">
-        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6 xl:gap-8 items-stretch">
+        <div className="liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group h-full px-4 py-5 sm:px-5 sm:py-6">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce">
@@ -224,7 +238,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full">
+        <div className="liquid-glass-card liquid-glass-card-elevated liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group h-full px-4 py-5 sm:px-5 sm:py-6">
           <div className="liquid-glass-content flex h-full flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="icon-container icon-container-gradient-emerald icon-micro-bounce">
@@ -250,10 +264,10 @@ export default function HomePage() {
       </div>
 
       {/* 最近紀錄區塊 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.85fr)_minmax(0,1.05fr)] gap-4 sm:gap-5 md:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1.1fr)] gap-3.5 sm:gap-4 md:gap-5">
         {/* 最近生產紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content">
+          <div className="liquid-glass-content p-4 sm:p-5">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
               <div>
                 <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
@@ -302,8 +316,8 @@ export default function HomePage() {
 
                   return (
                     <Link key={order.id} href={`/orders/${order.id}`} className="block">
-                      <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
-                        <div className="p-3.5 space-y-2.5">
+                      <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_16px_rgba(15,32,77,0.07)] hover:shadow-[0_10px_22px_rgba(45,85,155,0.12)]">
+                        <div className="p-3 space-y-2">
                           <div className="flex items-start justify-between gap-2.5">
                             <div className="min-w-0 space-y-1">
                               <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.16em]">
@@ -323,11 +337,11 @@ export default function HomePage() {
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-slate-600">
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
                               <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">訂單數量</p>
                               <p className="text-sm font-semibold text-slate-900">{formatNumber(order.productionQuantity)} 粒</p>
                             </div>
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
                               <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">累積工時</p>
                               <p className="text-sm font-semibold text-slate-900">
                                 {order.worklogs && order.worklogs.length > 0
@@ -335,7 +349,7 @@ export default function HomePage() {
                                   : '—'}
                               </p>
                             </div>
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-2.5 py-2">
+                            <div className="rounded-xl bg-white/75 border border-white/60 px-2 py-1.5">
                               <p className="uppercase tracking-[0.12em] text-[10px] text-slate-400 mb-1">客服</p>
                               <p className="text-sm font-semibold text-slate-900 truncate">{order.customerService || '未填寫'}</p>
                             </div>
@@ -359,7 +373,7 @@ export default function HomePage() {
                           </div>
 
                           {latestWorklog && (
-                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-2 text-[11px] text-indigo-600 flex items-center justify-between">
+                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/10 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2 py-1.5 text-[11px] text-indigo-600 flex items-center justify-between">
                               <span className="font-medium">最新工時</span>
                               <span>{formatDateOnly(latestWorklog.workDate)} {latestWorklog.startTime} - {latestWorklog.endTime}</span>
                             </div>
@@ -384,7 +398,7 @@ export default function HomePage() {
         </div>
         {/* 最近工時紀錄 */}
         <div className="liquid-glass-card liquid-glass-card-interactive floating-dots">
-          <div className="liquid-glass-content">
+          <div className="liquid-glass-content p-4 sm:p-5">
             <div className="flex items-start justify-between gap-3 mb-5">
               <div>
                 <h3 className="text-sm sm:text-base md:text-base font-semibold flex items-center gap-2 text-slate-800">
@@ -415,7 +429,7 @@ export default function HomePage() {
               <div className="space-y-2.5">
                 {recentWorklogs.map((worklog) => (
                   <Link key={worklog.id} href={`/orders/${worklog.orderId}`} className="block">
-                    <div className="rounded-2xl bg-white/60 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
+                    <div className="rounded-2xl bg-white/55 border border-white/60 hover:border-white/85 transition-all duration-200 shadow-[0_6px_18px_rgba(15,32,77,0.07)] hover:shadow-[0_12px_26px_rgba(45,85,155,0.15)]">
                       <div className="p-3.5 space-y-2.5">
                         <div className="flex items-start justify-between gap-2.5">
                           <div className="min-w-0 space-y-1">
