@@ -4,13 +4,11 @@ import { useState, useEffect, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Logo } from '@/components/ui/logo'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
 import { LiquidGlassModal } from '@/components/ui/liquid-glass-modal'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
-import { Plus, FileText, Eye, Download, Brain, ClipboardList, Calendar, Zap, FlaskConical, ClipboardCheck, Timer, Package2, UserRound, Square, ArrowRight, Clock3 } from 'lucide-react'
+import { Plus, FileText, ArrowRight, Calendar, Timer, ClipboardList, Clock3, Brain, FlaskConical, ClipboardCheck } from 'lucide-react'
 import { formatDate, formatDateOnly, formatNumber, convertWeight, calculateBatchWeight } from '@/lib/utils'
 import { ProductionOrder, OrderWorklog, WorklogWithOrder } from '@/types'
 import Link from 'next/link'
@@ -18,18 +16,31 @@ import { sumWorkUnits } from '@/lib/worklog'
 import { fetchWithTimeout } from '@/lib/api-client'
 import { DateTime } from 'luxon'
 
+const QUICK_CARD_PADDING = 'px-4 py-4 sm:px-6 sm:py-6'
+const MINI_CARD_PADDING = 'px-3 sm:px-3.5 py-3'
+
+const SmartAIAssistant = dynamic(
+  () => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant),
+  { ssr: false }
+)
+
+const OrderAIAssistant = dynamic(
+  () => import('@/components/ai/order-ai-assistant').then(mod => mod.OrderAIAssistant),
+  { ssr: false }
+)
+
 type StatusKey = 'inProgress' | 'notStarted' | 'completed'
 
 const STATUS_PRIORITY: Record<StatusKey, number> = {
   inProgress: 0,
   notStarted: 1,
-  completed: 2,
+  completed: 2
 }
 
-const WORKLOG_DISPLAY_LIMIT = 5
 const ORDER_DISPLAY_LIMIT = 5
+const WORKLOG_DISPLAY_LIMIT = 5
 
-const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
+const getOrderStatus = (order: ProductionOrder): StatusKey => {
   const hasWorklog = Array.isArray(order.worklogs) && order.worklogs.length > 0
   const completed = Boolean(order.completionDate)
   if (hasWorklog && !completed) return 'inProgress'
@@ -37,47 +48,36 @@ const resolveOrderStatus = (order: ProductionOrder): StatusKey => {
   return 'completed'
 }
 
-const toDateTime = (value: Date | string | null | undefined) => {
-  if (!value) return DateTime.invalid('missing')
-  if (value instanceof Date) return DateTime.fromJSDate(value, { zone: 'Asia/Hong_Kong' })
-  return DateTime.fromISO(value, { zone: 'Asia/Hong_Kong' })
+const getOrderDate = (order: ProductionOrder) => {
+  // 使用 completionDate 為主，沒有完工日期時改用 createdAt
+  const raw = order.completionDate ?? order.createdAt
+  if (!raw) return DateTime.invalid('missing')
+  if (raw instanceof Date) return DateTime.fromJSDate(raw, { zone: 'Asia/Hong_Kong' })
+  return DateTime.fromISO(raw, { zone: 'Asia/Hong_Kong' })
 }
 
-const reorderOrdersByStatus = (orders: ProductionOrder[]) =>
-  [...orders].sort((a, b) => {
-    const statusA = resolveOrderStatus(a)
-    const statusB = resolveOrderStatus(b)
-    if (statusA !== statusB) {
-      return STATUS_PRIORITY[statusA] - STATUS_PRIORITY[statusB]
-    }
+const sortOrdersForHomepage = (orders: ProductionOrder[]) =>
+  [...orders]
+    .map(order => ({
+      ...order,
+      worklogs: order.worklogs || []
+    }))
+    .sort((a, b) => {
+      const statusA = getOrderStatus(a)
+      const statusB = getOrderStatus(b)
+      if (statusA !== statusB) {
+        return STATUS_PRIORITY[statusA] - STATUS_PRIORITY[statusB]
+      }
 
-    const dateA = toDateTime(a.completionDate ?? a.createdAt)
-    const dateB = toDateTime(b.completionDate ?? b.createdAt)
-    if (dateA.isValid && dateB.isValid) {
-      return dateB.toMillis() - dateA.toMillis()
-    }
-    return 0
-  })
+      const dateA = getOrderDate(a)
+      const dateB = getOrderDate(b)
+      if (dateA.isValid && dateB.isValid) {
+        return dateB.toMillis() - dateA.toMillis()
+      }
+      return 0
+    })
 
-const SmartAIAssistant = dynamic(() => import('@/components/ai/smart-ai-assistant').then(mod => mod.SmartAIAssistant), {
-  ssr: false,
-  loading: () => (
-    <div className="liquid-glass-card p-6 rounded-3xl shadow-sm bg-white/60 border border-white/80 text-sm text-slate-500">
-      AI 助手載入中...
-    </div>
-  ),
-})
-
-const OrderAIAssistant = dynamic(() => import('@/components/ai/order-ai-assistant').then(mod => mod.OrderAIAssistant), {
-  ssr: false,
-  loading: () => (
-    <div className="inline-flex items-center justify-center rounded-full border border-white/70 bg-white/40 px-4 py-2 text-xs text-slate-500">
-      助手初始化中...
-    </div>
-  ),
-})
-
-const renderWorklogOrderLabel = (worklog: WorklogWithOrder) => {
+const renderWorklogLabel = (worklog: WorklogWithOrder) => {
   if (worklog.order) {
     const product = worklog.order.productName || '未指派訂單'
     const customer = worklog.order.customerName || '未填寫'
@@ -86,21 +86,18 @@ const renderWorklogOrderLabel = (worklog: WorklogWithOrder) => {
   return '未關聯訂單'
 }
 
-const formatWorklogDateDisplay = (workDate: string) => {
-  const date = DateTime.fromISO(workDate, { zone: 'Asia/Hong_Kong' })
-  if (!date.isValid) return workDate
+const formatWorklogDate = (value: string) => {
+  const date = DateTime.fromISO(value, { zone: 'Asia/Hong_Kong' })
+  if (!date.isValid) return value
   return date.toFormat('yyyy/MM/dd (ccc)', { locale: 'zh-Hant' })
 }
 
-// 訂單詳情檢視組件
 function OrderDetailView({ order }: { order: ProductionOrder }) {
   return (
     <div className="space-y-6">
-      {/* AI 助手按鈕 */}
       <div className="flex justify-end">
         <OrderAIAssistant order={order} />
       </div>
-      {/* 基本資訊 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <h4 className="font-medium mb-2">基本資訊</h4>
@@ -109,30 +106,19 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
             <p><span className="font-medium">產品名字：</span>{order.productName}</p>
             <p><span className="font-medium">生產數量：</span>{formatNumber(order.productionQuantity)} 粒</p>
             <p><span className="font-medium">客服：</span>{order.customerService || '未填寫'}</p>
-            {(order.capsuleColor || order.capsuleSize || order.capsuleType) && (
-              <div className="mt-3 pt-3 border-t">
-                <h5 className="font-medium mb-2">膠囊規格</h5>
-                {order.capsuleColor && <p><span className="font-medium">顏色：</span>{order.capsuleColor}</p>}
-                {order.capsuleSize && <p><span className="font-medium">大小：</span>{order.capsuleSize}</p>}
-                {order.capsuleType && <p><span className="font-medium">類型：</span>{order.capsuleType}</p>}
-              </div>
-            )}
           </div>
         </div>
         <div>
           <h4 className="font-medium mb-2">生產狀態</h4>
           <div className="space-y-2 text-sm">
-            <p><span className="font-medium">完工日期：</span>
-              {order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}
-            </p>
+            <p><span className="font-medium">完工日期：</span>{order.completionDate ? formatDateOnly(order.completionDate) : '未完工'}</p>
             <p><span className="font-medium">單粒總重量：</span>{order.unitWeightMg.toFixed(3)} mg</p>
             <p><span className="font-medium">批次總重量：</span>{convertWeight(order.batchTotalWeightMg).display}</p>
           </div>
         </div>
       </div>
 
-      {/* 原料配方 */}
-      {order.ingredients && order.ingredients.length > 0 && (
+      {order.ingredients?.length ? (
         <div>
           <h4 className="font-medium mb-2">原料配方</h4>
           <Table>
@@ -148,15 +134,13 @@ function OrderDetailView({ order }: { order: ProductionOrder }) {
                 <TableRow key={index}>
                   <TableCell>{ingredient.materialName}</TableCell>
                   <TableCell>{ingredient.unitContentMg.toFixed(3)}</TableCell>
-                  <TableCell>
-                    {calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}
-                  </TableCell>
+                  <TableCell>{calculateBatchWeight(ingredient.unitContentMg, order.productionQuantity).display}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -172,7 +156,6 @@ export default function HomePage() {
   const router = useRouter()
 
   useEffect(() => {
-    // Check authentication - 檢查兩個認證狀態
     const authStatus = localStorage.getItem('isAuthenticated')
     const easypackAuth = localStorage.getItem('easypack_auth')
     if (authStatus !== 'true' && easypackAuth !== 'true') {
@@ -188,10 +171,8 @@ export default function HomePage() {
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
-
       const orders = Array.isArray(payload.data?.orders) ? payload.data.orders : []
-      const normalized = reorderOrdersByStatus(orders).slice(0, ORDER_DISPLAY_LIMIT)
-      setRecentOrders(normalized)
+      setRecentOrders(sortOrdersForHomepage(orders).slice(0, ORDER_DISPLAY_LIMIT))
     } catch (error) {
       console.error('載入最近訂單錯誤:', error)
     }
@@ -200,12 +181,10 @@ export default function HomePage() {
   const fetchAllOrders = useCallback(async () => {
     try {
       const response = await fetchWithTimeout('/api/orders?limit=50&sortBy=completionDate&sortOrder=desc')
-      if (response.ok) {
-        const payload = await response.json()
-        if (payload?.success) {
-          setAllOrders(payload.data?.orders || [])
-        }
-      }
+      if (!response.ok) return
+      const payload = await response.json()
+      if (!payload?.success) return
+      setAllOrders(Array.isArray(payload.data?.orders) ? payload.data.orders : [])
     } catch (error) {
       console.error('載入所有訂單錯誤:', error)
     }
@@ -217,31 +196,28 @@ export default function HomePage() {
       if (!response.ok) return
       const payload = await response.json()
       if (!payload?.success) return
-
-      const worklogs = Array.isArray(payload.data?.worklogs) ? payload.data.worklogs : []
-      setRecentWorklogs(worklogs.slice(0, WORKLOG_DISPLAY_LIMIT))
+      setRecentWorklogs(Array.isArray(payload.data?.worklogs) ? payload.data.worklogs.slice(0, WORKLOG_DISPLAY_LIMIT) : [])
     } catch (error) {
       console.error('載入最近工時錯誤:', error)
     }
   }, [])
 
   useEffect(() => {
-    const run = async () => {
+    const load = async () => {
       try {
         await Promise.all([fetchRecentOrders(), fetchAllOrders(), fetchRecentWorklogs()])
       } finally {
         setLoading(false)
       }
     }
-
-    run()
+    load()
   }, [fetchRecentOrders, fetchAllOrders, fetchRecentWorklogs])
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">驗證中...</p>
         </div>
       </div>
@@ -250,178 +226,173 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen logo-bg-animation flex flex-col">
-      {/* Liquid Glass Navigation */}
-        <LiquidGlassNav />
+      <LiquidGlassNav />
 
-      {/* Main Content with padding for fixed nav */}
-      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-8 floating-combined">
-
-      {/* Main Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-stretch">
-        <div className="liquid-glass-card px-3.5 py-3 sm:px-4 sm:py-4 shadow-[0_6px_14px_rgba(45,85,155,0.15)]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="icon-container icon-container-gradient-sunrise h-8 w-8">
-                <Plus className="h-4 w-4 text-white" />
+      <div className="pt-28 sm:pt-24 px-4 sm:px-6 md:px-8 space-y-6 floating-combined">
+        {/* 快捷入口卡片保持原尺寸 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className={`liquid-glass-card liquid-glass-card-brand liquid-glass-card-interactive liquid-glass-card-refraction floating-shapes group ${QUICK_CARD_PADDING}`}>
+            <div className="liquid-glass-content flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="icon-container icon-container-gradient-sunrise icon-micro-bounce">
+                  <Plus className="h-5 w-5 text-white" />
+                </div>
+                <div className="text-right space-y-1">
+                  <h3 className="text-sm font-semibold text-indigo-600">新增配方</h3>
+                  <p className="text-xs text-indigo-500/75">快速建立新配方記錄</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-indigo-600">新增配方</h3>
-                <p className="text-[11px] text-slate-500">快速建立新配方記錄</p>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                建立新的膠囊配方記錄，包含原料配置與生產參數。
+              </p>
+              <div className="mt-auto">
+                <Button asChild size="sm" className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-110">
+                  <Link href="/orders/new">開始建立</Link>
+                </Button>
               </div>
             </div>
-            <Button asChild size="sm" className="text-xs px-3 py-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-              <Link href="/orders/new">開始</Link>
-            </Button>
+          </div>
+
+          <div className={`liquid-glass-card liquid-glass-card-interactive liquid-glass-card-refraction floating-orbs group ${QUICK_CARD_PADDING}`}>
+            <div className="liquid-glass-content flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="icon-container icon-container-gradient-emerald icon-micro-bounce">
+                  <ClipboardList className="h-5 w-5 text-white" />
+                </div>
+                <div className="text-right space-y-1">
+                  <h3 className="text-sm font-semibold text-emerald-600">生產記錄</h3>
+                  <p className="text-xs text-emerald-500/70">支援搜尋篩選與編輯</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                檢視與管理所有生產訂單，掌握最新工時與進度。
+              </p>
+              <div className="mt-auto">
+                <Button asChild size="sm" className="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:brightness-110">
+                  <Link href="/orders">查看記錄</Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="liquid-glass-card px-3.5 py-3 sm:px-4 sm:py-4 shadow-[0_6px_14px_rgba(13,148,136,0.2)]">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="icon-container icon-container-gradient-emerald h-8 w-8">
-                <FileText className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-emerald-600">生產記錄</h3>
-                <p className="text-[11px] text-slate-500">管理歷史生產訂單</p>
-              </div>
-            </div>
-            <Button asChild size="sm" className="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500">
-              <Link href="/orders">管理</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* 最近紀錄卡改為迷你版 */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-3 sm:gap-4">
-        {/* 最近生產紀錄 */}
-        <div className="rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] p-3 sm:p-4">
-          <div className="liquid-glass-content p-4 sm:p-4">
-            <div className="flex items-center justify-between mb-3">
+        {/* 最近紀錄以迷你卡呈現 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] ${MINI_CARD_PADDING}`}>
+            <div className="flex items-center justify-between mb-2.5">
               <div>
                 <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-cyan-600" />
-                  最近生產紀錄
+                  <FileText className="h-4 w-4 text-cyan-500" />最近生產紀錄
                 </h3>
                 <p className="text-[11px] text-slate-500">最新 5 筆訂單</p>
               </div>
-              <Link href="/orders" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1">
-                查看全部
-                <ArrowRight className="h-3.5 w-3.5" />
+              <Link href="/orders" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+                查看全部<ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="space-y-3">
-                <div className="skeleton h-4 w-40" />
+              <div className="space-y-2.5">
+                <div className="skeleton h-4 w-32" />
                 <div className="skeleton h-3 w-full" />
                 <div className="skeleton h-3 w-5/6" />
               </div>
             ) : recentOrders.length > 0 ? (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {recentOrders.map((order) => {
-                  const status = resolveOrderStatus(order)
+                  const status = getOrderStatus(order)
                   const statusLabel = status === 'completed' ? '已完成' : status === 'inProgress' ? '進行中' : '未開始'
                   const statusTone = status === 'completed'
                     ? 'from-emerald-500 to-emerald-600'
                     : status === 'inProgress'
                       ? 'from-sky-500 to-blue-600'
                       : 'from-slate-300 to-slate-400'
-
                   const latestWorklog = order.worklogs?.[order.worklogs.length - 1]
 
                   return (
                     <Link key={order.id} href={`/orders/${order.id}`} className="block">
-                      <div className="rounded-2xl bg-white/60 border border-white/70 hover:border-white/90 transition shadow-[0_4px_12px_rgba(15,32,77,0.08)] hover:shadow-[0_8px_18px_rgba(45,85,155,0.12)]">
-                        <div className="px-3.5 py-3 space-y-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="min-w-0 space-y-1">
-                              <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.14em]">
-                                <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
-                                <span>更新 {formatDateOnly(order.createdAt)}</span>
-                              </div>
-                              <h4 className="text-sm font-semibold text-slate-900 truncate">{order.productName}</h4>
-                              <p className="text-[11px] text-slate-500 truncate">客戶：{order.customerName}</p>
+                      <div className="rounded-xl bg-white/70 border border-white/80 px-3 py-2.5 hover:border-white/95 transition shadow-[0_4px_10px_rgba(15,32,77,0.08)]">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.14em]">
+                              <span className="h-2 w-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                              <span>更新 {formatDateOnly(order.createdAt)}</span>
                             </div>
-                            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-white bg-gradient-to-r ${statusTone}`}>
-                              <Calendar className="h-3 w-3" />
-                              {statusLabel}
+                            <h4 className="text-sm font-semibold text-slate-900 truncate">{order.productName}</h4>
+                            <p className="text-[11px] text-slate-500 truncate">客戶：{order.customerName}</p>
+                          </div>
+                          <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-white bg-gradient-to-r ${statusTone}`}>
+                            <Calendar className="h-3 w-3" />
+                            {statusLabel}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 mt-2 text-[10px] text-slate-600">
+                          <span className="rounded-lg bg-white/80 border border-white/60 px-2 py-1">
+                            <span className="text-slate-400 mr-1">訂單</span>
+                            {formatNumber(order.productionQuantity)} 粒
+                          </span>
+                          <span className="rounded-lg bg-white/80 border border-white/60 px-2 py-1">
+                            <span className="text-slate-400 mr-1">工時</span>
+                            {order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)}h` : '—'}
+                          </span>
+                          {order.customerService && (
+                            <span className="rounded-lg bg-white/80 border border-white/60 px-2 py-1">
+                              <span className="text-slate-400 mr-1">客服</span>
+                              {order.customerService}
                             </span>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2 text-[11px] text-slate-600">
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
-                              <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">訂單</span>
-                              {formatNumber(order.productionQuantity)} 粒
-                            </div>
-                            <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
-                              <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">工時</span>
-                              {order.worklogs && order.worklogs.length > 0 ? `${sumWorkUnits(order.worklogs as OrderWorklog[]).toFixed(1)} 工時` : '—'}
-                            </div>
-                            {order.customerService && (
-                              <div className="rounded-xl bg-white/80 border border-white/60 px-2 py-1.5">
-                                <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 mr-1">客服</span>
-                                {order.customerService}
-                              </div>
-                            )}
-                          </div>
-
-                          {latestWorklog && (
-                            <div className="rounded-xl bg-gradient-to-r from-indigo-500/12 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2.5 py-1.5 text-[10px] text-indigo-600 flex items-center justify-between">
-                              <span>最新工時</span>
-                              <span>{formatWorklogDateDisplay(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</span>
-                            </div>
                           )}
                         </div>
+
+                        {latestWorklog && (
+                          <div className="rounded-lg bg-gradient-to-r from-indigo-500/10 via-indigo-400/10 to-purple-500/12 border border-indigo-100 px-2 py-1.5 text-[10px] text-indigo-600 mt-2 flex items-center justify-between">
+                            <span>最新工時</span>
+                            <span>{formatWorklogDate(latestWorklog.workDate)} {latestWorklog.startTime}-{latestWorklog.endTime}</span>
+                          </div>
+                        )}
                       </div>
                     </Link>
                   )
                 })}
               </div>
             ) : (
-              <div className="text-center py-8 text-sm text-gray-500">
-                目前沒有最近的生產記錄。
+              <div className="text-center py-6 text-sm text-gray-500">
+                目前沒有最近的生產紀錄。
               </div>
             )}
           </div>
-        </div>
 
-        {/* 最近工時紀錄 */}
-        <div className="liquid-glass-card">
-          <div className="liquid-glass-content p-4 sm:p-4">
-            <div className="flex items-center justify-between mb-3">
+          <div className={`rounded-2xl bg-white/65 border border-white/75 shadow-[0_6px_16px_rgba(15,32,77,0.12)] ${MINI_CARD_PADDING}`}>
+            <div className="flex items-center justify-between mb-2.5">
               <div>
                 <h3 className="text-sm font-semibold text-slate-800 flex items-center gap-2">
-                  <Clock3 className="h-4 w-4 text-indigo-500" />
-                  最近工時紀錄
+                  <Clock3 className="h-4 w-4 text-indigo-500" />最近工時紀錄
                 </h3>
-                <p className="text-[11px] text-slate-500">最新 5 筆填報</p>
+                <p className="text-[11px] text-slate-500">最新 5 筆工時</p>
               </div>
-              <Link href="/worklogs" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1">
-                查看全部
-                <ArrowRight className="h-3.5 w-3.5" />
+              <Link href="/worklogs" className="text-[11px] font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+                查看全部<ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {loading ? (
-              <div className="space-y-3">
-                <div className="skeleton h-4 w-36" />
+              <div className="space-y-2">
+                <div className="skeleton h-4 w-28" />
                 <div className="skeleton h-3 w-full" />
               </div>
             ) : recentWorklogs.length > 0 ? (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {recentWorklogs.map((worklog) => (
-                  <div key={worklog.id} className="rounded-2xl bg-white/55 border border-white/65 px-3 py-2.5 shadow-[0_4px_10px_rgba(15,32,77,0.08)]">
+                  <div key={worklog.id} className="rounded-xl bg-white/70 border border-white/80 px-3 py-2.5 hover:border-white/95 transition">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 space-y-1">
                         <div className="flex items-center gap-1.5 text-[10px] text-slate-400 uppercase tracking-[0.14em]">
                           <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
-                          <span>{formatWorklogDateDisplay(worklog.workDate)}</span>
+                          <span>{formatWorklogDate(worklog.workDate)}</span>
                         </div>
-                        <h4 className="text-sm font-semibold text-slate-900 truncate">{renderWorklogOrderLabel(worklog)}</h4>
+                        <h4 className="text-sm font-semibold text-slate-900 truncate">{renderWorklogLabel(worklog)}</h4>
                         <p className="text-[11px] text-slate-500">
-                          {worklog.startTime} - {worklog.endTime} · {worklog.headcount} 人
+                          {worklog.startTime}-{worklog.endTime} · {worklog.headcount} 人
                         </p>
                       </div>
                       <span className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-500">
@@ -429,7 +400,6 @@ export default function HomePage() {
                         {(worklog.effectiveMinutes / 60).toFixed(1)}h
                       </span>
                     </div>
-
                     {worklog.notes && (
                       <p className="mt-1 text-[11px] text-indigo-600 line-clamp-2">{worklog.notes}</p>
                     )}
@@ -437,13 +407,10 @@ export default function HomePage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-sm text-gray-500">
-                目前沒有最近的工時紀錄。
-              </div>
+              <div className="text-center py-6 text-sm text-gray-500">目前沒有最近的工時紀錄。</div>
             )}
           </div>
         </div>
-      </div>
 
       {/* 輔助工具區塊 */}
       <div className="mb-8">
