@@ -95,9 +95,7 @@ export function LiquidGlassNav({
                   label={link.label}
                   items={link.children}
                   active={link.active}
-                >
-                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                </NavDropdown>
+                />
               ) : (
                 <Link
                   key={link.href}
