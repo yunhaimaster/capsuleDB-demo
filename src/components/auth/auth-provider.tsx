@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext } from 'react'
 
 interface AuthContextType {
   isAuthenticated: boolean
@@ -11,43 +11,17 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // 檢查本地存儲中是否有認證狀態
-    const authStatus = localStorage.getItem('easypack_auth')
-    const classicStatus = localStorage.getItem('isAuthenticated')
-    if (authStatus === 'true' || classicStatus === 'true') {
-      setIsAuthenticated(true)
-    }
-    setIsLoading(false)
-  }, [])
-
+  // Demo mode: always authenticated, no checks required
   const login = (code: string) => {
-    if (code === '2356') {
-      setIsAuthenticated(true)
-      localStorage.setItem('easypack_auth', 'true')
-      localStorage.setItem('isAuthenticated', 'true')
-    }
+    // No-op for demo mode
   }
 
   const logout = () => {
-    setIsAuthenticated(false)
-    localStorage.removeItem('easypack_auth')
-    localStorage.removeItem('isAuthenticated')
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    )
+    // No-op for demo mode
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: true, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

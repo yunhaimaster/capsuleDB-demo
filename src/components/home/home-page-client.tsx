@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { DateTime } from 'luxon'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { LiquidGlassNav } from '@/components/ui/liquid-glass-nav'
 import { LiquidGlassFooter } from '@/components/ui/liquid-glass-footer'
@@ -68,21 +67,9 @@ const formatWorklogDate = (value: string) => {
 }
 
 export function HomePageClient() {
-  const router = useRouter()
   const [recentOrders, setRecentOrders] = useState<ProductionOrder[]>([])
   const [recentWorklogs, setRecentWorklogs] = useState<WorklogWithOrder[]>([])
   const [loading, setLoading] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-  useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated')
-    const easypackAuth = localStorage.getItem('easypack_auth')
-    if (authStatus !== 'true' && easypackAuth !== 'true') {
-      router.push('/login')
-      return
-    }
-    setIsAuthenticated(true)
-  }, [router])
 
   const fetchRecentOrders = useCallback(async () => {
     try {
@@ -119,17 +106,6 @@ export function HomePageClient() {
     }
     load()
   }, [fetchRecentOrders, fetchRecentWorklogs])
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">驗證中...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen logo-bg-animation flex flex-col">
