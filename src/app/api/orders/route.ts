@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
                 })
 
                 return {
-                  workDate: parsed.workDate,
+                  workDate: DateTime.fromFormat(parsed.workDate, 'yyyy-MM-dd').toJSDate(),
                   startTime: parsed.startTime,
                   endTime: parsed.endTime,
                   headcount: Number(parsed.headcount),
@@ -335,7 +335,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
                 })
 
                 return {
-                  workDate: parsed.workDate,
+                  workDate: DateTime.fromFormat(parsed.workDate, 'yyyy-MM-dd').toJSDate(),
                   startTime: parsed.startTime,
                   endTime: parsed.endTime,
                   headcount: Number(parsed.headcount),
